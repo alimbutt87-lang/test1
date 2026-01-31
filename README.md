@@ -1,2 +1,3 @@
-# test1
-AI-powered interview practice app
+# Test Project 1
+
+A React application.
