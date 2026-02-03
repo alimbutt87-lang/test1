@@ -50,10 +50,6 @@ export default function InterviewSimulator() {
   const videoStreamRef = useRef(null);
   const snapshotIntervalRef = useRef(null);
   const transcriptRef = useRef(''); // Store transcript in ref for reliable access
-  
-  // ElevenLabs configuration - uses environment variables in production
-  const ELEVENLABS_API_KEY = import.meta.env?.VITE_ELEVENLABS_API_KEY || '';
-  const ELEVENLABS_VOICE_ID = 'EXAVITQu4vr4xnSDxMaL'; // "Sarah" - natural, professional female voice
 
   // Initialize on mount
   useEffect(() => {
@@ -374,42 +370,24 @@ Return ONLY valid JSON:
       return null;
     }
   };
+  
+  // Text-to-Speech using serverless function
   const speakQuestion = async (text) => {
     setIsSpeaking(true);
-    setIsRecording(false); // Ensure recording is off while speaking
-    console.log('Attempting ElevenLabs API call...');
+    setIsRecording(false);
     
     try {
-      const response = await fetch(
-        `https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE_ID}`,
-        {
-          method: 'POST',
-          headers: {
-            'Accept': 'audio/mpeg',
-            'Content-Type': 'application/json',
-            'xi-api-key': ELEVENLABS_API_KEY,
-          },
-          body: JSON.stringify({
-            text: text,
-            model_id: 'eleven_monolingual_v1',
-            voice_settings: {
-              stability: 0.5,
-              similarity_boost: 0.75,
-            },
-          }),
-        }
-      );
+      const response = await fetch('/api/speak', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text })
+      });
 
-      console.log('ElevenLabs response status:', response.status);
-      
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('ElevenLabs API error:', response.status, errorText);
-        throw new Error('ElevenLabs API error');
+        throw new Error('Speech API error');
       }
 
       const audioBlob = await response.blob();
-      console.log('Got audio blob, size:', audioBlob.size);
       const audioUrl = URL.createObjectURL(audioBlob);
       
       return new Promise((resolve) => {
@@ -432,13 +410,12 @@ Return ONLY valid JSON:
         audio.play().catch((e) => {
           console.error('Audio play() error:', e);
           setIsSpeaking(false);
-          resolve();
+          fallbackSpeak(text).then(resolve);
         });
       });
       
     } catch (error) {
       console.error('ElevenLabs error, falling back to browser voice:', error);
-      // Fallback to browser speech synthesis
       return fallbackSpeak(text);
     }
   };
@@ -480,38 +457,14 @@ Return ONLY valid JSON:
     }
     
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1500,
-          messages: [{
-            role: "user",
-            content: `You are an expert interviewer at a top tech company conducting a real job interview. Generate exactly 5 challenging, specific interview questions for this role:
-
-Job Title: ${jobTitle}
-Job Description: ${jobDescription || 'General role responsibilities'}
-
-Requirements:
-- Question 1: Behavioral (past experience, STAR format expected)
-- Question 2: Technical/Role-specific skills
-- Question 3: Problem-solving/situational
-- Question 4: Leadership/teamwork
-- Question 5: Culture fit/motivation
-
-Make questions specific to this exact role, not generic. They should be challenging but fair.
-
-Return ONLY a JSON array of 5 question strings, nothing else:
-["question1", "question2", "question3", "question4", "question5"]`
-          }],
-        })
+      const response = await fetch('/api/generate-questions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jobTitle, jobDescription })
       });
 
       const data = await response.json();
-      const text = data.content[0].text;
-      const cleanText = text.replace(/```json|```/g, '').trim();
-      const parsedQuestions = JSON.parse(cleanText);
+      const parsedQuestions = data.questions;
       setQuestions(parsedQuestions);
       setStage('interview');
       
@@ -625,71 +578,38 @@ Return ONLY a JSON array of 5 question strings, nothing else:
     }
   };
 
-  // AI Analysis of all answers
+  // AI Analysis of all answers using serverless function
   const analyzeAllAnswers = async (allAnswers) => {
     try {
-      const answersText = allAnswers.map((a, i) => 
-        `Question ${i + 1}: ${a.question}\nCandidate's Answer: ${a.answer}\nTime Spent: ${a.timeSpent} seconds`
-      ).join('\n\n');
-
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 2500,
-          messages: [{
-            role: "user",
-            content: `You are an expert interview coach analyzing a candidate's SPOKEN interview performance for a ${jobTitle} position. The answers below were captured via voice transcription, so ignore any spelling/grammar issues - focus only on the CONTENT and SUBSTANCE of their responses.
-
-Interview Responses:
-${answersText}
-
-Analyze each answer and provide a comprehensive scorecard. Be fair but rigorous - this is a real interview assessment. Remember: this is transcribed speech, so evaluate what they SAID, not how it's written.
-
-Return ONLY valid JSON in this exact format:
-{
-  "overallScore": <number 0-100>,
-  "passed": <boolean - true if score >= 70>,
-  "verdict": "<one sentence: 'Congratulations! You got the job!' or 'Unfortunately, you did not pass this interview.'>",
-  "summary": "<2-3 sentence overall assessment>",
-  "questionScores": [
-    {
-      "questionNum": 1,
-      "score": <0-100>,
-      "feedback": "<specific feedback for this answer - focus on content, structure, examples, not grammar>",
-      "strengths": ["<strength1>", "<strength2>"],
-      "improvements": ["<improvement1>", "<improvement2>"]
-    }
-  ],
-  "categories": {
-    "clarity": {"score": <0-100>, "feedback": "<was their point clear and easy to follow?>"},
-    "relevance": {"score": <0-100>, "feedback": "<did they actually answer the question asked?>"},
-    "depth": {"score": <0-100>, "feedback": "<did they provide enough detail and specifics?>"},
-    "confidence": {"score": <0-100>, "feedback": "<did they sound confident and assured?>"},
-    "conciseness": {"score": <0-100>, "feedback": "<were they focused or did they ramble?>"},
-    "starMethod": {"score": <0-100>, "feedback": "<did they use Situation, Task, Action, Result for behavioral questions?>"},
-    "technicalAccuracy": {"score": <0-100>, "feedback": "<was their technical knowledge accurate?>"},
-    "enthusiasm": {"score": <0-100>, "feedback": "<did they show genuine interest in the role?>"}
-  },
-  "topStrengths": ["<strength1>", "<strength2>", "<strength3>"],
-  "criticalImprovements": ["<improvement1>", "<improvement2>", "<improvement3>"],
-  "coachingTip": "<one specific, actionable tip for their next interview>"
-}`
-          }],
-        })
+      const response = await fetch('/api/analyze-interview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ answers: allAnswers, jobTitle })
       });
 
       const data = await response.json();
-      const text = data.content[0].text;
-      const cleanText = text.replace(/```json|```/g, '').trim();
-      const results = JSON.parse(cleanText);
+      
+      if (!response.ok || !data.results) {
+        throw new Error('Analysis failed');
+      }
+
+      const results = data.results;
       
       // Also analyze video if we have snapshots
       let videoResults = null;
       if (videoEnabled && videoSnapshots.length > 0) {
-        videoResults = await analyzeVideoPresence(videoSnapshots);
-        setVideoFeedback(videoResults);
+        try {
+          const videoResponse = await fetch('/api/analyze-video', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ snapshots: videoSnapshots })
+          });
+          const videoData = await videoResponse.json();
+          videoResults = videoData.results;
+          setVideoFeedback(videoResults);
+        } catch (e) {
+          console.error('Video analysis error:', e);
+        }
       }
       
       // Stop camera and snapshot capture
