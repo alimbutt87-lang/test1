@@ -66,6 +66,14 @@ export default function InterviewSimulator() {
     };
   }, []);
 
+  // Attach video stream when interview stage is active
+  useEffect(() => {
+    if (stage === 'interview' && videoEnabled && videoStreamRef.current && videoRef.current) {
+      videoRef.current.srcObject = videoStreamRef.current;
+      videoRef.current.play().catch(e => console.log('Video play error:', e));
+    }
+  }, [stage, videoEnabled]);
+
   const initializeApp = async () => {
     await checkCompletedInterviews();
     await checkSubscriptionStatus();
@@ -248,10 +256,21 @@ export default function InterviewSimulator() {
       });
       
       videoStreamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
       setCameraPermission(true);
+      
+      // Try to attach stream immediately, and also after a delay
+      const attachStream = () => {
+        if (videoRef.current && videoStreamRef.current) {
+          videoRef.current.srcObject = videoStreamRef.current;
+          videoRef.current.play().catch(e => console.log('Video play error:', e));
+        }
+      };
+      
+      attachStream();
+      // Also try after a short delay in case video element wasn't ready
+      setTimeout(attachStream, 100);
+      setTimeout(attachStream, 500);
+      
       return true;
     } catch (e) {
       console.error('Camera access denied:', e);
