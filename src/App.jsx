@@ -561,7 +561,15 @@ Return ONLY valid JSON:
   const handleNextQuestion = async () => {
     setIsTimerRunning(false);
     stopRecording();
+    
+    // Stop any currently playing audio (ElevenLabs or browser)
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
+    }
     window.speechSynthesis?.cancel();
+    setIsSpeaking(false);
     
     // Use ref for reliable transcript access (React state may be stale)
     const capturedTranscript = transcriptRef.current || currentTranscript || '[No response recorded]';
