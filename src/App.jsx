@@ -1405,12 +1405,20 @@ Return ONLY valid JSON:
             )}
           </div>
           
-          <button style={styles.primaryBtn} onClick={handleNextQuestion}>
-            {currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'Finish Interview'}
+          <button 
+            style={{
+              ...styles.primaryBtn,
+              opacity: isSpeaking ? 0.5 : 1,
+              cursor: isSpeaking ? 'not-allowed' : 'pointer'
+            }} 
+            onClick={handleNextQuestion}
+            disabled={isSpeaking}
+          >
+            {isSpeaking ? 'Please wait...' : (currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'Finish Interview')}
             <span style={styles.btnArrow}>→</span>
           </button>
           
-          <p style={styles.skipNote}>Click above when you're done answering, or wait for the timer</p>
+          <p style={styles.skipNote}>{isSpeaking ? 'Wait for AI to finish speaking' : 'Click above when you\'re done answering, or wait for the timer'}</p>
         </div>
       </div>
     );
