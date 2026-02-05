@@ -172,15 +172,27 @@ export default function InterviewSimulator() {
     setIsLoading(false);
   };
 
-  const checkPaymentSuccess = () => {
+  const checkPaymentSuccess = async () => {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('success') === 'true') {
       // User just paid! Mark them as subscribed
       const subData = { active: true, date: new Date().toISOString() };
       try {
+        // Save to localStorage as backup
         localStorage.setItem('subscription', JSON.stringify(subData));
         setIsSubscribed(true);
         setSubscriptionDate(subData.date);
+        
+        // Save to Supabase if user is logged in
+        if (user) {
+          await supabase
+            .from('user_profiles')
+            .update({ 
+              is_subscribed: true, 
+              subscription_date: subData.date 
+            })
+            .eq('id', user.id);
+        }
         
         // Clean up URL (remove ?success=true)
         window.history.replaceState({}, '', window.location.pathname);
