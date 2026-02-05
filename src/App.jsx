@@ -4,9 +4,9 @@ import React, { useState, useEffect, useRef } from 'react';
 // Set to true for testing (bypasses paywall), false for production
 const TEST_MODE = true;
 
-// Stripe customer portal URL (replace with your actual Stripe portal link)
-const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/YOUR_PORTAL_ID';
-const STRIPE_SUBSCRIBE_URL = 'https://buy.stripe.com/YOUR_STRIPE_LINK';
+// Stripe URLs
+const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/fZu14n8Ac7Wm3QJ0TN6wE00';
+const STRIPE_SUBSCRIBE_URL = 'https://buy.stripe.com/fZu14n8Ac7Wm3QJ0TN6wE00';
 
 // Main App Component
 export default function InterviewSimulator() {
@@ -75,12 +75,36 @@ export default function InterviewSimulator() {
   }, [stage, videoEnabled]);
 
   const initializeApp = async () => {
+    // Check if user just completed payment (redirected from Stripe)
+    checkPaymentSuccess();
+    
     await checkCompletedInterviews();
     await checkSubscriptionStatus();
     await loadPastInterviews();
     await loadLeaderboard();
     await setupSpeechRecognition();
     setIsLoading(false);
+  };
+
+  const checkPaymentSuccess = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('success') === 'true') {
+      // User just paid! Mark them as subscribed
+      const subData = { active: true, date: new Date().toISOString() };
+      try {
+        localStorage.setItem('subscription', JSON.stringify(subData));
+        setIsSubscribed(true);
+        setSubscriptionDate(subData.date);
+        
+        // Clean up URL (remove ?success=true)
+        window.history.replaceState({}, '', window.location.pathname);
+        
+        // Show success message
+        alert('🎉 Welcome! Your subscription is now active. Enjoy unlimited interviews!');
+      } catch (e) {
+        console.error('Error saving subscription:', e);
+      }
+    }
   };
 
   const checkCompletedInterviews = async () => {
