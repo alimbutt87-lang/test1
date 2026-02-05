@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createClient } from '@supabase/supabase-js';
 
 // ===== CONFIGURATION =====
 // Set to true for testing (bypasses paywall), false for production
@@ -7,6 +8,11 @@ const TEST_MODE = true;
 // Stripe URLs
 const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/fZu14n8Ac7Wm3QJ0TN6wE00';
 const STRIPE_SUBSCRIBE_URL = 'https://buy.stripe.com/fZu14n8Ac7Wm3QJ0TN6wE00';
+
+// Supabase configuration
+const SUPABASE_URL = 'https://msngeennlvzbhohnrhnq.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable__01NFWdOHHofya6dz2CLhg_XFBWE8sQ';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Main App Component
 export default function InterviewSimulator() {
@@ -32,6 +38,10 @@ export default function InterviewSimulator() {
   const [micPermission, setMicPermission] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   
+  // Authentication states
+  const [user, setUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
+  
   // Video recording states
   const [videoEnabled, setVideoEnabled] = useState(true);
   const [cameraPermission, setCameraPermission] = useState(null);
@@ -51,9 +61,35 @@ export default function InterviewSimulator() {
   const snapshotIntervalRef = useRef(null);
   const transcriptRef = useRef(''); // Store transcript in ref for reliable access
 
-  // Initialize on mount
+  // Initialize auth on mount
   useEffect(() => {
-    initializeApp();
+    // Check current session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        setUserName(session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || '');
+      }
+      setAuthLoading(false);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        setUserName(session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || '');
+        // Load user data when they sign in
+        loadUserData(session.user.id);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // Initialize app on mount
+  useEffect(() => {
+    if (!authLoading) {
+      initializeApp();
+    }
     return () => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
@@ -64,7 +100,7 @@ export default function InterviewSimulator() {
       window.speechSynthesis?.cancel();
       stopCamera();
     };
-  }, []);
+  }, [authLoading]);
 
   // Attach video stream when interview stage is active
   useEffect(() => {
@@ -74,15 +110,67 @@ export default function InterviewSimulator() {
     }
   }, [stage, videoEnabled]);
 
+  // Load user data from Supabase
+  const loadUserData = async (userId) => {
+    try {
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+      
+      if (data) {
+        setCompletedInterviews(data.completed_interviews || 0);
+        setIsSubscribed(data.is_subscribed || false);
+        setSubscriptionDate(data.subscription_date);
+      } else if (error && error.code === 'PGRST116') {
+        // User doesn't exist in our table yet, create them
+        await supabase.from('user_profiles').insert({
+          id: userId,
+          completed_interviews: 0,
+          is_subscribed: false
+        });
+      }
+    } catch (e) {
+      console.error('Error loading user data:', e);
+    }
+  };
+
+  // Sign in with Google
+  const signInWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin
+      }
+    });
+    if (error) console.error('Error signing in:', error);
+  };
+
+  // Sign out
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+    setCompletedInterviews(0);
+    setIsSubscribed(false);
+    setPastInterviews([]);
+  };
+
   const initializeApp = async () => {
     // Check if user just completed payment (redirected from Stripe)
     checkPaymentSuccess();
     
-    await checkCompletedInterviews();
-    await checkSubscriptionStatus();
+    if (user) {
+      await loadUserData(user.id);
+    } else {
+      await checkCompletedInterviews();
+      await checkSubscriptionStatus();
+    }
     await loadPastInterviews();
     await loadLeaderboard();
     await setupSpeechRecognition();
+    setIsLoading(false);
+  };
     setIsLoading(false);
   };
 
@@ -109,9 +197,9 @@ export default function InterviewSimulator() {
 
   const checkCompletedInterviews = async () => {
     try {
-      const result = await window.storage.get('completedInterviews');
-      if (result) {
-        setCompletedInterviews(parseInt(result.value) || 0);
+      const stored = localStorage.getItem('completedInterviews');
+      if (stored) {
+        setCompletedInterviews(parseInt(stored) || 0);
       }
     } catch (e) {
       // No completed interviews yet
@@ -120,9 +208,9 @@ export default function InterviewSimulator() {
 
   const checkSubscriptionStatus = async () => {
     try {
-      const result = await window.storage.get('subscription');
-      if (result) {
-        const sub = JSON.parse(result.value);
+      const stored = localStorage.getItem('subscription');
+      if (stored) {
+        const sub = JSON.parse(stored);
         setIsSubscribed(sub.active);
         setSubscriptionDate(sub.date);
       }
@@ -133,7 +221,7 @@ export default function InterviewSimulator() {
   const simulateSubscribe = async () => {
     const subData = { active: true, date: new Date().toISOString() };
     try {
-      await window.storage.set('subscription', JSON.stringify(subData));
+      localStorage.setItem('subscription', JSON.stringify(subData));
       setIsSubscribed(true);
       setSubscriptionDate(subData.date);
     } catch (e) {}
@@ -141,7 +229,7 @@ export default function InterviewSimulator() {
 
   const cancelSubscription = async () => {
     try {
-      await window.storage.set('subscription', JSON.stringify({ active: false, date: null }));
+      localStorage.setItem('subscription', JSON.stringify({ active: false, date: null }));
       setIsSubscribed(false);
       setSubscriptionDate(null);
     } catch (e) {}
@@ -150,7 +238,15 @@ export default function InterviewSimulator() {
   const incrementCompletedInterviews = async () => {
     const newCount = completedInterviews + 1;
     try {
-      await window.storage.set('completedInterviews', newCount.toString());
+      if (user) {
+        // Save to Supabase if logged in
+        await supabase
+          .from('user_profiles')
+          .update({ completed_interviews: newCount })
+          .eq('id', user.id);
+      }
+      // Always save to localStorage as backup
+      localStorage.setItem('completedInterviews', newCount.toString());
       setCompletedInterviews(newCount);
     } catch (e) {
       console.error('Failed to save completed interviews count');
@@ -160,13 +256,15 @@ export default function InterviewSimulator() {
   // For testing: reset all data
   const resetAllData = async () => {
     try {
-      await window.storage.delete('completedInterviews');
-      await window.storage.delete('pastInterviews');
-      await window.storage.delete('subscription');
+      localStorage.removeItem('completedInterviews');
+      localStorage.removeItem('pastInterviews');
+      localStorage.removeItem('subscription');
+      localStorage.removeItem('leaderboard');
       setCompletedInterviews(0);
       setPastInterviews([]);
       setIsSubscribed(false);
       setSubscriptionDate(null);
+      setLeaderboard([]);
       alert('All data reset! You can test fresh.');
     } catch (e) {
       console.error('Failed to reset data');
@@ -175,18 +273,18 @@ export default function InterviewSimulator() {
 
   const loadPastInterviews = async () => {
     try {
-      const result = await window.storage.get('pastInterviews');
-      if (result) {
-        setPastInterviews(JSON.parse(result.value));
+      const stored = localStorage.getItem('pastInterviews');
+      if (stored) {
+        setPastInterviews(JSON.parse(stored));
       }
     } catch (e) {}
   };
 
   const loadLeaderboard = async () => {
     try {
-      const result = await window.storage.get('leaderboard', true);
-      if (result) {
-        setLeaderboard(JSON.parse(result.value));
+      const stored = localStorage.getItem('leaderboard');
+      if (stored) {
+        setLeaderboard(JSON.parse(stored));
       }
     } catch (e) {}
   };
@@ -194,7 +292,7 @@ export default function InterviewSimulator() {
   const savePastInterview = async (interviewData) => {
     const updated = [interviewData, ...pastInterviews].slice(0, 3);
     try {
-      await window.storage.set('pastInterviews', JSON.stringify(updated));
+      localStorage.setItem('pastInterviews', JSON.stringify(updated));
       setPastInterviews(updated);
     } catch (e) {
       console.error('Failed to save interview history');
@@ -203,8 +301,7 @@ export default function InterviewSimulator() {
 
   const markFreeTrialUsed = async () => {
     try {
-      await window.storage.set('hasUsedFreeTrial', 'true');
-      setHasUsedFreeTrial(true);
+      localStorage.setItem('hasUsedFreeTrial', 'true');
     } catch (e) {}
   };
 
@@ -222,7 +319,7 @@ export default function InterviewSimulator() {
       .slice(0, 50);
     
     try {
-      await window.storage.set('leaderboard', JSON.stringify(updatedLeaderboard), true);
+      localStorage.setItem('leaderboard', JSON.stringify(updatedLeaderboard));
       setLeaderboard(updatedLeaderboard);
     } catch (e) {}
   };
@@ -752,6 +849,19 @@ Return ONLY valid JSON:
       return;
     }
     
+    // Reset form and interview state for new interview
+    setJobTitle('');
+    setJobDescription('');
+    setUserName('');
+    setQuestions([]);
+    setCurrentQuestionIndex(0);
+    setAnswers([]);
+    setCurrentTranscript('');
+    setFinalResults(null);
+    setTimeLeft(180);
+    setVideoSnapshots([]);
+    setVideoFeedback(null);
+    
     // Try to get mic permission, but don't block if it fails
     try {
       await requestMicPermission();
@@ -797,6 +907,28 @@ Return ONLY valid JSON:
       <div style={styles.container}>
         <div style={styles.heroGlow}></div>
         <div style={styles.landing}>
+          {/* User auth section - top right */}
+          <div style={styles.authSection}>
+            {authLoading ? (
+              <span style={styles.authLoading}>Loading...</span>
+            ) : user ? (
+              <div style={styles.userInfo}>
+                <span style={styles.userEmail}>👤 {user.email}</span>
+                <button style={styles.signOutBtn} onClick={signOut}>Sign Out</button>
+              </div>
+            ) : (
+              <button style={styles.googleSignInBtn} onClick={signInWithGoogle}>
+                <svg style={styles.googleIcon} viewBox="0 0 24 24" width="18" height="18">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Sign in with Google
+              </button>
+            )}
+          </div>
+          
           {TEST_MODE && (
             <div style={styles.testModeBanner}>
               🧪 TEST MODE - Paywall disabled
@@ -844,21 +976,39 @@ Return ONLY valid JSON:
             </div>
           </div>
 
-          <button style={styles.primaryBtn} onClick={handleStartInterview}>
-            {completedInterviews === 0 ? 'Start Free Interview' : 'Start Interview'}
-            <span style={styles.btnArrow}>→</span>
-          </button>
-          
-          {completedInterviews === 0 && !TEST_MODE && (
-            <p style={styles.trialNote}>🎁 First interview is completely free • No card required</p>
-          )}
-          
-          {isSubscribed && (
-            <p style={styles.trialNote}>✓ Subscribed • Unlimited interviews</p>
-          )}
-          
-          {!isSubscribed && completedInterviews > 0 && !TEST_MODE && (
-            <p style={styles.trialNote}>Free trial used • Subscribe for unlimited access</p>
+          {/* Main CTA - changes based on auth state */}
+          {!user && !TEST_MODE ? (
+            <>
+              <button style={styles.googleSignInBtnLarge} onClick={signInWithGoogle}>
+                <svg style={styles.googleIcon} viewBox="0 0 24 24" width="20" height="20">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Sign in to Start Free Interview
+              </button>
+              <p style={styles.trialNote}>🎁 First interview is completely free • Sign in to track your progress</p>
+            </>
+          ) : (
+            <>
+              <button style={styles.primaryBtn} onClick={handleStartInterview}>
+                {completedInterviews === 0 ? 'Start Free Interview' : 'Start Interview'}
+                <span style={styles.btnArrow}>→</span>
+              </button>
+              
+              {completedInterviews === 0 && !TEST_MODE && (
+                <p style={styles.trialNote}>🎁 First interview is completely free</p>
+              )}
+              
+              {isSubscribed && (
+                <p style={styles.trialNote}>✓ Subscribed • Unlimited interviews</p>
+              )}
+              
+              {!isSubscribed && completedInterviews > 0 && !TEST_MODE && (
+                <p style={styles.trialNote}>Free trial used • Subscribe for unlimited access</p>
+              )}
+            </>
           )}
 
           <div style={styles.secondaryActions}>
@@ -1681,6 +1831,71 @@ const styles = {
     background: 'radial-gradient(circle at 30% 30%, rgba(0, 217, 255, 0.06) 0%, transparent 50%), radial-gradient(circle at 70% 70%, rgba(139, 92, 246, 0.06) 0%, transparent 50%)',
     pointerEvents: 'none',
     zIndex: 0,
+  },
+  // Auth styles
+  authSection: {
+    position: 'absolute',
+    top: '20px',
+    right: '20px',
+    zIndex: 10,
+  },
+  authLoading: {
+    color: 'rgba(255,255,255,0.5)',
+    fontSize: '14px',
+  },
+  userInfo: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+  },
+  userEmail: {
+    color: 'rgba(255,255,255,0.8)',
+    fontSize: '14px',
+  },
+  signOutBtn: {
+    padding: '8px 16px',
+    background: 'rgba(255,255,255,0.1)',
+    border: '1px solid rgba(255,255,255,0.2)',
+    borderRadius: '8px',
+    color: '#fff',
+    fontSize: '13px',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+  },
+  googleSignInBtn: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    padding: '10px 20px',
+    background: '#ffffff',
+    border: 'none',
+    borderRadius: '8px',
+    color: '#333',
+    fontSize: '14px',
+    fontWeight: '500',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+  },
+  googleSignInBtnLarge: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '12px',
+    padding: '16px 32px',
+    background: '#ffffff',
+    border: 'none',
+    borderRadius: '12px',
+    color: '#333',
+    fontSize: '16px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+    boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
+    marginTop: '20px',
+  },
+  googleIcon: {
+    flexShrink: 0,
   },
   testModeBanner: {
     display: 'flex',
