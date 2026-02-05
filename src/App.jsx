@@ -171,8 +171,6 @@ export default function InterviewSimulator() {
     await setupSpeechRecognition();
     setIsLoading(false);
   };
-    setIsLoading(false);
-  };
 
   const checkPaymentSuccess = () => {
     const urlParams = new URLSearchParams(window.location.search);
