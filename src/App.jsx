@@ -48,6 +48,11 @@ export default function InterviewSimulator() {
   const [videoSnapshots, setVideoSnapshots] = useState([]); // Store snapshots for AI analysis
   const [videoFeedback, setVideoFeedback] = useState(null);
   
+  // Contact form states
+  const [contactType, setContactType] = useState('feedback');
+  const [contactMessage, setContactMessage] = useState('');
+  const [contactSubmitted, setContactSubmitted] = useState(false);
+  
   const timerRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
@@ -243,6 +248,35 @@ export default function InterviewSimulator() {
       setIsSubscribed(false);
       setSubscriptionDate(null);
     } catch (e) {}
+  };
+
+  // Contact form submission - saves to Supabase
+  const submitContactForm = async () => {
+    if (!contactMessage.trim()) {
+      alert('Please enter a message');
+      return;
+    }
+    
+    try {
+      await supabase.from('contact_requests').insert({
+        user_id: user?.id || null,
+        user_email: user?.email || 'anonymous',
+        request_type: contactType,
+        message: contactMessage,
+        created_at: new Date().toISOString()
+      });
+      
+      setContactSubmitted(true);
+      setContactMessage('');
+      
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setContactSubmitted(false);
+      }, 3000);
+    } catch (e) {
+      console.error('Error submitting contact form:', e);
+      alert('Failed to submit. Please try again.');
+    }
   };
 
   const incrementCompletedInterviews = async () => {
@@ -1236,6 +1270,49 @@ Return ONLY valid JSON:
 
                 <button style={styles.secondaryBtn} onClick={() => setStage('history')}>
                   View Detailed History
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Contact Us Card */}
+          <div style={styles.dashboardCard}>
+            <h3 style={styles.dashboardCardTitle}>💬 Contact Us</h3>
+            {contactSubmitted ? (
+              <div style={styles.successMessage}>
+                ✅ Thank you! We'll get back to you soon.
+              </div>
+            ) : (
+              <div>
+                <p style={styles.contactDescription}>
+                  Need help with your subscription or have feedback? We'd love to hear from you.
+                </p>
+                <div style={styles.formGroup}>
+                  <label style={styles.formLabel}>Request Type</label>
+                  <select 
+                    style={styles.formSelect}
+                    value={contactType}
+                    onChange={(e) => setContactType(e.target.value)}
+                  >
+                    <option value="feedback">💡 Feedback or Suggestion</option>
+                    <option value="cancellation">❌ Cancellation Request</option>
+                    <option value="support">🆘 Technical Support</option>
+                    <option value="other">📝 Other</option>
+                  </select>
+                </div>
+                <div style={styles.formGroup}>
+                  <label style={styles.formLabel}>Message</label>
+                  <textarea
+                    style={styles.formTextarea}
+                    placeholder="Tell us how we can help..."
+                    value={contactMessage}
+                    onChange={(e) => setContactMessage(e.target.value)}
+                    rows={4}
+                  />
+                </div>
+                <button style={styles.primaryBtn} onClick={submitContactForm}>
+                  Send Message
+                  <span style={styles.btnArrow}>→</span>
                 </button>
               </div>
             )}
@@ -2587,6 +2664,53 @@ const styles = {
     textAlign: 'center',
     color: 'rgba(255,255,255,0.4)',
     padding: '40px',
+  },
+  // Contact form styles
+  contactDescription: {
+    color: 'rgba(255,255,255,0.6)',
+    fontSize: '14px',
+    marginBottom: '20px',
+  },
+  formGroup: {
+    marginBottom: '16px',
+  },
+  formLabel: {
+    display: 'block',
+    fontSize: '13px',
+    fontWeight: '500',
+    color: 'rgba(255,255,255,0.7)',
+    marginBottom: '6px',
+  },
+  formSelect: {
+    width: '100%',
+    padding: '12px 14px',
+    fontSize: '14px',
+    background: 'rgba(255,255,255,0.05)',
+    border: '1px solid rgba(255,255,255,0.1)',
+    borderRadius: '8px',
+    color: '#fff',
+    cursor: 'pointer',
+    outline: 'none',
+  },
+  formTextarea: {
+    width: '100%',
+    padding: '12px 14px',
+    fontSize: '14px',
+    background: 'rgba(255,255,255,0.05)',
+    border: '1px solid rgba(255,255,255,0.1)',
+    borderRadius: '8px',
+    color: '#fff',
+    resize: 'vertical',
+    outline: 'none',
+    fontFamily: 'inherit',
+    minHeight: '100px',
+  },
+  successMessage: {
+    textAlign: 'center',
+    padding: '30px',
+    color: '#10b981',
+    fontSize: '16px',
+    fontWeight: '500',
   },
   historyList: {
     display: 'flex',
