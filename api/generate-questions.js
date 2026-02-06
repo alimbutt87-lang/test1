@@ -29,42 +29,50 @@ export default async function handler(req, res) {
         max_tokens: 1500,
         messages: [{
           role: 'user',
-          content: `You are a hiring manager at a top company conducting a behavioral interview.
+          content: `You are a hiring manager conducting a behavioral interview for the specific role below.
 
 JOB TITLE: ${jobTitle}
-JOB DESCRIPTION: ${jobDescription || 'General role responsibilities'}
 
-STEP 1: Identify the 3-5 most critical skills for success in THIS specific role based on the job title and description.
+JOB DESCRIPTION: 
+${jobDescription || 'General role responsibilities'}
 
-STEP 2: Generate exactly 5 interview questions.
+CRITICAL: Your questions MUST be tailored to this SPECIFIC role and job description. Reference specific responsibilities, tools, skills, or challenges mentioned in the job description.
+
+STEP 1: Read the job description carefully. Identify:
+- Key responsibilities mentioned
+- Required skills/tools/technologies
+- Team dynamics or stakeholders involved
+- Challenges this role would face
+
+STEP 2: Generate exactly 5 interview questions that directly relate to what's in the job description.
 
 QUESTION MIX:
-- 3 behavioral questions ("Tell me about a time...")
-- 1 situational question ("What would you do if...")
-- 1 role-specific question (directly tests a key skill for this job)
+- 3 behavioral questions ("Tell me about a time...") - tied to specific responsibilities in the JD
+- 1 situational question ("What would you do if...") - based on a realistic challenge for this role
+- 1 role-specific question - directly tests a skill/tool mentioned in the JD
 
-HARD RULES - DO NOT BREAK:
+HARD RULES:
 
-1. LENGTH: Each question MUST be 10-25 words. Count the words. If over 25, rewrite shorter.
+1. LENGTH: 10-25 words per question. No exceptions.
 
-2. FORMAT: One clear question. No multi-part questions. No "and also". No bullet points.
+2. SPECIFICITY: Questions must reference specifics from the job description.
+   BAD: "Tell me about a time you led a project."
+   GOOD: "Tell me about a time you managed competing stakeholder priorities." (if JD mentions stakeholder management)
 
-3. TONE: Sound like a real person speaking, not a textbook.
-   USE: "Tell me about a time...", "Walk me through...", "Give me an example of...", "What would you do if..."
-   AVOID: "Describe a scenario in which...", "Please elaborate on...", academic jargon
+3. FORMAT: One clear question. No multi-part questions. No bullet points.
 
-4. ONE SKILL PER QUESTION: Each question tests exactly ONE thing relevant to this role.
+4. TONE: Natural spoken English.
+   USE: "Tell me about a time...", "Walk me through...", "Give me an example..."
+   AVOID: "Describe a scenario in which...", academic jargon
 
-5. MAKE IT UNCOMFORTABLE: Questions should require real examples, probe challenges/failures/conflicts. No softball questions.
+5. ONE SKILL PER QUESTION: Each tests one specific thing from the JD.
 
-GOOD EXAMPLES:
-- "Tell me about a time you failed at something. What happened?" (12 words)
-- "Walk me through a project that didn't go as planned." (11 words)
-- "Give me an example of when you disagreed with your manager." (12 words)
-- "What would you do if a teammate wasn't pulling their weight?" (12 words)
+6. CHALLENGING: Probe real challenges, failures, conflicts. No softballs.
 
-BAD EXAMPLES (too long/complex):
-- "Can you describe a situation where you had to work with multiple stakeholders who had competing priorities and explain how you managed to balance their needs while delivering the project on time?" (TOO LONG - 34 words)
+EXAMPLES OF GOOD ROLE-SPECIFIC QUESTIONS:
+- For PM role mentioning roadmap: "Walk me through how you'd prioritize a cluttered product roadmap."
+- For engineer role mentioning scale: "Tell me about a time you debugged a production issue under pressure."
+- For sales role mentioning quotas: "Give me an example of a deal you lost. What happened?"
 
 Return ONLY a JSON array of exactly 5 question strings:
 ["question1", "question2", "question3", "question4", "question5"]`
