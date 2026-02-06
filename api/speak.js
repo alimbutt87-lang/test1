@@ -1,3 +1,5 @@
+import { PollyClient, SynthesizeSpeechCommand } from "@aws-sdk/client-polly";
+
 export default async function handler(req, res) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Credentials', true);
@@ -17,40 +19,37 @@ export default async function handler(req, res) {
   try {
     const { text } = req.body;
     
-    // Sarah voice - natural, professional female voice
-    const VOICE_ID = 'EXAVITQu4vr4xnSDxMaL';
+    // Initialize Polly client
+    const pollyClient = new PollyClient({
+      region: "eu-west-2",
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      },
+    });
 
-    const response = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`,
-      {
-        method: 'POST',
-        headers: {
-          'Accept': 'audio/mpeg',
-          'Content-Type': 'application/json',
-          'xi-api-key': process.env.ELEVENLABS_API_KEY,
-        },
-        body: JSON.stringify({
-          text: text,
-          model_id: 'eleven_turbo_v2_5',
-          voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.75,
-          },
-        }),
-      }
-    );
+    // Use neural voice for more natural sound
+    // Joanna = US English female, neural voice
+    // Other options: Matthew (US male), Amy (UK female), Brian (UK male)
+    const command = new SynthesizeSpeechCommand({
+      Text: text,
+      OutputFormat: "mp3",
+      VoiceId: "Joanna",
+      Engine: "neural",
+    });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('ElevenLabs API error:', response.status, errorText);
-      throw new Error('ElevenLabs API error');
+    const response = await pollyClient.send(command);
+    
+    // Convert stream to buffer
+    const chunks = [];
+    for await (const chunk of response.AudioStream) {
+      chunks.push(chunk);
     }
-
-    const audioBuffer = await response.arrayBuffer();
+    const audioBuffer = Buffer.concat(chunks);
     
     res.setHeader('Content-Type', 'audio/mpeg');
     res.setHeader('Content-Length', audioBuffer.byteLength);
-    res.status(200).send(Buffer.from(audioBuffer));
+    res.status(200).send(audioBuffer);
   } catch (error) {
     console.error('Error generating speech:', error);
     res.status(500).json({ error: 'Failed to generate speech' });
