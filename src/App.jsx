@@ -1513,6 +1513,17 @@ Return ONLY valid JSON:
             )}
           </div>
 
+          {/* Leaderboard Card */}
+          <div style={styles.dashboardCard}>
+            <h3 style={styles.dashboardCardTitle}>🏆 Leaderboard</h3>
+            <p style={styles.contactDescription}>
+              See how you rank against other candidates globally.
+            </p>
+            <button style={styles.secondaryBtn} onClick={() => setStage('leaderboard')}>
+              View Leaderboard
+            </button>
+          </div>
+
           {/* Contact Us Card */}
           <div style={styles.dashboardCard}>
             <h3 style={styles.dashboardCardTitle}>💬 Contact Us</h3>
