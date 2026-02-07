@@ -42,6 +42,9 @@ export default function InterviewSimulator() {
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
   
+  // Country for leaderboard
+  const [userCountry, setUserCountry] = useState('');
+  
   // Video recording states
   const [videoEnabled, setVideoEnabled] = useState(true);
   const [cameraPermission, setCameraPermission] = useState(null);
@@ -353,14 +356,15 @@ export default function InterviewSimulator() {
     const newEntry = {
       name,
       score: finalScore,
-      job,
+      role: job,
+      flag: userCountry || '🌍',
       passed,
       date: new Date().toISOString().split('T')[0]
     };
     
     const updatedLeaderboard = [...leaderboard, newEntry]
       .sort((a, b) => b.score - a.score)
-      .slice(0, 50);
+      .slice(0, 20); // Keep top 20
     
     try {
       localStorage.setItem('leaderboard', JSON.stringify(updatedLeaderboard));
@@ -979,44 +983,32 @@ Return ONLY valid JSON:
               <button style={styles.resetBtn} onClick={resetAllData}>Reset Data</button>
             </div>
           )}
-          <div style={styles.badge}>AI-POWERED INTERVIEW SIMULATOR</div>
+          <div style={styles.badge}>INTERVIEW SIMULATOR</div>
           <h1 style={styles.heroTitle}>
-            Ace Your<br />
-            <span style={styles.heroAccent}>Next Interview</span>
+            No surprises.<br />
+            <span style={styles.heroAccent}>Ace your interview.</span>
           </h1>
           <p style={styles.heroSubtitle}>
-            Practice with AI-generated questions, record your responses, 
-            and get instant feedback on what's working and what needs improvement.
+            Enter your role and job description. We simulate a real interview with timed, 
+            camera-on answers — then score both what you say and how you say it.
           </p>
           
-          <div style={styles.features}>
-            <div style={styles.feature}>
-              <div style={styles.featureIcon}>🎙️</div>
-              <div>
-                <strong>Voice Recording</strong>
-                <span style={styles.featureDesc}>Speak your answers naturally</span>
-              </div>
+          <div style={styles.featurePills}>
+            <div style={styles.featurePill}>
+              <span>⏱️</span>
+              <span>3-min timed answers</span>
             </div>
-            <div style={styles.feature}>
-              <div style={styles.featureIcon}>🤖</div>
-              <div>
-                <strong>AI Analysis</strong>
-                <span style={styles.featureDesc}>Detailed scoring & feedback</span>
-              </div>
+            <div style={styles.featurePill}>
+              <span>📹</span>
+              <span>Camera-on pressure</span>
             </div>
-            <div style={styles.feature}>
-              <div style={styles.featureIcon}>📊</div>
-              <div>
-                <strong>Scorecard</strong>
-                <span style={styles.featureDesc}>Know exactly where to improve</span>
-              </div>
+            <div style={styles.featurePill}>
+              <span>✅</span>
+              <span>Pass/Fail verdict</span>
             </div>
-            <div style={styles.feature}>
-              <div style={styles.featureIcon}>📈</div>
-              <div>
-                <strong>Track Progress</strong>
-                <span style={styles.featureDesc}>See improvement over time</span>
-              </div>
+            <div style={styles.featurePill}>
+              <span>📊</span>
+              <span>Delivery analysis</span>
             </div>
           </div>
 
@@ -1064,9 +1056,25 @@ Return ONLY valid JSON:
                 📋 History ({pastInterviews.length})
               </button>
             )}
-            <button style={styles.secondaryBtn} onClick={() => setStage('leaderboard')}>
-              🏆 Leaderboard
-            </button>
+          </div>
+          
+          {/* Trust Block */}
+          <div style={styles.trustBlock}>
+            <p style={styles.trustTitle}>🔒 Your Practice is Private</p>
+            <p style={styles.trustText}>
+              Video and audio recordings are processed in real-time and never stored. 
+              We only save your scores to track progress. <a href="#" onClick={(e) => { e.preventDefault(); setStage('privacy'); }} style={styles.trustLink}>Learn more</a>
+            </p>
+          </div>
+          
+          {/* Footer */}
+          <div style={styles.footer}>
+            <div style={styles.footerLinks}>
+              <a href="#" onClick={(e) => { e.preventDefault(); setStage('privacy'); }} style={styles.footerLink}>Privacy Policy</a>
+              <span style={styles.footerDivider}>•</span>
+              <a href="mailto:support@interviewsimulator.com" style={styles.footerLink}>Contact</a>
+            </div>
+            <p style={styles.footerCopyright}>© 2025 Interview Simulator. All rights reserved.</p>
           </div>
         </div>
       </div>
@@ -1500,6 +1508,70 @@ Return ONLY valid JSON:
             />
           </div>
 
+          <div style={styles.inputGroup}>
+            <label style={styles.label}>Country <span style={styles.optional}>(for leaderboard)</span></label>
+            <select
+              style={styles.select}
+              value={userCountry}
+              onChange={(e) => setUserCountry(e.target.value)}
+            >
+              <option value="">Select country...</option>
+              <option value="🇺🇸">🇺🇸 United States</option>
+              <option value="🇬🇧">🇬🇧 United Kingdom</option>
+              <option value="🇨🇦">🇨🇦 Canada</option>
+              <option value="🇦🇺">🇦🇺 Australia</option>
+              <option value="🇩🇪">🇩🇪 Germany</option>
+              <option value="🇫🇷">🇫🇷 France</option>
+              <option value="🇮🇳">🇮🇳 India</option>
+              <option value="🇳🇱">🇳🇱 Netherlands</option>
+              <option value="🇸🇬">🇸🇬 Singapore</option>
+              <option value="🇦🇪">🇦🇪 UAE</option>
+              <option value="🇮🇪">🇮🇪 Ireland</option>
+              <option value="🇳🇿">🇳🇿 New Zealand</option>
+              <option value="🇸🇪">🇸🇪 Sweden</option>
+              <option value="🇨🇭">🇨🇭 Switzerland</option>
+              <option value="🇯🇵">🇯🇵 Japan</option>
+              <option value="🇧🇷">🇧🇷 Brazil</option>
+              <option value="🇲🇽">🇲🇽 Mexico</option>
+              <option value="🇪🇸">🇪🇸 Spain</option>
+              <option value="🇮🇹">🇮🇹 Italy</option>
+              <option value="🇵🇱">🇵🇱 Poland</option>
+              <option value="🇵🇹">🇵🇹 Portugal</option>
+              <option value="🇧🇪">🇧🇪 Belgium</option>
+              <option value="🇦🇹">🇦🇹 Austria</option>
+              <option value="🇩🇰">🇩🇰 Denmark</option>
+              <option value="🇳🇴">🇳🇴 Norway</option>
+              <option value="🇫🇮">🇫🇮 Finland</option>
+              <option value="🇿🇦">🇿🇦 South Africa</option>
+              <option value="🇰🇷">🇰🇷 South Korea</option>
+              <option value="🇹🇼">🇹🇼 Taiwan</option>
+              <option value="🇭🇰">🇭🇰 Hong Kong</option>
+              <option value="🇵🇭">🇵🇭 Philippines</option>
+              <option value="🇮🇩">🇮🇩 Indonesia</option>
+              <option value="🇲🇾">🇲🇾 Malaysia</option>
+              <option value="🇹🇭">🇹🇭 Thailand</option>
+              <option value="🇻🇳">🇻🇳 Vietnam</option>
+              <option value="🇵🇰">🇵🇰 Pakistan</option>
+              <option value="🇧🇩">🇧🇩 Bangladesh</option>
+              <option value="🇳🇬">🇳🇬 Nigeria</option>
+              <option value="🇪🇬">🇪🇬 Egypt</option>
+              <option value="🇰🇪">🇰🇪 Kenya</option>
+              <option value="🇦🇷">🇦🇷 Argentina</option>
+              <option value="🇨🇱">🇨🇱 Chile</option>
+              <option value="🇨🇴">🇨🇴 Colombia</option>
+              <option value="🇵🇪">🇵🇪 Peru</option>
+              <option value="🇮🇱">🇮🇱 Israel</option>
+              <option value="🇹🇷">🇹🇷 Turkey</option>
+              <option value="🇷🇺">🇷🇺 Russia</option>
+              <option value="🇺🇦">🇺🇦 Ukraine</option>
+              <option value="🇨🇿">🇨🇿 Czech Republic</option>
+              <option value="🇷🇴">🇷🇴 Romania</option>
+              <option value="🇬🇷">🇬🇷 Greece</option>
+              <option value="🇭🇺">🇭🇺 Hungary</option>
+              <option value="🌍">🌍 Other</option>
+            </select>
+          </div>
+
           {/* Video Toggle */}
           <div style={styles.videoToggle}>
             <label style={styles.toggleLabel}>
@@ -1709,30 +1781,68 @@ Return ONLY valid JSON:
 
   // Results / Scorecard
   if (stage === 'results' && finalResults) {
+    // Calculate percentile (comparing to all users)
+    const calculatePercentile = () => {
+      const allScores = leaderboard.map(l => l.score);
+      if (allScores.length === 0) return 50;
+      const belowCount = allScores.filter(s => s < finalResults.overallScore).length;
+      return Math.round((belowCount / allScores.length) * 100);
+    };
+    const percentile = calculatePercentile();
+    
+    // Find weakest categories
+    const categoryScores = Object.entries(finalResults.categories).map(([key, val]) => ({ key, score: val.score }));
+    const weakestCategories = categoryScores.sort((a, b) => a.score - b.score).slice(0, 2);
+    
     return (
       <div style={styles.container}>
         <div style={styles.heroGlow}></div>
         <div style={styles.results}>
-          {/* Verdict */}
+          {/* Verdict - Softened */}
           <div style={{
             ...styles.verdictCard,
             background: finalResults.passed 
               ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.05) 100%)'
-              : 'linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(239, 68, 68, 0.05) 100%)',
-            borderColor: finalResults.passed ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)'
+              : 'linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.03) 100%)',
+            borderColor: finalResults.passed ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.2)'
           }}>
-            <div style={styles.verdictIcon}>{finalResults.passed ? '🎉' : '😔'}</div>
+            <div style={styles.verdictIcon}>{finalResults.passed ? '🎉' : '💪'}</div>
             <h2 style={{
               ...styles.verdictTitle,
-              color: finalResults.passed ? '#10b981' : '#ef4444'
+              color: finalResults.passed ? '#10b981' : '#fca5a5'
             }}>
-              {finalResults.verdict}
+              {finalResults.passed 
+                ? "Great job! You passed!" 
+                : "Not quite there yet — but you can fix this"}
             </h2>
             <div style={styles.overallScore}>
               <span style={styles.scoreNumber}>{finalResults.overallScore}</span>
               <span style={styles.scoreOutOf}>/100</span>
             </div>
-            <p style={styles.verdictSummary}>{finalResults.summary}</p>
+            <p style={styles.verdictSummary}>
+              You scored higher than {percentile}% of candidates
+            </p>
+          </div>
+
+          {/* Fixable Message - Only show if not passed */}
+          {!finalResults.passed && (
+            <div style={styles.fixableMessage}>
+              <p style={styles.fixableTitle}>💡 Here's the good news</p>
+              <p style={styles.fixableText}>
+                Your weakest areas are <strong>{weakestCategories[0]?.key.replace(/([A-Z])/g, ' $1').trim()}</strong> and <strong>{weakestCategories[1]?.key.replace(/([A-Z])/g, ' $1').trim()}</strong>. 
+                These are the easiest to improve with practice. Review the feedback below, then retry this interview.
+              </p>
+            </div>
+          )}
+
+          {/* Retry CTAs */}
+          <div style={styles.retryCTAs}>
+            <button style={styles.retryBtn} onClick={handleStartInterview}>
+              🔁 Retry Interview
+            </button>
+            <button style={styles.practiceBtn} onClick={() => setStage('landing')}>
+              🏠 Back to Home
+            </button>
           </div>
 
           {/* Category Breakdown */}
@@ -1870,22 +1980,131 @@ Return ONLY valid JSON:
             </div>
           )}
 
-          {/* Actions */}
-          <div style={styles.resultsActions}>
-            {userName && (
-              <button 
-                style={styles.primaryBtn}
-                onClick={() => setStage('leaderboard')}
-              >
-                View Leaderboard
+          {/* Leaderboard Teaser */}
+          <div style={styles.leaderboardTeaser}>
+            <h3 style={styles.leaderboardTeaserTitle}>🏆 How do you compare?</h3>
+            
+            {/* User's position */}
+            <div style={styles.yourPosition}>
+              <span style={styles.yourPositionLabel}>Your score</span>
+              <span style={styles.yourPositionScore}>{finalResults.overallScore}%</span>
+              <span style={styles.yourPositionRank}>Higher than {percentile}% of candidates</span>
+            </div>
+            
+            {/* #1 visible */}
+            {leaderboard.length > 0 && (
+              <div style={styles.leaderboardTop}>
+                <div style={styles.rankBadge}>1</div>
+                <div style={styles.topUserInfo}>
+                  <div style={styles.topUserName}>{leaderboard[0].flag || '🌍'} {leaderboard[0].name}</div>
+                  <div style={styles.topUserRole}>{leaderboard[0].role || 'Interview Champion'}</div>
+                </div>
+                <div style={styles.topUserScore}>{leaderboard[0].score}%</div>
+              </div>
+            )}
+            
+            {/* Rest locked */}
+            {!isSubscribed && (
+              <div style={styles.lockedRows}>
+                <div style={styles.lockedRow}></div>
+                <div style={styles.lockedRow}></div>
+                <div style={styles.lockedRow}></div>
+                <div style={styles.lockedOverlay}>
+                  <p style={styles.lockedText}>See full leaderboard and track your ranking</p>
+                  <button style={styles.unlockBtn} onClick={() => setStage('paywall')}>
+                    🔓 Unlock with Pro
+                  </button>
+                </div>
+              </div>
+            )}
+            
+            {isSubscribed && (
+              <button style={styles.secondaryBtn} onClick={() => setStage('leaderboard')}>
+                View Full Leaderboard
               </button>
             )}
+          </div>
+
+          {/* Bottom Actions */}
+          <div style={styles.resultsActions}>
             <button style={styles.secondaryBtn} onClick={() => setStage('history')}>
-              View Progress History
+              📋 View Progress History
             </button>
-            <button style={styles.ghostBtn} onClick={() => setStage('landing')}>
-              ← Back to Home
-            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Privacy Policy
+  if (stage === 'privacy') {
+    return (
+      <div style={styles.container}>
+        <div style={styles.heroGlow}></div>
+        <div style={styles.privacyPage}>
+          <button style={styles.ghostBtn} onClick={() => setStage('landing')}>
+            ← Back to Interview Simulator
+          </button>
+          
+          <h1 style={styles.privacyTitle}>Privacy Policy</h1>
+          <p style={styles.privacyUpdated}>Last updated: February 2025</p>
+          
+          <div style={styles.privacyHighlight}>
+            <p><strong>The short version:</strong> We don't store your video or audio recordings. We only keep your scores to track your progress. Your practice is private.</p>
+          </div>
+          
+          <h2 style={styles.privacyH2}>What we collect</h2>
+          <p style={styles.privacyP}>When you use Interview Simulator, we collect:</p>
+          <ul style={styles.privacyList}>
+            <li><strong>Account information:</strong> Your email address and name (via Google Sign-in)</li>
+            <li><strong>Interview scores:</strong> Your overall scores, category breakdowns, and pass/fail results</li>
+            <li><strong>Subscription status:</strong> Whether you have an active subscription</li>
+          </ul>
+          
+          <h2 style={styles.privacyH2}>What we DON'T store</h2>
+          <ul style={styles.privacyList}>
+            <li><strong>Video recordings:</strong> Your camera feed is processed in real-time for body language analysis, then immediately discarded. We never store video files.</li>
+            <li><strong>Audio recordings:</strong> Your voice is transcribed in your browser. The audio itself is not stored.</li>
+            <li><strong>Interview transcripts:</strong> Your spoken answers are analyzed for feedback, then discarded. We don't keep transcripts.</li>
+          </ul>
+          
+          <h2 style={styles.privacyH2}>How we use your data</h2>
+          <p style={styles.privacyP}>We use your information to:</p>
+          <ul style={styles.privacyList}>
+            <li>Provide AI-powered feedback on your interview performance</li>
+            <li>Track your progress across multiple practice sessions</li>
+            <li>Manage your subscription and account</li>
+            <li>Display anonymized scores on the leaderboard (first name and initial only)</li>
+          </ul>
+          
+          <h2 style={styles.privacyH2}>Third-party services</h2>
+          <p style={styles.privacyP}>We use trusted third-party services for:</p>
+          <ul style={styles.privacyList}>
+            <li>Secure data storage</li>
+            <li>AI-powered interview analysis and feedback</li>
+            <li>Text-to-speech for interview questions</li>
+            <li>Payment processing</li>
+            <li>Authentication (Sign in with Google)</li>
+          </ul>
+          <p style={styles.privacyP}>These services are GDPR-compliant and process data securely.</p>
+          
+          <h2 style={styles.privacyH2}>Your rights</h2>
+          <p style={styles.privacyP}>Under GDPR, you have the right to:</p>
+          <ul style={styles.privacyList}>
+            <li><strong>Access:</strong> Request a copy of your data</li>
+            <li><strong>Delete:</strong> Request deletion of your account and all associated data</li>
+            <li><strong>Portability:</strong> Receive your data in a portable format</li>
+            <li><strong>Rectification:</strong> Correct any inaccurate information</li>
+          </ul>
+          
+          <div style={styles.privacyContact}>
+            <h3 style={styles.privacyH3}>Questions or requests?</h3>
+            <p style={styles.privacyP}>To access, delete, or ask questions about your data, contact us at:</p>
+            <a href="mailto:privacy@interviewsimulator.com" style={styles.privacyEmail}>privacy@interviewsimulator.com</a>
+          </div>
+          
+          <div style={styles.privacyFooter}>
+            © 2025 Interview Simulator. All rights reserved.
           </div>
         </div>
       </div>
@@ -3183,6 +3402,323 @@ const styles = {
     resize: 'vertical',
     outline: 'none',
     minHeight: '100px',
+  },
+  // Feature pills for landing page
+  featurePills: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '12px',
+    justifyContent: 'center',
+    marginBottom: '32px',
+  },
+  featurePill: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    padding: '8px 16px',
+    background: 'rgba(255,255,255,0.05)',
+    borderRadius: '20px',
+    fontSize: '14px',
+    color: 'rgba(255,255,255,0.8)',
+  },
+  // Trust block
+  trustBlock: {
+    marginTop: '40px',
+    padding: '20px',
+    background: 'rgba(255,255,255,0.03)',
+    border: '1px solid rgba(255,255,255,0.06)',
+    borderRadius: '12px',
+    textAlign: 'center',
+  },
+  trustTitle: {
+    fontSize: '14px',
+    fontWeight: '600',
+    color: 'rgba(255,255,255,0.9)',
+    marginBottom: '8px',
+  },
+  trustText: {
+    fontSize: '13px',
+    color: 'rgba(255,255,255,0.5)',
+    margin: 0,
+  },
+  trustLink: {
+    color: '#00d9ff',
+    textDecoration: 'none',
+  },
+  // Footer
+  footer: {
+    marginTop: '40px',
+    paddingTop: '20px',
+    borderTop: '1px solid rgba(255,255,255,0.1)',
+    textAlign: 'center',
+  },
+  footerLinks: {
+    marginBottom: '12px',
+  },
+  footerLink: {
+    color: 'rgba(255,255,255,0.5)',
+    textDecoration: 'none',
+    fontSize: '13px',
+  },
+  footerDivider: {
+    color: 'rgba(255,255,255,0.3)',
+    margin: '0 12px',
+  },
+  footerCopyright: {
+    fontSize: '12px',
+    color: 'rgba(255,255,255,0.3)',
+    margin: 0,
+  },
+  // Select dropdown
+  select: {
+    width: '100%',
+    padding: '14px 16px',
+    fontSize: '16px',
+    background: 'rgba(255,255,255,0.05)',
+    border: '1px solid rgba(255,255,255,0.1)',
+    borderRadius: '12px',
+    color: '#fff',
+    outline: 'none',
+    cursor: 'pointer',
+    appearance: 'none',
+  },
+  // Fixable message
+  fixableMessage: {
+    padding: '20px',
+    background: 'rgba(59, 130, 246, 0.1)',
+    border: '1px solid rgba(59, 130, 246, 0.2)',
+    borderRadius: '12px',
+    marginBottom: '24px',
+  },
+  fixableTitle: {
+    fontSize: '16px',
+    fontWeight: '600',
+    color: '#93c5fd',
+    marginBottom: '8px',
+    marginTop: 0,
+  },
+  fixableText: {
+    fontSize: '14px',
+    color: 'rgba(255,255,255,0.7)',
+    lineHeight: '1.6',
+    margin: 0,
+  },
+  // Retry CTAs
+  retryCTAs: {
+    display: 'flex',
+    gap: '12px',
+    justifyContent: 'center',
+    marginBottom: '32px',
+    flexWrap: 'wrap',
+  },
+  retryBtn: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    padding: '14px 28px',
+    background: 'linear-gradient(135deg, #00d9ff, #8b5cf6)',
+    border: 'none',
+    borderRadius: '10px',
+    color: '#fff',
+    fontSize: '15px',
+    fontWeight: '600',
+    cursor: 'pointer',
+  },
+  practiceBtn: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    padding: '14px 28px',
+    background: 'rgba(255,255,255,0.05)',
+    border: '1px solid rgba(255,255,255,0.15)',
+    borderRadius: '10px',
+    color: '#fff',
+    fontSize: '15px',
+    fontWeight: '600',
+    cursor: 'pointer',
+  },
+  // Leaderboard teaser
+  leaderboardTeaser: {
+    padding: '24px',
+    background: 'rgba(255,255,255,0.03)',
+    border: '1px solid rgba(255,255,255,0.06)',
+    borderRadius: '12px',
+    marginBottom: '24px',
+  },
+  leaderboardTeaserTitle: {
+    fontSize: '18px',
+    fontWeight: '600',
+    marginBottom: '16px',
+    marginTop: 0,
+  },
+  yourPosition: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    padding: '12px 16px',
+    background: 'rgba(139, 92, 246, 0.1)',
+    border: '1px solid rgba(139, 92, 246, 0.2)',
+    borderRadius: '8px',
+    marginBottom: '12px',
+    flexWrap: 'wrap',
+  },
+  yourPositionLabel: {
+    fontSize: '13px',
+    color: 'rgba(255,255,255,0.6)',
+  },
+  yourPositionScore: {
+    fontSize: '20px',
+    fontWeight: '700',
+    color: '#8b5cf6',
+  },
+  yourPositionRank: {
+    marginLeft: 'auto',
+    fontSize: '13px',
+    color: 'rgba(255,255,255,0.5)',
+  },
+  leaderboardTop: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    padding: '12px 16px',
+    background: 'rgba(255, 215, 0, 0.1)',
+    border: '1px solid rgba(255, 215, 0, 0.2)',
+    borderRadius: '8px',
+    marginBottom: '12px',
+  },
+  rankBadge: {
+    width: '32px',
+    height: '32px',
+    background: 'linear-gradient(135deg, #ffd700, #ffaa00)',
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '14px',
+    fontWeight: '700',
+    color: '#000',
+  },
+  topUserInfo: {
+    flex: 1,
+  },
+  topUserName: {
+    fontWeight: '600',
+    fontSize: '14px',
+  },
+  topUserRole: {
+    fontSize: '12px',
+    color: 'rgba(255,255,255,0.5)',
+  },
+  topUserScore: {
+    fontSize: '18px',
+    fontWeight: '700',
+    color: '#10b981',
+  },
+  lockedRows: {
+    position: 'relative',
+    marginTop: '8px',
+  },
+  lockedRow: {
+    height: '44px',
+    background: 'rgba(255,255,255,0.02)',
+    borderRadius: '6px',
+    marginBottom: '8px',
+    filter: 'blur(4px)',
+    opacity: 0.5,
+  },
+  lockedOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'rgba(10, 10, 15, 0.7)',
+    borderRadius: '8px',
+  },
+  lockedText: {
+    fontSize: '14px',
+    color: 'rgba(255,255,255,0.8)',
+    marginBottom: '12px',
+  },
+  unlockBtn: {
+    padding: '10px 20px',
+    background: 'linear-gradient(135deg, #8b5cf6, #6d28d9)',
+    border: 'none',
+    borderRadius: '8px',
+    color: '#fff',
+    fontSize: '13px',
+    fontWeight: '600',
+    cursor: 'pointer',
+  },
+  // Privacy Policy page
+  privacyPage: {
+    maxWidth: '700px',
+    width: '100%',
+    padding: '20px',
+    zIndex: 1,
+  },
+  privacyTitle: {
+    fontSize: '32px',
+    fontWeight: '700',
+    marginBottom: '8px',
+  },
+  privacyUpdated: {
+    fontSize: '14px',
+    color: 'rgba(255,255,255,0.5)',
+    marginBottom: '32px',
+  },
+  privacyHighlight: {
+    padding: '20px',
+    background: 'rgba(0, 217, 255, 0.1)',
+    border: '1px solid rgba(0, 217, 255, 0.2)',
+    borderRadius: '10px',
+    marginBottom: '32px',
+  },
+  privacyH2: {
+    fontSize: '20px',
+    fontWeight: '600',
+    marginTop: '32px',
+    marginBottom: '16px',
+    color: '#00d9ff',
+  },
+  privacyH3: {
+    fontSize: '16px',
+    fontWeight: '600',
+    marginBottom: '12px',
+  },
+  privacyP: {
+    fontSize: '15px',
+    color: 'rgba(255,255,255,0.8)',
+    marginBottom: '16px',
+    lineHeight: '1.7',
+  },
+  privacyList: {
+    marginBottom: '16px',
+    paddingLeft: '24px',
+    lineHeight: '1.8',
+  },
+  privacyContact: {
+    padding: '20px',
+    background: 'rgba(255,255,255,0.03)',
+    border: '1px solid rgba(255,255,255,0.1)',
+    borderRadius: '10px',
+    marginTop: '32px',
+  },
+  privacyEmail: {
+    color: '#00d9ff',
+    textDecoration: 'none',
+  },
+  privacyFooter: {
+    marginTop: '48px',
+    paddingTop: '24px',
+    borderTop: '1px solid rgba(255,255,255,0.1)',
+    fontSize: '13px',
+    color: 'rgba(255,255,255,0.4)',
+    textAlign: 'center',
   },
 };
 
