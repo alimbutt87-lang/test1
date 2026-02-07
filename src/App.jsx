@@ -1074,7 +1074,7 @@ Return ONLY valid JSON:
 
           {/* Main CTA - changes based on auth state */}
           {!user && !TEST_MODE ? (
-            <>
+            <div style={styles.ctaWrapper}>
               <button style={styles.googleSignInBtnLarge} onClick={signInWithGoogle}>
                 <svg style={styles.googleIcon} viewBox="0 0 24 24" width="20" height="20">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -1085,7 +1085,7 @@ Return ONLY valid JSON:
                 Sign in to Start Free Interview
               </button>
               <p style={styles.trialNote}>🎁 First interview is completely free • No credit card required</p>
-            </>
+            </div>
           ) : (
             <>
               <button style={styles.primaryBtn} onClick={handleStartInterview}>
@@ -1107,16 +1107,19 @@ Return ONLY valid JSON:
             </>
           )}
 
-          <div style={styles.secondaryActions}>
-            <button style={styles.secondaryBtn} onClick={() => setStage('dashboard')}>
-              ⚙️ Dashboard
-            </button>
-            {pastInterviews.length > 0 && (
-              <button style={styles.secondaryBtn} onClick={() => setStage('history')}>
-                📋 History ({pastInterviews.length})
+          {/* Secondary actions - only show when logged in */}
+          {user && (
+            <div style={styles.secondaryActions}>
+              <button style={styles.secondaryBtn} onClick={() => setStage('dashboard')}>
+                ⚙️ Dashboard
               </button>
-            )}
-          </div>
+              {pastInterviews.length > 0 && (
+                <button style={styles.secondaryBtn} onClick={() => setStage('history')}>
+                  📋 History ({pastInterviews.length})
+                </button>
+              )}
+            </div>
+          )}
           
           {/* Trust Block */}
           <div style={styles.trustBlock}>
@@ -2266,6 +2269,12 @@ const styles = {
     cursor: 'pointer',
     transition: 'all 0.2s',
     boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+  },
+  ctaWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '100%',
   },
   googleSignInBtnLarge: {
     display: 'flex',
