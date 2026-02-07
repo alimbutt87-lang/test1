@@ -15,7 +15,22 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { jobTitle, jobDescription } = req.body;
+    const { jobTitle, jobDescription, resume } = req.body;
+
+    // Build the prompt based on available info
+    let resumeSection = '';
+    if (resume && resume.trim().length > 50) {
+      resumeSection = `
+CANDIDATE'S RESUME:
+${resume}
+
+IMPORTANT: Since you have the candidate's resume, ask questions that probe their SPECIFIC experience:
+- Reference projects, companies, or roles from their resume
+- Ask about gaps or transitions in their career
+- Dig into skills they claim to have
+- Ask "Tell me more about [specific thing from resume]"
+`;
+    }
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -35,44 +50,41 @@ JOB TITLE: ${jobTitle}
 
 JOB DESCRIPTION: 
 ${jobDescription || 'General role responsibilities'}
+${resumeSection}
+CRITICAL: Your questions MUST be tailored to this SPECIFIC role${resume ? ' and the candidate\'s background' : ''}. Reference specific responsibilities, tools, skills, or challenges mentioned.
 
-CRITICAL: Your questions MUST be tailored to this SPECIFIC role and job description. Reference specific responsibilities, tools, skills, or challenges mentioned in the job description.
-
-STEP 1: Read the job description carefully. Identify:
+STEP 1: Read the job description${resume ? ' and resume' : ''} carefully. Identify:
 - Key responsibilities mentioned
 - Required skills/tools/technologies
 - Team dynamics or stakeholders involved
 - Challenges this role would face
+${resume ? '- Specific experiences from the resume to probe deeper' : ''}
 
-STEP 2: Generate exactly 5 interview questions that directly relate to what's in the job description.
+STEP 2: Generate exactly 5 interview questions.
 
 QUESTION MIX:
-- 3 behavioral questions ("Tell me about a time...") - tied to specific responsibilities in the JD
+- 3 behavioral questions ("Tell me about a time...") - tied to specific responsibilities${resume ? ' or their resume' : ''}
 - 1 situational question ("What would you do if...") - based on a realistic challenge for this role
-- 1 role-specific question - directly tests a skill/tool mentioned in the JD
+- 1 ${resume ? 'resume-specific question (probe something from their background)' : 'role-specific question - directly tests a skill/tool mentioned in the JD'}
 
 HARD RULES:
 
 1. LENGTH: 10-25 words per question. No exceptions.
 
-2. SPECIFICITY: Questions must reference specifics from the job description.
+2. SPECIFICITY: Questions must reference specifics from the job description${resume ? ' or resume' : ''}.
    BAD: "Tell me about a time you led a project."
-   GOOD: "Tell me about a time you managed competing stakeholder priorities." (if JD mentions stakeholder management)
+   GOOD: "Tell me about a time you managed competing stakeholder priorities."
+   ${resume ? 'BETTER: "I see you worked at [Company]. Tell me about a challenge you faced there."' : ''}
 
 3. FORMAT: One clear question. No multi-part questions. No bullet points.
 
 4. TONE: Natural spoken English.
-   USE: "Tell me about a time...", "Walk me through...", "Give me an example..."
+   USE: "Tell me about a time...", "Walk me through...", "Give me an example...", "I noticed on your resume..."
    AVOID: "Describe a scenario in which...", academic jargon
 
-5. ONE SKILL PER QUESTION: Each tests one specific thing from the JD.
+5. ONE SKILL PER QUESTION: Each tests one specific thing.
 
 6. CHALLENGING: Probe real challenges, failures, conflicts. No softballs.
-
-EXAMPLES OF GOOD ROLE-SPECIFIC QUESTIONS:
-- For PM role mentioning roadmap: "Walk me through how you'd prioritize a cluttered product roadmap."
-- For engineer role mentioning scale: "Tell me about a time you debugged a production issue under pressure."
-- For sales role mentioning quotas: "Give me an example of a deal you lost. What happened?"
 
 Return ONLY a JSON array of exactly 5 question strings:
 ["question1", "question2", "question3", "question4", "question5"]`
