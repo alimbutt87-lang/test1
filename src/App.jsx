@@ -366,8 +366,39 @@ export default function InterviewSimulator() {
     try {
       const stored = localStorage.getItem('leaderboard');
       if (stored) {
-        setLeaderboard(JSON.parse(stored));
+        const parsed = JSON.parse(stored);
+        if (parsed.length > 0) {
+          setLeaderboard(parsed);
+          return;
+        }
       }
+      
+      // Seed with dummy data if no leaderboard exists
+      const dummyLeaderboard = [
+        { name: 'Sarah M.', score: 92, role: 'Product Manager', flag: '🇺🇸', passed: true, date: '2025-02-01' },
+        { name: 'James K.', score: 89, role: 'Software Engineer', flag: '🇬🇧', passed: true, date: '2025-02-02' },
+        { name: 'Priya S.', score: 87, role: 'Data Analyst', flag: '🇮🇳', passed: true, date: '2025-02-01' },
+        { name: 'Max B.', score: 85, role: 'UX Designer', flag: '🇩🇪', passed: true, date: '2025-02-03' },
+        { name: 'Emma T.', score: 83, role: 'Marketing Manager', flag: '🇨🇦', passed: true, date: '2025-02-02' },
+        { name: 'Liam H.', score: 81, role: 'Sales Executive', flag: '🇦🇺', passed: true, date: '2025-02-01' },
+        { name: 'Sofia R.', score: 80, role: 'Business Analyst', flag: '🇪🇸', passed: true, date: '2025-02-03' },
+        { name: 'Noah C.', score: 78, role: 'Project Manager', flag: '🇳🇱', passed: true, date: '2025-02-02' },
+        { name: 'Aisha M.', score: 77, role: 'HR Manager', flag: '🇦🇪', passed: true, date: '2025-02-01' },
+        { name: 'Lucas P.', score: 76, role: 'Financial Analyst', flag: '🇫🇷', passed: true, date: '2025-02-03' },
+        { name: 'Mia W.', score: 75, role: 'Operations Manager', flag: '🇸🇬', passed: true, date: '2025-02-02' },
+        { name: 'Oliver J.', score: 74, role: 'Account Executive', flag: '🇮🇪', passed: true, date: '2025-02-01' },
+        { name: 'Chloe L.', score: 73, role: 'Content Strategist', flag: '🇳🇿', passed: true, date: '2025-02-03' },
+        { name: 'Ethan D.', score: 72, role: 'DevOps Engineer', flag: '🇸🇪', passed: true, date: '2025-02-02' },
+        { name: 'Zara A.', score: 71, role: 'Consultant', flag: '🇵🇰', passed: true, date: '2025-02-01' },
+        { name: 'Ryan F.', score: 70, role: 'Product Designer', flag: '🇯🇵', passed: true, date: '2025-02-03' },
+        { name: 'Lily N.', score: 69, role: 'QA Engineer', flag: '🇰🇷', passed: false, date: '2025-02-02' },
+        { name: 'Jack S.', score: 68, role: 'Technical Writer', flag: '🇧🇷', passed: false, date: '2025-02-01' },
+        { name: 'Grace Y.', score: 67, role: 'Support Specialist', flag: '🇲🇽', passed: false, date: '2025-02-03' },
+        { name: 'Ben V.', score: 66, role: 'Junior Developer', flag: '🇵🇱', passed: false, date: '2025-02-02' },
+      ];
+      
+      localStorage.setItem('leaderboard', JSON.stringify(dummyLeaderboard));
+      setLeaderboard(dummyLeaderboard);
     } catch (e) {}
   };
 
@@ -968,10 +999,7 @@ Return ONLY valid JSON:
       return;
     }
     
-    // Reset form and interview state for new interview
-    setJobTitle('');
-    setJobDescription('');
-    setUserName('');
+    // Reset interview state for new interview (but keep form data like job title, description, name, country, resume)
     setQuestions([]);
     setCurrentQuestionIndex(0);
     setAnswers([]);
