@@ -1146,12 +1146,15 @@ Return ONLY valid JSON:
           yPos += 10;
         }
         
-        // Video categories with scores and feedback
-        if (videoFeedback.categories) {
-          pdf.setFontSize(10);
-          pdf.setFont('helvetica', 'normal');
-          
-          Object.entries(videoFeedback.categories).forEach(([key, val]) => {
+        // Video categories - these are at root level, not nested
+        const videoCategories = ['eyeContact', 'posture', 'facialExpression', 'framing', 'background', 'overallPresence'];
+        
+        pdf.setFontSize(10);
+        pdf.setFont('helvetica', 'normal');
+        
+        videoCategories.forEach(key => {
+          const val = videoFeedback[key];
+          if (val && val.score !== undefined) {
             yPos = checkNewPage(yPos, 20);
             const label = key.replace(/([A-Z])/g, ' $1').trim();
             
@@ -1176,6 +1179,23 @@ Return ONLY valid JSON:
               });
             }
             yPos += 3;
+          }
+        });
+        
+        // Top tip
+        if (videoFeedback.topTip) {
+          yPos = checkNewPage(yPos, 15);
+          yPos += 5;
+          pdf.setTextColor(...primaryColor);
+          pdf.setFont('helvetica', 'bold');
+          pdf.text('💡 Top Tip:', 20, yPos);
+          yPos += 6;
+          pdf.setFont('helvetica', 'normal');
+          pdf.setTextColor(...grayColor);
+          const tipLines = pdf.splitTextToSize(videoFeedback.topTip, 170);
+          tipLines.forEach(line => {
+            pdf.text(line, 20, yPos);
+            yPos += 5;
           });
         }
       }
@@ -2377,7 +2397,6 @@ Return ONLY valid JSON:
                 <div style={styles.rankBadge}>1</div>
                 <div style={styles.topUserInfo}>
                   <div style={styles.topUserName}>{leaderboard[0].flag || '🌍'} {leaderboard[0].name}</div>
-                  <div style={styles.topUserRole}>{leaderboard[0].role || 'Interview Champion'}</div>
                 </div>
                 <div style={styles.topUserScore}>{leaderboard[0].score}%</div>
               </div>
