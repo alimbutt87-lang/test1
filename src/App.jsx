@@ -1096,20 +1096,30 @@ Return ONLY valid JSON:
             });
           }
           
-          // Strengths
+          // All Strengths
           if (q.strengths && q.strengths.length > 0) {
-            yPos = checkNewPage(yPos, 10);
-            pdf.setTextColor(...primaryColor);
-            pdf.text(`✓ ${q.strengths[0]}`, 20, yPos);
-            yPos += 5;
+            q.strengths.forEach(strength => {
+              yPos = checkNewPage(yPos, 10);
+              pdf.setTextColor(...primaryColor);
+              const strengthText = pdf.splitTextToSize(`✓ ${strength}`, 170);
+              strengthText.forEach(line => {
+                pdf.text(line, 20, yPos);
+                yPos += 5;
+              });
+            });
           }
           
-          // Improvements
+          // All Improvements
           if (q.improvements && q.improvements.length > 0) {
-            yPos = checkNewPage(yPos, 10);
-            pdf.setTextColor(...failColor);
-            pdf.text(`→ ${q.improvements[0]}`, 20, yPos);
-            yPos += 5;
+            q.improvements.forEach(improvement => {
+              yPos = checkNewPage(yPos, 10);
+              pdf.setTextColor(...failColor);
+              const improvementText = pdf.splitTextToSize(`→ ${improvement}`, 170);
+              improvementText.forEach(line => {
+                pdf.text(line, 20, yPos);
+                yPos += 5;
+              });
+            });
           }
           
           yPos += 5;
@@ -1130,20 +1140,42 @@ Return ONLY valid JSON:
         // Video overall score
         if (videoFeedback.overallVideoScore) {
           pdf.setFontSize(11);
-          pdf.setFont('helvetica', 'normal');
+          pdf.setFont('helvetica', 'bold');
           pdf.setTextColor(...grayColor);
           pdf.text(`Overall Video Score: ${videoFeedback.overallVideoScore}/100`, 20, yPos);
-          yPos += 8;
+          yPos += 10;
         }
         
-        // Video categories
+        // Video categories with scores and feedback
         if (videoFeedback.categories) {
+          pdf.setFontSize(10);
+          pdf.setFont('helvetica', 'normal');
+          
           Object.entries(videoFeedback.categories).forEach(([key, val]) => {
-            yPos = checkNewPage(yPos, 10);
+            yPos = checkNewPage(yPos, 20);
             const label = key.replace(/([A-Z])/g, ' $1').trim();
-            pdf.setTextColor(...grayColor);
-            pdf.text(`${label}: ${val.score}/100`, 20, yPos);
+            
+            // Category name and score
+            pdf.setTextColor(...darkColor);
+            pdf.setFont('helvetica', 'bold');
+            pdf.text(`${label}:`, 20, yPos);
+            
+            const catScoreColor = val.score >= 80 ? primaryColor : val.score >= 70 ? [245, 158, 11] : failColor;
+            pdf.setTextColor(...catScoreColor);
+            pdf.text(`${val.score}/100`, 80, yPos);
             yPos += 6;
+            
+            // Category feedback
+            if (val.feedback) {
+              pdf.setFont('helvetica', 'normal');
+              pdf.setTextColor(...grayColor);
+              const feedbackLines = pdf.splitTextToSize(val.feedback, 170);
+              feedbackLines.slice(0, 2).forEach(line => {
+                pdf.text(line, 20, yPos);
+                yPos += 5;
+              });
+            }
+            yPos += 3;
           });
         }
       }
@@ -1766,7 +1798,6 @@ Return ONLY valid JSON:
                   </span>
                   <div style={styles.playerInfo}>
                     <span style={styles.playerName}>{entry.flag} {entry.name}</span>
-                    <span style={styles.playerJob}>{entry.role}</span>
                   </div>
                   <div style={styles.playerResult}>
                     <span style={styles.playerScore}>{entry.score}</span>
@@ -1776,8 +1807,8 @@ Return ONLY valid JSON:
             </div>
           )}
           
-          <button style={styles.secondaryBtn} onClick={() => setStage('landing')}>
-            ← Back to home
+          <button style={styles.secondaryBtn} onClick={() => setStage('results')}>
+            ← Back to results
           </button>
         </div>
       </div>
@@ -2148,7 +2179,9 @@ Return ONLY valid JSON:
               <span style={styles.scoreOutOf}>/100</span>
             </div>
             <p style={styles.verdictSummary}>
-              You scored higher than {percentile}% of candidates
+              {percentile > 0 
+                ? `You scored higher than ${percentile}% of candidates`
+                : "Keep practicing to climb the leaderboard!"}
             </p>
           </div>
 
@@ -2185,9 +2218,6 @@ Return ONLY valid JSON:
               title={(!isSubscribed && !TEST_MODE) ? 'Pro feature - Subscribe to download' : 'Download your results as PDF'}
             >
               📥 Download PDF {(!isSubscribed && !TEST_MODE) && '🔒'}
-            </button>
-            <button style={styles.practiceBtn} onClick={() => setStage('landing')}>
-              🏠 Back to Home
             </button>
           </div>
 
@@ -2334,7 +2364,11 @@ Return ONLY valid JSON:
             <div style={styles.yourPosition}>
               <span style={styles.yourPositionLabel}>Your score</span>
               <span style={styles.yourPositionScore}>{finalResults.overallScore}%</span>
-              <span style={styles.yourPositionRank}>Higher than {percentile}% of candidates</span>
+              <span style={styles.yourPositionRank}>
+                {percentile > 0 
+                  ? `Higher than ${percentile}% of candidates`
+                  : "Keep practicing to climb up!"}
+              </span>
             </div>
             
             {/* #1 visible */}
@@ -2375,6 +2409,9 @@ Return ONLY valid JSON:
           <div style={styles.resultsActions}>
             <button style={styles.secondaryBtn} onClick={() => setStage('history')}>
               📋 View Progress History
+            </button>
+            <button style={styles.secondaryBtn} onClick={() => setStage('landing')}>
+              🏠 Back to Home
             </button>
           </div>
         </div>
