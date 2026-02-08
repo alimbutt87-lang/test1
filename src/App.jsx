@@ -971,11 +971,22 @@ Return ONLY valid JSON:
       const { jsPDF } = window.jspdf;
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
       
       // Colors
       const primaryColor = [16, 185, 129]; // Green
+      const failColor = [239, 68, 68]; // Red
       const darkColor = [30, 30, 40];
       const grayColor = [100, 100, 120];
+      
+      // Helper to add new page if needed
+      const checkNewPage = (yPos, needed = 30) => {
+        if (yPos + needed > pageHeight - 20) {
+          pdf.addPage();
+          return 20;
+        }
+        return yPos;
+      };
       
       // Header
       pdf.setFillColor(20, 20, 30);
@@ -994,7 +1005,7 @@ Return ONLY valid JSON:
       let yPos = 65;
       
       // Overall Score Circle (simulated)
-      pdf.setFillColor(...(finalResults.passed ? primaryColor : [239, 68, 68]));
+      pdf.setFillColor(...(finalResults.passed ? primaryColor : failColor));
       pdf.circle(pageWidth / 2, yPos + 15, 20, 'F');
       
       pdf.setTextColor(255, 255, 255);
@@ -1008,7 +1019,7 @@ Return ONLY valid JSON:
       yPos += 50;
       
       // Verdict
-      pdf.setTextColor(...(finalResults.passed ? primaryColor : [239, 68, 68]));
+      pdf.setTextColor(...(finalResults.passed ? primaryColor : failColor));
       pdf.setFontSize(18);
       pdf.setFont('helvetica', 'bold');
       pdf.text(finalResults.passed ? 'PASSED' : 'NEEDS IMPROVEMENT', pageWidth / 2, yPos, { align: 'center' });
@@ -1045,30 +1056,102 @@ Return ONLY valid JSON:
         yPos += 8;
       });
       
-      yPos += 10;
+      yPos += 15;
       
-      // Question-by-Question (if fits on page)
-      if (yPos < 200 && finalResults.questionScores) {
+      // Question-by-Question Breakdown
+      if (finalResults.questionScores && finalResults.questionScores.length > 0) {
+        yPos = checkNewPage(yPos, 40);
+        
         pdf.setTextColor(...darkColor);
         pdf.setFontSize(14);
         pdf.setFont('helvetica', 'bold');
-        pdf.text('Question Scores', 20, yPos);
+        pdf.text('Question-by-Question Breakdown', 20, yPos);
         yPos += 10;
         
-        pdf.setFontSize(10);
-        pdf.setFont('helvetica', 'normal');
-        
-        finalResults.questionScores.slice(0, 5).forEach((q, i) => {
+        finalResults.questionScores.forEach((q, i) => {
+          yPos = checkNewPage(yPos, 35);
+          
+          // Question header
+          pdf.setFontSize(11);
+          pdf.setFont('helvetica', 'bold');
+          pdf.setTextColor(...darkColor);
+          pdf.text(`Question ${i + 1}`, 20, yPos);
+          
+          const scoreColor = q.score >= 80 ? primaryColor : q.score >= 70 ? [245, 158, 11] : failColor;
+          pdf.setTextColor(...scoreColor);
+          pdf.text(`${q.score}/100`, 170, yPos);
+          yPos += 7;
+          
+          // Feedback
+          pdf.setFontSize(9);
+          pdf.setFont('helvetica', 'normal');
           pdf.setTextColor(...grayColor);
-          pdf.text(`Q${i + 1}: ${q.score}/100`, 20, yPos);
-          yPos += 6;
+          
+          if (q.feedback) {
+            const feedbackLines = pdf.splitTextToSize(q.feedback, 170);
+            feedbackLines.slice(0, 3).forEach(line => {
+              yPos = checkNewPage(yPos, 10);
+              pdf.text(line, 20, yPos);
+              yPos += 5;
+            });
+          }
+          
+          // Strengths
+          if (q.strengths && q.strengths.length > 0) {
+            yPos = checkNewPage(yPos, 10);
+            pdf.setTextColor(...primaryColor);
+            pdf.text(`✓ ${q.strengths[0]}`, 20, yPos);
+            yPos += 5;
+          }
+          
+          // Improvements
+          if (q.improvements && q.improvements.length > 0) {
+            yPos = checkNewPage(yPos, 10);
+            pdf.setTextColor(...failColor);
+            pdf.text(`→ ${q.improvements[0]}`, 20, yPos);
+            yPos += 5;
+          }
+          
+          yPos += 5;
         });
       }
       
-      // Footer
+      // Video Analysis (if available)
+      if (videoFeedback) {
+        yPos = checkNewPage(yPos, 50);
+        yPos += 10;
+        
+        pdf.setTextColor(...darkColor);
+        pdf.setFontSize(14);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Video Presence Analysis', 20, yPos);
+        yPos += 10;
+        
+        // Video overall score
+        if (videoFeedback.overallVideoScore) {
+          pdf.setFontSize(11);
+          pdf.setFont('helvetica', 'normal');
+          pdf.setTextColor(...grayColor);
+          pdf.text(`Overall Video Score: ${videoFeedback.overallVideoScore}/100`, 20, yPos);
+          yPos += 8;
+        }
+        
+        // Video categories
+        if (videoFeedback.categories) {
+          Object.entries(videoFeedback.categories).forEach(([key, val]) => {
+            yPos = checkNewPage(yPos, 10);
+            const label = key.replace(/([A-Z])/g, ' $1').trim();
+            pdf.setTextColor(...grayColor);
+            pdf.text(`${label}: ${val.score}/100`, 20, yPos);
+            yPos += 6;
+          });
+        }
+      }
+      
+      // Footer on last page
       pdf.setTextColor(150, 150, 150);
       pdf.setFontSize(8);
-      pdf.text('Generated by Interview Simulator • acemyinterview.ai', pageWidth / 2, 285, { align: 'center' });
+      pdf.text('Generated by Ace My Interviews • acemyinterviews.io', pageWidth / 2, pageHeight - 10, { align: 'center' });
       
       // Download
       pdf.save(`interview-results-${new Date().toISOString().split('T')[0]}.pdf`);
@@ -1687,12 +1770,6 @@ Return ONLY valid JSON:
                   </div>
                   <div style={styles.playerResult}>
                     <span style={styles.playerScore}>{entry.score}</span>
-                    <span style={{
-                      ...styles.playerStatus,
-                      color: entry.passed ? '#10b981' : '#ef4444'
-                    }}>
-                      {entry.passed ? '✓ Passed' : '✗ Failed'}
-                    </span>
                   </div>
                 </div>
               ))}
@@ -2028,8 +2105,14 @@ Return ONLY valid JSON:
   if (stage === 'results' && finalResults) {
     // Calculate percentile (comparing to all users)
     const calculatePercentile = () => {
-      const allScores = leaderboard.map(l => l.score);
-      if (allScores.length === 0) return 50;
+      // Use leaderboard scores, or fallback dummy scores if empty
+      let allScores = leaderboard.map(l => l.score);
+      
+      // Fallback to dummy score range if leaderboard is empty
+      if (allScores.length === 0) {
+        allScores = [92, 89, 87, 85, 83, 81, 80, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 68, 67, 66];
+      }
+      
       const belowCount = allScores.filter(s => s < finalResults.overallScore).length;
       return Math.round((belowCount / allScores.length) * 100);
     };
