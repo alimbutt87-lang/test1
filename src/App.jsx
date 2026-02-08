@@ -702,8 +702,15 @@ Return ONLY valid JSON:
   // Generate questions using Claude API
   const generateQuestions = async () => {
     setStage('generating');
-    setVideoSnapshots([]); // Reset snapshots for new interview
+    
+    // Reset all interview state for fresh start
+    setAnswers([]);
+    setCurrentTranscript('');
+    setCurrentQuestionIndex(0);
+    setTimeLeft(180);
+    setVideoSnapshots([]);
     setVideoFeedback(null);
+    setFinalResults(null);
     
     // Track interview started
     if (window.mixpanel) {
