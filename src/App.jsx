@@ -1317,14 +1317,11 @@ Return ONLY valid JSON:
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const handleStartInterview = async () => {
+  const handleStartInterview = async (source = 'landing') => {
     // In TEST_MODE, always allow access
     // In production, check if user is subscribed or has free trial remaining
     if (!TEST_MODE && !isSubscribed && completedInterviews >= 1) {
-      // Only set previousStage if not already set (e.g., from retry button)
-      if (previousStage !== 'results') {
-        setPreviousStage('landing');
-      }
+      setPreviousStage(source);
       setStage('paywall');
       return;
     }
@@ -2411,8 +2408,7 @@ Return ONLY valid JSON:
                   previous_passed: finalResults.passed
                 });
               }
-              setPreviousStage('results');
-              handleStartInterview();
+              handleStartInterview('results');
             }}>
               🔁 Retry Interview
             </button>
