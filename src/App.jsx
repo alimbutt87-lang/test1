@@ -65,6 +65,10 @@ export default function InterviewSimulator() {
   // Track previous stage for back navigation
   const [previousStage, setPreviousStage] = useState('landing');
   
+  // Mobile audio - need user tap to enable audio on mobile
+  const [mobileAudioReady, setMobileAudioReady] = useState(false);
+  const [waitingForMobileStart, setWaitingForMobileStart] = useState(false);
+  
   const timerRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
@@ -774,10 +778,16 @@ Return ONLY valid JSON:
         startSnapshotCapture();
       }
       
-      // Speak introduction then first question
-      await speakQuestion(`Welcome to your interview for the ${jobTitle} position. I'll be asking you 5 questions. You have 3 minutes to answer each question. Please speak clearly and take your time. Let's begin.`);
-      await speakQuestion(`Question 1: ${parsedQuestions[0]}`);
-      startRecordingPhase();
+      // On mobile, wait for user tap before playing audio
+      if (isMobile && !mobileAudioReady) {
+        setWaitingForMobileStart(true);
+        // Audio will be triggered by the "Start Interview" button tap
+      } else {
+        // Desktop: play audio immediately
+        await speakQuestion(`Welcome to your interview for the ${jobTitle} position. I'll be asking you 5 questions. You have 3 minutes to answer each question. Please speak clearly and take your time. Let's begin.`);
+        await speakQuestion(`Question 1: ${parsedQuestions[0]}`);
+        startRecordingPhase();
+      }
     } catch (error) {
       console.error('Error:', error);
       // Fallback
@@ -796,9 +806,25 @@ Return ONLY valid JSON:
         startSnapshotCapture();
       }
       
-      await speakQuestion(`Welcome to your interview. Let's begin with question 1: ${fallback[0]}`);
-      startRecordingPhase();
+      // On mobile, wait for user tap before playing audio
+      if (isMobile && !mobileAudioReady) {
+        setWaitingForMobileStart(true);
+      } else {
+        await speakQuestion(`Welcome to your interview. Let's begin with question 1: ${fallback[0]}`);
+        startRecordingPhase();
+      }
     }
+  };
+
+  // Handle mobile start button tap - enables audio playback
+  const handleMobileStart = async () => {
+    setMobileAudioReady(true);
+    setWaitingForMobileStart(false);
+    
+    // Now play the intro and first question
+    await speakQuestion(`Welcome to your interview for the ${jobTitle} position. I'll be asking you 5 questions. You have 3 minutes to answer each question. Please speak clearly and take your time. Let's begin.`);
+    await speakQuestion(`Question 1: ${questions[0]}`);
+    startRecordingPhase();
   };
 
   const startRecordingPhase = () => {
@@ -1307,6 +1333,7 @@ Return ONLY valid JSON:
     setTimeLeft(180);
     setVideoSnapshots([]);
     setVideoFeedback(null);
+    setWaitingForMobileStart(false);
     
     // Try to get mic permission, but don't block if it fails
     try {
@@ -2148,6 +2175,29 @@ Return ONLY valid JSON:
     const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
     const timerColor = timeLeft <= 30 ? '#ef4444' : timeLeft <= 60 ? '#f59e0b' : '#00d9ff';
     
+    // Mobile start overlay - waiting for user tap to enable audio
+    if (waitingForMobileStart) {
+      return (
+        <div style={styles.container}>
+          <div style={styles.heroGlow}></div>
+          <div style={styles.mobileStartOverlay}>
+            <div style={styles.mobileStartCard}>
+              <h2 style={styles.mobileStartTitle}>🎤 Ready to Begin?</h2>
+              <p style={styles.mobileStartText}>
+                Tap below to start your interview. The AI interviewer will ask you {questions.length} questions.
+              </p>
+              <button style={styles.mobileStartBtn} onClick={handleMobileStart}>
+                ▶️ Start Interview
+              </button>
+              <p style={styles.mobileStartHint}>
+                Make sure your volume is up to hear the questions
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
     return (
       <div style={styles.container}>
         <div style={styles.heroGlow}></div>
@@ -2764,6 +2814,51 @@ const styles = {
     marginTop: '8px',
     borderTop: '1px solid rgba(255,255,255,0.1)',
     paddingTop: '18px',
+  },
+  // Mobile start overlay styles
+  mobileStartOverlay: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: '80vh',
+    padding: '20px',
+    zIndex: 1,
+  },
+  mobileStartCard: {
+    background: 'rgba(20, 20, 30, 0.95)',
+    border: '1px solid rgba(0, 217, 255, 0.3)',
+    borderRadius: '20px',
+    padding: '40px 30px',
+    textAlign: 'center',
+    maxWidth: '350px',
+  },
+  mobileStartTitle: {
+    fontSize: '24px',
+    fontWeight: '700',
+    marginBottom: '16px',
+    color: '#fff',
+  },
+  mobileStartText: {
+    fontSize: '16px',
+    color: 'rgba(255,255,255,0.7)',
+    marginBottom: '24px',
+    lineHeight: '1.5',
+  },
+  mobileStartBtn: {
+    width: '100%',
+    padding: '16px 32px',
+    fontSize: '18px',
+    fontWeight: '600',
+    background: 'linear-gradient(135deg, #00d9ff 0%, #8b5cf6 100%)',
+    border: 'none',
+    borderRadius: '12px',
+    color: '#fff',
+    cursor: 'pointer',
+    marginBottom: '16px',
+  },
+  mobileStartHint: {
+    fontSize: '13px',
+    color: 'rgba(255,255,255,0.5)',
   },
   googleSignInBtn: {
     display: 'flex',
