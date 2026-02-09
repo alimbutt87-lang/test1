@@ -671,23 +671,13 @@ Return ONLY valid JSON:
         const audio = new Audio(audioUrl);
         audioRef.current = audio;
         
-        // Timeout fallback in case audio never plays (mobile autoplay issues)
-        const timeout = setTimeout(() => {
-          console.log('Audio timeout - proceeding without audio');
-          setIsSpeaking(false);
-          URL.revokeObjectURL(audioUrl);
-          resolve();
-        }, 10000); // 10 second timeout
-        
         audio.onended = () => {
-          clearTimeout(timeout);
           setIsSpeaking(false);
           URL.revokeObjectURL(audioUrl);
           resolve();
         };
         
         audio.onerror = (e) => {
-          clearTimeout(timeout);
           console.error('Audio playback error:', e);
           setIsSpeaking(false);
           URL.revokeObjectURL(audioUrl);
@@ -695,23 +685,17 @@ Return ONLY valid JSON:
         };
         
         // Try to play audio
-        const playPromise = audio.play();
-        
-        if (playPromise !== undefined) {
-          playPromise
-            .then(() => {
-              // Audio started playing successfully
-              console.log('Audio playing...');
-            })
-            .catch((e) => {
-              clearTimeout(timeout);
-              console.error('Audio play() blocked (likely mobile autoplay restriction):', e);
-              setIsSpeaking(false);
-              URL.revokeObjectURL(audioUrl);
-              // Skip audio and proceed - don't try fallback which may also fail
-              resolve();
-            });
-        }
+        audio.play()
+          .then(() => {
+            console.log('Audio playing...');
+          })
+          .catch((e) => {
+            console.error('Audio play() blocked:', e);
+            setIsSpeaking(false);
+            URL.revokeObjectURL(audioUrl);
+            // On mobile, just proceed without audio
+            resolve();
+          });
       });
       
     } catch (error) {
