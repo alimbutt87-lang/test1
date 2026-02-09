@@ -1021,6 +1021,7 @@ Return ONLY valid JSON:
   // PDF Download function (Pro feature)
   const downloadResultsPDF = async () => {
     if (!isSubscribed && !TEST_MODE) {
+      setPreviousStage('results');
       setStage('paywall');
       return;
     }
@@ -1320,6 +1321,7 @@ Return ONLY valid JSON:
     // In TEST_MODE, always allow access
     // In production, check if user is subscribed or has free trial remaining
     if (!TEST_MODE && !isSubscribed && completedInterviews >= 1) {
+      setPreviousStage('landing');
       setStage('paywall');
       return;
     }
@@ -1613,8 +1615,8 @@ Return ONLY valid JSON:
             </a>
           )}
           
-          <button style={styles.ghostBtn} onClick={() => setStage('landing')}>
-            ← Back to home
+          <button style={styles.ghostBtn} onClick={() => setStage(previousStage || 'landing')}>
+            ← Back to {previousStage === 'results' ? 'results' : previousStage === 'dashboard' ? 'dashboard' : 'home'}
           </button>
         </div>
       </div>
@@ -1680,7 +1682,10 @@ Return ONLY valid JSON:
                     ? "You have 1 free interview available"
                     : "Subscribe to continue practicing"}
                 </p>
-                <button style={styles.primaryBtn} onClick={() => setStage('paywall')}>
+                <button style={styles.primaryBtn} onClick={() => {
+                  setPreviousStage('dashboard');
+                  setStage('paywall');
+                }}>
                   View Plans
                   <span style={styles.btnArrow}>→</span>
                 </button>
@@ -2588,7 +2593,10 @@ Return ONLY valid JSON:
                 <div style={styles.lockedRow}></div>
                 <div style={styles.lockedOverlay}>
                   <p style={styles.lockedText}>See full leaderboard and track your ranking</p>
-                  <button style={styles.unlockBtn} onClick={() => setStage('paywall')}>
+                  <button style={styles.unlockBtn} onClick={() => {
+                    setPreviousStage('results');
+                    setStage('paywall');
+                  }}>
                     🔓 Unlock with Pro
                   </button>
                 </div>
