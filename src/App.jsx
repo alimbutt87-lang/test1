@@ -1442,7 +1442,7 @@ Return ONLY valid JSON:
             </div>
           )}
           
-          <img src="/Logoapp.png" alt="Ace My Interviews" style={styles.logo} />
+          <div style={styles.badge}>INTERVIEW SIMULATOR</div>
           <h1 style={styles.heroTitle}>
             No surprises.<br />
             <span style={styles.heroAccent}>Ace your interview.</span>
@@ -2976,9 +2976,9 @@ const styles = {
     marginBottom: '24px',
   },
   logo: {
-    maxWidth: '200px',
+    maxWidth: '350px',
     height: 'auto',
-    marginBottom: '24px',
+    marginBottom: '32px',
   },
   heroTitle: {
     fontSize: 'clamp(40px, 8vw, 64px)',
