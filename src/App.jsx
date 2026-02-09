@@ -1321,7 +1321,10 @@ Return ONLY valid JSON:
     // In TEST_MODE, always allow access
     // In production, check if user is subscribed or has free trial remaining
     if (!TEST_MODE && !isSubscribed && completedInterviews >= 1) {
-      setPreviousStage('landing');
+      // Only set previousStage if not already set (e.g., from retry button)
+      if (previousStage !== 'results') {
+        setPreviousStage('landing');
+      }
       setStage('paywall');
       return;
     }
@@ -2408,6 +2411,7 @@ Return ONLY valid JSON:
                   previous_passed: finalResults.passed
                 });
               }
+              setPreviousStage('results');
               handleStartInterview();
             }}>
               🔁 Retry Interview
