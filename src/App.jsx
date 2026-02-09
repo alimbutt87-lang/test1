@@ -150,7 +150,7 @@ export default function InterviewSimulator() {
       videoRef.current.srcObject = videoStreamRef.current;
       videoRef.current.play().catch(e => console.log('Video play error:', e));
     }
-  }, [stage, videoEnabled]);
+  }, [stage, videoEnabled, waitingForMobileStart]);
 
   // Load user data from Supabase
   const loadUserData = async (userId) => {
@@ -2180,6 +2180,16 @@ Return ONLY valid JSON:
       return (
         <div style={styles.container}>
           <div style={styles.heroGlow}></div>
+          {/* Hidden video element to keep camera stream attached */}
+          {videoEnabled && (
+            <video
+              ref={videoRef}
+              autoPlay
+              muted
+              playsInline
+              style={{ position: 'absolute', width: 1, height: 1, opacity: 0 }}
+            />
+          )}
           <div style={styles.mobileStartOverlay}>
             <div style={styles.mobileStartCard}>
               <h2 style={styles.mobileStartTitle}>🎤 Ready to Begin?</h2>
