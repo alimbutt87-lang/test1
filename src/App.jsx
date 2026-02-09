@@ -1615,7 +1615,10 @@ Return ONLY valid JSON:
             </a>
           )}
           
-          <button style={styles.ghostBtn} onClick={() => setStage(previousStage || 'landing')}>
+          <button style={styles.ghostBtn} onClick={() => {
+            const destination = (previousStage === 'results' || previousStage === 'dashboard') ? previousStage : 'landing';
+            setStage(destination);
+          }}>
             ← Back to {previousStage === 'results' ? 'results' : previousStage === 'dashboard' ? 'dashboard' : 'home'}
           </button>
         </div>
