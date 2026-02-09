@@ -1442,7 +1442,7 @@ Return ONLY valid JSON:
             </div>
           )}
           
-          <div style={styles.badge}>INTERVIEW SIMULATOR</div>
+          <img src="/Logoapp.png" alt="Ace My Interviews" style={styles.logo} />
           <h1 style={styles.heroTitle}>
             No surprises.<br />
             <span style={styles.heroAccent}>Ace your interview.</span>
@@ -1990,10 +1990,10 @@ Return ONLY valid JSON:
           </div>
           
           <div style={styles.inputGroup}>
-            <label style={styles.label}>Job Description <span style={styles.optional}>(optional but recommended)</span></label>
+            <label style={styles.label}>Job Description</label>
             <textarea
               style={styles.textarea}
-              placeholder="Paste the job description here for more tailored questions..."
+              placeholder="Paste the job description to get questions most likely to come up in your interview"
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
               rows={5}
@@ -2001,7 +2001,7 @@ Return ONLY valid JSON:
           </div>
 
           <div style={styles.inputGroup}>
-            <label style={styles.label}>Your Name <span style={styles.optional}>(for leaderboard)</span></label>
+            <label style={styles.label}>Your Name</label>
             <input
               type="text"
               style={styles.input}
@@ -2012,7 +2012,7 @@ Return ONLY valid JSON:
           </div>
 
           <div style={styles.inputGroup}>
-            <label style={styles.label}>Country <span style={styles.optional}>(for leaderboard)</span></label>
+            <label style={styles.label}>Country</label>
             <select
               style={styles.select}
               value={userCountry}
@@ -2973,6 +2973,11 @@ const styles = {
     fontWeight: '600',
     letterSpacing: '1.5px',
     color: '#00d9ff',
+    marginBottom: '24px',
+  },
+  logo: {
+    maxWidth: '200px',
+    height: 'auto',
     marginBottom: '24px',
   },
   heroTitle: {
