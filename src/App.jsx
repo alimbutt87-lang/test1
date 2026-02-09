@@ -59,6 +59,12 @@ export default function InterviewSimulator() {
   const [contactMessage, setContactMessage] = useState('');
   const [contactSubmitted, setContactSubmitted] = useState(false);
   
+  // Mobile menu state
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  // Track previous stage for back navigation
+  const [previousStage, setPreviousStage] = useState('landing');
+  
   const timerRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
@@ -71,6 +77,16 @@ export default function InterviewSimulator() {
   const videoStreamRef = useRef(null);
   const snapshotIntervalRef = useRef(null);
   const transcriptRef = useRef(''); // Store transcript in ref for reliable access
+
+  // Check if mobile
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 600);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Initialize auth on mount
   useEffect(() => {
@@ -1333,10 +1349,53 @@ Return ONLY valid JSON:
           {/* User auth section - top right (only show when logged in) */}
           {user && (
             <div style={styles.authSection}>
-              <div style={styles.userInfo}>
-                <span style={styles.userEmail}>👤 {user.email.length > 20 ? user.email.substring(0, 17) + '...' : user.email}</span>
-                <button style={styles.signOutBtn} onClick={signOut}>Sign Out</button>
-              </div>
+              {/* Desktop view */}
+              {!isMobile && (
+                <div style={styles.userInfo}>
+                  <span style={styles.userEmail}>👤 {user.email.length > 25 ? user.email.substring(0, 22) + '...' : user.email}</span>
+                  <button style={styles.signOutBtn} onClick={signOut}>Sign Out</button>
+                </div>
+              )}
+              {/* Mobile menu button */}
+              {isMobile && (
+                <>
+                  <button 
+                    style={styles.mobileMenuBtn} 
+                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  >
+                    {mobileMenuOpen ? '✕' : '☰'}
+                  </button>
+                  {/* Mobile dropdown */}
+                  {mobileMenuOpen && (
+                    <div style={styles.mobileMenuDropdown}>
+                      <span style={styles.mobileMenuEmail}>{user.email}</span>
+                      <button style={styles.mobileMenuItem} onClick={() => {
+                        setMobileMenuOpen(false);
+                        if (window.mixpanel) window.mixpanel.track('dashboard_viewed');
+                        setStage('dashboard');
+                      }}>
+                        ⚙️ Dashboard
+                      </button>
+                      {pastInterviews.length > 0 && (
+                        <button style={styles.mobileMenuItem} onClick={() => {
+                          setMobileMenuOpen(false);
+                          if (window.mixpanel) window.mixpanel.track('history_viewed');
+                          setPreviousStage('landing');
+                          setStage('history');
+                        }}>
+                          📋 History
+                        </button>
+                      )}
+                      <button style={styles.mobileMenuItemDanger} onClick={() => {
+                        setMobileMenuOpen(false);
+                        signOut();
+                      }}>
+                        Sign Out
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           )}
           
@@ -1423,6 +1482,7 @@ Return ONLY valid JSON:
               {pastInterviews.length > 0 && (
                 <button style={styles.secondaryBtn} onClick={() => {
                   if (window.mixpanel) window.mixpanel.track('history_viewed');
+                  setPreviousStage('landing');
                   setStage('history');
                 }}>
                   📋 History ({pastInterviews.length})
@@ -1671,6 +1731,7 @@ Return ONLY valid JSON:
 
                 <button style={styles.secondaryBtn} onClick={() => {
                   if (window.mixpanel) window.mixpanel.track('history_viewed');
+                  setPreviousStage('dashboard');
                   setStage('history');
                 }}>
                   View Detailed History
@@ -1821,8 +1882,8 @@ Return ONLY valid JSON:
             </div>
           )}
           
-          <button style={styles.secondaryBtn} onClick={() => setStage('landing')}>
-            ← Back to home
+          <button style={styles.secondaryBtn} onClick={() => setStage(previousStage || 'landing')}>
+            ← Back to {previousStage === 'results' ? 'results' : previousStage === 'dashboard' ? 'dashboard' : 'home'}
           </button>
         </div>
       </div>
@@ -2481,6 +2542,7 @@ Return ONLY valid JSON:
           <div style={styles.resultsActions}>
             <button style={styles.secondaryBtn} onClick={() => {
               if (window.mixpanel) window.mixpanel.track('history_viewed');
+              setPreviousStage('results');
               setStage('history');
             }}>
               📋 View Progress History
@@ -2612,10 +2674,18 @@ const styles = {
     alignItems: 'center',
     gap: '12px',
   },
+  userInfoDesktop: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    '@media (max-width: 600px)': {
+      display: 'none',
+    },
+  },
   userEmail: {
     color: 'rgba(255,255,255,0.8)',
     fontSize: '14px',
-    maxWidth: '150px',
+    maxWidth: '200px',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
@@ -2630,6 +2700,63 @@ const styles = {
     cursor: 'pointer',
     transition: 'all 0.2s',
     flexShrink: 0,
+  },
+  mobileMenuBtn: {
+    padding: '8px 12px',
+    background: 'rgba(255,255,255,0.1)',
+    border: '1px solid rgba(255,255,255,0.2)',
+    borderRadius: '8px',
+    color: '#fff',
+    fontSize: '18px',
+    cursor: 'pointer',
+  },
+  mobileMenuDropdown: {
+    position: 'absolute',
+    top: '50px',
+    right: '0',
+    background: 'rgba(20, 20, 30, 0.98)',
+    border: '1px solid rgba(255,255,255,0.1)',
+    borderRadius: '12px',
+    padding: '12px',
+    minWidth: '200px',
+    boxShadow: '0 10px 40px rgba(0,0,0,0.5)',
+  },
+  mobileMenuEmail: {
+    display: 'block',
+    color: 'rgba(255,255,255,0.6)',
+    fontSize: '12px',
+    padding: '8px 12px',
+    borderBottom: '1px solid rgba(255,255,255,0.1)',
+    marginBottom: '8px',
+    wordBreak: 'break-all',
+  },
+  mobileMenuItem: {
+    display: 'block',
+    width: '100%',
+    padding: '10px 12px',
+    background: 'transparent',
+    border: 'none',
+    borderRadius: '8px',
+    color: '#fff',
+    fontSize: '14px',
+    textAlign: 'left',
+    cursor: 'pointer',
+    transition: 'background 0.2s',
+  },
+  mobileMenuItemDanger: {
+    display: 'block',
+    width: '100%',
+    padding: '10px 12px',
+    background: 'transparent',
+    border: 'none',
+    borderRadius: '8px',
+    color: '#ef4444',
+    fontSize: '14px',
+    textAlign: 'left',
+    cursor: 'pointer',
+    marginTop: '8px',
+    borderTop: '1px solid rgba(255,255,255,0.1)',
+    paddingTop: '18px',
   },
   googleSignInBtn: {
     display: 'flex',
