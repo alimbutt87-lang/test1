@@ -304,6 +304,13 @@ export default function InterviewSimulator() {
         created_at: new Date().toISOString()
       });
       
+      // Track contact form submission
+      if (window.mixpanel) {
+        window.mixpanel.track('contact_form_submitted', {
+          request_type: contactType
+        });
+      }
+      
       setContactSubmitted(true);
       setContactMessage('');
       
@@ -1327,7 +1334,7 @@ Return ONLY valid JSON:
           {user && (
             <div style={styles.authSection}>
               <div style={styles.userInfo}>
-                <span style={styles.userEmail}>👤 {user.email}</span>
+                <span style={styles.userEmail}>👤 {user.email.length > 20 ? user.email.substring(0, 17) + '...' : user.email}</span>
                 <button style={styles.signOutBtn} onClick={signOut}>Sign Out</button>
               </div>
             </div>
@@ -1407,11 +1414,17 @@ Return ONLY valid JSON:
           {/* Secondary actions - only show when logged in */}
           {user && (
             <div style={styles.secondaryActions}>
-              <button style={styles.secondaryBtn} onClick={() => setStage('dashboard')}>
+              <button style={styles.secondaryBtn} onClick={() => {
+                if (window.mixpanel) window.mixpanel.track('dashboard_viewed');
+                setStage('dashboard');
+              }}>
                 ⚙️ Dashboard
               </button>
               {pastInterviews.length > 0 && (
-                <button style={styles.secondaryBtn} onClick={() => setStage('history')}>
+                <button style={styles.secondaryBtn} onClick={() => {
+                  if (window.mixpanel) window.mixpanel.track('history_viewed');
+                  setStage('history');
+                }}>
                   📋 History ({pastInterviews.length})
                 </button>
               )}
@@ -1423,14 +1436,22 @@ Return ONLY valid JSON:
             <p style={styles.trustTitle}>🔒 Your Practice is Private</p>
             <p style={styles.trustText}>
               Video and audio recordings are processed in real-time and never stored. 
-              We only save your scores to track progress. <a href="#" onClick={(e) => { e.preventDefault(); setStage('privacy'); }} style={styles.trustLink}>Learn more</a>
+              We only save your scores to track progress. <a href="#" onClick={(e) => { 
+                e.preventDefault(); 
+                if (window.mixpanel) window.mixpanel.track('privacy_policy_viewed');
+                setStage('privacy'); 
+              }} style={styles.trustLink}>Learn more</a>
             </p>
           </div>
           
           {/* Footer */}
           <div style={styles.footer}>
             <div style={styles.footerLinks}>
-              <a href="#" onClick={(e) => { e.preventDefault(); setStage('privacy'); }} style={styles.footerLink}>Privacy Policy</a>
+              <a href="#" onClick={(e) => { 
+                e.preventDefault(); 
+                if (window.mixpanel) window.mixpanel.track('privacy_policy_viewed');
+                setStage('privacy'); 
+              }} style={styles.footerLink}>Privacy Policy</a>
               <span style={styles.footerDivider}>•</span>
               <a href="mailto:support@interviewsimulator.com" style={styles.footerLink}>Contact</a>
             </div>
@@ -1648,7 +1669,10 @@ Return ONLY valid JSON:
                   )}
                 </div>
 
-                <button style={styles.secondaryBtn} onClick={() => setStage('history')}>
+                <button style={styles.secondaryBtn} onClick={() => {
+                  if (window.mixpanel) window.mixpanel.track('history_viewed');
+                  setStage('history');
+                }}>
                   View Detailed History
                 </button>
               </div>
@@ -1661,7 +1685,10 @@ Return ONLY valid JSON:
             <p style={styles.contactDescription}>
               See how you rank against other candidates globally.
             </p>
-            <button style={styles.secondaryBtn} onClick={() => setStage('leaderboard')}>
+            <button style={styles.secondaryBtn} onClick={() => {
+              if (window.mixpanel) window.mixpanel.track('leaderboard_viewed');
+              setStage('leaderboard');
+            }}>
               View Leaderboard
             </button>
           </div>
@@ -1966,7 +1993,12 @@ Return ONLY valid JSON:
               <input
                 type="checkbox"
                 checked={videoEnabled}
-                onChange={(e) => setVideoEnabled(e.target.checked)}
+                onChange={(e) => {
+                  setVideoEnabled(e.target.checked);
+                  if (window.mixpanel) {
+                    window.mixpanel.track('video_toggled', { enabled: e.target.checked });
+                  }
+                }}
                 style={styles.checkbox}
               />
               <span style={styles.toggleSwitch}>
@@ -2003,7 +2035,18 @@ Return ONLY valid JSON:
               opacity: jobTitle.trim() ? 1 : 0.5,
               cursor: jobTitle.trim() ? 'pointer' : 'not-allowed'
             }}
-            onClick={() => jobTitle.trim() && generateQuestions()}
+            onClick={() => {
+              if (jobTitle.trim()) {
+                if (window.mixpanel) {
+                  window.mixpanel.track('setup_completed', {
+                    has_job_description: !!jobDescription.trim(),
+                    has_resume: !!userResume.trim(),
+                    video_enabled: videoEnabled
+                  });
+                }
+                generateQuestions();
+              }
+            }}
             disabled={!jobTitle.trim()}
           >
             Start Interview
@@ -2425,7 +2468,10 @@ Return ONLY valid JSON:
             )}
             
             {isSubscribed && (
-              <button style={styles.secondaryBtn} onClick={() => setStage('leaderboard')}>
+              <button style={styles.secondaryBtn} onClick={() => {
+                if (window.mixpanel) window.mixpanel.track('leaderboard_viewed');
+                setStage('leaderboard');
+              }}>
                 View Full Leaderboard
               </button>
             )}
@@ -2433,7 +2479,10 @@ Return ONLY valid JSON:
 
           {/* Bottom Actions */}
           <div style={styles.resultsActions}>
-            <button style={styles.secondaryBtn} onClick={() => setStage('history')}>
+            <button style={styles.secondaryBtn} onClick={() => {
+              if (window.mixpanel) window.mixpanel.track('history_viewed');
+              setStage('history');
+            }}>
               📋 View Progress History
             </button>
             <button style={styles.secondaryBtn} onClick={() => setStage('landing')}>
@@ -2566,6 +2615,10 @@ const styles = {
   userEmail: {
     color: 'rgba(255,255,255,0.8)',
     fontSize: '14px',
+    maxWidth: '150px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
   signOutBtn: {
     padding: '8px 16px',
@@ -2576,6 +2629,7 @@ const styles = {
     fontSize: '13px',
     cursor: 'pointer',
     transition: 'all 0.2s',
+    flexShrink: 0,
   },
   googleSignInBtn: {
     display: 'flex',

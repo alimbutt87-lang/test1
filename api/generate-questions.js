@@ -42,6 +42,7 @@ IMPORTANT: Since you have the candidate's resume, ask questions that probe their
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1500,
+        temperature: 0.8,
         messages: [{
           role: 'user',
           content: `You are a hiring manager conducting a behavioral interview for the specific role below.
@@ -52,6 +53,8 @@ JOB DESCRIPTION:
 ${jobDescription || 'General role responsibilities'}
 ${resumeSection}
 CRITICAL: Your questions MUST be tailored to this SPECIFIC role${resume ? ' and the candidate\'s background' : ''}. Reference specific responsibilities, tools, skills, or challenges mentioned.
+
+VARIATION: Generate FRESH questions each time. Avoid common/generic questions. Pick DIFFERENT aspects of the JD${resume ? ' and resume' : ''} to focus on. Be creative with angles.
 
 STEP 1: Read the job description${resume ? ' and resume' : ''} carefully. Identify:
 - Key responsibilities mentioned
