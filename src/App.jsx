@@ -1442,10 +1442,8 @@ Return ONLY valid JSON:
             </div>
           )}
           
-          {/* Logo - top left */}
-          <img src="/Logoapp.png" alt="Ace My Interviews" style={styles.logoTopLeft} />
-          
-          <div style={styles.badge}>INTERVIEW SIMULATOR</div>
+          {/* Logo - centered */}
+          <img src="/Logoapp.png" alt="Ace My Interviews" style={styles.logoCentered} />
           <h1 style={styles.heroTitle}>
             No surprises.<br />
             <span style={styles.heroAccent}>Ace your interview.</span>
@@ -2992,6 +2990,11 @@ const styles = {
     left: '22px',
     height: '44px',
     width: 'auto',
+  },
+  logoCentered: {
+    maxWidth: '400px',
+    height: 'auto',
+    marginBottom: '24px',
   },
   heroTitle: {
     fontSize: 'clamp(40px, 8vw, 64px)',
