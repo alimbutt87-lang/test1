@@ -2994,7 +2994,8 @@ const styles = {
   logoCentered: {
     maxWidth: '400px',
     height: 'auto',
-    marginBottom: '12px',
+    marginTop: '40px',
+    marginBottom: '8px',
   },
   heroTitle: {
     fontSize: 'clamp(40px, 8vw, 64px)',
