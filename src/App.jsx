@@ -2999,6 +2999,8 @@ const styles = {
     marginTop: '0',
     marginBottom: '0',
     display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   heroTitle: {
     fontSize: 'clamp(40px, 8vw, 64px)',
