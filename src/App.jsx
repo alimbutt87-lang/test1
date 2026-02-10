@@ -1442,6 +1442,9 @@ Return ONLY valid JSON:
             </div>
           )}
           
+          {/* Logo - top left */}
+          <img src="/Logoapp.png" alt="Ace My Interviews" style={styles.logoTopLeft} />
+          
           <div style={styles.badge}>INTERVIEW SIMULATOR</div>
           <h1 style={styles.heroTitle}>
             No surprises.<br />
@@ -2982,6 +2985,13 @@ const styles = {
     maxWidth: '350px',
     height: 'auto',
     marginBottom: '32px',
+  },
+  logoTopLeft: {
+    position: 'absolute',
+    top: '20px',
+    left: '20px',
+    maxWidth: '120px',
+    height: 'auto',
   },
   heroTitle: {
     fontSize: 'clamp(40px, 8vw, 64px)',
