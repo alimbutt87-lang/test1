@@ -2988,9 +2988,9 @@ const styles = {
   },
   logoTopLeft: {
     position: 'absolute',
-    top: '30px',
-    left: '30px',
-    maxWidth: '500px',
+    top: '15px',
+    left: '15px',
+    maxWidth: '400px',
     height: 'auto',
   },
   heroTitle: {
