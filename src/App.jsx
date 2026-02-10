@@ -2988,10 +2988,10 @@ const styles = {
   },
   logoTopLeft: {
     position: 'absolute',
-    top: '15px',
-    left: '15px',
-    maxWidth: '400px',
-    height: 'auto',
+    top: '18px',
+    left: '22px',
+    height: '44px',
+    width: 'auto',
   },
   heroTitle: {
     fontSize: 'clamp(40px, 8vw, 64px)',
