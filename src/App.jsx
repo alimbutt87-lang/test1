@@ -2966,6 +2966,7 @@ const styles = {
     textAlign: 'center',
     maxWidth: '650px',
     zIndex: 1,
+    padding: '0 20px',
   },
   badge: {
     display: 'inline-block',
@@ -2992,10 +2993,12 @@ const styles = {
     width: 'auto',
   },
   logoCentered: {
-    maxWidth: '400px',
+    maxWidth: '100%',
+    width: '400px',
     height: 'auto',
-    marginTop: '40px',
-    marginBottom: '8px',
+    marginTop: '0',
+    marginBottom: '0',
+    display: 'block',
   },
   heroTitle: {
     fontSize: 'clamp(40px, 8vw, 64px)',
