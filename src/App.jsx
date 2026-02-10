@@ -2990,7 +2990,7 @@ const styles = {
     position: 'absolute',
     top: '20px',
     left: '20px',
-    maxWidth: '120px',
+    maxWidth: '200px',
     height: 'auto',
   },
   heroTitle: {
