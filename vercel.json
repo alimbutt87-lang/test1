@@ -10,6 +10,10 @@
       "destination": "/sitemap.xml"
     },
     {
+      "source": "/interview",
+      "destination": "/interview/index.html"
+    },
+    {
       "source": "/interview/:slug",
       "destination": "/interview/:slug.html"
     },
