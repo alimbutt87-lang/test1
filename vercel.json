@@ -4,10 +4,14 @@
       "maxDuration": 30
     }
   },
-   "rewrites": [
+  "rewrites": [
     {
       "source": "/interview/:slug",
       "destination": "/interview/:slug.html"
+    },
+    {
+      "source": "/((?!api|interview).*)",
+      "destination": "/index.html"
     }
   ]
 }
