@@ -6,11 +6,15 @@
   },
   "rewrites": [
     {
+      "source": "/sitemap.xml",
+      "destination": "/sitemap.xml"
+    },
+    {
       "source": "/interview/:slug",
       "destination": "/interview/:slug.html"
     },
     {
-      "source": "/((?!api|interview).*)",
+      "source": "/((?!api|interview|sitemap).*)",
       "destination": "/index.html"
     }
   ]
