@@ -7,7 +7,7 @@ const TEST_MODE = false;
 
 // Stripe URLs
 const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/fZu14n8Ac7Wm3QJ0TN6wE00';
-const STRIPE_SUBSCRIBE_URL = 'https://buy.stripe.com/4gMfZh03G90q86ZcCv6wE01';
+const STRIPE_SUBSCRIBE_URL = 'https://buy.stripe.com/6oUaEXbMo90qcnfaun6wE02';
 
 // Supabase configuration
 const SUPABASE_URL = 'https://msngeennlvzbhohnrhnq.supabase.co';
@@ -237,7 +237,7 @@ export default function InterviewSimulator() {
         if (window.mixpanel) {
           window.mixpanel.track('payment_completed', {
             plan: 'monthly',
-            price: 9.99,
+            price: 19.99,
             currency: 'USD'
           });
           window.mixpanel.people.set({
@@ -1584,7 +1584,7 @@ Return ONLY valid JSON:
           
           <div style={styles.priceCard}>
             <div style={styles.priceTag}>
-              <span style={styles.priceAmount}>$9.99</span>
+              <span style={styles.priceAmount}>$19.99</span>
               <span style={styles.pricePeriod}>/month</span>
             </div>
             <ul style={styles.priceFeatures}>
@@ -1652,7 +1652,7 @@ Return ONLY valid JSON:
               <div>
                 <div style={styles.subscriptionStatus}>
                   <span style={styles.statusBadgeActive}>✓ Active</span>
-                  <span style={styles.subscriptionPrice}>$9.99/month</span>
+                  <span style={styles.subscriptionPrice}>$19.99/month</span>
                 </div>
                 {subscriptionDate && (
                   <p style={styles.subscriptionDate}>
