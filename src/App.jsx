@@ -7,7 +7,7 @@ const TEST_MODE = false;
 
 // Stripe URLs
 const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/fZu14n8Ac7Wm3QJ0TN6wE00';
-const STRIPE_SUBSCRIBE_URL = 'https://buy.stripe.com/fZu14n8Ac7Wm3QJ0TN6wE00';
+const STRIPE_SUBSCRIBE_URL = 'https://buy.stripe.com/4gMfZh03G90q86ZcCv6wE01';
 
 // Supabase configuration
 const SUPABASE_URL = 'https://msngeennlvzbhohnrhnq.supabase.co';
