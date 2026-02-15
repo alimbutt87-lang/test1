@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
 // ===== CONFIGURATION =====
-// Set to true for testing (bypasses paywall AND auth), false for production
+// Set to true for testing (bypasses paywall), false for production
 const TEST_MODE = true;
-const SKIP_AUTH = true; // Bypasses Google sign-in completely for testing
+const SKIP_AUTH = true; // For staging testing only
 
 // Stripe URLs
 const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/fZu14n8Ac7Wm3QJ0TN6wE00';
@@ -39,7 +39,7 @@ export default function InterviewSimulator() {
   const [micPermission, setMicPermission] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   
-  // Authentication states - skip auth in test mode
+  // Authentication states
   const [user, setUser] = useState(SKIP_AUTH ? { id: 'test-user', email: 'test@test.com' } : null);
   const [authLoading, setAuthLoading] = useState(SKIP_AUTH ? false : true);
   
@@ -71,11 +71,11 @@ export default function InterviewSimulator() {
   const [waitingForMobileStart, setWaitingForMobileStart] = useState(false);
   
   // V2: Follow-up question states
-  const [isEvaluating, setIsEvaluating] = useState(false); // "Evaluating your response..." state
-  const [isFollowUp, setIsFollowUp] = useState(false); // Currently answering a follow-up
+  const [isEvaluating, setIsEvaluating] = useState(false);
+  const [isFollowUp, setIsFollowUp] = useState(false);
   const [currentFollowUpQuestion, setCurrentFollowUpQuestion] = useState(null);
   const [followUpsAskedCount, setFollowUpsAskedCount] = useState(0);
-  const [followUpTypesUsed, setFollowUpTypesUsed] = useState([]); // Track which types used to avoid repeats
+  const [followUpTypesUsed, setFollowUpTypesUsed] = useState([]);
   
   const timerRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -914,10 +914,10 @@ Return ONLY valid JSON:
     setCurrentTranscript('');
     transcriptRef.current = '';
     
-    // Reset timer immediately
+    // Reset timer
     setTimeLeft(180);
     
-    // If we just answered a follow-up, always move to next main question
+    // If we just answered a follow-up, move to next main question
     if (isFollowUp) {
       setIsFollowUp(false);
       setCurrentFollowUpQuestion(null);
@@ -928,7 +928,6 @@ Return ONLY valid JSON:
         await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
         startRecordingPhase();
       } else {
-        // Interview complete
         setStage('analyzing');
         setIsAnalyzing(true);
         await analyzeAllAnswers(newAnswers);
@@ -937,7 +936,6 @@ Return ONLY valid JSON:
     }
     
     // For main question answers, evaluate if follow-up is needed
-    // Show "Evaluating your response..." state
     setIsEvaluating(true);
     
     try {
@@ -960,7 +958,6 @@ Return ONLY valid JSON:
           setFollowUpTypesUsed(prev => [...prev, followUpResult.followUpType]);
         }
         
-        // Speak the follow-up question
         await speakQuestion(followUpResult.followUpQuestion);
         startRecordingPhase();
       } else {
@@ -971,7 +968,6 @@ Return ONLY valid JSON:
           await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
           startRecordingPhase();
         } else {
-          // Interview complete
           setStage('analyzing');
           setIsAnalyzing(true);
           await analyzeAllAnswers(newAnswers);
@@ -996,7 +992,6 @@ Return ONLY valid JSON:
   
   // V2: Evaluate if follow-up is needed
   const evaluateForFollowUp = async (question, answer, questionIndex, totalQuestions, followUpsSoFar) => {
-    // Skip evaluation for very short non-answers
     if (answer === '[No response recorded]' || answer.length < 20) {
       return { shouldFollowUp: false, reason: 'no_content' };
     }
@@ -1016,10 +1011,7 @@ Return ONLY valid JSON:
         })
       });
       
-      if (!response.ok) {
-        throw new Error('Follow-up evaluation failed');
-      }
-      
+      if (!response.ok) throw new Error('Follow-up evaluation failed');
       return await response.json();
     } catch (error) {
       console.error('Error evaluating for follow-up:', error);
@@ -1030,34 +1022,10 @@ Return ONLY valid JSON:
   // AI Analysis of all answers using serverless function
   const analyzeAllAnswers = async (allAnswers) => {
     try {
-      // First, analyze video if we have snapshots (need score for hero calculation)
-      let videoResults = null;
-      let videoScore = null;
-      if (videoEnabled && videoSnapshots.length > 0) {
-        try {
-          const videoResponse = await fetch('/api/analyze-video', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ snapshots: videoSnapshots })
-          });
-          const videoData = await videoResponse.json();
-          videoResults = videoData.results;
-          videoScore = videoResults?.overallVideoScore || null;
-          setVideoFeedback(videoResults);
-        } catch (e) {
-          console.error('Video analysis error:', e);
-        }
-      }
-      
-      // Now analyze answers with video score for hero calculation
       const response = await fetch('/api/analyze-interview', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          answers: allAnswers, 
-          jobTitle,
-          videoScore // Pass video score for 80/20 hero calculation
-        })
+        body: JSON.stringify({ answers: allAnswers, jobTitle })
       });
 
       const data = await response.json();
@@ -1067,6 +1035,23 @@ Return ONLY valid JSON:
       }
 
       const results = data.results;
+      
+      // Also analyze video if we have snapshots
+      let videoResults = null;
+      if (videoEnabled && videoSnapshots.length > 0) {
+        try {
+          const videoResponse = await fetch('/api/analyze-video', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ snapshots: videoSnapshots })
+          });
+          const videoData = await videoResponse.json();
+          videoResults = videoData.results;
+          setVideoFeedback(videoResults);
+        } catch (e) {
+          console.error('Video analysis error:', e);
+        }
+      }
       
       // Stop camera and snapshot capture
       stopCamera();
@@ -2363,10 +2348,7 @@ Return ONLY valid JSON:
             <div style={styles.progressBar}>
               <div style={{...styles.progressFill, width: `${progress}%`}}></div>
             </div>
-            <span style={styles.progressText}>
-              Question {currentQuestionIndex + 1} of {questions.length}
-              {isFollowUp && ' (Follow-up)'}
-            </span>
+            <span style={styles.progressText}>Question {currentQuestionIndex + 1} of {questions.length}</span>
           </div>
           
           {/* Timer */}
@@ -2383,8 +2365,17 @@ Return ONLY valid JSON:
               </div>
             )}
             {isFollowUp && (
-              <div style={styles.followUpIndicator}>
-                <span>↪️ Follow-up Question</span>
+              <div style={{
+                display: 'inline-block',
+                padding: '6px 12px',
+                background: 'rgba(139, 92, 246, 0.2)',
+                border: '1px solid rgba(139, 92, 246, 0.4)',
+                borderRadius: '6px',
+                fontSize: '13px',
+                color: '#a78bfa',
+                marginBottom: '12px'
+              }}>
+                ↪️ Follow-up Question
               </div>
             )}
             <p style={styles.questionText}>
@@ -2394,9 +2385,28 @@ Return ONLY valid JSON:
           
           {/* Evaluating state */}
           {isEvaluating && (
-            <div style={styles.evaluatingState}>
-              <div style={styles.evaluatingDot}></div>
-              <span>Evaluating your response...</span>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '12px',
+              padding: '20px',
+              background: 'rgba(0, 217, 255, 0.1)',
+              border: '1px solid rgba(0, 217, 255, 0.3)',
+              borderRadius: '12px',
+              marginBottom: '20px',
+              color: '#00d9ff',
+              fontSize: '15px',
+              fontWeight: '500'
+            }}>
+              <span style={{
+                width: '10px',
+                height: '10px',
+                background: '#00d9ff',
+                borderRadius: '50%',
+                animation: 'pulse 1.5s ease-in-out infinite'
+              }}></span>
+              Evaluating your response...
             </div>
           )}
           
@@ -2576,23 +2586,6 @@ Return ONLY valid JSON:
           {/* Category Breakdown */}
           <div style={styles.scorecardSection}>
             <h3 style={styles.scorecardTitle}>📊 Performance Breakdown</h3>
-            
-            {/* V2: Score Breakdown showing 80/20 split */}
-            <div style={styles.scoreBreakdownCard}>
-              <div style={styles.scoreBreakdownRow}>
-                <span style={styles.scoreBreakdownLabel}>📝 Content Score (80%)</span>
-                <span style={{...styles.scoreBreakdownValue, color: getScoreColor(finalResults.contentScore || finalResults.overallScore)}}>
-                  {finalResults.contentScore || finalResults.overallScore}/100
-                </span>
-              </div>
-              <div style={styles.scoreBreakdownRow}>
-                <span style={styles.scoreBreakdownLabel}>🎥 Delivery Score (20%)</span>
-                <span style={{...styles.scoreBreakdownValue, color: getScoreColor(finalResults.deliveryScore || finalResults.videoAnalysis?.overallVideoScore || 0)}}>
-                  {finalResults.deliveryScore || finalResults.videoAnalysis?.overallVideoScore || 'N/A'}/100
-                </span>
-              </div>
-            </div>
-            
             <div style={styles.categoryGrid}>
               {Object.entries(finalResults.categories).map(([key, val]) => {
                 const trend = getPerformanceTrend(key);
@@ -2625,100 +2618,72 @@ Return ONLY valid JSON:
             </div>
           </div>
 
-          {/* V2: Follow-up Insight Card - only show if follow-ups were asked */}
-          {finalResults.followUpInsight && finalResults.followUpInsight.totalFollowUpsAsked > 0 && (
-            <div style={styles.followUpInsightCard}>
-              <h4 style={styles.followUpInsightTitle}>🎯 Follow-up Performance Insight</h4>
-              <div style={styles.followUpInsightStats}>
-                <div style={styles.followUpInsightStat}>
-                  <span style={styles.followUpInsightLabel}>Main Answer Avg</span>
-                  <span style={{...styles.followUpInsightValue, color: getScoreColor(finalResults.followUpInsight.averageMainScore)}}>
-                    {Math.round(finalResults.followUpInsight.averageMainScore)}
-                  </span>
-                </div>
-                <div style={styles.followUpInsightStat}>
-                  <span style={styles.followUpInsightLabel}>Follow-up Avg</span>
-                  <span style={{...styles.followUpInsightValue, color: getScoreColor(finalResults.followUpInsight.averageFollowUpScore || 0)}}>
-                    {finalResults.followUpInsight.averageFollowUpScore ? Math.round(finalResults.followUpInsight.averageFollowUpScore) : 'N/A'}
-                  </span>
-                </div>
-                <div style={styles.followUpInsightStat}>
-                  <span style={styles.followUpInsightLabel}>Follow-ups Asked</span>
-                  <span style={styles.followUpInsightValue}>
-                    {finalResults.followUpInsight.totalFollowUpsAsked}
-                  </span>
-                </div>
-              </div>
-              {finalResults.followUpInsight.pattern && (
-                <p style={styles.followUpInsightPattern}>
-                  💡 {finalResults.followUpInsight.pattern}
-                </p>
-              )}
-            </div>
-          )}
-
-          {/* Question by Question - V2 with follow-up support */}
+          {/* Question by Question */}
           <div style={styles.scorecardSection}>
             <h3 style={styles.scorecardTitle}>📝 Question-by-Question Feedback</h3>
             {finalResults.questionScores.map((q, i) => (
               <div key={i} style={styles.questionFeedback}>
                 <div style={styles.questionFeedbackHeader}>
                   <span style={styles.questionNum}>Q{q.questionNum}</span>
-                  <span style={{...styles.questionScore, color: getScoreColor(q.combinedQuestionScore || q.mainAnswerScore || q.score)}}>
-                    {q.combinedQuestionScore || q.mainAnswerScore || q.score}/100
+                  <span style={{...styles.questionScore, color: getScoreColor(q.score)}}>
+                    {q.score}/100
                   </span>
                 </div>
-                
-                {/* Main answer feedback */}
-                <p style={styles.questionFeedbackText}>{q.mainAnswerFeedback || q.feedback}</p>
+                <p style={styles.questionFeedbackText}>{q.feedback}</p>
                 <div style={styles.feedbackDetails}>
                   <div style={styles.feedbackStrengths}>
                     <strong>✓ Strengths:</strong>
-                    <ul>{(q.mainAnswerStrengths || q.strengths || []).map((s, j) => <li key={j}>{s}</li>)}</ul>
+                    <ul>{q.strengths.map((s, j) => <li key={j}>{s}</li>)}</ul>
                   </div>
                   <div style={styles.feedbackImprovements}>
                     <strong>△ Improve:</strong>
-                    <ul>{(q.mainAnswerImprovements || q.improvements || []).map((s, j) => <li key={j}>{s}</li>)}</ul>
+                    <ul>{q.improvements.map((s, j) => <li key={j}>{s}</li>)}</ul>
                   </div>
                 </div>
                 
-                {/* V2: Follow-up section if this question had a follow-up */}
-                {q.hasFollowUp && q.followUpQuestion && (
-                  <div style={styles.followUpFeedbackSection}>
-                    <div style={styles.followUpFeedbackHeader}>
-                      <span style={styles.followUpLabel}>↪️ Follow-up Question</span>
-                      <span style={{...styles.followUpScore, color: getScoreColor(q.followUpScore)}}>
-                        {q.followUpScore}/100
+                {/* V2: Show follow-up section if this question had one */}
+                {q.hasFollowUp && q.followUp && (
+                  <div style={{
+                    marginTop: '16px',
+                    padding: '16px',
+                    background: 'rgba(139, 92, 246, 0.08)',
+                    border: '1px solid rgba(139, 92, 246, 0.2)',
+                    borderRadius: '10px',
+                    borderLeft: '3px solid #8b5cf6'
+                  }}>
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginBottom: '12px'
+                    }}>
+                      <span style={{ fontSize: '13px', fontWeight: '600', color: '#a78bfa' }}>
+                        ↪️ Follow-up Question
+                      </span>
+                      <span style={{ fontSize: '16px', fontWeight: '700', color: getScoreColor(q.followUp.score) }}>
+                        {q.followUp.score}/100
                       </span>
                     </div>
-                    <p style={styles.followUpQuestionText}>"{q.followUpQuestion}"</p>
-                    {q.whatFollowUpTested && (
-                      <p style={styles.followUpTestingNote}>
-                        <em>Testing: {q.whatFollowUpTested}</em>
-                      </p>
-                    )}
-                    <p style={styles.followUpFeedbackText}>{q.followUpFeedback}</p>
-                    {q.followUpStrengths && q.followUpStrengths.length > 0 && (
+                    <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.8)', fontStyle: 'italic', marginBottom: '12px' }}>
+                      "{q.followUp.question}"
+                    </p>
+                    <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', lineHeight: '1.6' }}>
+                      {q.followUp.feedback}
+                    </p>
+                    {q.followUp.strengths && q.followUp.strengths.length > 0 && (
                       <div style={styles.feedbackDetails}>
                         <div style={styles.feedbackStrengths}>
                           <strong>✓ Strengths:</strong>
-                          <ul>{q.followUpStrengths.map((s, j) => <li key={j}>{s}</li>)}</ul>
+                          <ul>{q.followUp.strengths.map((s, j) => <li key={j}>{s}</li>)}</ul>
                         </div>
-                        {q.followUpImprovements && q.followUpImprovements.length > 0 && (
+                        {q.followUp.improvements && q.followUp.improvements.length > 0 && (
                           <div style={styles.feedbackImprovements}>
                             <strong>△ Improve:</strong>
-                            <ul>{q.followUpImprovements.map((s, j) => <li key={j}>{s}</li>)}</ul>
+                            <ul>{q.followUp.improvements.map((s, j) => <li key={j}>{s}</li>)}</ul>
                           </div>
                         )}
                       </div>
                     )}
-                  </div>
-                )}
-                
-                {/* No follow-up indicator - positive reinforcement */}
-                {!q.hasFollowUp && (
-                  <div style={styles.noFollowUpNote}>
-                    ✅ No follow-up needed — your answer was thorough
                   </div>
                 )}
               </div>
@@ -2753,9 +2718,9 @@ Return ONLY valid JSON:
           {/* Video Analysis Feedback */}
           {finalResults.videoAnalysis && (
             <div style={styles.scorecardSection}>
-              <h3 style={styles.scorecardTitle}>📹 Visual Delivery Analysis</h3>
+              <h3 style={styles.scorecardTitle}>📹 Video Presence Analysis</h3>
               <div style={styles.videoScoreHeader}>
-                <span style={styles.videoScoreLabel}>Overall Delivery Score</span>
+                <span style={styles.videoScoreLabel}>Overall Video Score</span>
                 <span style={{
                   ...styles.videoScoreValue,
                   color: getScoreColor(finalResults.videoAnalysis.overallVideoScore)
@@ -4767,154 +4732,6 @@ const styles = {
     fontSize: '13px',
     color: 'rgba(255,255,255,0.4)',
     textAlign: 'center',
-  },
-  // V2: Follow-up and Evaluating styles
-  followUpIndicator: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '6px',
-    padding: '6px 12px',
-    background: 'rgba(139, 92, 246, 0.2)',
-    border: '1px solid rgba(139, 92, 246, 0.4)',
-    borderRadius: '6px',
-    fontSize: '13px',
-    color: '#a78bfa',
-    marginBottom: '12px',
-  },
-  evaluatingState: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '12px',
-    padding: '20px',
-    background: 'rgba(0, 217, 255, 0.1)',
-    border: '1px solid rgba(0, 217, 255, 0.3)',
-    borderRadius: '12px',
-    marginBottom: '20px',
-    color: '#00d9ff',
-    fontSize: '15px',
-    fontWeight: '500',
-  },
-  evaluatingDot: {
-    width: '10px',
-    height: '10px',
-    background: '#00d9ff',
-    borderRadius: '50%',
-    animation: 'pulse 1.5s ease-in-out infinite',
-  },
-  // V2: Score breakdown card
-  scoreBreakdownCard: {
-    padding: '20px',
-    background: 'rgba(255,255,255,0.03)',
-    border: '1px solid rgba(255,255,255,0.08)',
-    borderRadius: '12px',
-    marginBottom: '24px',
-  },
-  scoreBreakdownRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '12px 0',
-    borderBottom: '1px solid rgba(255,255,255,0.06)',
-  },
-  scoreBreakdownLabel: {
-    fontSize: '14px',
-    color: 'rgba(255,255,255,0.7)',
-  },
-  scoreBreakdownValue: {
-    fontSize: '18px',
-    fontWeight: '700',
-  },
-  // V2: Follow-up insight card
-  followUpInsightCard: {
-    padding: '20px',
-    background: 'rgba(139, 92, 246, 0.1)',
-    border: '1px solid rgba(139, 92, 246, 0.3)',
-    borderRadius: '12px',
-    marginBottom: '24px',
-  },
-  followUpInsightTitle: {
-    fontSize: '16px',
-    fontWeight: '600',
-    color: '#a78bfa',
-    marginBottom: '16px',
-    marginTop: 0,
-  },
-  followUpInsightStats: {
-    display: 'flex',
-    gap: '24px',
-    marginBottom: '12px',
-    flexWrap: 'wrap',
-  },
-  followUpInsightStat: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '4px',
-  },
-  followUpInsightLabel: {
-    fontSize: '12px',
-    color: 'rgba(255,255,255,0.5)',
-    textTransform: 'uppercase',
-  },
-  followUpInsightValue: {
-    fontSize: '24px',
-    fontWeight: '700',
-  },
-  followUpInsightPattern: {
-    fontSize: '14px',
-    color: 'rgba(255,255,255,0.7)',
-    fontStyle: 'italic',
-    margin: 0,
-    marginTop: '8px',
-  },
-  // V2: Follow-up feedback section within question
-  followUpFeedbackSection: {
-    marginTop: '20px',
-    padding: '16px',
-    background: 'rgba(139, 92, 246, 0.08)',
-    border: '1px solid rgba(139, 92, 246, 0.2)',
-    borderRadius: '10px',
-    borderLeft: '3px solid #8b5cf6',
-  },
-  followUpFeedbackHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '12px',
-  },
-  followUpLabel: {
-    fontSize: '13px',
-    fontWeight: '600',
-    color: '#a78bfa',
-  },
-  followUpScore: {
-    fontSize: '16px',
-    fontWeight: '700',
-  },
-  followUpQuestionText: {
-    fontSize: '14px',
-    color: 'rgba(255,255,255,0.8)',
-    fontStyle: 'italic',
-    marginBottom: '8px',
-  },
-  followUpTestingNote: {
-    fontSize: '12px',
-    color: 'rgba(139, 92, 246, 0.8)',
-    marginBottom: '12px',
-  },
-  followUpFeedbackText: {
-    fontSize: '13px',
-    color: 'rgba(255,255,255,0.7)',
-    lineHeight: '1.6',
-  },
-  noFollowUpNote: {
-    marginTop: '12px',
-    padding: '10px 14px',
-    background: 'rgba(16, 185, 129, 0.1)',
-    border: '1px solid rgba(16, 185, 129, 0.2)',
-    borderRadius: '8px',
-    fontSize: '13px',
-    color: '#10b981',
   },
 };
 
