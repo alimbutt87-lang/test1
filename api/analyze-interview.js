@@ -15,18 +15,34 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { answers, jobTitle, videoScore } = req.body;
+    const { answers, jobTitle } = req.body;
 
-    // Build the prompt for analysis - handle both main and follow-up answers
-    const answersText = answers.map((a) => {
-      const prefix = a.isFollowUp 
-        ? `[FOLLOW-UP to Q${a.parentQuestionIndex + 1}]` 
-        : `Question ${a.questionIndex + 1}:`;
-      return `${prefix} ${a.question}\nCandidate's Answer: ${a.answer}\nTime Spent: ${a.timeSpent} seconds`;
+    // Group answers: main questions with their follow-ups
+    const questionGroups = [];
+    let currentGroup = null;
+    
+    answers.forEach((a) => {
+      if (!a.isFollowUp) {
+        if (currentGroup) questionGroups.push(currentGroup);
+        currentGroup = { main: a, followUp: null };
+      } else if (currentGroup) {
+        currentGroup.followUp = a;
+      }
+    });
+    if (currentGroup) questionGroups.push(currentGroup);
+
+    // Build prompt text - same format as original, but include follow-ups
+    const answersText = questionGroups.map((group, i) => {
+      let text = `Question ${i + 1}: ${group.main.question}\nCandidate's Answer: ${group.main.answer}\nTime Spent: ${group.main.timeSpent} seconds`;
+      
+      if (group.followUp) {
+        text += `\n\n[FOLLOW-UP for Question ${i + 1}]: ${group.followUp.question}\nCandidate's Follow-up Answer: ${group.followUp.answer}\nTime Spent: ${group.followUp.timeSpent} seconds`;
+      }
+      
+      return text;
     }).join('\n\n');
 
-    // Count follow-ups for context
-    const followUpCount = answers.filter(a => a.isFollowUp).length;
+    const hasAnyFollowUps = questionGroups.some(g => g.followUp);
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -37,7 +53,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 3500,
+        max_tokens: 3000,
         messages: [{
           role: 'user',
           content: `You are an expert interview coach analyzing a candidate's SPOKEN interview performance for a ${jobTitle} position. The answers below were captured via voice transcription, so ignore any spelling/grammar issues - focus only on the CONTENT and SUBSTANCE of their responses.
@@ -45,33 +61,36 @@ export default async function handler(req, res) {
 Interview Responses:
 ${answersText}
 
-IMPORTANT CONTEXT:
-- Some questions have follow-up questions (marked with [FOLLOW-UP])
-- Follow-ups were asked when the main answer needed more depth or missed a key element
-- If a question has no follow-up, it means the main answer was thorough - this is GOOD, not a penalty
-- Total follow-up questions asked: ${followUpCount}
+Analyze each answer and provide a comprehensive scorecard. Be fair but rigorous - this is a real interview assessment. Remember: this is transcribed speech, so evaluate what they SAID, not how it's written.
 
-Analyze each answer and provide a comprehensive scorecard. Be fair but rigorous - this is a real interview assessment.
+SCORING RULES:
+- Empty/skipped answers: 0-20
+- Very brief or "I don't know": 20-40  
+- Vague answer without examples: 40-60
+- Good answer with some examples: 60-80
+- Excellent detailed answer with specifics: 80-100
+
+${hasAnyFollowUps ? `FOLLOW-UP HANDLING:
+- Some questions have follow-up questions marked with [FOLLOW-UP]
+- For questions WITH a follow-up: score = 70% main answer + 30% follow-up answer
+- Provide feedback for both the main answer AND the follow-up separately
+- Include the follow-up details in the questionScores array` : ''}
 
 Return ONLY valid JSON in this exact format:
 {
-  "contentScore": <number 0-100 - overall content quality across all answers>,
+  "overallScore": <number 0-100>,
+  "passed": <boolean - true if score >= 70>,
+  "verdict": "<one sentence: 'Congratulations! You got the job!' or 'Unfortunately, you did not pass this interview.'>",
+  "summary": "<2-3 sentence overall assessment>",
   "questionScores": [
     {
       "questionNum": 1,
-      "questionText": "<the original question>",
-      "mainAnswerScore": <0-100>,
-      "mainAnswerFeedback": "<specific feedback for main answer>",
-      "mainAnswerStrengths": ["<strength1>", "<strength2>"],
-      "mainAnswerImprovements": ["<improvement1>", "<improvement2>"],
-      "hasFollowUp": <boolean>,
-      "followUpQuestion": "<the follow-up question if asked, or null>",
-      "followUpScore": <0-100 or null if no follow-up>,
-      "followUpFeedback": "<feedback for follow-up answer or null>",
-      "followUpStrengths": ["<strength1>"] or null,
-      "followUpImprovements": ["<improvement1>"] or null,
-      "whatFollowUpTested": "<what the follow-up was probing for, or null>",
-      "combinedQuestionScore": <0-100 - if follow-up exists: 70% main + 30% follow-up, else: 100% main>
+      "score": <0-100>,
+      "feedback": "<specific feedback for this answer - focus on content, structure, examples, not grammar>",
+      "strengths": ["<strength1>", "<strength2>"],
+      "improvements": ["<improvement1>", "<improvement2>"]${hasAnyFollowUps ? `,
+      "hasFollowUp": <true if this question had a follow-up, false otherwise>,
+      "followUp": <null if no follow-up, OR object with: { "question": "...", "score": 0-100, "feedback": "...", "strengths": [...], "improvements": [...] }>` : ''}
     }
   ],
   "categories": {
@@ -86,13 +105,7 @@ Return ONLY valid JSON in this exact format:
   },
   "topStrengths": ["<strength1>", "<strength2>", "<strength3>"],
   "criticalImprovements": ["<improvement1>", "<improvement2>", "<improvement3>"],
-  "coachingTip": "<one specific, actionable tip for their next interview>",
-  "followUpInsight": {
-    "totalFollowUpsAsked": <number>,
-    "averageMainScore": <0-100>,
-    "averageFollowUpScore": <0-100 or null if no follow-ups>,
-    "pattern": "<insight like 'You tend to lose specificity when pushed deeper' or 'Your follow-up answers showed good recovery' or null if no follow-ups>"
-  }
+  "coachingTip": "<one specific, actionable tip for their next interview>"
 }`
         }]
       })
@@ -107,54 +120,7 @@ Return ONLY valid JSON in this exact format:
 
     const text = data.content[0].text;
     const cleanText = text.replace(/```json|```/g, '').trim();
-    const analysisResults = JSON.parse(cleanText);
-
-    // Calculate the hero score: 80% content + 20% delivery
-    // Content score is average of all combinedQuestionScores
-    const avgContentScore = analysisResults.questionScores.reduce(
-      (sum, q) => sum + q.combinedQuestionScore, 0
-    ) / analysisResults.questionScores.length;
-
-    // Delivery score comes from video analysis (passed in from frontend)
-    // If no video score, use content score as fallback for that portion
-    const deliveryScore = videoScore || avgContentScore;
-
-    // Hero score: 80% content + 20% delivery
-    const heroScore = Math.round(avgContentScore * 0.8 + deliveryScore * 0.2);
-
-    // Determine pass/fail
-    const passed = heroScore >= 70;
-    const verdict = passed 
-      ? "Congratulations! You got the job!" 
-      : "Unfortunately, you did not pass this interview.";
-
-    // Build summary
-    const summary = `Your interview has been evaluated with a focus on content quality${videoScore ? ' and visual delivery' : ''}. ${
-      analysisResults.followUpInsight.totalFollowUpsAsked > 0 
-        ? `You received ${analysisResults.followUpInsight.totalFollowUpsAsked} follow-up question${analysisResults.followUpInsight.totalFollowUpsAsked > 1 ? 's' : ''} during the interview.`
-        : 'No follow-up questions were needed - your answers were thorough.'
-    }`;
-
-    const results = {
-      overallScore: heroScore,
-      contentScore: Math.round(avgContentScore),
-      deliveryScore: Math.round(deliveryScore),
-      passed,
-      verdict,
-      summary,
-      questionScores: analysisResults.questionScores,
-      categories: analysisResults.categories,
-      topStrengths: analysisResults.topStrengths,
-      criticalImprovements: analysisResults.criticalImprovements,
-      coachingTip: analysisResults.coachingTip,
-      followUpInsight: analysisResults.followUpInsight,
-      scoringBreakdown: {
-        contentWeight: 80,
-        deliveryWeight: 20,
-        mainAnswerWeight: 70,
-        followUpWeight: 30
-      }
-    };
+    const results = JSON.parse(cleanText);
 
     res.status(200).json({ results });
   } catch (error) {
