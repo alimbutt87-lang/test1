@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 
 // ===== CONFIGURATION =====
 // Set to true for testing (bypasses paywall), false for production
-const TEST_MODE = false;
+const TEST_MODE = true;
 
 // Stripe URLs
 const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/fZu14n8Ac7Wm3QJ0TN6wE00';
