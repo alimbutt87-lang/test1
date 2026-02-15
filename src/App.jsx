@@ -7,7 +7,7 @@ const TEST_MODE = false;
 
 // Stripe URLs
 const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/fZu14n8Ac7Wm3QJ0TN6wE00';
-const STRIPE_SUBSCRIBE_URL = 'https://buy.stripe.com/6oUaEXbMo90qcnfaun6wE02';
+const STRIPE_SUBSCRIBE_URL = 'https://buy.stripe.com/fZu14n8Ac7Wm3QJ0TN6wE00';
 
 // Supabase configuration
 const SUPABASE_URL = 'https://msngeennlvzbhohnrhnq.supabase.co';
@@ -68,6 +68,13 @@ export default function InterviewSimulator() {
   // Mobile audio - need user tap to enable audio on mobile
   const [mobileAudioReady, setMobileAudioReady] = useState(false);
   const [waitingForMobileStart, setWaitingForMobileStart] = useState(false);
+  
+  // V2: Follow-up question states
+  const [isEvaluating, setIsEvaluating] = useState(false); // "Evaluating your response..." state
+  const [isFollowUp, setIsFollowUp] = useState(false); // Currently answering a follow-up
+  const [currentFollowUpQuestion, setCurrentFollowUpQuestion] = useState(null);
+  const [followUpsAskedCount, setFollowUpsAskedCount] = useState(0);
+  const [followUpTypesUsed, setFollowUpTypesUsed] = useState([]); // Track which types used to avoid repeats
   
   const timerRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -237,7 +244,7 @@ export default function InterviewSimulator() {
         if (window.mixpanel) {
           window.mixpanel.track('payment_completed', {
             plan: 'monthly',
-            price: 19.99,
+            price: 9.99,
             currency: 'USD'
           });
           window.mixpanel.people.set({
@@ -746,6 +753,13 @@ Return ONLY valid JSON:
     setVideoFeedback(null);
     setFinalResults(null);
     
+    // V2: Reset follow-up states
+    setIsFollowUp(false);
+    setCurrentFollowUpQuestion(null);
+    setFollowUpsAskedCount(0);
+    setFollowUpTypesUsed([]);
+    setIsEvaluating(false);
+    
     // Track interview started
     if (window.mixpanel) {
       window.mixpanel.track('interview_started', {
@@ -882,11 +896,14 @@ Return ONLY valid JSON:
     // Use ref for reliable transcript access (React state may be stale)
     const capturedTranscript = transcriptRef.current || currentTranscript || '[No response recorded]';
     
+    // Build answer object - mark if this was a follow-up answer
     const newAnswer = {
-      question: questions[currentQuestionIndex],
+      question: isFollowUp ? currentFollowUpQuestion : questions[currentQuestionIndex],
       answer: capturedTranscript,
       timeSpent: 180 - timeLeft,
-      questionIndex: currentQuestionIndex
+      questionIndex: currentQuestionIndex,
+      isFollowUp: isFollowUp,
+      parentQuestionIndex: isFollowUp ? currentQuestionIndex : null
     };
     
     const newAnswers = [...answers, newAnswer];
@@ -896,42 +913,125 @@ Return ONLY valid JSON:
     setCurrentTranscript('');
     transcriptRef.current = '';
     
-    // Reset timer immediately for next question
+    // Reset timer immediately
     setTimeLeft(180);
     
-    if (currentQuestionIndex < questions.length - 1) {
-      const nextIndex = currentQuestionIndex + 1;
-      setCurrentQuestionIndex(nextIndex);
+    // If we just answered a follow-up, always move to next main question
+    if (isFollowUp) {
+      setIsFollowUp(false);
+      setCurrentFollowUpQuestion(null);
       
-      await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
-      startRecordingPhase();
-    } else {
-      // Interview complete - analyze answers
-      setStage('analyzing');
-      setIsAnalyzing(true);
-      await analyzeAllAnswers(newAnswers);
+      if (currentQuestionIndex < questions.length - 1) {
+        const nextIndex = currentQuestionIndex + 1;
+        setCurrentQuestionIndex(nextIndex);
+        await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
+        startRecordingPhase();
+      } else {
+        // Interview complete
+        setStage('analyzing');
+        setIsAnalyzing(true);
+        await analyzeAllAnswers(newAnswers);
+      }
+      return;
+    }
+    
+    // For main question answers, evaluate if follow-up is needed
+    // Show "Evaluating your response..." state
+    setIsEvaluating(true);
+    
+    try {
+      const followUpResult = await evaluateForFollowUp(
+        questions[currentQuestionIndex],
+        capturedTranscript,
+        currentQuestionIndex,
+        questions.length,
+        followUpsAskedCount
+      );
+      
+      setIsEvaluating(false);
+      
+      if (followUpResult.shouldFollowUp && followUpResult.followUpQuestion) {
+        // Ask the follow-up question
+        setIsFollowUp(true);
+        setCurrentFollowUpQuestion(followUpResult.followUpQuestion);
+        setFollowUpsAskedCount(prev => prev + 1);
+        if (followUpResult.followUpType) {
+          setFollowUpTypesUsed(prev => [...prev, followUpResult.followUpType]);
+        }
+        
+        // Speak the follow-up question
+        await speakQuestion(followUpResult.followUpQuestion);
+        startRecordingPhase();
+      } else {
+        // No follow-up needed, move to next question
+        if (currentQuestionIndex < questions.length - 1) {
+          const nextIndex = currentQuestionIndex + 1;
+          setCurrentQuestionIndex(nextIndex);
+          await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
+          startRecordingPhase();
+        } else {
+          // Interview complete
+          setStage('analyzing');
+          setIsAnalyzing(true);
+          await analyzeAllAnswers(newAnswers);
+        }
+      }
+    } catch (error) {
+      console.error('Follow-up evaluation error:', error);
+      setIsEvaluating(false);
+      // On error, just move to next question
+      if (currentQuestionIndex < questions.length - 1) {
+        const nextIndex = currentQuestionIndex + 1;
+        setCurrentQuestionIndex(nextIndex);
+        await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
+        startRecordingPhase();
+      } else {
+        setStage('analyzing');
+        setIsAnalyzing(true);
+        await analyzeAllAnswers(newAnswers);
+      }
+    }
+  };
+  
+  // V2: Evaluate if follow-up is needed
+  const evaluateForFollowUp = async (question, answer, questionIndex, totalQuestions, followUpsSoFar) => {
+    // Skip evaluation for very short non-answers
+    if (answer === '[No response recorded]' || answer.length < 20) {
+      return { shouldFollowUp: false, reason: 'no_content' };
+    }
+    
+    try {
+      const response = await fetch('/api/evaluate-followup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question,
+          answer,
+          questionIndex,
+          totalQuestions,
+          followUpsAskedSoFar: followUpsSoFar,
+          jobTitle,
+          previousFollowUpTypes: followUpTypesUsed
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Follow-up evaluation failed');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error evaluating for follow-up:', error);
+      return { shouldFollowUp: false, reason: 'error' };
     }
   };
 
   // AI Analysis of all answers using serverless function
   const analyzeAllAnswers = async (allAnswers) => {
     try {
-      const response = await fetch('/api/analyze-interview', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ answers: allAnswers, jobTitle })
-      });
-
-      const data = await response.json();
-      
-      if (!response.ok || !data.results) {
-        throw new Error('Analysis failed');
-      }
-
-      const results = data.results;
-      
-      // Also analyze video if we have snapshots
+      // First, analyze video if we have snapshots (need score for hero calculation)
       let videoResults = null;
+      let videoScore = null;
       if (videoEnabled && videoSnapshots.length > 0) {
         try {
           const videoResponse = await fetch('/api/analyze-video', {
@@ -941,11 +1041,31 @@ Return ONLY valid JSON:
           });
           const videoData = await videoResponse.json();
           videoResults = videoData.results;
+          videoScore = videoResults?.overallVideoScore || null;
           setVideoFeedback(videoResults);
         } catch (e) {
           console.error('Video analysis error:', e);
         }
       }
+      
+      // Now analyze answers with video score for hero calculation
+      const response = await fetch('/api/analyze-interview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          answers: allAnswers, 
+          jobTitle,
+          videoScore // Pass video score for 80/20 hero calculation
+        })
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok || !data.results) {
+        throw new Error('Analysis failed');
+      }
+
+      const results = data.results;
       
       // Stop camera and snapshot capture
       stopCamera();
@@ -1584,7 +1704,7 @@ Return ONLY valid JSON:
           
           <div style={styles.priceCard}>
             <div style={styles.priceTag}>
-              <span style={styles.priceAmount}>$19.99</span>
+              <span style={styles.priceAmount}>$9.99</span>
               <span style={styles.pricePeriod}>/month</span>
             </div>
             <ul style={styles.priceFeatures}>
@@ -1652,7 +1772,7 @@ Return ONLY valid JSON:
               <div>
                 <div style={styles.subscriptionStatus}>
                   <span style={styles.statusBadgeActive}>✓ Active</span>
-                  <span style={styles.subscriptionPrice}>$19.99/month</span>
+                  <span style={styles.subscriptionPrice}>$9.99/month</span>
                 </div>
                 {subscriptionDate && (
                   <p style={styles.subscriptionDate}>
@@ -2242,7 +2362,10 @@ Return ONLY valid JSON:
             <div style={styles.progressBar}>
               <div style={{...styles.progressFill, width: `${progress}%`}}></div>
             </div>
-            <span style={styles.progressText}>Question {currentQuestionIndex + 1} of {questions.length}</span>
+            <span style={styles.progressText}>
+              Question {currentQuestionIndex + 1} of {questions.length}
+              {isFollowUp && ' (Follow-up)'}
+            </span>
           </div>
           
           {/* Timer */}
@@ -2258,60 +2381,81 @@ Return ONLY valid JSON:
                 <span style={styles.soundWave}>🔊</span> AI is speaking...
               </div>
             )}
-            <p style={styles.questionText}>{questions[currentQuestionIndex]}</p>
+            {isFollowUp && (
+              <div style={styles.followUpIndicator}>
+                <span>↪️ Follow-up Question</span>
+              </div>
+            )}
+            <p style={styles.questionText}>
+              {isFollowUp ? currentFollowUpQuestion : questions[currentQuestionIndex]}
+            </p>
           </div>
           
+          {/* Evaluating state */}
+          {isEvaluating && (
+            <div style={styles.evaluatingState}>
+              <div style={styles.evaluatingDot}></div>
+              <span>Evaluating your response...</span>
+            </div>
+          )}
+          
           {/* Recording status */}
-          <div style={styles.recordingSection}>
-            {isSpeaking ? (
-              <div style={styles.recordingWaiting}>
-                🔊 Listening to question... Recording will start when AI finishes.
-              </div>
-            ) : isRecording ? (
-              <div style={styles.recordingActive}>
-                <span style={styles.recordingDot}></span>
-                Recording your answer...
-              </div>
-            ) : (
-              <div style={styles.recordingWaiting}>
-                Preparing...
-              </div>
-            )}
-            
-            {/* Manual text input fallback - only show in TEST_MODE for sandbox testing */}
-            {TEST_MODE && !isSpeaking && (
-              <div style={styles.manualInputSection}>
-                <span style={styles.manualInputLabel}>
-                  💡 Voice not working? Type your answer (TEST MODE only):
-                </span>
-                <textarea
-                  style={styles.manualTextarea}
-                  placeholder="Type your answer here if voice recording isn't capturing..."
-                  value={currentTranscript}
-                  onChange={(e) => {
-                    setCurrentTranscript(e.target.value);
-                    transcriptRef.current = e.target.value;
-                  }}
-                  rows={4}
-                />
-              </div>
-            )}
-          </div>
+          {!isEvaluating && (
+            <div style={styles.recordingSection}>
+              {isSpeaking ? (
+                <div style={styles.recordingWaiting}>
+                  🔊 Listening to question... Recording will start when AI finishes.
+                </div>
+              ) : isRecording ? (
+                <div style={styles.recordingActive}>
+                  <span style={styles.recordingDot}></span>
+                  Recording your answer...
+                </div>
+              ) : (
+                <div style={styles.recordingWaiting}>
+                  Preparing...
+                </div>
+              )}
+              
+              {/* Manual text input fallback - only show in TEST_MODE for sandbox testing */}
+              {TEST_MODE && !isSpeaking && (
+                <div style={styles.manualInputSection}>
+                  <span style={styles.manualInputLabel}>
+                    💡 Voice not working? Type your answer (TEST MODE only):
+                  </span>
+                  <textarea
+                    style={styles.manualTextarea}
+                    placeholder="Type your answer here if voice recording isn't capturing..."
+                    value={currentTranscript}
+                    onChange={(e) => {
+                      setCurrentTranscript(e.target.value);
+                      transcriptRef.current = e.target.value;
+                    }}
+                    rows={4}
+                  />
+                </div>
+              )}
+            </div>
+          )}
           
           <button 
             style={{
               ...styles.primaryBtn,
-              opacity: isSpeaking ? 0.5 : 1,
-              cursor: isSpeaking ? 'not-allowed' : 'pointer'
+              opacity: (isSpeaking || isEvaluating) ? 0.5 : 1,
+              cursor: (isSpeaking || isEvaluating) ? 'not-allowed' : 'pointer'
             }} 
             onClick={handleNextQuestion}
-            disabled={isSpeaking}
+            disabled={isSpeaking || isEvaluating}
           >
-            {isSpeaking ? 'Please wait...' : (currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'Finish Interview')}
+            {isSpeaking ? 'Please wait...' : isEvaluating ? 'Evaluating...' : 'Submit Answer'}
             <span style={styles.btnArrow}>→</span>
           </button>
           
-          <p style={styles.skipNote}>{isSpeaking ? 'Wait for AI to finish speaking' : 'Click above when you\'re done answering, or wait for the timer'}</p>
+          <p style={styles.skipNote}>
+            {isSpeaking ? 'Wait for AI to finish speaking' : 
+             isEvaluating ? 'AI is reviewing your response...' :
+             'Click above when you\'re done answering, or wait for the timer'}
+          </p>
         </div>
       </div>
     );
@@ -2431,6 +2575,23 @@ Return ONLY valid JSON:
           {/* Category Breakdown */}
           <div style={styles.scorecardSection}>
             <h3 style={styles.scorecardTitle}>📊 Performance Breakdown</h3>
+            
+            {/* V2: Score Breakdown showing 80/20 split */}
+            <div style={styles.scoreBreakdownCard}>
+              <div style={styles.scoreBreakdownRow}>
+                <span style={styles.scoreBreakdownLabel}>📝 Content Score (80%)</span>
+                <span style={{...styles.scoreBreakdownValue, color: getScoreColor(finalResults.contentScore || finalResults.overallScore)}}>
+                  {finalResults.contentScore || finalResults.overallScore}/100
+                </span>
+              </div>
+              <div style={styles.scoreBreakdownRow}>
+                <span style={styles.scoreBreakdownLabel}>🎥 Delivery Score (20%)</span>
+                <span style={{...styles.scoreBreakdownValue, color: getScoreColor(finalResults.deliveryScore || finalResults.videoAnalysis?.overallVideoScore || 0)}}>
+                  {finalResults.deliveryScore || finalResults.videoAnalysis?.overallVideoScore || 'N/A'}/100
+                </span>
+              </div>
+            </div>
+            
             <div style={styles.categoryGrid}>
               {Object.entries(finalResults.categories).map(([key, val]) => {
                 const trend = getPerformanceTrend(key);
@@ -2463,28 +2624,102 @@ Return ONLY valid JSON:
             </div>
           </div>
 
-          {/* Question by Question */}
+          {/* V2: Follow-up Insight Card - only show if follow-ups were asked */}
+          {finalResults.followUpInsight && finalResults.followUpInsight.totalFollowUpsAsked > 0 && (
+            <div style={styles.followUpInsightCard}>
+              <h4 style={styles.followUpInsightTitle}>🎯 Follow-up Performance Insight</h4>
+              <div style={styles.followUpInsightStats}>
+                <div style={styles.followUpInsightStat}>
+                  <span style={styles.followUpInsightLabel}>Main Answer Avg</span>
+                  <span style={{...styles.followUpInsightValue, color: getScoreColor(finalResults.followUpInsight.averageMainScore)}}>
+                    {Math.round(finalResults.followUpInsight.averageMainScore)}
+                  </span>
+                </div>
+                <div style={styles.followUpInsightStat}>
+                  <span style={styles.followUpInsightLabel}>Follow-up Avg</span>
+                  <span style={{...styles.followUpInsightValue, color: getScoreColor(finalResults.followUpInsight.averageFollowUpScore || 0)}}>
+                    {finalResults.followUpInsight.averageFollowUpScore ? Math.round(finalResults.followUpInsight.averageFollowUpScore) : 'N/A'}
+                  </span>
+                </div>
+                <div style={styles.followUpInsightStat}>
+                  <span style={styles.followUpInsightLabel}>Follow-ups Asked</span>
+                  <span style={styles.followUpInsightValue}>
+                    {finalResults.followUpInsight.totalFollowUpsAsked}
+                  </span>
+                </div>
+              </div>
+              {finalResults.followUpInsight.pattern && (
+                <p style={styles.followUpInsightPattern}>
+                  💡 {finalResults.followUpInsight.pattern}
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Question by Question - V2 with follow-up support */}
           <div style={styles.scorecardSection}>
             <h3 style={styles.scorecardTitle}>📝 Question-by-Question Feedback</h3>
             {finalResults.questionScores.map((q, i) => (
               <div key={i} style={styles.questionFeedback}>
                 <div style={styles.questionFeedbackHeader}>
                   <span style={styles.questionNum}>Q{q.questionNum}</span>
-                  <span style={{...styles.questionScore, color: getScoreColor(q.score)}}>
-                    {q.score}/100
+                  <span style={{...styles.questionScore, color: getScoreColor(q.combinedQuestionScore || q.mainAnswerScore || q.score)}}>
+                    {q.combinedQuestionScore || q.mainAnswerScore || q.score}/100
                   </span>
                 </div>
-                <p style={styles.questionFeedbackText}>{q.feedback}</p>
+                
+                {/* Main answer feedback */}
+                <p style={styles.questionFeedbackText}>{q.mainAnswerFeedback || q.feedback}</p>
                 <div style={styles.feedbackDetails}>
                   <div style={styles.feedbackStrengths}>
                     <strong>✓ Strengths:</strong>
-                    <ul>{q.strengths.map((s, j) => <li key={j}>{s}</li>)}</ul>
+                    <ul>{(q.mainAnswerStrengths || q.strengths || []).map((s, j) => <li key={j}>{s}</li>)}</ul>
                   </div>
                   <div style={styles.feedbackImprovements}>
                     <strong>△ Improve:</strong>
-                    <ul>{q.improvements.map((s, j) => <li key={j}>{s}</li>)}</ul>
+                    <ul>{(q.mainAnswerImprovements || q.improvements || []).map((s, j) => <li key={j}>{s}</li>)}</ul>
                   </div>
                 </div>
+                
+                {/* V2: Follow-up section if this question had a follow-up */}
+                {q.hasFollowUp && q.followUpQuestion && (
+                  <div style={styles.followUpFeedbackSection}>
+                    <div style={styles.followUpFeedbackHeader}>
+                      <span style={styles.followUpLabel}>↪️ Follow-up Question</span>
+                      <span style={{...styles.followUpScore, color: getScoreColor(q.followUpScore)}}>
+                        {q.followUpScore}/100
+                      </span>
+                    </div>
+                    <p style={styles.followUpQuestionText}>"{q.followUpQuestion}"</p>
+                    {q.whatFollowUpTested && (
+                      <p style={styles.followUpTestingNote}>
+                        <em>Testing: {q.whatFollowUpTested}</em>
+                      </p>
+                    )}
+                    <p style={styles.followUpFeedbackText}>{q.followUpFeedback}</p>
+                    {q.followUpStrengths && q.followUpStrengths.length > 0 && (
+                      <div style={styles.feedbackDetails}>
+                        <div style={styles.feedbackStrengths}>
+                          <strong>✓ Strengths:</strong>
+                          <ul>{q.followUpStrengths.map((s, j) => <li key={j}>{s}</li>)}</ul>
+                        </div>
+                        {q.followUpImprovements && q.followUpImprovements.length > 0 && (
+                          <div style={styles.feedbackImprovements}>
+                            <strong>△ Improve:</strong>
+                            <ul>{q.followUpImprovements.map((s, j) => <li key={j}>{s}</li>)}</ul>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+                
+                {/* No follow-up indicator - positive reinforcement */}
+                {!q.hasFollowUp && (
+                  <div style={styles.noFollowUpNote}>
+                    ✅ No follow-up needed — your answer was thorough
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -2517,9 +2752,9 @@ Return ONLY valid JSON:
           {/* Video Analysis Feedback */}
           {finalResults.videoAnalysis && (
             <div style={styles.scorecardSection}>
-              <h3 style={styles.scorecardTitle}>📹 Video Presence Analysis</h3>
+              <h3 style={styles.scorecardTitle}>📹 Visual Delivery Analysis</h3>
               <div style={styles.videoScoreHeader}>
-                <span style={styles.videoScoreLabel}>Overall Video Score</span>
+                <span style={styles.videoScoreLabel}>Overall Delivery Score</span>
                 <span style={{
                   ...styles.videoScoreValue,
                   color: getScoreColor(finalResults.videoAnalysis.overallVideoScore)
@@ -4531,6 +4766,154 @@ const styles = {
     fontSize: '13px',
     color: 'rgba(255,255,255,0.4)',
     textAlign: 'center',
+  },
+  // V2: Follow-up and Evaluating styles
+  followUpIndicator: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '6px',
+    padding: '6px 12px',
+    background: 'rgba(139, 92, 246, 0.2)',
+    border: '1px solid rgba(139, 92, 246, 0.4)',
+    borderRadius: '6px',
+    fontSize: '13px',
+    color: '#a78bfa',
+    marginBottom: '12px',
+  },
+  evaluatingState: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '12px',
+    padding: '20px',
+    background: 'rgba(0, 217, 255, 0.1)',
+    border: '1px solid rgba(0, 217, 255, 0.3)',
+    borderRadius: '12px',
+    marginBottom: '20px',
+    color: '#00d9ff',
+    fontSize: '15px',
+    fontWeight: '500',
+  },
+  evaluatingDot: {
+    width: '10px',
+    height: '10px',
+    background: '#00d9ff',
+    borderRadius: '50%',
+    animation: 'pulse 1.5s ease-in-out infinite',
+  },
+  // V2: Score breakdown card
+  scoreBreakdownCard: {
+    padding: '20px',
+    background: 'rgba(255,255,255,0.03)',
+    border: '1px solid rgba(255,255,255,0.08)',
+    borderRadius: '12px',
+    marginBottom: '24px',
+  },
+  scoreBreakdownRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '12px 0',
+    borderBottom: '1px solid rgba(255,255,255,0.06)',
+  },
+  scoreBreakdownLabel: {
+    fontSize: '14px',
+    color: 'rgba(255,255,255,0.7)',
+  },
+  scoreBreakdownValue: {
+    fontSize: '18px',
+    fontWeight: '700',
+  },
+  // V2: Follow-up insight card
+  followUpInsightCard: {
+    padding: '20px',
+    background: 'rgba(139, 92, 246, 0.1)',
+    border: '1px solid rgba(139, 92, 246, 0.3)',
+    borderRadius: '12px',
+    marginBottom: '24px',
+  },
+  followUpInsightTitle: {
+    fontSize: '16px',
+    fontWeight: '600',
+    color: '#a78bfa',
+    marginBottom: '16px',
+    marginTop: 0,
+  },
+  followUpInsightStats: {
+    display: 'flex',
+    gap: '24px',
+    marginBottom: '12px',
+    flexWrap: 'wrap',
+  },
+  followUpInsightStat: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px',
+  },
+  followUpInsightLabel: {
+    fontSize: '12px',
+    color: 'rgba(255,255,255,0.5)',
+    textTransform: 'uppercase',
+  },
+  followUpInsightValue: {
+    fontSize: '24px',
+    fontWeight: '700',
+  },
+  followUpInsightPattern: {
+    fontSize: '14px',
+    color: 'rgba(255,255,255,0.7)',
+    fontStyle: 'italic',
+    margin: 0,
+    marginTop: '8px',
+  },
+  // V2: Follow-up feedback section within question
+  followUpFeedbackSection: {
+    marginTop: '20px',
+    padding: '16px',
+    background: 'rgba(139, 92, 246, 0.08)',
+    border: '1px solid rgba(139, 92, 246, 0.2)',
+    borderRadius: '10px',
+    borderLeft: '3px solid #8b5cf6',
+  },
+  followUpFeedbackHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '12px',
+  },
+  followUpLabel: {
+    fontSize: '13px',
+    fontWeight: '600',
+    color: '#a78bfa',
+  },
+  followUpScore: {
+    fontSize: '16px',
+    fontWeight: '700',
+  },
+  followUpQuestionText: {
+    fontSize: '14px',
+    color: 'rgba(255,255,255,0.8)',
+    fontStyle: 'italic',
+    marginBottom: '8px',
+  },
+  followUpTestingNote: {
+    fontSize: '12px',
+    color: 'rgba(139, 92, 246, 0.8)',
+    marginBottom: '12px',
+  },
+  followUpFeedbackText: {
+    fontSize: '13px',
+    color: 'rgba(255,255,255,0.7)',
+    lineHeight: '1.6',
+  },
+  noFollowUpNote: {
+    marginTop: '12px',
+    padding: '10px 14px',
+    background: 'rgba(16, 185, 129, 0.1)',
+    border: '1px solid rgba(16, 185, 129, 0.2)',
+    borderRadius: '8px',
+    fontSize: '13px',
+    color: '#10b981',
   },
 };
 
