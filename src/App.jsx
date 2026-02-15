@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
 // ===== CONFIGURATION =====
-// Set to true for testing (bypasses paywall), false for production
+// Set to true for testing (bypasses paywall AND auth), false for production
 const TEST_MODE = true;
+const SKIP_AUTH = true; // Bypasses Google sign-in completely for testing
 
 // Stripe URLs
 const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/fZu14n8Ac7Wm3QJ0TN6wE00';
@@ -38,9 +39,9 @@ export default function InterviewSimulator() {
   const [micPermission, setMicPermission] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   
-  // Authentication states
-  const [user, setUser] = useState(null);
-  const [authLoading, setAuthLoading] = useState(true);
+  // Authentication states - skip auth in test mode
+  const [user, setUser] = useState(SKIP_AUTH ? { id: 'test-user', email: 'test@test.com' } : null);
+  const [authLoading, setAuthLoading] = useState(SKIP_AUTH ? false : true);
   
   // Country for leaderboard
   const [userCountry, setUserCountry] = useState('');
