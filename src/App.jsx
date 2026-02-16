@@ -1051,6 +1051,10 @@ Return ONLY valid JSON:
 
       const results = data.results;
       
+      // Diagnostic: log that we got real API results
+      console.log('✅ Got REAL API results. Overall score:', results.overallScore, 
+        'Q1 feedback preview:', results.questionScores?.[0]?.feedback?.substring(0, 80));
+      
       // Also analyze video if we have snapshots
       let videoResults = null;
       if (videoEnabled && videoSnapshots.length > 0) {
