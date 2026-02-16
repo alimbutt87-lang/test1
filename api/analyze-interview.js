@@ -32,14 +32,72 @@ export default async function handler(req, res) {
       };
     });
 
-    // ===== STEP 1: Analyze main answers — IDENTICAL to V1 prompt =====
-    // This is the exact same prompt from production. Do not add scoring rules,
-    // follow-up instructions, or anything else that could dilute the analysis.
-    const mainAnswersText = mainAnswers.map((a, i) =>
-      `Question ${i + 1}: ${a.question}\nCandidate's Answer: ${a.answer}\nTime Spent: ${a.timeSpent} seconds`
-    ).join('\n\n');
+    const hasAnyFollowUps = followUpAnswers.length > 0;
 
-    const mainResponse = await fetch('https://api.anthropic.com/v1/messages', {
+    console.log(`Analyzing interview: ${mainAnswers.length} main answers, ${followUpAnswers.length} follow-ups, job: ${jobTitle}`);
+
+    // Build the interview text — main answers with follow-ups explicitly attached
+    const answersText = mainAnswers.map((a, i) => {
+      const fu = followUpMap[i];
+      let text = `Question ${i + 1}: ${a.question}\nCandidate's Answer: ${a.answer}\nTime Spent: ${a.timeSpent} seconds`;
+
+      if (fu) {
+        text += `\n\n  [FOLLOW-UP for Question ${i + 1}]`;
+        text += `\n  Follow-up Question: ${fu.question}`;
+        text += `\n  What this follow-up was probing for: ${fu.whatWasMissing || 'More detail and specifics'}`;
+        text += `\n  Follow-up Type: ${fu.followUpType || 'DEPTH_PROBE'}`;
+        text += `\n  Candidate's Follow-up Answer: ${fu.answer}`;
+        text += `\n  Time Spent: ${fu.timeSpent} seconds`;
+      }
+
+      return text;
+    }).join('\n\n---\n\n');
+
+    // Build the list of which questions have follow-ups (explicit, not for Claude to guess)
+    const followUpQuestionNums = Object.keys(followUpMap).map(i => parseInt(i) + 1);
+
+    // Build the JSON schema — always include follow-up fields so the structure is consistent
+    const questionScoreSchema = hasAnyFollowUps
+      ? `{
+      "questionNum": 1,
+      "score": <0-100 for the MAIN answer only>,
+      "feedback": "<2-3 sentences of specific feedback on the MAIN answer, referencing what the candidate actually said>",
+      "strengths": ["<specific strength from their main answer>", "<another>"],
+      "improvements": ["<specific improvement>", "<another>"],
+      "hasFollowUp": <true if this question has a [FOLLOW-UP] section above, false otherwise>,
+      "followUp": <null if no follow-up, OR if this question had a follow-up: {
+        "question": "<the follow-up question that was asked>",
+        "score": <0-100 for the follow-up answer specifically>,
+        "addressedGap": <boolean - did the follow-up answer address what was being probed?>,
+        "feedback": "<2-3 sentences on the follow-up answer — what they added, what was still missing>",
+        "strengths": ["<specific strength from follow-up>"],
+        "improvements": ["<specific improvement>"],
+        "coachingNote": "<explain what the follow-up tested and whether they addressed it>"
+      }>,
+      "combinedScore": <null if no follow-up, OR Math.round(score * 0.7 + followUp.score * 0.3)>,
+      "noFollowUpReason": <null if has follow-up, "thorough_answer" if no follow-up was needed because the main answer was complete, null otherwise>
+    }`
+      : `{
+      "questionNum": 1,
+      "score": <0-100>,
+      "feedback": "<2-3 sentences of specific feedback referencing what the candidate actually said>",
+      "strengths": ["<specific strength from their answer>", "<another>"],
+      "improvements": ["<specific improvement>", "<another>"]
+    }`;
+
+    const followUpInstructions = hasAnyFollowUps
+      ? `
+FOLLOW-UP HANDLING:
+- Questions ${followUpQuestionNums.join(', ')} have follow-up sections marked with [FOLLOW-UP].
+- Score the MAIN answer and the FOLLOW-UP answer SEPARATELY. Do NOT blend them in the main score.
+- The main answer score should reflect ONLY the main answer quality. The follow-up is scored in its own field.
+- For the follow-up feedback: explain whether the candidate addressed what was missing. Reference specific things they said.
+- For the follow-up coachingNote: tell them what the follow-up was testing and whether they nailed it. Example: "This follow-up probed for specific metrics. You added that the campaign drove 2,400 signups at $12 CAC — exactly the specificity missing from your initial answer."
+- For questions WITHOUT a follow-up: set hasFollowUp to false, followUp to null. If the reason the question had no follow-up is that the answer was already thorough, set noFollowUpReason to "thorough_answer".
+`
+      : '';
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -48,16 +106,22 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 2500,
+        max_tokens: 3500,
         messages: [{
           role: 'user',
           content: `You are an expert interview coach analyzing a candidate's SPOKEN interview performance for a ${jobTitle} position. The answers below were captured via voice transcription, so ignore any spelling/grammar issues - focus only on the CONTENT and SUBSTANCE of their responses.
 
 Interview Responses:
-${mainAnswersText}
+${answersText}
 
 Analyze each answer and provide a comprehensive scorecard. Be fair but rigorous - this is a real interview assessment. Remember: this is transcribed speech, so evaluate what they SAID, not how it's written.
 
+QUALITY STANDARDS — CRITICAL:
+- Each question's feedback MUST be 2-3 detailed sentences referencing specific things the candidate said (or failed to say). Generic feedback like "good answer" or "needs improvement" is unacceptable.
+- Each question MUST have at least 2 specific strengths and 2 specific improvements that reference actual content from their answer.
+- Be a STRICT grader: vague answers without concrete examples = 40-60. Mentioning a framework without a real example = 50-65 max. Only answers with specific examples, metrics, clear structure AND relevant detail score above 75. A score of 80+ means genuinely impressive.
+- Category feedback must also reference specific moments from the interview, not generic observations.
+${followUpInstructions}
 Return ONLY valid JSON in this exact format:
 {
   "overallScore": <number 0-100>,
@@ -65,13 +129,7 @@ Return ONLY valid JSON in this exact format:
   "verdict": "<one sentence: 'Congratulations! You got the job!' or 'Unfortunately, you did not pass this interview.'>",
   "summary": "<2-3 sentence overall assessment>",
   "questionScores": [
-    {
-      "questionNum": 1,
-      "score": <0-100>,
-      "feedback": "<specific feedback for this answer - focus on content, structure, examples, not grammar>",
-      "strengths": ["<strength1>", "<strength2>"],
-      "improvements": ["<improvement1>", "<improvement2>"]
-    }
+    ${questionScoreSchema}
   ],
   "categories": {
     "clarity": {"score": <0-100>, "feedback": "<was their point clear and easy to follow?>"},
@@ -91,139 +149,77 @@ Return ONLY valid JSON in this exact format:
       })
     });
 
-    const mainData = await mainResponse.json();
+    const data = await response.json();
 
-    if (!mainResponse.ok) {
-      console.error('Anthropic API error (main analysis):', JSON.stringify(mainData));
-      throw new Error(`Main analysis failed: ${mainData?.error?.message || 'Unknown API error'}`);
+    if (!response.ok) {
+      console.error('Anthropic API error:', JSON.stringify(data));
+      throw new Error(`API error: ${response.status} - ${data?.error?.message || JSON.stringify(data)}`);
     }
 
-    let mainResults;
+    let results;
     try {
-      const mainText = mainData.content[0].text;
-      const mainClean = mainText.replace(/```json|```/g, '').trim();
-      mainResults = JSON.parse(mainClean);
+      const text = data.content[0].text;
+      console.log('Analysis response length:', text.length);
+      const cleanText = text.replace(/```json|```/g, '').trim();
+      results = JSON.parse(cleanText);
+      console.log('Parsed successfully. Overall score:', results.overallScore, 'Questions:', results.questionScores?.length);
     } catch (parseError) {
-      console.error('Failed to parse main analysis response:', mainData.content?.[0]?.text?.substring(0, 500));
-      throw new Error('Failed to parse main analysis JSON');
+      console.error('JSON parse failed. Raw:', data.content?.[0]?.text?.substring(0, 1000));
+      throw new Error('Failed to parse analysis JSON');
     }
 
-    // ===== STEP 2: Analyze follow-ups separately (only if any exist) =====
-    const followUpIndices = Object.keys(followUpMap).map(Number);
-
-    if (followUpIndices.length > 0) {
-      try {
-        const followUpPromptParts = followUpIndices.map(qIdx => {
-          const fu = followUpMap[qIdx];
-          const mainQ = mainAnswers[qIdx];
-          return `Main Question ${qIdx + 1}: ${mainQ.question}
-Main Answer (summary): ${mainQ.answer.substring(0, 300)}${mainQ.answer.length > 300 ? '...' : ''}
-
-Follow-up Question: ${fu.question}
-What the follow-up was probing for: ${fu.whatWasMissing || 'More detail and specifics'}
-Follow-up Type: ${fu.followUpType || 'DEPTH_PROBE'}
-Candidate's Follow-up Answer: ${fu.answer}
-Time Spent on follow-up: ${fu.timeSpent} seconds`;
-        }).join('\n\n---\n\n');
-
-        const followUpResponse = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': process.env.ANTHROPIC_API_KEY,
-            'anthropic-version': '2023-06-01'
-          },
-          body: JSON.stringify({
-            model: 'claude-sonnet-4-20250514',
-            max_tokens: 1500,
-            messages: [{
-              role: 'user',
-              content: `You are an expert interview coach. Analyze these follow-up answers from a ${jobTitle} interview. Each follow-up was asked because the candidate's main answer was missing something specific. Evaluate whether the follow-up answer addressed the gap.
-
-Be rigorous — a follow-up is a recovery opportunity, not a free pass. If the candidate still didn't provide what was missing, score accordingly.
-
-Remember: these are transcribed from speech, so ignore grammar/spelling — focus on content.
-
-${followUpPromptParts}
-
-For each follow-up, evaluate:
-1. Did they address what the follow-up was probing for?
-2. Did they add meaningful new information or just repeat themselves?
-3. Was the follow-up answer a genuine recovery or still vague?
-
-Return ONLY valid JSON as an array:
-[
-  {
-    "parentQuestionNum": <1-based question number this follow-up belongs to>,
-    "score": <0-100 for the follow-up answer specifically>,
-    "addressedGap": <boolean - did they address what the follow-up was testing?>,
-    "feedback": "<specific feedback on the follow-up answer — what they added, what was still missing>",
-    "strengths": ["<strength1>", "<strength2>"],
-    "improvements": ["<improvement1>"],
-    "coachingNote": "<explain what the follow-up was testing and whether they addressed it, e.g. 'This follow-up was probing for specific metrics, and you added that the campaign drove 2,400 signups at $12 CAC — exactly the specificity that was missing.'>"
-  }
-]`
-            }]
-          })
-        });
-
-        const followUpData = await followUpResponse.json();
-
-        if (followUpResponse.ok) {
-          const fuText = followUpData.content[0].text;
-          const fuClean = fuText.replace(/```json|```/g, '').trim();
-          const followUpScores = JSON.parse(fuClean);
-
-          // Merge follow-up results into the corresponding main question scores
-          followUpScores.forEach(fuScore => {
-            const qIdx = fuScore.parentQuestionNum - 1;
-            if (qIdx >= 0 && qIdx < mainResults.questionScores.length) {
-              const mainQ = mainResults.questionScores[qIdx];
-              mainQ.hasFollowUp = true;
-              mainQ.followUp = {
-                question: followUpMap[qIdx].question,
-                score: fuScore.score,
-                addressedGap: fuScore.addressedGap,
-                feedback: fuScore.feedback,
-                strengths: fuScore.strengths || [],
-                improvements: fuScore.improvements || [],
-                coachingNote: fuScore.coachingNote || '',
-                followUpType: followUpMap[qIdx].followUpType || null,
-                whatWasMissing: followUpMap[qIdx].whatWasMissing || null
-              };
-              // 70% main + 30% follow-up (delivery weighting deferred until filler words feature)
-              mainQ.combinedScore = Math.round(mainQ.score * 0.7 + fuScore.score * 0.3);
-            }
-          });
+    // Post-process: ensure follow-up fields are set correctly using our metadata
+    // This is the safety net — even if Claude misses a field, we fill it from our data
+    if (hasAnyFollowUps) {
+      results.questionScores.forEach((q, idx) => {
+        const fu = followUpMap[idx];
+        if (fu) {
+          // This question HAD a follow-up — ensure it's marked
+          q.hasFollowUp = true;
+          if (q.followUp) {
+            // Claude provided follow-up analysis — enrich with our metadata
+            q.followUp.followUpType = fu.followUpType || q.followUp.followUpType || null;
+            q.followUp.whatWasMissing = fu.whatWasMissing || q.followUp.whatWasMissing || null;
+            if (!q.followUp.question) q.followUp.question = fu.question;
+          } else {
+            // Claude missed the follow-up — create a basic entry from our data
+            console.warn(`Claude missed follow-up for Q${idx + 1}, creating from metadata`);
+            q.followUp = {
+              question: fu.question,
+              score: null,
+              addressedGap: null,
+              feedback: 'Follow-up answer was recorded but could not be analyzed in detail.',
+              strengths: [],
+              improvements: [],
+              coachingNote: fu.whatWasMissing ? `This follow-up was probing for: ${fu.whatWasMissing}` : null,
+              followUpType: fu.followUpType || null,
+              whatWasMissing: fu.whatWasMissing || null
+            };
+          }
+          // Ensure combinedScore is calculated
+          if (q.followUp.score !== null && q.followUp.score !== undefined) {
+            q.combinedScore = Math.round(q.score * 0.7 + q.followUp.score * 0.3);
+          }
         } else {
-          console.error('Follow-up analysis API error:', JSON.stringify(followUpData));
-          // Non-fatal: main results still valid
+          // No follow-up for this question
+          q.hasFollowUp = false;
+          q.followUp = null;
+          // Set the reason from our metadata
+          const meta = followUpMetadata[idx];
+          if (meta && meta.reason === 'thorough_answer') {
+            q.noFollowUpReason = 'thorough_answer';
+          } else if (meta && meta.reason) {
+            q.noFollowUpReason = meta.reason;
+          } else {
+            q.noFollowUpReason = q.noFollowUpReason || null;
+          }
         }
-      } catch (followUpError) {
-        console.error('Follow-up analysis failed (non-fatal):', followUpError.message);
-        // Main results proceed without follow-up enrichment
-      }
+      });
     }
 
-    // ===== STEP 3: Mark questions that had no follow-up =====
-    mainResults.questionScores.forEach((q, idx) => {
-      if (!q.hasFollowUp) {
-        q.hasFollowUp = false;
-        q.followUp = null;
-        const meta = followUpMetadata[idx];
-        if (meta && meta.reason === 'thorough_answer') {
-          q.noFollowUpReason = 'thorough_answer';
-        } else if (meta && meta.reason) {
-          q.noFollowUpReason = meta.reason;
-        } else {
-          q.noFollowUpReason = null;
-        }
-      }
-    });
-
-    res.status(200).json({ results: mainResults });
+    res.status(200).json({ results });
   } catch (error) {
-    console.error('Error analyzing interview:', error.message);
+    console.error('analyze-interview FATAL:', error.message);
     res.status(500).json({ error: 'Failed to analyze interview', detail: error.message });
   }
 }
