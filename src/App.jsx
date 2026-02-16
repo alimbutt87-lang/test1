@@ -76,6 +76,8 @@ export default function InterviewSimulator() {
   const [currentFollowUpQuestion, setCurrentFollowUpQuestion] = useState(null);
   const [followUpsAskedCount, setFollowUpsAskedCount] = useState(0);
   const [followUpTypesUsed, setFollowUpTypesUsed] = useState([]);
+  // Stores evaluate-followup metadata per question index: { [qIdx]: { reason, followUpType, whatWasMissing, ... } }
+  const [followUpMetadata, setFollowUpMetadata] = useState({});
   
   const timerRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -760,6 +762,7 @@ Return ONLY valid JSON:
     setFollowUpsAskedCount(0);
     setFollowUpTypesUsed([]);
     setIsEvaluating(false);
+    setFollowUpMetadata({});
     
     // Track interview started
     if (window.mixpanel) {
@@ -949,6 +952,17 @@ Return ONLY valid JSON:
       
       setIsEvaluating(false);
       
+      // Always store the evaluation metadata for this question (whether or not follow-up fires)
+      setFollowUpMetadata(prev => ({
+        ...prev,
+        [currentQuestionIndex]: {
+          reason: followUpResult.reason || null,
+          followUpType: followUpResult.followUpType || null,
+          whatWasMissing: followUpResult.whatWasMissing || null,
+          shouldFollowUp: followUpResult.shouldFollowUp || false
+        }
+      }));
+      
       if (followUpResult.shouldFollowUp && followUpResult.followUpQuestion) {
         // Ask the follow-up question
         setIsFollowUp(true);
@@ -1025,7 +1039,7 @@ Return ONLY valid JSON:
       const response = await fetch('/api/analyze-interview', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ answers: allAnswers, jobTitle })
+        body: JSON.stringify({ answers: allAnswers, jobTitle, followUpMetadata })
       });
 
       const data = await response.json();
@@ -1292,6 +1306,69 @@ Return ONLY valid JSON:
             });
           }
           
+          // Follow-up section in PDF
+          if (q.hasFollowUp && q.followUp) {
+            yPos = checkNewPage(yPos, 30);
+            yPos += 3;
+            
+            // Follow-up header
+            const purpleColor = [167, 139, 250];
+            pdf.setTextColor(...purpleColor);
+            pdf.setFont('helvetica', 'bold');
+            pdf.setFontSize(10);
+            pdf.text(`↪ Follow-up Question`, 24, yPos);
+            
+            const fuScoreColor = q.followUp.score >= 80 ? primaryColor : q.followUp.score >= 70 ? [245, 158, 11] : failColor;
+            pdf.setTextColor(...fuScoreColor);
+            pdf.text(`${q.followUp.score}/100`, 170, yPos);
+            yPos += 6;
+            
+            // Follow-up question text
+            pdf.setFont('helvetica', 'italic');
+            pdf.setFontSize(9);
+            pdf.setTextColor(...grayColor);
+            const fuQuestionLines = pdf.splitTextToSize(`"${q.followUp.question}"`, 160);
+            fuQuestionLines.slice(0, 2).forEach(line => {
+              yPos = checkNewPage(yPos, 8);
+              pdf.text(line, 24, yPos);
+              yPos += 5;
+            });
+            
+            // Coaching note
+            if (q.followUp.coachingNote) {
+              yPos = checkNewPage(yPos, 10);
+              pdf.setFont('helvetica', 'normal');
+              pdf.setTextColor(...purpleColor);
+              const noteLines = pdf.splitTextToSize(`💡 ${q.followUp.coachingNote}`, 160);
+              noteLines.slice(0, 2).forEach(line => {
+                pdf.text(line, 24, yPos);
+                yPos += 5;
+              });
+            }
+            
+            // Follow-up feedback
+            if (q.followUp.feedback) {
+              pdf.setFont('helvetica', 'normal');
+              pdf.setTextColor(...grayColor);
+              const fuFeedbackLines = pdf.splitTextToSize(q.followUp.feedback, 160);
+              fuFeedbackLines.slice(0, 3).forEach(line => {
+                yPos = checkNewPage(yPos, 8);
+                pdf.text(line, 24, yPos);
+                yPos += 5;
+              });
+            }
+          }
+          
+          // No follow-up positive note in PDF
+          if (!q.hasFollowUp && q.noFollowUpReason === 'thorough_answer') {
+            yPos = checkNewPage(yPos, 10);
+            yPos += 2;
+            pdf.setTextColor(...primaryColor);
+            pdf.setFont('helvetica', 'italic');
+            pdf.setFontSize(9);
+            pdf.text('✓ No follow-up needed — your answer was thorough', 24, yPos);
+          }
+          
           yPos += 5;
         });
       }
@@ -1385,22 +1462,54 @@ Return ONLY valid JSON:
   };
 
   const generateFallbackResults = (allAnswers) => {
-    const avgLength = allAnswers.reduce((sum, a) => sum + a.answer.length, 0) / allAnswers.length;
-    const avgTime = allAnswers.reduce((sum, a) => sum + a.timeSpent, 0) / allAnswers.length;
+    // Only use main answers for scoring
+    const mainOnly = allAnswers.filter(a => !a.isFollowUp);
+    const followUps = allAnswers.filter(a => a.isFollowUp);
+    
+    const avgLength = mainOnly.reduce((sum, a) => sum + a.answer.length, 0) / mainOnly.length;
+    const avgTime = mainOnly.reduce((sum, a) => sum + a.timeSpent, 0) / mainOnly.length;
     const baseScore = Math.min(Math.round((avgLength / 500) * 50 + (avgTime / 180) * 30 + 20), 85);
+    
+    // Build follow-up lookup
+    const fuLookup = {};
+    followUps.forEach(fa => {
+      fuLookup[fa.parentQuestionIndex] = fa;
+    });
     
     return {
       overallScore: baseScore,
       passed: baseScore >= 70,
       verdict: baseScore >= 70 ? "Congratulations! You got the job!" : "Unfortunately, you did not pass this interview.",
       summary: "Your interview has been evaluated. Review the detailed feedback below.",
-      questionScores: allAnswers.map((a, i) => ({
-        questionNum: i + 1,
-        score: Math.round(baseScore + (Math.random() - 0.5) * 20),
-        feedback: "Answer recorded and evaluated.",
-        strengths: ["Attempted the question"],
-        improvements: ["Provide more specific examples"]
-      })),
+      questionScores: mainOnly.map((a, i) => {
+        const hasFU = fuLookup[a.questionIndex] !== undefined;
+        const meta = followUpMetadata[a.questionIndex];
+        const fuAnswer = fuLookup[a.questionIndex];
+        const mainScore = Math.round(baseScore + (Math.random() - 0.5) * 20);
+        const fuScore = hasFU ? Math.round(baseScore + (Math.random() - 0.5) * 15) : null;
+        
+        return {
+          questionNum: i + 1,
+          score: mainScore,
+          combinedScore: hasFU && fuScore ? Math.round(mainScore * 0.7 + fuScore * 0.3) : undefined,
+          feedback: "Answer recorded and evaluated.",
+          strengths: ["Attempted the question"],
+          improvements: ["Provide more specific examples"],
+          hasFollowUp: hasFU,
+          followUp: hasFU ? {
+            question: fuAnswer.question,
+            score: fuScore,
+            addressedGap: true,
+            feedback: "Follow-up answer recorded and evaluated.",
+            strengths: ["Responded to follow-up"],
+            improvements: ["Add more detail"],
+            coachingNote: meta?.whatWasMissing ? `This follow-up was probing for: ${meta.whatWasMissing}` : "Follow-up was asked to probe deeper.",
+            followUpType: meta?.followUpType || null,
+            whatWasMissing: meta?.whatWasMissing || null
+          } : null,
+          noFollowUpReason: !hasFU ? (meta?.reason || null) : undefined
+        };
+      }),
       categories: {
         clarity: { score: baseScore, feedback: "Evaluation based on response structure." },
         relevance: { score: baseScore, feedback: "Evaluation based on answer relevance." },
@@ -2625,10 +2734,33 @@ Return ONLY valid JSON:
               <div key={i} style={styles.questionFeedback}>
                 <div style={styles.questionFeedbackHeader}>
                   <span style={styles.questionNum}>Q{q.questionNum}</span>
-                  <span style={{...styles.questionScore, color: getScoreColor(q.score)}}>
-                    {q.score}/100
-                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    {/* Show combined score if there was a follow-up, otherwise main score */}
+                    {q.hasFollowUp && q.combinedScore !== undefined && (
+                      <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>
+                        combined
+                      </span>
+                    )}
+                    <span style={{...styles.questionScore, color: getScoreColor(q.hasFollowUp && q.combinedScore !== undefined ? q.combinedScore : q.score)}}>
+                      {q.hasFollowUp && q.combinedScore !== undefined ? q.combinedScore : q.score}/100
+                    </span>
+                  </div>
                 </div>
+                
+                {/* Main answer feedback - always shown with full V1 depth */}
+                {q.hasFollowUp && (
+                  <div style={{
+                    display: 'inline-block',
+                    padding: '4px 10px',
+                    background: 'rgba(255,255,255,0.05)',
+                    borderRadius: '4px',
+                    fontSize: '12px',
+                    color: 'rgba(255,255,255,0.5)',
+                    marginBottom: '10px'
+                  }}>
+                    Main answer: {q.score}/100
+                  </div>
+                )}
                 <p style={styles.questionFeedbackText}>{q.feedback}</p>
                 <div style={styles.feedbackDetails}>
                   <div style={styles.feedbackStrengths}>
@@ -2641,7 +2773,7 @@ Return ONLY valid JSON:
                   </div>
                 </div>
                 
-                {/* V2: Show follow-up section if this question had one */}
+                {/* V2: Follow-up section — shown when this question had a follow-up */}
                 {q.hasFollowUp && q.followUp && (
                   <div style={{
                     marginTop: '16px',
@@ -2655,7 +2787,7 @@ Return ONLY valid JSON:
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      marginBottom: '12px'
+                      marginBottom: '8px'
                     }}>
                       <span style={{ fontSize: '13px', fontWeight: '600', color: '#a78bfa' }}>
                         ↪️ Follow-up Question
@@ -2664,18 +2796,36 @@ Return ONLY valid JSON:
                         {q.followUp.score}/100
                       </span>
                     </div>
-                    <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.8)', fontStyle: 'italic', marginBottom: '12px' }}>
+                    <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.8)', fontStyle: 'italic', marginBottom: '8px', marginTop: 0 }}>
                       "{q.followUp.question}"
                     </p>
-                    <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', lineHeight: '1.6' }}>
+                    
+                    {/* What was being tested */}
+                    {q.followUp.coachingNote && (
+                      <div style={{
+                        padding: '10px 12px',
+                        background: 'rgba(139, 92, 246, 0.1)',
+                        borderRadius: '8px',
+                        marginBottom: '12px',
+                        fontSize: '13px',
+                        color: 'rgba(255,255,255,0.7)',
+                        lineHeight: '1.5'
+                      }}>
+                        💡 {q.followUp.coachingNote}
+                      </div>
+                    )}
+                    
+                    <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', lineHeight: '1.6', margin: '0 0 12px 0' }}>
                       {q.followUp.feedback}
                     </p>
-                    {q.followUp.strengths && q.followUp.strengths.length > 0 && (
+                    {((q.followUp.strengths && q.followUp.strengths.length > 0) || (q.followUp.improvements && q.followUp.improvements.length > 0)) && (
                       <div style={styles.feedbackDetails}>
-                        <div style={styles.feedbackStrengths}>
-                          <strong>✓ Strengths:</strong>
-                          <ul>{q.followUp.strengths.map((s, j) => <li key={j}>{s}</li>)}</ul>
-                        </div>
+                        {q.followUp.strengths && q.followUp.strengths.length > 0 && (
+                          <div style={styles.feedbackStrengths}>
+                            <strong>✓ Strengths:</strong>
+                            <ul>{q.followUp.strengths.map((s, j) => <li key={j}>{s}</li>)}</ul>
+                          </div>
+                        )}
                         {q.followUp.improvements && q.followUp.improvements.length > 0 && (
                           <div style={styles.feedbackImprovements}>
                             <strong>△ Improve:</strong>
@@ -2684,6 +2834,24 @@ Return ONLY valid JSON:
                         )}
                       </div>
                     )}
+                  </div>
+                )}
+                
+                {/* V2: No follow-up — positive reinforcement when answer was thorough */}
+                {!q.hasFollowUp && q.noFollowUpReason === 'thorough_answer' && (
+                  <div style={{
+                    marginTop: '12px',
+                    padding: '10px 14px',
+                    background: 'rgba(16, 185, 129, 0.08)',
+                    border: '1px solid rgba(16, 185, 129, 0.2)',
+                    borderRadius: '8px',
+                    fontSize: '13px',
+                    color: '#10b981',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}>
+                    ✅ No follow-up needed — your answer was thorough
                   </div>
                 )}
               </div>
