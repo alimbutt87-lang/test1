@@ -1045,7 +1045,8 @@ Return ONLY valid JSON:
       const data = await response.json();
       
       if (!response.ok || !data.results) {
-        throw new Error('Analysis failed');
+        console.error('Analysis API response not ok:', response.status, JSON.stringify(data));
+        throw new Error(`Analysis failed: ${data?.error || data?.detail || 'No results in response'}`);
       }
 
       const results = data.results;
@@ -1129,8 +1130,10 @@ Return ONLY valid JSON:
       
     } catch (error) {
       console.error('Analysis error:', error);
+      console.error('Error detail:', error.message);
       stopCamera();
-      // Fallback results
+      // Fallback results - log that we're using fallback so it's clear during testing
+      console.warn('⚠️ Using FALLBACK results - API analysis failed. Check server logs for details.');
       const fallbackResults = generateFallbackResults(allAnswers);
       setFinalResults(fallbackResults);
       setIsAnalyzing(false);
