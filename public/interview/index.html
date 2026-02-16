@@ -3,404 +3,652 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interview Questions by Role – Practice with AI Simulator | AceMyInterviews</title>
-  <meta name="description" content="Practice interview questions for 476+ job roles. Software Engineer, Product Manager, Data Analyst, UX Designer and more. AI-powered interview simulator with instant feedback.">
-  <meta name="keywords" content="interview questions, job interview practice, interview simulator, behavioral interview questions">
-  
-  <meta property="og:title" content="Interview Questions by Role – AceMyInterviews">
-  <meta property="og:description" content="Practice interview questions for 476+ job roles with our AI-powered simulator.">
+  <title>Interview Questions by Role | AceMyInterviews</title>
+  <meta name="description" content="Practice interview questions for 564+ job roles. Get AI-powered feedback on your answers with our interview simulator.">
+  <meta name="keywords" content="interview questions, job interview practice, interview simulator, career preparation">
+  <meta property="og:title" content="Interview Questions by Role | AceMyInterviews">
+  <meta property="og:description" content="Practice interview questions for 564+ job roles with AI-powered feedback.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://acemyinterviews.io/interview">
-  
   <link rel="canonical" href="https://acemyinterviews.io/interview">
   <link rel="icon" href="/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
   <style>
-    :root {
-      --bg-primary: #0f1419;
-      --bg-secondary: #1a1f2e;
-      --bg-card: #1e2330;
-      --bg-card-hover: #252b3b;
-      --accent-primary: #14b8a6;
-      --accent-primary-hover: #0d9488;
-      --text-primary: #ffffff;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      --border-color: #2d3748;
-      --success: #10b981;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-    .header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .logo-icon {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--accent-primary), #2dd4bf);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .header-cta {
-      background: var(--accent-primary);
-      color: var(--bg-primary);
-      padding: 10px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: background 0.2s;
-    }
-    .header-cta:hover { background: var(--accent-primary-hover); }
-    .breadcrumbs {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 16px 24px;
-      font-size: 0.875rem;
-    }
-    .breadcrumbs a { color: var(--text-muted); text-decoration: none; }
-    .breadcrumbs a:hover { color: var(--accent-primary); }
-    .breadcrumbs span { color: var(--text-muted); margin: 0 8px; }
-    .breadcrumbs .current { color: var(--text-secondary); }
-    .hero {
-      padding: 60px 24px;
-      text-align: center;
-      background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-    }
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 2.75rem);
-      font-weight: 800;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .hero p {
-      color: var(--text-secondary);
-      font-size: 1.125rem;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    .last-updated {
-      text-align: center;
-      padding: 12px 24px;
-      font-size: 0.8125rem;
-      color: var(--text-muted);
-    }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-    }
-    .category { margin-bottom: 48px; }
-    .category h2 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 20px;
-      color: var(--text-primary);
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border-color);
-    }
-    .role-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 12px;
-    }
-    .role-grid a {
-      display: block;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      padding: 16px 20px;
-      border-radius: 10px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.9375rem;
-      transition: all 0.2s;
-    }
-    .role-grid a:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--accent-primary);
-      color: var(--text-primary);
-    }
-    .footer {
-      padding: 32px 24px;
-      text-align: center;
-      border-top: 1px solid var(--border-color);
-    }
-    .footer a { color: var(--accent-primary); text-decoration: none; }
-    .footer a:hover { text-decoration: underline; }
-    @media (max-width: 640px) {
-      .hero { padding: 40px 20px; }
-      .container { padding: 24px 20px 60px; }
-      .role-grid { grid-template-columns: 1fr; }
-    }
-  
-    .search-container {
-      max-width: 600px;
-      margin: 0 auto 32px;
-      padding: 0 24px;
-      position: relative;
-    }
-    .search-input {
-      width: 100%;
-      padding: 14px 20px 14px 48px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      color: var(--text-primary);
-      font-size: 1rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .search-input:focus { border-color: var(--accent-primary); }
-    .search-input::placeholder { color: var(--text-muted); }
-    .search-icon {
-      position: absolute;
-      left: 40px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-      width: 20px;
-      height: 20px;
-    }
-    .hidden { display: none !important; }
+    :root {--bg-primary:#0f1419;--bg-secondary:#1a1f2e;--bg-card:#1e2330;--bg-card-hover:#252b3b;--accent-primary:#14b8a6;--accent-primary-hover:#0d9488;--text-primary:#ffffff;--text-secondary:#94a3b8;--text-muted:#64748b;--border-color:#2d3748;--success:#10b981}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.6}
+    .header{padding:20px 24px;border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:0 auto}
+    .logo{font-size:1.25rem;font-weight:700;color:var(--text-primary);text-decoration:none;display:flex;align-items:center;gap:8px}
+    .logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent-primary),#2dd4bf);border-radius:8px;display:flex;align-items:center;justify-content:center}
+    .header-cta{background:var(--accent-primary);color:var(--bg-primary);padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.9rem}
+    .hero{padding:60px 24px;text-align:center;background:linear-gradient(180deg,var(--bg-secondary) 0%,var(--bg-primary) 100%)}
+    .hero h1{font-size:2.5rem;font-weight:800;margin-bottom:16px}
+    .hero p{color:var(--text-secondary);font-size:1.125rem;max-width:600px;margin:0 auto 32px}
+    .search-box{max-width:500px;margin:0 auto 20px;position:relative}
+    .search-box input{width:100%;padding:16px 20px 16px 48px;border-radius:12px;border:1px solid var(--border-color);background:var(--bg-card);color:var(--text-primary);font-size:1rem}
+    .search-box input::placeholder{color:var(--text-muted)}
+    .search-box svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--text-muted);width:20px;height:20px}
+    .stats{display:flex;justify-content:center;gap:32px;margin-top:24px;flex-wrap:wrap}
+    .stat{text-align:center}
+    .stat-value{font-size:1.75rem;font-weight:700;color:var(--accent-primary)}
+    .stat-label{font-size:0.875rem;color:var(--text-muted)}
+    .roles-section{padding:48px 24px;max-width:1200px;margin:0 auto}
+    .roles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+    .role-link{display:block;padding:14px 18px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:10px;color:var(--text-primary);text-decoration:none;font-size:0.9375rem;transition:all 0.2s}
+    .role-link:hover{background:var(--bg-card-hover);border-color:var(--accent-primary);transform:translateY(-2px)}
+    .hidden{display:none !important}
+    .footer{padding:32px 24px;text-align:center;border-top:1px solid var(--border-color)}
+    .footer a{color:var(--accent-primary);text-decoration:none}
+    @media(max-width:640px){.hero h1{font-size:1.75rem}.stats{gap:16px}.stat-value{font-size:1.5rem}}
   </style>
 </head>
 <body>
   <header class="header">
     <a href="/" class="logo">
-      <div class="logo-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
-      </div>
+      <div class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
       AceMyInterviews
     </a>
     <a href="/" class="header-cta">Start Practicing</a>
   </header>
-  <nav class="breadcrumbs">
-    <a href="/">Home</a>
-    <span>›</span>
-    <span class="current">Interview Questions</span>
-  </nav>
-  <div class="search-container">
-    <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
-    <input type="text" class="search-input" id="search" placeholder="Search roles (e.g., Product Manager, Data Scientist)">
-  </div>
+  
   <section class="hero">
     <h1>Interview Questions by Role</h1>
-    <p>Practice realistic interview questions for 476+ job roles. AI-powered simulator with instant feedback.</p>
+    <p>Practice with AI-powered interview simulation for your target role. Get instant feedback on your answers.</p>
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="roleSearch" placeholder="Search 564 roles..." onkeyup="filterRoles()">
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-value">564+</div><div class="stat-label">Job Roles</div></div>
+      <div class="stat"><div class="stat-value">5</div><div class="stat-label">Questions per Session</div></div>
+      <div class="stat"><div class="stat-value">AI</div><div class="stat-label">Instant Feedback</div></div>
+    </div>
   </section>
-  <div class="last-updated">
-    <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" viewBox="0 0 20 20" fill="currentColor">
-      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-    </svg>
-    Last updated: February 2026
-  </div>
-  <main class="container">
-      <div class="category">
-        <h2>AI & Machine Learning</h2>
-        <div class="role-grid"><a href="/interview/ai-engineer" data-role="AI Engineer">AI Engineer</a><a href="/interview/ai-research-scientist" data-role="AI Research Scientist">AI Research Scientist</a><a href="/interview/applied-ai-engineer" data-role="Applied AI Engineer">Applied AI Engineer</a><a href="/interview/computer-vision-scientist" data-role="Computer Vision Scientist">Computer Vision Scientist</a><a href="/interview/deep-learning-engineer" data-role="Deep Learning Engineer">Deep Learning Engineer</a><a href="/interview/generative-ai-engineer" data-role="Generative AI Engineer">Generative AI Engineer</a><a href="/interview/large-language-model-engineer" data-role="Large Language Model Engineer">Large Language Model Engineer</a><a href="/interview/machine-learning-scientist" data-role="Machine Learning Scientist">Machine Learning Scientist</a><a href="/interview/mlops-engineer" data-role="MLOps Engineer">MLOps Engineer</a><a href="/interview/prompt-engineer" data-role="Prompt Engineer">Prompt Engineer</a><a href="/interview/robotics-software-engineer" data-role="Robotics Software Engineer">Robotics Software Engineer</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Engineering</h2>
-        <div class="role-grid"><a href="/interview/aerospace-engineer" data-role="Aerospace Engineer">Aerospace Engineer</a><a href="/interview/analytics-engineer" data-role="Analytics Engineer">Analytics Engineer</a><a href="/interview/android-developer" data-role="Android Developer">Android Developer</a><a href="/interview/angular-developer" data-role="Angular Developer">Angular Developer</a><a href="/interview/api-developer" data-role="API Developer">API Developer</a><a href="/interview/aws-engineer" data-role="AWS Engineer">AWS Engineer</a><a href="/interview/azure-engineer" data-role="Azure Engineer">Azure Engineer</a><a href="/interview/back-end-engineer" data-role="Back End Engineer">Back End Engineer</a><a href="/interview/backend-developer" data-role="Backend Developer">Backend Developer</a><a href="/interview/backend-software-engineer" data-role="Backend Software Engineer">Backend Software Engineer</a><a href="/interview/blockchain-developer" data-role="Blockchain Developer">Blockchain Developer</a><a href="/interview/build-engineer" data-role="Build Engineer">Build Engineer</a><a href="/interview/business-intelligence-developer" data-role="Business Intelligence Developer">Business Intelligence Developer</a><a href="/interview/civil-engineer" data-role="Civil Engineer">Civil Engineer</a><a href="/interview/cnc-machinist" data-role="CNC Machinist">CNC Machinist</a><a href="/interview/computer-vision-engineer" data-role="Computer Vision Engineer">Computer Vision Engineer</a><a href="/interview/cpp-software-engineer" data-role="Cpp Software Engineer">Cpp Software Engineer</a><a href="/interview/cto" data-role="CTO">CTO</a><a href="/interview/database-developer" data-role="Database Developer">Database Developer</a><a href="/interview/deep-learning-engineer" data-role="Deep Learning Engineer">Deep Learning Engineer</a><a href="/interview/desktop-support-technician" data-role="Desktop Support Technician">Desktop Support Technician</a><a href="/interview/django-developer" data-role="Django Developer">Django Developer</a><a href="/interview/dotnet-developer" data-role=".NET Developer">.NET Developer</a><a href="/interview/electrical-engineer" data-role="Electrical Engineer">Electrical Engineer</a><a href="/interview/engineering-manager" data-role="Engineering Manager">Engineering Manager</a><a href="/interview/entry-level-software-engineer" data-role="Entry Level Software Engineer">Entry Level Software Engineer</a><a href="/interview/etl-developer" data-role="ETL Developer">ETL Developer</a><a href="/interview/flutter-developer" data-role="Flutter Developer">Flutter Developer</a><a href="/interview/front-end-engineer" data-role="Front End Engineer">Front End Engineer</a><a href="/interview/frontend-developer" data-role="Frontend Developer">Frontend Developer</a><a href="/interview/frontend-software-engineer" data-role="Frontend Software Engineer">Frontend Software Engineer</a><a href="/interview/full-stack-developer" data-role="Full Stack Developer">Full Stack Developer</a><a href="/interview/full-stack-software-engineer" data-role="Full Stack Software Engineer">Full Stack Software Engineer</a><a href="/interview/game-developer" data-role="Game Developer">Game Developer</a><a href="/interview/gcp-engineer" data-role="GCP Engineer">GCP Engineer</a><a href="/interview/golang-developer" data-role="Golang Developer">Golang Developer</a><a href="/interview/help-desk-technician" data-role="Help Desk Technician">Help Desk Technician</a><a href="/interview/industrial-designer" data-role="Industrial Designer">Industrial Designer</a><a href="/interview/ios-developer" data-role="iOS Developer">iOS Developer</a><a href="/interview/it-director" data-role="IT Director">IT Director</a><a href="/interview/it-manager" data-role="IT Manager">IT Manager</a><a href="/interview/java-developer" data-role="Java Developer">Java Developer</a><a href="/interview/java-software-engineer" data-role="Java Software Engineer">Java Software Engineer</a><a href="/interview/javascript-developer" data-role="Javascript Developer">Javascript Developer</a><a href="/interview/junior-backend-developer" data-role="Junior Backend Developer">Junior Backend Developer</a><a href="/interview/junior-frontend-developer" data-role="Junior Frontend Developer">Junior Frontend Developer</a><a href="/interview/junior-full-stack-developer" data-role="Junior Full Stack Developer">Junior Full Stack Developer</a><a href="/interview/junior-software-engineer" data-role="Junior Software Engineer">Junior Software Engineer</a><a href="/interview/kotlin-developer" data-role="Kotlin Developer">Kotlin Developer</a><a href="/interview/laravel-developer" data-role="Laravel Developer">Laravel Developer</a><a href="/interview/lead-software-engineer" data-role="Lead Software Engineer">Lead Software Engineer</a><a href="/interview/linux-administrator" data-role="Linux Administrator">Linux Administrator</a><a href="/interview/looker-developer" data-role="Looker Developer">Looker Developer</a><a href="/interview/machine-learning-engineer" data-role="Machine Learning Engineer">Machine Learning Engineer</a><a href="/interview/manufacturing-engineer" data-role="Manufacturing Engineer">Manufacturing Engineer</a><a href="/interview/mechanical-engineer" data-role="Mechanical Engineer">Mechanical Engineer</a><a href="/interview/mobile-app-developer" data-role="Mobile App Developer">Mobile App Developer</a><a href="/interview/nlp-engineer" data-role="NLP Engineer">NLP Engineer</a><a href="/interview/nodejs-developer" data-role="Node.js Developer">Node.js Developer</a><a href="/interview/packaging-engineer" data-role="Packaging Engineer">Packaging Engineer</a><a href="/interview/php-developer" data-role="Php Developer">Php Developer</a><a href="/interview/power-bi-developer" data-role="Power BI Developer">Power BI Developer</a><a href="/interview/principal-software-engineer" data-role="Principal Software Engineer">Principal Software Engineer</a><a href="/interview/python-developer" data-role="Python Developer">Python Developer</a><a href="/interview/python-software-engineer" data-role="Python Software Engineer">Python Software Engineer</a><a href="/interview/qa-engineer" data-role="QA Engineer">QA Engineer</a><a href="/interview/r-developer" data-role="R Developer">R Developer</a><a href="/interview/react-developer" data-role="React Developer">React Developer</a><a href="/interview/release-manager" data-role="Release Manager">Release Manager</a><a href="/interview/ruby-developer" data-role="Ruby Developer">Ruby Developer</a><a href="/interview/ruby-on-rails-developer" data-role="Ruby On Rails Developer">Ruby On Rails Developer</a><a href="/interview/rust-developer" data-role="Rust Developer">Rust Developer</a><a href="/interview/salesforce-administrator" data-role="Salesforce Administrator">Salesforce Administrator</a><a href="/interview/salesforce-developer" data-role="Salesforce Developer">Salesforce Developer</a><a href="/interview/sap-consultant" data-role="Sap Consultant">Sap Consultant</a><a href="/interview/scala-developer" data-role="Scala Developer">Scala Developer</a><a href="/interview/senior-backend-developer" data-role="Senior Backend Developer">Senior Backend Developer</a><a href="/interview/senior-frontend-developer" data-role="Senior Frontend Developer">Senior Frontend Developer</a><a href="/interview/senior-full-stack-developer" data-role="Senior Full Stack Developer">Senior Full Stack Developer</a><a href="/interview/senior-software-engineer" data-role="Senior Software Engineer">Senior Software Engineer</a><a href="/interview/servicenow-developer" data-role="ServiceNow Developer">ServiceNow Developer</a><a href="/interview/shopify-developer" data-role="Shopify Developer">Shopify Developer</a><a href="/interview/site-reliability-engineer" data-role="Site Reliability Engineer">Site Reliability Engineer</a><a href="/interview/software-architect" data-role="Software Architect">Software Architect</a><a href="/interview/software-development-manager" data-role="Software Development Manager">Software Development Manager</a><a href="/interview/software-engineer" data-role="Software Engineer">Software Engineer</a><a href="/interview/software-engineer-intern" data-role="Software Engineer Intern">Software Engineer Intern</a><a href="/interview/spring-boot-developer" data-role="Spring Boot Developer">Spring Boot Developer</a><a href="/interview/sql-developer" data-role="Sql Developer">Sql Developer</a><a href="/interview/staff-software-engineer" data-role="Staff Software Engineer">Staff Software Engineer</a><a href="/interview/structural-engineer" data-role="Structural Engineer">Structural Engineer</a><a href="/interview/swift-developer" data-role="Swift Developer">Swift Developer</a><a href="/interview/systems-administrator" data-role="Systems Administrator">Systems Administrator</a><a href="/interview/tableau-developer" data-role="Tableau Developer">Tableau Developer</a><a href="/interview/technical-lead" data-role="Technical Lead">Technical Lead</a><a href="/interview/typescript-developer" data-role="Typescript Developer">Typescript Developer</a><a href="/interview/ui-engineer" data-role="UI Engineer">UI Engineer</a><a href="/interview/vp-of-engineering" data-role="VP Of Engineering">VP Of Engineering</a><a href="/interview/vuejs-developer" data-role="Vue.js Developer">Vue.js Developer</a><a href="/interview/web-developer" data-role="Web Developer">Web Developer</a><a href="/interview/webflow-developer" data-role="Webflow Developer">Webflow Developer</a><a href="/interview/windows-administrator" data-role="Windows Administrator">Windows Administrator</a><a href="/interview/wordpress-developer" data-role="WordPress Developer">WordPress Developer</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>DevOps & Infrastructure</h2>
-        <div class="role-grid"><a href="/interview/aws-solutions-architect" data-role="AWS Solutions Architect">AWS Solutions Architect</a><a href="/interview/azure-solutions-architect" data-role="Azure Solutions Architect">Azure Solutions Architect</a><a href="/interview/cloud-architect" data-role="Cloud Architect">Cloud Architect</a><a href="/interview/cloud-devops-engineer" data-role="Cloud DevOps Engineer">Cloud DevOps Engineer</a><a href="/interview/cloud-engineer" data-role="Cloud Engineer">Cloud Engineer</a><a href="/interview/cloud-security-engineer" data-role="Cloud Security Engineer">Cloud Security Engineer</a><a href="/interview/database-administrator" data-role="Database Administrator">Database Administrator</a><a href="/interview/devops-engineer" data-role="DevOps Engineer">DevOps Engineer</a><a href="/interview/embedded-systems-engineer" data-role="Embedded Systems Engineer">Embedded Systems Engineer</a><a href="/interview/firmware-engineer" data-role="Firmware Engineer">Firmware Engineer</a><a href="/interview/it-support-specialist" data-role="IT Support Specialist">IT Support Specialist</a><a href="/interview/junior-devops-engineer" data-role="Junior DevOps Engineer">Junior DevOps Engineer</a><a href="/interview/network-administrator" data-role="Network Administrator">Network Administrator</a><a href="/interview/network-engineer" data-role="Network Engineer">Network Engineer</a><a href="/interview/platform-engineer" data-role="Platform Engineer">Platform Engineer</a><a href="/interview/robotics-engineer" data-role="Robotics Engineer">Robotics Engineer</a><a href="/interview/senior-devops-engineer" data-role="Senior DevOps Engineer">Senior DevOps Engineer</a><a href="/interview/solutions-architect" data-role="Solutions Architect">Solutions Architect</a><a href="/interview/solutions-engineer" data-role="Solutions Engineer">Solutions Engineer</a><a href="/interview/systems-engineer" data-role="Systems Engineer">Systems Engineer</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Data & Analytics</h2>
-        <div class="role-grid"><a href="/interview/bi-analyst" data-role="BI Analyst">BI Analyst</a><a href="/interview/business-intelligence-analyst" data-role="Business Intelligence Analyst">Business Intelligence Analyst</a><a href="/interview/data-analyst" data-role="Data Analyst">Data Analyst</a><a href="/interview/data-analytics-manager" data-role="Data Analytics Manager">Data Analytics Manager</a><a href="/interview/data-architect" data-role="Data Architect">Data Architect</a><a href="/interview/data-coordinator" data-role="Data Coordinator">Data Coordinator</a><a href="/interview/data-engineer" data-role="Data Engineer">Data Engineer</a><a href="/interview/data-entry-specialist" data-role="Data Entry Specialist">Data Entry Specialist</a><a href="/interview/data-manager" data-role="Data Manager">Data Manager</a><a href="/interview/data-quality-analyst" data-role="Data Quality Analyst">Data Quality Analyst</a><a href="/interview/data-scientist" data-role="Data Scientist">Data Scientist</a><a href="/interview/healthcare-data-analyst" data-role="Healthcare Data Analyst">Healthcare Data Analyst</a><a href="/interview/insights-analyst" data-role="Insights Analyst">Insights Analyst</a><a href="/interview/junior-data-analyst" data-role="Junior Data Analyst">Junior Data Analyst</a><a href="/interview/junior-data-engineer" data-role="Junior Data Engineer">Junior Data Engineer</a><a href="/interview/junior-data-scientist" data-role="Junior Data Scientist">Junior Data Scientist</a><a href="/interview/marketing-data-analyst" data-role="Marketing Data Analyst">Marketing Data Analyst</a><a href="/interview/master-data-manager" data-role="Master Data Manager">Master Data Manager</a><a href="/interview/quantitative-analyst" data-role="Quantitative Analyst">Quantitative Analyst</a><a href="/interview/reporting-analyst" data-role="Reporting Analyst">Reporting Analyst</a><a href="/interview/senior-data-analyst" data-role="Senior Data Analyst">Senior Data Analyst</a><a href="/interview/senior-data-engineer" data-role="Senior Data Engineer">Senior Data Engineer</a><a href="/interview/senior-data-scientist" data-role="Senior Data Scientist">Senior Data Scientist</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Product & Project</h2>
-        <div class="role-grid"><a href="/interview/agile-coach" data-role="Agile Coach">Agile Coach</a><a href="/interview/ai-product-manager" data-role="AI Product Manager">AI Product Manager</a><a href="/interview/associate-product-manager" data-role="Associate Product Manager">Associate Product Manager</a><a href="/interview/growth-product-manager" data-role="Growth Product Manager">Growth Product Manager</a><a href="/interview/head-of-product" data-role="Head Of Product">Head Of Product</a><a href="/interview/junior-product-manager" data-role="Junior Product Manager">Junior Product Manager</a><a href="/interview/lead-product-manager" data-role="Lead Product Manager">Lead Product Manager</a><a href="/interview/platform-product-manager" data-role="Platform Product Manager">Platform Product Manager</a><a href="/interview/product-manager" data-role="Product Manager">Product Manager</a><a href="/interview/product-operations-manager" data-role="Product Operations Manager">Product Operations Manager</a><a href="/interview/product-owner" data-role="Product Owner">Product Owner</a><a href="/interview/product-strategy-manager" data-role="Product Strategy Manager">Product Strategy Manager</a><a href="/interview/program-coordinator" data-role="Program Coordinator">Program Coordinator</a><a href="/interview/program-manager" data-role="Program Manager">Program Manager</a><a href="/interview/project-manager" data-role="Project Manager">Project Manager</a><a href="/interview/scrum-master" data-role="Scrum Master">Scrum Master</a><a href="/interview/senior-product-manager" data-role="Senior Product Manager">Senior Product Manager</a><a href="/interview/technical-product-manager" data-role="Technical Product Manager">Technical Product Manager</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Design & Research</h2>
-        <div class="role-grid"><a href="/interview/brand-designer" data-role="Brand Designer">Brand Designer</a><a href="/interview/content-designer" data-role="Content Designer">Content Designer</a><a href="/interview/creative-producer" data-role="Creative Producer">Creative Producer</a><a href="/interview/design-director" data-role="Design Director">Design Director</a><a href="/interview/design-manager" data-role="Design Manager">Design Manager</a><a href="/interview/design-systems-designer" data-role="Design Systems Designer">Design Systems Designer</a><a href="/interview/digital-designer" data-role="Digital Designer">Digital Designer</a><a href="/interview/graphic-designer" data-role="Graphic Designer">Graphic Designer</a><a href="/interview/interaction-designer" data-role="Interaction Designer">Interaction Designer</a><a href="/interview/junior-ux-designer" data-role="Junior UX Designer">Junior UX Designer</a><a href="/interview/motion-designer" data-role="Motion Designer">Motion Designer</a><a href="/interview/product-designer" data-role="Product Designer">Product Designer</a><a href="/interview/senior-ux-designer" data-role="Senior UX Designer">Senior UX Designer</a><a href="/interview/service-designer" data-role="Service Designer">Service Designer</a><a href="/interview/ui-designer" data-role="UI Designer">UI Designer</a><a href="/interview/urban-designer" data-role="Urban Designer">Urban Designer</a><a href="/interview/ux-designer" data-role="UX Designer">UX Designer</a><a href="/interview/ux-lead" data-role="UX Lead">UX Lead</a><a href="/interview/ux-researcher" data-role="UX Researcher">UX Researcher</a><a href="/interview/ux-ui-designer" data-role="UX UI Designer">UX UI Designer</a><a href="/interview/ux-writer" data-role="UX Writer">UX Writer</a><a href="/interview/visual-designer" data-role="Visual Designer">Visual Designer</a><a href="/interview/web-designer" data-role="Web Designer">Web Designer</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Analytics</h2>
-        <div class="role-grid"><a href="/interview/actuarial-analyst" data-role="Actuarial Analyst">Actuarial Analyst</a><a href="/interview/analytics-manager" data-role="Analytics Manager">Analytics Manager</a><a href="/interview/budget-analyst" data-role="Budget Analyst">Budget Analyst</a><a href="/interview/compensation-analyst" data-role="Compensation Analyst">Compensation Analyst</a><a href="/interview/compliance-analyst" data-role="Compliance Analyst">Compliance Analyst</a><a href="/interview/corporate-finance-analyst" data-role="Corporate Finance Analyst">Corporate Finance Analyst</a><a href="/interview/credit-analyst" data-role="Credit Analyst">Credit Analyst</a><a href="/interview/financial-analyst" data-role="Financial Analyst">Financial Analyst</a><a href="/interview/financial-planning-analyst" data-role="Financial Planning Analyst">Financial Planning Analyst</a><a href="/interview/hris-analyst" data-role="HRIS Analyst">HRIS Analyst</a><a href="/interview/inventory-analyst" data-role="Inventory Analyst">Inventory Analyst</a><a href="/interview/investment-analyst" data-role="Investment Analyst">Investment Analyst</a><a href="/interview/marketing-analyst" data-role="Marketing Analyst">Marketing Analyst</a><a href="/interview/operations-analyst" data-role="Operations Analyst">Operations Analyst</a><a href="/interview/policy-analyst" data-role="Policy Analyst">Policy Analyst</a><a href="/interview/pricing-analyst" data-role="Pricing Analyst">Pricing Analyst</a><a href="/interview/product-analyst" data-role="Product Analyst">Product Analyst</a><a href="/interview/research-analyst" data-role="Research Analyst">Research Analyst</a><a href="/interview/risk-analyst" data-role="Risk Analyst">Risk Analyst</a><a href="/interview/sales-operations-analyst" data-role="Sales Operations Analyst">Sales Operations Analyst</a><a href="/interview/strategy-analyst" data-role="Strategy Analyst">Strategy Analyst</a><a href="/interview/supply-chain-analyst" data-role="Supply Chain Analyst">Supply Chain Analyst</a><a href="/interview/tax-analyst" data-role="Tax Analyst">Tax Analyst</a><a href="/interview/treasury-analyst" data-role="Treasury Analyst">Treasury Analyst</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Sales</h2>
-        <div class="role-grid"><a href="/interview/account-executive" data-role="Account Executive">Account Executive</a><a href="/interview/account-manager" data-role="Account Manager">Account Manager</a><a href="/interview/automotive-sales-manager" data-role="Automotive Sales Manager">Automotive Sales Manager</a><a href="/interview/automotive-service-manager" data-role="Automotive Service Manager">Automotive Service Manager</a><a href="/interview/business-development-manager" data-role="Business Development Manager">Business Development Manager</a><a href="/interview/business-development-representative" data-role="Business Development Representative">Business Development Representative</a><a href="/interview/channel-sales-manager" data-role="Channel Sales Manager">Channel Sales Manager</a><a href="/interview/deal-desk-analyst" data-role="Deal Desk Analyst">Deal Desk Analyst</a><a href="/interview/enterprise-account-executive" data-role="Enterprise Account Executive">Enterprise Account Executive</a><a href="/interview/inside-sales-representative" data-role="Inside Sales Representative">Inside Sales Representative</a><a href="/interview/key-account-manager" data-role="Key Account Manager">Key Account Manager</a><a href="/interview/national-account-manager" data-role="National Account Manager">National Account Manager</a><a href="/interview/outside-sales-representative" data-role="Outside Sales Representative">Outside Sales Representative</a><a href="/interview/partnerships-manager" data-role="Partnerships Manager">Partnerships Manager</a><a href="/interview/presales-consultant" data-role="Presales Consultant">Presales Consultant</a><a href="/interview/quote-specialist" data-role="Quote Specialist">Quote Specialist</a><a href="/interview/regional-sales-manager" data-role="Regional Sales Manager">Regional Sales Manager</a><a href="/interview/revenue-operations-manager" data-role="Revenue Operations Manager">Revenue Operations Manager</a><a href="/interview/saas-account-executive" data-role="SaaS Account Executive">SaaS Account Executive</a><a href="/interview/sales-analyst" data-role="Sales Analyst">Sales Analyst</a><a href="/interview/sales-associate" data-role="Sales Associate">Sales Associate</a><a href="/interview/sales-coordinator" data-role="Sales Coordinator">Sales Coordinator</a><a href="/interview/sales-development-representative" data-role="Sales Development Representative">Sales Development Representative</a><a href="/interview/sales-director" data-role="Sales Director">Sales Director</a><a href="/interview/sales-enablement-manager" data-role="Sales Enablement Manager">Sales Enablement Manager</a><a href="/interview/sales-engineer" data-role="Sales Engineer">Sales Engineer</a><a href="/interview/sales-manager" data-role="Sales Manager">Sales Manager</a><a href="/interview/sales-representative" data-role="Sales Representative">Sales Representative</a><a href="/interview/territory-sales-manager" data-role="Territory Sales Manager">Territory Sales Manager</a><a href="/interview/vp-of-sales" data-role="VP Of Sales">VP Of Sales</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Customer Success & Support</h2>
-        <div class="role-grid"><a href="/interview/call-center-manager" data-role="Call Center Manager">Call Center Manager</a><a href="/interview/call-center-representative" data-role="Call Center Representative">Call Center Representative</a><a href="/interview/client-services-manager" data-role="Client Services Manager">Client Services Manager</a><a href="/interview/client-success-manager" data-role="Client Success Manager">Client Success Manager</a><a href="/interview/concierge" data-role="Concierge">Concierge</a><a href="/interview/customer-experience-manager" data-role="Customer Experience Manager">Customer Experience Manager</a><a href="/interview/customer-service-manager" data-role="Customer Service Manager">Customer Service Manager</a><a href="/interview/customer-service-representative" data-role="Customer Service Representative">Customer Service Representative</a><a href="/interview/customer-success-manager" data-role="Customer Success Manager">Customer Success Manager</a><a href="/interview/customer-success-specialist" data-role="Customer Success Specialist">Customer Success Specialist</a><a href="/interview/customer-support-manager" data-role="Customer Support Manager">Customer Support Manager</a><a href="/interview/customer-support-specialist" data-role="Customer Support Specialist">Customer Support Specialist</a><a href="/interview/front-desk-manager" data-role="Front Desk Manager">Front Desk Manager</a><a href="/interview/help-desk-analyst" data-role="Help Desk Analyst">Help Desk Analyst</a><a href="/interview/support-engineer" data-role="Support Engineer">Support Engineer</a><a href="/interview/technical-support-engineer" data-role="Technical Support Engineer">Technical Support Engineer</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Marketing</h2>
-        <div class="role-grid"><a href="/interview/affiliate-marketing-manager" data-role="Affiliate Marketing Manager">Affiliate Marketing Manager</a><a href="/interview/brand-manager" data-role="Brand Manager">Brand Manager</a><a href="/interview/campaign-manager" data-role="Campaign Manager">Campaign Manager</a><a href="/interview/channel-marketing-manager" data-role="Channel Marketing Manager">Channel Marketing Manager</a><a href="/interview/cmo" data-role="CMO">CMO</a><a href="/interview/content-manager" data-role="Content Manager">Content Manager</a><a href="/interview/content-strategist" data-role="Content Strategist">Content Strategist</a><a href="/interview/content-writer" data-role="Content Writer">Content Writer</a><a href="/interview/copywriter" data-role="Copywriter">Copywriter</a><a href="/interview/demand-generation-manager" data-role="Demand Generation Manager">Demand Generation Manager</a><a href="/interview/digital-marketing-manager" data-role="Digital Marketing Manager">Digital Marketing Manager</a><a href="/interview/e-commerce-manager" data-role="E-commerce Manager">E-commerce Manager</a><a href="/interview/e-commerce-specialist" data-role="E-commerce Specialist">E-commerce Specialist</a><a href="/interview/email-marketing-manager" data-role="Email Marketing Manager">Email Marketing Manager</a><a href="/interview/events-manager" data-role="Events Manager">Events Manager</a><a href="/interview/field-marketing-manager" data-role="Field Marketing Manager">Field Marketing Manager</a><a href="/interview/growth-manager" data-role="Growth Manager">Growth Manager</a><a href="/interview/growth-marketing-manager" data-role="Growth Marketing Manager">Growth Marketing Manager</a><a href="/interview/influencer-marketing-manager" data-role="Influencer Marketing Manager">Influencer Marketing Manager</a><a href="/interview/marketing-coordinator" data-role="Marketing Coordinator">Marketing Coordinator</a><a href="/interview/marketing-director" data-role="Marketing Director">Marketing Director</a><a href="/interview/marketing-manager" data-role="Marketing Manager">Marketing Manager</a><a href="/interview/marketing-operations-manager" data-role="Marketing Operations Manager">Marketing Operations Manager</a><a href="/interview/marketing-specialist" data-role="Marketing Specialist">Marketing Specialist</a><a href="/interview/paid-media-manager" data-role="Paid Media Manager">Paid Media Manager</a><a href="/interview/performance-marketing-manager" data-role="Performance Marketing Manager">Performance Marketing Manager</a><a href="/interview/ppc-specialist" data-role="PPC Specialist">PPC Specialist</a><a href="/interview/pr-specialist" data-role="PR Specialist">PR Specialist</a><a href="/interview/product-marketing-manager" data-role="Product Marketing Manager">Product Marketing Manager</a><a href="/interview/public-affairs-specialist" data-role="Public Affairs Specialist">Public Affairs Specialist</a><a href="/interview/retail-marketing-manager" data-role="Retail Marketing Manager">Retail Marketing Manager</a><a href="/interview/seo-specialist" data-role="SEO Specialist">SEO Specialist</a><a href="/interview/social-media-manager" data-role="Social Media Manager">Social Media Manager</a><a href="/interview/trade-marketing-manager" data-role="Trade Marketing Manager">Trade Marketing Manager</a><a href="/interview/vp-of-marketing" data-role="VP Of Marketing">VP Of Marketing</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>HR & Recruiting</h2>
-        <div class="role-grid"><a href="/interview/benefits-specialist" data-role="Benefits Specialist">Benefits Specialist</a><a href="/interview/corporate-trainer" data-role="Corporate Trainer">Corporate Trainer</a><a href="/interview/diversity-and-inclusion-manager" data-role="Diversity And Inclusion Manager">Diversity And Inclusion Manager</a><a href="/interview/employee-experience-manager" data-role="Employee Experience Manager">Employee Experience Manager</a><a href="/interview/hr-business-partner" data-role="HR Business Partner">HR Business Partner</a><a href="/interview/hr-coordinator" data-role="HR Coordinator">HR Coordinator</a><a href="/interview/hr-director" data-role="HR Director">HR Director</a><a href="/interview/hr-generalist" data-role="HR Generalist">HR Generalist</a><a href="/interview/hr-manager" data-role="HR Manager">HR Manager</a><a href="/interview/learning-and-development-manager" data-role="Learning And Development Manager">Learning And Development Manager</a><a href="/interview/onboarding-specialist" data-role="Onboarding Specialist">Onboarding Specialist</a><a href="/interview/people-operations-manager" data-role="People Operations Manager">People Operations Manager</a><a href="/interview/recruiter" data-role="Recruiter">Recruiter</a><a href="/interview/recruiting-coordinator" data-role="Recruiting Coordinator">Recruiting Coordinator</a><a href="/interview/talent-acquisition-specialist" data-role="Talent Acquisition Specialist">Talent Acquisition Specialist</a><a href="/interview/talent-partner" data-role="Talent Partner">Talent Partner</a><a href="/interview/technical-recruiter" data-role="Technical Recruiter">Technical Recruiter</a><a href="/interview/technical-sourcer" data-role="Technical Sourcer">Technical Sourcer</a><a href="/interview/training-specialist" data-role="Training Specialist">Training Specialist</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Finance & Insurance</h2>
-        <div class="role-grid"><a href="/interview/accountant" data-role="Accountant">Accountant</a><a href="/interview/actuary" data-role="Actuary">Actuary</a><a href="/interview/audit-associate" data-role="Audit Associate">Audit Associate</a><a href="/interview/bookkeeper" data-role="Bookkeeper">Bookkeeper</a><a href="/interview/claims-adjuster" data-role="Claims Adjuster">Claims Adjuster</a><a href="/interview/compliance-officer" data-role="Compliance Officer">Compliance Officer</a><a href="/interview/finance-manager" data-role="Finance Manager">Finance Manager</a><a href="/interview/financial-controller" data-role="Financial Controller">Financial Controller</a><a href="/interview/insurance-agent" data-role="Insurance Agent">Insurance Agent</a><a href="/interview/insurance-broker" data-role="Insurance Broker">Insurance Broker</a><a href="/interview/insurance-underwriter" data-role="Insurance Underwriter">Insurance Underwriter</a><a href="/interview/internal-auditor" data-role="Internal Auditor">Internal Auditor</a><a href="/interview/loan-officer" data-role="Loan Officer">Loan Officer</a><a href="/interview/loss-control-specialist" data-role="Loss Control Specialist">Loss Control Specialist</a><a href="/interview/mortgage-loan-officer" data-role="Mortgage Loan Officer">Mortgage Loan Officer</a><a href="/interview/payroll-specialist" data-role="Payroll Specialist">Payroll Specialist</a><a href="/interview/risk-manager" data-role="Risk Manager">Risk Manager</a><a href="/interview/staff-accountant" data-role="Staff Accountant">Staff Accountant</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Consulting</h2>
-        <div class="role-grid"><a href="/interview/business-consultant" data-role="Business Consultant">Business Consultant</a><a href="/interview/consultant" data-role="Consultant">Consultant</a><a href="/interview/education-consultant" data-role="Education Consultant">Education Consultant</a><a href="/interview/management-consultant" data-role="Management Consultant">Management Consultant</a><a href="/interview/security-consultant" data-role="Security Consultant">Security Consultant</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Operations & Admin</h2>
-        <div class="role-grid"><a href="/interview/administrative-assistant" data-role="Administrative Assistant">Administrative Assistant</a><a href="/interview/business-operations-manager" data-role="Business Operations Manager">Business Operations Manager</a><a href="/interview/demand-planner" data-role="Demand Planner">Demand Planner</a><a href="/interview/event-coordinator" data-role="Event Coordinator">Event Coordinator</a><a href="/interview/executive-assistant" data-role="Executive Assistant">Executive Assistant</a><a href="/interview/fleet-manager" data-role="Fleet Manager">Fleet Manager</a><a href="/interview/lean-manufacturing-specialist" data-role="Lean Manufacturing Specialist">Lean Manufacturing Specialist</a><a href="/interview/logistics-coordinator" data-role="Logistics Coordinator">Logistics Coordinator</a><a href="/interview/maintenance-manager" data-role="Maintenance Manager">Maintenance Manager</a><a href="/interview/office-manager" data-role="Office Manager">Office Manager</a><a href="/interview/operations-coordinator" data-role="Operations Coordinator">Operations Coordinator</a><a href="/interview/operations-manager" data-role="Operations Manager">Operations Manager</a><a href="/interview/parts-manager" data-role="Parts Manager">Parts Manager</a><a href="/interview/plant-manager" data-role="Plant Manager">Plant Manager</a><a href="/interview/process-improvement-manager" data-role="Process Improvement Manager">Process Improvement Manager</a><a href="/interview/procurement-manager" data-role="Procurement Manager">Procurement Manager</a><a href="/interview/procurement-specialist" data-role="Procurement Specialist">Procurement Specialist</a><a href="/interview/production-manager" data-role="Production Manager">Production Manager</a><a href="/interview/quality-control-inspector" data-role="Quality Control Inspector">Quality Control Inspector</a><a href="/interview/safety-manager" data-role="Safety Manager">Safety Manager</a><a href="/interview/supply-chain-manager" data-role="Supply Chain Manager">Supply Chain Manager</a><a href="/interview/technical-writer" data-role="Technical Writer">Technical Writer</a><a href="/interview/vendor-manager" data-role="Vendor Manager">Vendor Manager</a><a href="/interview/warehouse-manager" data-role="Warehouse Manager">Warehouse Manager</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Quality Assurance</h2>
-        <div class="role-grid"><a href="/interview/automation-engineer" data-role="Automation Engineer">Automation Engineer</a><a href="/interview/qa-tester" data-role="QA Tester">QA Tester</a><a href="/interview/quality-assurance-manager" data-role="Quality Assurance Manager">Quality Assurance Manager</a><a href="/interview/quality-assurance-specialist-pharma" data-role="Quality Assurance Specialist Pharma">Quality Assurance Specialist Pharma</a><a href="/interview/test-automation-engineer" data-role="Test Automation Engineer">Test Automation Engineer</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Legal</h2>
-        <div class="role-grid"><a href="/interview/contract-manager" data-role="Contract Manager">Contract Manager</a><a href="/interview/legal-assistant" data-role="Legal Assistant">Legal Assistant</a><a href="/interview/legal-counsel" data-role="Legal Counsel">Legal Counsel</a><a href="/interview/legislative-assistant" data-role="Legislative Assistant">Legislative Assistant</a><a href="/interview/paralegal" data-role="Paralegal">Paralegal</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Healthcare</h2>
-        <div class="role-grid"><a href="/interview/biostatistician" data-role="Biostatistician">Biostatistician</a><a href="/interview/clinical-pharmacist" data-role="Clinical Pharmacist">Clinical Pharmacist</a><a href="/interview/clinical-research-associate" data-role="Clinical Research Associate">Clinical Research Associate</a><a href="/interview/dental-assistant" data-role="Dental Assistant">Dental Assistant</a><a href="/interview/dental-hygienist" data-role="Dental Hygienist">Dental Hygienist</a><a href="/interview/health-information-technician" data-role="Health Information Technician">Health Information Technician</a><a href="/interview/healthcare-administrator" data-role="Healthcare Administrator">Healthcare Administrator</a><a href="/interview/hospital-case-manager" data-role="Hospital Case Manager">Hospital Case Manager</a><a href="/interview/medical-assistant" data-role="Medical Assistant">Medical Assistant</a><a href="/interview/medical-coder" data-role="Medical Coder">Medical Coder</a><a href="/interview/medical-laboratory-technician" data-role="Medical Laboratory Technician">Medical Laboratory Technician</a><a href="/interview/medical-science-liaison" data-role="Medical Science Liaison">Medical Science Liaison</a><a href="/interview/medical-writer" data-role="Medical Writer">Medical Writer</a><a href="/interview/nurse-practitioner" data-role="Nurse Practitioner">Nurse Practitioner</a><a href="/interview/occupational-therapist" data-role="Occupational Therapist">Occupational Therapist</a><a href="/interview/patient-care-coordinator" data-role="Patient Care Coordinator">Patient Care Coordinator</a><a href="/interview/pharmacist" data-role="Pharmacist">Pharmacist</a><a href="/interview/pharmacy-technician" data-role="Pharmacy Technician">Pharmacy Technician</a><a href="/interview/physical-therapist" data-role="Physical Therapist">Physical Therapist</a><a href="/interview/physician-assistant" data-role="Physician Assistant">Physician Assistant</a><a href="/interview/radiology-technician" data-role="Radiology Technician">Radiology Technician</a><a href="/interview/registered-nurse" data-role="Registered Nurse">Registered Nurse</a><a href="/interview/regulatory-affairs-specialist" data-role="Regulatory Affairs Specialist">Regulatory Affairs Specialist</a><a href="/interview/research-scientist" data-role="Research Scientist">Research Scientist</a><a href="/interview/speech-language-pathologist" data-role="Speech Language Pathologist">Speech Language Pathologist</a><a href="/interview/telemedicine-physician" data-role="Telemedicine Physician">Telemedicine Physician</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Cybersecurity</h2>
-        <div class="role-grid"><a href="/interview/application-security-engineer" data-role="Application Security Engineer">Application Security Engineer</a><a href="/interview/cybersecurity-analyst" data-role="Cybersecurity Analyst">Cybersecurity Analyst</a><a href="/interview/identity-access-management-analyst" data-role="Identity Access Management Analyst">Identity Access Management Analyst</a><a href="/interview/information-security-analyst" data-role="Information Security Analyst">Information Security Analyst</a><a href="/interview/penetration-tester" data-role="Penetration Tester">Penetration Tester</a><a href="/interview/security-engineer" data-role="Security Engineer">Security Engineer</a><a href="/interview/security-operations-analyst" data-role="Security Operations Analyst">Security Operations Analyst</a><a href="/interview/threat-intelligence-analyst" data-role="Threat Intelligence Analyst">Threat Intelligence Analyst</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Ethics & Compliance</h2>
-        <div class="role-grid"><a href="/interview/ai-ethics-officer" data-role="AI Ethics Officer">AI Ethics Officer</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Real Estate & Property</h2>
-        <div class="role-grid"><a href="/interview/commercial-real-estate-agent" data-role="Commercial Real Estate Agent">Commercial Real Estate Agent</a><a href="/interview/leasing-agent" data-role="Leasing Agent">Leasing Agent</a><a href="/interview/property-manager" data-role="Property Manager">Property Manager</a><a href="/interview/real-estate-agent" data-role="Real Estate Agent">Real Estate Agent</a><a href="/interview/real-estate-appraiser" data-role="Real Estate Appraiser">Real Estate Appraiser</a><a href="/interview/real-estate-broker" data-role="Real Estate Broker">Real Estate Broker</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Education</h2>
-        <div class="role-grid"><a href="/interview/academic-advisor" data-role="Academic Advisor">Academic Advisor</a><a href="/interview/admissions-counselor" data-role="Admissions Counselor">Admissions Counselor</a><a href="/interview/curriculum-developer" data-role="Curriculum Developer">Curriculum Developer</a><a href="/interview/e-learning-developer" data-role="E-Learning Developer">E-Learning Developer</a><a href="/interview/esl-teacher" data-role="ESL Teacher">ESL Teacher</a><a href="/interview/instructional-coordinator" data-role="Instructional Coordinator">Instructional Coordinator</a><a href="/interview/school-principal" data-role="School Principal">School Principal</a><a href="/interview/special-education-teacher" data-role="Special Education Teacher">Special Education Teacher</a><a href="/interview/substitute-teacher" data-role="Substitute Teacher">Substitute Teacher</a><a href="/interview/teaching-assistant" data-role="Teaching Assistant">Teaching Assistant</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Media & Entertainment</h2>
-        <div class="role-grid"><a href="/interview/broadcast-journalist" data-role="Broadcast Journalist">Broadcast Journalist</a><a href="/interview/cinematographer" data-role="Cinematographer">Cinematographer</a><a href="/interview/film-editor" data-role="Film Editor">Film Editor</a><a href="/interview/music-producer" data-role="Music Producer">Music Producer</a><a href="/interview/news-anchor" data-role="News Anchor">News Anchor</a><a href="/interview/podcast-producer" data-role="Podcast Producer">Podcast Producer</a><a href="/interview/sound-engineer" data-role="Sound Engineer">Sound Engineer</a><a href="/interview/video-producer" data-role="Video Producer">Video Producer</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Hospitality & Travel</h2>
-        <div class="role-grid"><a href="/interview/catering-manager" data-role="Catering Manager">Catering Manager</a><a href="/interview/hotel-general-manager" data-role="Hotel General Manager">Hotel General Manager</a><a href="/interview/restaurant-general-manager" data-role="Restaurant General Manager">Restaurant General Manager</a><a href="/interview/tour-guide" data-role="Tour Guide">Tour Guide</a><a href="/interview/travel-agent" data-role="Travel Agent">Travel Agent</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Nonprofit & Government</h2>
-        <div class="role-grid"><a href="/interview/case-manager" data-role="Case Manager">Case Manager</a><a href="/interview/community-outreach-manager" data-role="Community Outreach Manager">Community Outreach Manager</a><a href="/interview/development-officer" data-role="Development Officer">Development Officer</a><a href="/interview/foundation-program-officer" data-role="Foundation Program Officer">Foundation Program Officer</a><a href="/interview/grant-writer" data-role="Grant Writer">Grant Writer</a><a href="/interview/nonprofit-executive-director" data-role="Nonprofit Executive Director">Nonprofit Executive Director</a><a href="/interview/social-worker" data-role="Social Worker">Social Worker</a><a href="/interview/volunteer-coordinator" data-role="Volunteer Coordinator">Volunteer Coordinator</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Construction & Trades</h2>
-        <div class="role-grid"><a href="/interview/building-inspector" data-role="Building Inspector">Building Inspector</a><a href="/interview/construction-project-manager" data-role="Construction Project Manager">Construction Project Manager</a><a href="/interview/electrician" data-role="Electrician">Electrician</a><a href="/interview/estimator" data-role="Estimator">Estimator</a><a href="/interview/hvac-technician" data-role="HVAC Technician">HVAC Technician</a><a href="/interview/plumber" data-role="Plumber">Plumber</a><a href="/interview/site-superintendent" data-role="Site Superintendent">Site Superintendent</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Transportation & Logistics</h2>
-        <div class="role-grid"><a href="/interview/air-traffic-controller" data-role="Air Traffic Controller">Air Traffic Controller</a><a href="/interview/aircraft-mechanic" data-role="Aircraft Mechanic">Aircraft Mechanic</a><a href="/interview/aviation-safety-inspector" data-role="Aviation Safety Inspector">Aviation Safety Inspector</a><a href="/interview/vehicle-inspector" data-role="Vehicle Inspector">Vehicle Inspector</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Science & Environment</h2>
-        <div class="role-grid"><a href="/interview/agricultural-scientist" data-role="Agricultural Scientist">Agricultural Scientist</a><a href="/interview/environmental-scientist" data-role="Environmental Scientist">Environmental Scientist</a><a href="/interview/farm-manager" data-role="Farm Manager">Farm Manager</a><a href="/interview/sustainability-coordinator" data-role="Sustainability Coordinator">Sustainability Coordinator</a><a href="/interview/wildlife-biologist" data-role="Wildlife Biologist">Wildlife Biologist</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Fitness & Wellness</h2>
-        <div class="role-grid"><a href="/interview/fitness-instructor" data-role="Fitness Instructor">Fitness Instructor</a><a href="/interview/personal-trainer" data-role="Personal Trainer">Personal Trainer</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Public Safety</h2>
-        <div class="role-grid"><a href="/interview/firefighter" data-role="Firefighter">Firefighter</a><a href="/interview/police-officer" data-role="Police Officer">Police Officer</a></div>
-      </div>
-    
-      <div class="category">
-        <h2>Other</h2>
-        <div class="role-grid"><a href="/interview/business-analyst" data-role="Business Analyst">Business Analyst</a><a href="/interview/city-planner" data-role="City Planner">City Planner</a><a href="/interview/customer-acquisition-manager" data-role="Customer Acquisition Manager">Customer Acquisition Manager</a><a href="/interview/junior-business-analyst" data-role="Junior Business Analyst">Junior Business Analyst</a><a href="/interview/product-analytics-manager" data-role="Product Analytics Manager">Product Analytics Manager</a><a href="/interview/senior-business-analyst" data-role="Senior Business Analyst">Senior Business Analyst</a></div>
-      </div>
-    
-  </main>
+  
+  <section class="roles-section">
+    <div class="roles-grid" id="rolesGrid">
+<a href="/interview/academic-advisor" class="role-link">Academic Advisor</a>
+<a href="/interview/accessibility-specialist" class="role-link">Accessibility Specialist</a>
+<a href="/interview/account-executive" class="role-link">Account Executive</a>
+<a href="/interview/account-manager" class="role-link">Account Manager</a>
+<a href="/interview/accountant" class="role-link">Accountant</a>
+<a href="/interview/acoustic-engineer" class="role-link">Acoustic Engineer</a>
+<a href="/interview/actuarial-analyst" class="role-link">Actuarial Analyst</a>
+<a href="/interview/actuary" class="role-link">Actuary</a>
+<a href="/interview/administrative-assistant" class="role-link">Administrative Assistant</a>
+<a href="/interview/admissions-counselor" class="role-link">Admissions Counselor</a>
+<a href="/interview/aerospace-engineer" class="role-link">Aerospace Engineer</a>
+<a href="/interview/affiliate-marketing-manager" class="role-link">Affiliate Marketing Manager</a>
+<a href="/interview/agile-coach" class="role-link">Agile Coach</a>
+<a href="/interview/agricultural-scientist" class="role-link">Agricultural Scientist</a>
+<a href="/interview/ai-consultant" class="role-link">AI Consultant</a>
+<a href="/interview/ai-cybersecurity-analyst" class="role-link">AI Cybersecurity Analyst</a>
+<a href="/interview/ai-engineer" class="role-link">Ai Engineer</a>
+<a href="/interview/ai-ethics-officer" class="role-link">Ai Ethics Officer</a>
+<a href="/interview/ai-product-manager" class="role-link">Ai Product Manager</a>
+<a href="/interview/ai-research-scientist" class="role-link">Ai Research Scientist</a>
+<a href="/interview/ai-solutions-architect" class="role-link">AI Solutions Architect</a>
+<a href="/interview/ai-trainer" class="role-link">AI Trainer</a>
+<a href="/interview/air-traffic-controller" class="role-link">Air Traffic Controller</a>
+<a href="/interview/aircraft-mechanic" class="role-link">Aircraft Mechanic</a>
+<a href="/interview/aml-analyst" class="role-link">AML Analyst</a>
+<a href="/interview/analytics-engineer" class="role-link">Analytics Engineer</a>
+<a href="/interview/analytics-manager" class="role-link">Analytics Manager</a>
+<a href="/interview/android-developer" class="role-link">Android Developer</a>
+<a href="/interview/angular-developer" class="role-link">Angular Developer</a>
+<a href="/interview/api-developer" class="role-link">Api Developer</a>
+<a href="/interview/application-security-engineer" class="role-link">Application Security Engineer</a>
+<a href="/interview/applied-ai-engineer" class="role-link">Applied Ai Engineer</a>
+<a href="/interview/associate-product-manager" class="role-link">Associate Product Manager</a>
+<a href="/interview/audit-associate" class="role-link">Audit Associate</a>
+<a href="/interview/automation-engineer" class="role-link">Automation Engineer</a>
+<a href="/interview/automotive-sales-manager" class="role-link">Automotive Sales Manager</a>
+<a href="/interview/automotive-service-manager" class="role-link">Automotive Service Manager</a>
+<a href="/interview/autonomous-vehicle-engineer" class="role-link">Autonomous Vehicle Engineer</a>
+<a href="/interview/aviation-safety-inspector" class="role-link">Aviation Safety Inspector</a>
+<a href="/interview/aws-engineer" class="role-link">Aws Engineer</a>
+<a href="/interview/aws-solutions-architect" class="role-link">Aws Solutions Architect</a>
+<a href="/interview/azure-engineer" class="role-link">Azure Engineer</a>
+<a href="/interview/azure-solutions-architect" class="role-link">Azure Solutions Architect</a>
+<a href="/interview/back-end-engineer" class="role-link">Back End Engineer</a>
+<a href="/interview/backend-developer" class="role-link">Backend Developer</a>
+<a href="/interview/backend-software-engineer" class="role-link">Backend Software Engineer</a>
+<a href="/interview/battery-storage-engineer" class="role-link">Battery Storage Engineer</a>
+<a href="/interview/benefits-specialist" class="role-link">Benefits Specialist</a>
+<a href="/interview/bi-analyst" class="role-link">Bi Analyst</a>
+<a href="/interview/biostatistician" class="role-link">Biostatistician</a>
+<a href="/interview/blockchain-developer" class="role-link">Blockchain Developer</a>
+<a href="/interview/bookkeeper" class="role-link">Bookkeeper</a>
+<a href="/interview/brand-designer" class="role-link">Brand Designer</a>
+<a href="/interview/brand-manager" class="role-link">Brand Manager</a>
+<a href="/interview/brand-strategist" class="role-link">Brand Strategist</a>
+<a href="/interview/broadcast-journalist" class="role-link">Broadcast Journalist</a>
+<a href="/interview/budget-analyst" class="role-link">Budget Analyst</a>
+<a href="/interview/build-engineer" class="role-link">Build Engineer</a>
+<a href="/interview/building-inspector" class="role-link">Building Inspector</a>
+<a href="/interview/business-analyst" class="role-link">Business Analyst</a>
+<a href="/interview/business-consultant" class="role-link">Business Consultant</a>
+<a href="/interview/business-development-manager" class="role-link">Business Development Manager</a>
+<a href="/interview/business-development-representative" class="role-link">Business Development Representative</a>
+<a href="/interview/business-intelligence-analyst" class="role-link">Business Intelligence Analyst</a>
+<a href="/interview/business-intelligence-developer" class="role-link">Business Intelligence Developer</a>
+<a href="/interview/business-operations-manager" class="role-link">Business Operations Manager</a>
+<a href="/interview/call-center-manager" class="role-link">Call Center Manager</a>
+<a href="/interview/call-center-representative" class="role-link">Call Center Representative</a>
+<a href="/interview/campaign-manager" class="role-link">Campaign Manager</a>
+<a href="/interview/carbon-accounting-analyst" class="role-link">Carbon Accounting Analyst</a>
+<a href="/interview/case-manager" class="role-link">Case Manager</a>
+<a href="/interview/catering-manager" class="role-link">Catering Manager</a>
+<a href="/interview/channel-marketing-manager" class="role-link">Channel Marketing Manager</a>
+<a href="/interview/channel-sales-manager" class="role-link">Channel Sales Manager</a>
+<a href="/interview/cinematographer" class="role-link">Cinematographer</a>
+<a href="/interview/city-planner" class="role-link">City Planner</a>
+<a href="/interview/civil-engineer" class="role-link">Civil Engineer</a>
+<a href="/interview/claims-adjuster" class="role-link">Claims Adjuster</a>
+<a href="/interview/client-services-manager" class="role-link">Client Services Manager</a>
+<a href="/interview/client-success-manager" class="role-link">Client Success Manager</a>
+<a href="/interview/clinical-pharmacist" class="role-link">Clinical Pharmacist</a>
+<a href="/interview/clinical-research-associate" class="role-link">Clinical Research Associate</a>
+<a href="/interview/clinical-research-coordinator" class="role-link">Clinical Research Coordinator</a>
+<a href="/interview/cloud-architect" class="role-link">Cloud Architect</a>
+<a href="/interview/cloud-devops-engineer" class="role-link">Cloud Devops Engineer</a>
+<a href="/interview/cloud-engineer" class="role-link">Cloud Engineer</a>
+<a href="/interview/cloud-security-engineer" class="role-link">Cloud Security Engineer</a>
+<a href="/interview/cloud-solutions-architect" class="role-link">Cloud Solutions Architect</a>
+<a href="/interview/cmo" class="role-link">Cmo</a>
+<a href="/interview/cnc-machinist" class="role-link">Cnc Machinist</a>
+<a href="/interview/commercial-real-estate-agent" class="role-link">Commercial Real Estate Agent</a>
+<a href="/interview/community-manager" class="role-link">Community Manager</a>
+<a href="/interview/community-outreach-manager" class="role-link">Community Outreach Manager</a>
+<a href="/interview/compensation-analyst" class="role-link">Compensation Analyst</a>
+<a href="/interview/compensation-and-benefits-analyst" class="role-link">Compensation and Benefits Analyst</a>
+<a href="/interview/compliance-analyst" class="role-link">Compliance Analyst</a>
+<a href="/interview/compliance-officer" class="role-link">Compliance Officer</a>
+<a href="/interview/computer-vision-engineer" class="role-link">Computer Vision Engineer</a>
+<a href="/interview/computer-vision-scientist" class="role-link">Computer Vision Scientist</a>
+<a href="/interview/concierge" class="role-link">Concierge</a>
+<a href="/interview/construction-project-manager" class="role-link">Construction Project Manager</a>
+<a href="/interview/consultant" class="role-link">Consultant</a>
+<a href="/interview/content-designer" class="role-link">Content Designer</a>
+<a href="/interview/content-manager" class="role-link">Content Manager</a>
+<a href="/interview/content-strategist" class="role-link">Content Strategist</a>
+<a href="/interview/content-writer" class="role-link">Content Writer</a>
+<a href="/interview/context-engineer" class="role-link">Context Engineer</a>
+<a href="/interview/contract-manager" class="role-link">Contract Manager</a>
+<a href="/interview/controls-engineer" class="role-link">Controls Engineer</a>
+<a href="/interview/conversational-ai-designer" class="role-link">Conversational AI Designer</a>
+<a href="/interview/copywriter" class="role-link">Copywriter</a>
+<a href="/interview/corporate-counsel" class="role-link">Corporate Counsel</a>
+<a href="/interview/corporate-finance-analyst" class="role-link">Corporate Finance Analyst</a>
+<a href="/interview/corporate-trainer" class="role-link">Corporate Trainer</a>
+<a href="/interview/cpp-software-engineer" class="role-link">Cpp Software Engineer</a>
+<a href="/interview/creative-producer" class="role-link">Creative Producer</a>
+<a href="/interview/credit-analyst" class="role-link">Credit Analyst</a>
+<a href="/interview/cro-specialist" class="role-link">CRO Specialist</a>
+<a href="/interview/cto" class="role-link">Cto</a>
+<a href="/interview/curriculum-developer" class="role-link">Curriculum Developer</a>
+<a href="/interview/customer-acquisition-manager" class="role-link">Customer Acquisition Manager</a>
+<a href="/interview/customer-experience-manager" class="role-link">Customer Experience Manager</a>
+<a href="/interview/customer-service-manager" class="role-link">Customer Service Manager</a>
+<a href="/interview/customer-service-representative" class="role-link">Customer Service Representative</a>
+<a href="/interview/customer-success-manager" class="role-link">Customer Success Manager</a>
+<a href="/interview/customer-success-specialist" class="role-link">Customer Success Specialist</a>
+<a href="/interview/customer-support-manager" class="role-link">Customer Support Manager</a>
+<a href="/interview/customer-support-specialist" class="role-link">Customer Support Specialist</a>
+<a href="/interview/cybersecurity-analyst" class="role-link">Cybersecurity Analyst</a>
+<a href="/interview/data-analyst" class="role-link">Data Analyst</a>
+<a href="/interview/data-analytics-manager" class="role-link">Data Analytics Manager</a>
+<a href="/interview/data-annotation-specialist" class="role-link">Data Annotation Specialist</a>
+<a href="/interview/data-architect" class="role-link">Data Architect</a>
+<a href="/interview/data-coordinator" class="role-link">Data Coordinator</a>
+<a href="/interview/data-engineer" class="role-link">Data Engineer</a>
+<a href="/interview/data-entry-specialist" class="role-link">Data Entry Specialist</a>
+<a href="/interview/data-governance-analyst" class="role-link">Data Governance Analyst</a>
+<a href="/interview/data-manager" class="role-link">Data Manager</a>
+<a href="/interview/data-platform-engineer" class="role-link">Data Platform Engineer</a>
+<a href="/interview/data-quality-analyst" class="role-link">Data Quality Analyst</a>
+<a href="/interview/data-quality-engineer" class="role-link">Data Quality Engineer</a>
+<a href="/interview/data-scientist" class="role-link">Data Scientist</a>
+<a href="/interview/database-administrator" class="role-link">Database Administrator</a>
+<a href="/interview/database-developer" class="role-link">Database Developer</a>
+<a href="/interview/database-reliability-engineer" class="role-link">Database Reliability Engineer</a>
+<a href="/interview/deal-desk-analyst" class="role-link">Deal Desk Analyst</a>
+<a href="/interview/decision-scientist" class="role-link">Decision Scientist</a>
+<a href="/interview/deep-learning-engineer" class="role-link">Deep Learning Engineer</a>
+<a href="/interview/demand-generation-manager" class="role-link">Demand Generation Manager</a>
+<a href="/interview/demand-planner" class="role-link">Demand Planner</a>
+<a href="/interview/demand-planning-analyst" class="role-link">Demand Planning Analyst</a>
+<a href="/interview/dental-assistant" class="role-link">Dental Assistant</a>
+<a href="/interview/dental-hygienist" class="role-link">Dental Hygienist</a>
+<a href="/interview/design-director" class="role-link">Design Director</a>
+<a href="/interview/design-manager" class="role-link">Design Manager</a>
+<a href="/interview/design-systems-designer" class="role-link">Design Systems Designer</a>
+<a href="/interview/design-systems-engineer" class="role-link">Design Systems Engineer</a>
+<a href="/interview/desktop-support-technician" class="role-link">Desktop Support Technician</a>
+<a href="/interview/developer-advocate" class="role-link">Developer Advocate</a>
+<a href="/interview/development-officer" class="role-link">Development Officer</a>
+<a href="/interview/devops-engineer" class="role-link">Devops Engineer</a>
+<a href="/interview/digital-designer" class="role-link">Digital Designer</a>
+<a href="/interview/digital-forensics-analyst" class="role-link">Digital Forensics Analyst</a>
+<a href="/interview/digital-marketing-manager" class="role-link">Digital Marketing Manager</a>
+<a href="/interview/diversity-and-inclusion-manager" class="role-link">Diversity And Inclusion Manager</a>
+<a href="/interview/django-developer" class="role-link">Django Developer</a>
+<a href="/interview/dotnet-developer" class="role-link">Dotnet Developer</a>
+<a href="/interview/e-commerce-manager" class="role-link">E Commerce Manager</a>
+<a href="/interview/e-commerce-specialist" class="role-link">E Commerce Specialist</a>
+<a href="/interview/e-learning-developer" class="role-link">E Learning Developer</a>
+<a href="/interview/edge-ai-engineer" class="role-link">Edge AI Engineer</a>
+<a href="/interview/edge-computing-engineer" class="role-link">Edge Computing Engineer</a>
+<a href="/interview/ediscovery-specialist" class="role-link">eDiscovery Specialist</a>
+<a href="/interview/education-consultant" class="role-link">Education Consultant</a>
+<a href="/interview/electrical-engineer" class="role-link">Electrical Engineer</a>
+<a href="/interview/electrician" class="role-link">Electrician</a>
+<a href="/interview/email-marketing-manager" class="role-link">Email Marketing Manager</a>
+<a href="/interview/email-marketing-specialist" class="role-link">Email Marketing Specialist</a>
+<a href="/interview/embedded-systems-engineer" class="role-link">Embedded Systems Engineer</a>
+<a href="/interview/employee-experience-manager" class="role-link">Employee Experience Manager</a>
+<a href="/interview/energy-auditor" class="role-link">Energy Auditor</a>
+<a href="/interview/engineering-manager" class="role-link">Engineering Manager</a>
+<a href="/interview/enterprise-account-executive" class="role-link">Enterprise Account Executive</a>
+<a href="/interview/entry-level-software-engineer" class="role-link">Entry Level Software Engineer</a>
+<a href="/interview/environmental-compliance-specialist" class="role-link">Environmental Compliance Specialist</a>
+<a href="/interview/environmental-scientist" class="role-link">Environmental Scientist</a>
+<a href="/interview/epidemiologist" class="role-link">Epidemiologist</a>
+<a href="/interview/esg-analyst" class="role-link">ESG Analyst</a>
+<a href="/interview/esl-teacher" class="role-link">Esl Teacher</a>
+<a href="/interview/estimator" class="role-link">Estimator</a>
+<a href="/interview/etl-developer" class="role-link">Etl Developer</a>
+<a href="/interview/event-coordinator" class="role-link">Event Coordinator</a>
+<a href="/interview/event-marketing-manager" class="role-link">Event Marketing Manager</a>
+<a href="/interview/events-manager" class="role-link">Events Manager</a>
+<a href="/interview/executive-assistant" class="role-link">Executive Assistant</a>
+<a href="/interview/farm-manager" class="role-link">Farm Manager</a>
+<a href="/interview/field-marketing-manager" class="role-link">Field Marketing Manager</a>
+<a href="/interview/film-editor" class="role-link">Film Editor</a>
+<a href="/interview/finance-manager" class="role-link">Finance Manager</a>
+<a href="/interview/financial-analyst" class="role-link">Financial Analyst</a>
+<a href="/interview/financial-controller" class="role-link">Financial Controller</a>
+<a href="/interview/financial-planning-analyst" class="role-link">Financial Planning Analyst</a>
+<a href="/interview/finops-analyst" class="role-link">FinOps Analyst</a>
+<a href="/interview/fintech-product-manager" class="role-link">Fintech Product Manager</a>
+<a href="/interview/fire-protection-engineer" class="role-link">Fire Protection Engineer</a>
+<a href="/interview/firefighter" class="role-link">Firefighter</a>
+<a href="/interview/firmware-engineer" class="role-link">Firmware Engineer</a>
+<a href="/interview/fitness-instructor" class="role-link">Fitness Instructor</a>
+<a href="/interview/fleet-manager" class="role-link">Fleet Manager</a>
+<a href="/interview/flutter-developer" class="role-link">Flutter Developer</a>
+<a href="/interview/foundation-program-officer" class="role-link">Foundation Program Officer</a>
+<a href="/interview/fraud-analyst" class="role-link">Fraud Analyst</a>
+<a href="/interview/front-desk-manager" class="role-link">Front Desk Manager</a>
+<a href="/interview/front-end-engineer" class="role-link">Front End Engineer</a>
+<a href="/interview/frontend-developer" class="role-link">Frontend Developer</a>
+<a href="/interview/frontend-software-engineer" class="role-link">Frontend Software Engineer</a>
+<a href="/interview/full-stack-developer" class="role-link">Full Stack Developer</a>
+<a href="/interview/full-stack-software-engineer" class="role-link">Full Stack Software Engineer</a>
+<a href="/interview/game-developer" class="role-link">Game Developer</a>
+<a href="/interview/gcp-engineer" class="role-link">Gcp Engineer</a>
+<a href="/interview/generative-ai-engineer" class="role-link">Generative Ai Engineer</a>
+<a href="/interview/genetic-counselor" class="role-link">Genetic Counselor</a>
+<a href="/interview/geospatial-analyst" class="role-link">Geospatial Analyst</a>
+<a href="/interview/golang-developer" class="role-link">Golang Developer</a>
+<a href="/interview/grant-writer" class="role-link">Grant Writer</a>
+<a href="/interview/graphic-designer" class="role-link">Graphic Designer</a>
+<a href="/interview/grc-analyst" class="role-link">GRC Analyst</a>
+<a href="/interview/growth-manager" class="role-link">Growth Manager</a>
+<a href="/interview/growth-marketing-manager" class="role-link">Growth Marketing Manager</a>
+<a href="/interview/growth-product-manager" class="role-link">Growth Product Manager</a>
+<a href="/interview/head-of-product" class="role-link">Head Of Product</a>
+<a href="/interview/health-informatics-specialist" class="role-link">Health Informatics Specialist</a>
+<a href="/interview/health-information-technician" class="role-link">Health Information Technician</a>
+<a href="/interview/healthcare-administrator" class="role-link">Healthcare Administrator</a>
+<a href="/interview/healthcare-data-analyst" class="role-link">Healthcare Data Analyst</a>
+<a href="/interview/help-desk-analyst" class="role-link">Help Desk Analyst</a>
+<a href="/interview/help-desk-technician" class="role-link">Help Desk Technician</a>
+<a href="/interview/hospital-case-manager" class="role-link">Hospital Case Manager</a>
+<a href="/interview/hotel-general-manager" class="role-link">Hotel General Manager</a>
+<a href="/interview/hr-business-partner" class="role-link">Hr Business Partner</a>
+<a href="/interview/hr-coordinator" class="role-link">Hr Coordinator</a>
+<a href="/interview/hr-director" class="role-link">Hr Director</a>
+<a href="/interview/hr-generalist" class="role-link">Hr Generalist</a>
+<a href="/interview/hr-manager" class="role-link">Hr Manager</a>
+<a href="/interview/hris-analyst" class="role-link">Hris Analyst</a>
+<a href="/interview/hvac-technician" class="role-link">Hvac Technician</a>
+<a href="/interview/iam-specialist" class="role-link">IAM Specialist</a>
+<a href="/interview/identity-access-management-analyst" class="role-link">Identity Access Management Analyst</a>
+<a href="/interview/immigration-paralegal" class="role-link">Immigration Paralegal</a>
+<a href="/interview/implementation-consultant" class="role-link">Implementation Consultant</a>
+<a href="/interview/incident-response-analyst" class="role-link">Incident Response Analyst</a>
+<a href="/interview/industrial-designer" class="role-link">Industrial Designer</a>
+<a href="/interview/influencer-marketing-manager" class="role-link">Influencer Marketing Manager</a>
+<a href="/interview/information-security-analyst" class="role-link">Information Security Analyst</a>
+<a href="/interview/infrastructure-security-engineer" class="role-link">Infrastructure Security Engineer</a>
+<a href="/interview/inside-sales-representative" class="role-link">Inside Sales Representative</a>
+<a href="/interview/insights-analyst" class="role-link">Insights Analyst</a>
+<a href="/interview/instructional-coordinator" class="role-link">Instructional Coordinator</a>
+<a href="/interview/instructional-designer" class="role-link">Instructional Designer</a>
+<a href="/interview/insurance-agent" class="role-link">Insurance Agent</a>
+<a href="/interview/insurance-broker" class="role-link">Insurance Broker</a>
+<a href="/interview/insurance-underwriter" class="role-link">Insurance Underwriter</a>
+<a href="/interview/interaction-designer" class="role-link">Interaction Designer</a>
+<a href="/interview/internal-auditor" class="role-link">Internal Auditor</a>
+<a href="/interview/inventory-analyst" class="role-link">Inventory Analyst</a>
+<a href="/interview/investment-analyst" class="role-link">Investment Analyst</a>
+<a href="/interview/ios-developer" class="role-link">Ios Developer</a>
+<a href="/interview/it-director" class="role-link">It Director</a>
+<a href="/interview/it-manager" class="role-link">It Manager</a>
+<a href="/interview/it-support-specialist" class="role-link">It Support Specialist</a>
+<a href="/interview/java-developer" class="role-link">Java Developer</a>
+<a href="/interview/java-software-engineer" class="role-link">Java Software Engineer</a>
+<a href="/interview/javascript-developer" class="role-link">Javascript Developer</a>
+<a href="/interview/junior-backend-developer" class="role-link">Junior Backend Developer</a>
+<a href="/interview/junior-business-analyst" class="role-link">Junior Business Analyst</a>
+<a href="/interview/junior-data-analyst" class="role-link">Junior Data Analyst</a>
+<a href="/interview/junior-data-engineer" class="role-link">Junior Data Engineer</a>
+<a href="/interview/junior-data-scientist" class="role-link">Junior Data Scientist</a>
+<a href="/interview/junior-devops-engineer" class="role-link">Junior Devops Engineer</a>
+<a href="/interview/junior-frontend-developer" class="role-link">Junior Frontend Developer</a>
+<a href="/interview/junior-full-stack-developer" class="role-link">Junior Full Stack Developer</a>
+<a href="/interview/junior-product-manager" class="role-link">Junior Product Manager</a>
+<a href="/interview/junior-software-engineer" class="role-link">Junior Software Engineer</a>
+<a href="/interview/junior-ux-designer" class="role-link">Junior Ux Designer</a>
+<a href="/interview/key-account-manager" class="role-link">Key Account Manager</a>
+<a href="/interview/knowledge-manager" class="role-link">Knowledge Manager</a>
+<a href="/interview/kotlin-developer" class="role-link">Kotlin Developer</a>
+<a href="/interview/kubernetes-engineer" class="role-link">Kubernetes Engineer</a>
+<a href="/interview/laravel-developer" class="role-link">Laravel Developer</a>
+<a href="/interview/large-language-model-engineer" class="role-link">Large Language Model Engineer</a>
+<a href="/interview/lead-product-manager" class="role-link">Lead Product Manager</a>
+<a href="/interview/lead-software-engineer" class="role-link">Lead Software Engineer</a>
+<a href="/interview/lean-manufacturing-specialist" class="role-link">Lean Manufacturing Specialist</a>
+<a href="/interview/learning-and-development-manager" class="role-link">Learning And Development Manager</a>
+<a href="/interview/learning-and-development-specialist" class="role-link">Learning and Development Specialist</a>
+<a href="/interview/leasing-agent" class="role-link">Leasing Agent</a>
+<a href="/interview/legal-assistant" class="role-link">Legal Assistant</a>
+<a href="/interview/legal-counsel" class="role-link">Legal Counsel</a>
+<a href="/interview/legal-operations-manager" class="role-link">Legal Operations Manager</a>
+<a href="/interview/legislative-assistant" class="role-link">Legislative Assistant</a>
+<a href="/interview/linux-administrator" class="role-link">Linux Administrator</a>
+<a href="/interview/llm-engineer" class="role-link">LLM Engineer</a>
+<a href="/interview/loan-officer" class="role-link">Loan Officer</a>
+<a href="/interview/logistics-coordinator" class="role-link">Logistics Coordinator</a>
+<a href="/interview/looker-developer" class="role-link">Looker Developer</a>
+<a href="/interview/loss-control-specialist" class="role-link">Loss Control Specialist</a>
+<a href="/interview/machine-learning-engineer" class="role-link">Machine Learning Engineer</a>
+<a href="/interview/machine-learning-platform-engineer" class="role-link">Machine Learning Platform Engineer</a>
+<a href="/interview/machine-learning-scientist" class="role-link">Machine Learning Scientist</a>
+<a href="/interview/maintenance-manager" class="role-link">Maintenance Manager</a>
+<a href="/interview/management-consultant" class="role-link">Management Consultant</a>
+<a href="/interview/manufacturing-engineer" class="role-link">Manufacturing Engineer</a>
+<a href="/interview/marketing-analyst" class="role-link">Marketing Analyst</a>
+<a href="/interview/marketing-automation-specialist" class="role-link">Marketing Automation Specialist</a>
+<a href="/interview/marketing-coordinator" class="role-link">Marketing Coordinator</a>
+<a href="/interview/marketing-data-analyst" class="role-link">Marketing Data Analyst</a>
+<a href="/interview/marketing-director" class="role-link">Marketing Director</a>
+<a href="/interview/marketing-manager" class="role-link">Marketing Manager</a>
+<a href="/interview/marketing-operations-manager" class="role-link">Marketing Operations Manager</a>
+<a href="/interview/marketing-specialist" class="role-link">Marketing Specialist</a>
+<a href="/interview/master-data-manager" class="role-link">Master Data Manager</a>
+<a href="/interview/mechanical-engineer" class="role-link">Mechanical Engineer</a>
+<a href="/interview/medical-assistant" class="role-link">Medical Assistant</a>
+<a href="/interview/medical-coder" class="role-link">Medical Coder</a>
+<a href="/interview/medical-laboratory-technician" class="role-link">Medical Laboratory Technician</a>
+<a href="/interview/medical-science-liaison" class="role-link">Medical Science Liaison</a>
+<a href="/interview/medical-writer" class="role-link">Medical Writer</a>
+<a href="/interview/mlops-engineer" class="role-link">Mlops Engineer</a>
+<a href="/interview/mobile-app-developer" class="role-link">Mobile App Developer</a>
+<a href="/interview/mortgage-loan-officer" class="role-link">Mortgage Loan Officer</a>
+<a href="/interview/motion-designer" class="role-link">Motion Designer</a>
+<a href="/interview/music-producer" class="role-link">Music Producer</a>
+<a href="/interview/national-account-manager" class="role-link">National Account Manager</a>
+<a href="/interview/network-administrator" class="role-link">Network Administrator</a>
+<a href="/interview/network-automation-engineer" class="role-link">Network Automation Engineer</a>
+<a href="/interview/network-engineer" class="role-link">Network Engineer</a>
+<a href="/interview/news-anchor" class="role-link">News Anchor</a>
+<a href="/interview/nlp-engineer" class="role-link">Nlp Engineer</a>
+<a href="/interview/nodejs-developer" class="role-link">Nodejs Developer</a>
+<a href="/interview/nonprofit-executive-director" class="role-link">Nonprofit Executive Director</a>
+<a href="/interview/nurse-practitioner" class="role-link">Nurse Practitioner</a>
+<a href="/interview/occupational-therapist" class="role-link">Occupational Therapist</a>
+<a href="/interview/office-manager" class="role-link">Office Manager</a>
+<a href="/interview/onboarding-specialist" class="role-link">Onboarding Specialist</a>
+<a href="/interview/operations-analyst" class="role-link">Operations Analyst</a>
+<a href="/interview/operations-coordinator" class="role-link">Operations Coordinator</a>
+<a href="/interview/operations-manager" class="role-link">Operations Manager</a>
+<a href="/interview/optical-engineer" class="role-link">Optical Engineer</a>
+<a href="/interview/organizational-development-consultant" class="role-link">Organizational Development Consultant</a>
+<a href="/interview/outside-sales-representative" class="role-link">Outside Sales Representative</a>
+<a href="/interview/packaging-engineer" class="role-link">Packaging Engineer</a>
+<a href="/interview/paid-media-manager" class="role-link">Paid Media Manager</a>
+<a href="/interview/paralegal" class="role-link">Paralegal</a>
+<a href="/interview/partnership-manager" class="role-link">Partnership Manager</a>
+<a href="/interview/partnerships-manager" class="role-link">Partnerships Manager</a>
+<a href="/interview/parts-manager" class="role-link">Parts Manager</a>
+<a href="/interview/patient-care-coordinator" class="role-link">Patient Care Coordinator</a>
+<a href="/interview/payroll-specialist" class="role-link">Payroll Specialist</a>
+<a href="/interview/penetration-tester" class="role-link">Penetration Tester</a>
+<a href="/interview/people-analytics-manager" class="role-link">People Analytics Manager</a>
+<a href="/interview/people-operations-manager" class="role-link">People Operations Manager</a>
+<a href="/interview/performance-marketing-manager" class="role-link">Performance Marketing Manager</a>
+<a href="/interview/personal-trainer" class="role-link">Personal Trainer</a>
+<a href="/interview/pharmacist" class="role-link">Pharmacist</a>
+<a href="/interview/pharmacy-technician" class="role-link">Pharmacy Technician</a>
+<a href="/interview/php-developer" class="role-link">Php Developer</a>
+<a href="/interview/physical-therapist" class="role-link">Physical Therapist</a>
+<a href="/interview/physician-assistant" class="role-link">Physician Assistant</a>
+<a href="/interview/plant-manager" class="role-link">Plant Manager</a>
+<a href="/interview/platform-engineer" class="role-link">Platform Engineer</a>
+<a href="/interview/platform-product-manager" class="role-link">Platform Product Manager</a>
+<a href="/interview/plumber" class="role-link">Plumber</a>
+<a href="/interview/podcast-producer" class="role-link">Podcast Producer</a>
+<a href="/interview/police-officer" class="role-link">Police Officer</a>
+<a href="/interview/policy-analyst" class="role-link">Policy Analyst</a>
+<a href="/interview/power-bi-developer" class="role-link">Power Bi Developer</a>
+<a href="/interview/ppc-specialist" class="role-link">Ppc Specialist</a>
+<a href="/interview/pr-specialist" class="role-link">Pr Specialist</a>
+<a href="/interview/presales-consultant" class="role-link">Presales Consultant</a>
+<a href="/interview/pricing-analyst" class="role-link">Pricing Analyst</a>
+<a href="/interview/principal-software-engineer" class="role-link">Principal Software Engineer</a>
+<a href="/interview/privacy-officer" class="role-link">Privacy Officer</a>
+<a href="/interview/process-engineer" class="role-link">Process Engineer</a>
+<a href="/interview/process-improvement-manager" class="role-link">Process Improvement Manager</a>
+<a href="/interview/process-improvement-specialist" class="role-link">Process Improvement Specialist</a>
+<a href="/interview/procurement-manager" class="role-link">Procurement Manager</a>
+<a href="/interview/procurement-specialist" class="role-link">Procurement Specialist</a>
+<a href="/interview/product-analyst" class="role-link">Product Analyst</a>
+<a href="/interview/product-analytics-manager" class="role-link">Product Analytics Manager</a>
+<a href="/interview/product-designer" class="role-link">Product Designer</a>
+<a href="/interview/product-manager" class="role-link">Product Manager</a>
+<a href="/interview/product-marketing-manager" class="role-link">Product Marketing Manager</a>
+<a href="/interview/product-operations-manager" class="role-link">Product Operations Manager</a>
+<a href="/interview/product-owner" class="role-link">Product Owner</a>
+<a href="/interview/product-strategy-manager" class="role-link">Product Strategy Manager</a>
+<a href="/interview/production-manager" class="role-link">Production Manager</a>
+<a href="/interview/program-coordinator" class="role-link">Program Coordinator</a>
+<a href="/interview/program-manager" class="role-link">Program Manager</a>
+<a href="/interview/project-manager" class="role-link">Project Manager</a>
+<a href="/interview/prompt-engineer" class="role-link">Prompt Engineer</a>
+<a href="/interview/property-manager" class="role-link">Property Manager</a>
+<a href="/interview/public-affairs-specialist" class="role-link">Public Affairs Specialist</a>
+<a href="/interview/python-developer" class="role-link">Python Developer</a>
+<a href="/interview/python-software-engineer" class="role-link">Python Software Engineer</a>
+<a href="/interview/qa-engineer" class="role-link">Qa Engineer</a>
+<a href="/interview/qa-tester" class="role-link">Qa Tester</a>
+<a href="/interview/quality-assurance-manager" class="role-link">Quality Assurance Manager</a>
+<a href="/interview/quality-assurance-specialist-pharma" class="role-link">Quality Assurance Specialist Pharma</a>
+<a href="/interview/quality-control-inspector" class="role-link">Quality Control Inspector</a>
+<a href="/interview/quantitative-analyst" class="role-link">Quantitative Analyst</a>
+<a href="/interview/quantitative-ux-researcher" class="role-link">Quantitative UX Researcher</a>
+<a href="/interview/quote-specialist" class="role-link">Quote Specialist</a>
+<a href="/interview/r-developer" class="role-link">R Developer</a>
+<a href="/interview/radiology-technician" class="role-link">Radiology Technician</a>
+<a href="/interview/react-developer" class="role-link">React Developer</a>
+<a href="/interview/real-estate-agent" class="role-link">Real Estate Agent</a>
+<a href="/interview/real-estate-appraiser" class="role-link">Real Estate Appraiser</a>
+<a href="/interview/real-estate-broker" class="role-link">Real Estate Broker</a>
+<a href="/interview/recruiter" class="role-link">Recruiter</a>
+<a href="/interview/recruiting-coordinator" class="role-link">Recruiting Coordinator</a>
+<a href="/interview/regional-sales-manager" class="role-link">Regional Sales Manager</a>
+<a href="/interview/registered-nurse" class="role-link">Registered Nurse</a>
+<a href="/interview/regulatory-affairs-specialist" class="role-link">Regulatory Affairs Specialist</a>
+<a href="/interview/release-manager" class="role-link">Release Manager</a>
+<a href="/interview/reliability-engineer" class="role-link">Reliability Engineer</a>
+<a href="/interview/renewable-energy-project-manager" class="role-link">Renewable Energy Project Manager</a>
+<a href="/interview/reporting-analyst" class="role-link">Reporting Analyst</a>
+<a href="/interview/research-analyst" class="role-link">Research Analyst</a>
+<a href="/interview/research-operations-manager" class="role-link">Research Operations Manager</a>
+<a href="/interview/research-scientist" class="role-link">Research Scientist</a>
+<a href="/interview/restaurant-general-manager" class="role-link">Restaurant General Manager</a>
+<a href="/interview/retail-marketing-manager" class="role-link">Retail Marketing Manager</a>
+<a href="/interview/revenue-operations-analyst" class="role-link">Revenue Operations Analyst</a>
+<a href="/interview/revenue-operations-manager" class="role-link">Revenue Operations Manager</a>
+<a href="/interview/risk-analyst" class="role-link">Risk Analyst</a>
+<a href="/interview/risk-manager" class="role-link">Risk Manager</a>
+<a href="/interview/robotics-engineer" class="role-link">Robotics Engineer</a>
+<a href="/interview/robotics-software-engineer" class="role-link">Robotics Software Engineer</a>
+<a href="/interview/ruby-developer" class="role-link">Ruby Developer</a>
+<a href="/interview/ruby-on-rails-developer" class="role-link">Ruby On Rails Developer</a>
+<a href="/interview/rust-developer" class="role-link">Rust Developer</a>
+<a href="/interview/saas-account-executive" class="role-link">Saas Account Executive</a>
+<a href="/interview/safety-manager" class="role-link">Safety Manager</a>
+<a href="/interview/sales-analyst" class="role-link">Sales Analyst</a>
+<a href="/interview/sales-associate" class="role-link">Sales Associate</a>
+<a href="/interview/sales-coordinator" class="role-link">Sales Coordinator</a>
+<a href="/interview/sales-development-representative" class="role-link">Sales Development Representative</a>
+<a href="/interview/sales-director" class="role-link">Sales Director</a>
+<a href="/interview/sales-enablement-manager" class="role-link">Sales Enablement Manager</a>
+<a href="/interview/sales-engineer" class="role-link">Sales Engineer</a>
+<a href="/interview/sales-manager" class="role-link">Sales Manager</a>
+<a href="/interview/sales-operations-analyst" class="role-link">Sales Operations Analyst</a>
+<a href="/interview/sales-representative" class="role-link">Sales Representative</a>
+<a href="/interview/salesforce-administrator" class="role-link">Salesforce Administrator</a>
+<a href="/interview/salesforce-developer" class="role-link">Salesforce Developer</a>
+<a href="/interview/sap-consultant" class="role-link">Sap Consultant</a>
+<a href="/interview/scala-developer" class="role-link">Scala Developer</a>
+<a href="/interview/school-principal" class="role-link">School Principal</a>
+<a href="/interview/scrum-master" class="role-link">Scrum Master</a>
+<a href="/interview/security-architect" class="role-link">Security Architect</a>
+<a href="/interview/security-consultant" class="role-link">Security Consultant</a>
+<a href="/interview/security-engineer" class="role-link">Security Engineer</a>
+<a href="/interview/security-operations-analyst" class="role-link">Security Operations Analyst</a>
+<a href="/interview/semiconductor-process-engineer" class="role-link">Semiconductor Process Engineer</a>
+<a href="/interview/senior-backend-developer" class="role-link">Senior Backend Developer</a>
+<a href="/interview/senior-business-analyst" class="role-link">Senior Business Analyst</a>
+<a href="/interview/senior-data-analyst" class="role-link">Senior Data Analyst</a>
+<a href="/interview/senior-data-engineer" class="role-link">Senior Data Engineer</a>
+<a href="/interview/senior-data-scientist" class="role-link">Senior Data Scientist</a>
+<a href="/interview/senior-devops-engineer" class="role-link">Senior Devops Engineer</a>
+<a href="/interview/senior-frontend-developer" class="role-link">Senior Frontend Developer</a>
+<a href="/interview/senior-full-stack-developer" class="role-link">Senior Full Stack Developer</a>
+<a href="/interview/senior-product-manager" class="role-link">Senior Product Manager</a>
+<a href="/interview/senior-software-engineer" class="role-link">Senior Software Engineer</a>
+<a href="/interview/senior-ux-designer" class="role-link">Senior Ux Designer</a>
+<a href="/interview/seo-manager" class="role-link">SEO Manager</a>
+<a href="/interview/seo-specialist" class="role-link">Seo Specialist</a>
+<a href="/interview/service-designer" class="role-link">Service Designer</a>
+<a href="/interview/servicenow-developer" class="role-link">Servicenow Developer</a>
+<a href="/interview/shopify-developer" class="role-link">Shopify Developer</a>
+<a href="/interview/site-reliability-engineer" class="role-link">Site Reliability Engineer</a>
+<a href="/interview/site-superintendent" class="role-link">Site Superintendent</a>
+<a href="/interview/soc-analyst" class="role-link">SOC Analyst</a>
+<a href="/interview/social-media-manager" class="role-link">Social Media Manager</a>
+<a href="/interview/social-worker" class="role-link">Social Worker</a>
+<a href="/interview/software-architect" class="role-link">Software Architect</a>
+<a href="/interview/software-development-manager" class="role-link">Software Development Manager</a>
+<a href="/interview/software-engineer" class="role-link">Software Engineer</a>
+<a href="/interview/software-engineer-intern" class="role-link">Software Engineer Intern</a>
+<a href="/interview/solutions-architect" class="role-link">Solutions Architect</a>
+<a href="/interview/solutions-consultant" class="role-link">Solutions Consultant</a>
+<a href="/interview/solutions-engineer" class="role-link">Solutions Engineer</a>
+<a href="/interview/sound-engineer" class="role-link">Sound Engineer</a>
+<a href="/interview/special-education-teacher" class="role-link">Special Education Teacher</a>
+<a href="/interview/speech-language-pathologist" class="role-link">Speech Language Pathologist</a>
+<a href="/interview/spring-boot-developer" class="role-link">Spring Boot Developer</a>
+<a href="/interview/sql-developer" class="role-link">Sql Developer</a>
+<a href="/interview/staff-accountant" class="role-link">Staff Accountant</a>
+<a href="/interview/staff-software-engineer" class="role-link">Staff Software Engineer</a>
+<a href="/interview/strategy-analyst" class="role-link">Strategy Analyst</a>
+<a href="/interview/structural-engineer" class="role-link">Structural Engineer</a>
+<a href="/interview/substitute-teacher" class="role-link">Substitute Teacher</a>
+<a href="/interview/supply-chain-analyst" class="role-link">Supply Chain Analyst</a>
+<a href="/interview/supply-chain-manager" class="role-link">Supply Chain Manager</a>
+<a href="/interview/support-engineer" class="role-link">Support Engineer</a>
+<a href="/interview/sustainability-consultant" class="role-link">Sustainability Consultant</a>
+<a href="/interview/sustainability-coordinator" class="role-link">Sustainability Coordinator</a>
+<a href="/interview/sustainability-manager" class="role-link">Sustainability Manager</a>
+<a href="/interview/swift-developer" class="role-link">Swift Developer</a>
+<a href="/interview/systems-administrator" class="role-link">Systems Administrator</a>
+<a href="/interview/systems-engineer" class="role-link">Systems Engineer</a>
+<a href="/interview/tableau-developer" class="role-link">Tableau Developer</a>
+<a href="/interview/talent-acquisition-partner" class="role-link">Talent Acquisition Partner</a>
+<a href="/interview/talent-acquisition-specialist" class="role-link">Talent Acquisition Specialist</a>
+<a href="/interview/talent-partner" class="role-link">Talent Partner</a>
+<a href="/interview/tax-analyst" class="role-link">Tax Analyst</a>
+<a href="/interview/teaching-assistant" class="role-link">Teaching Assistant</a>
+<a href="/interview/technical-account-manager" class="role-link">Technical Account Manager</a>
+<a href="/interview/technical-lead" class="role-link">Technical Lead</a>
+<a href="/interview/technical-product-manager" class="role-link">Technical Product Manager</a>
+<a href="/interview/technical-recruiter" class="role-link">Technical Recruiter</a>
+<a href="/interview/technical-sourcer" class="role-link">Technical Sourcer</a>
+<a href="/interview/technical-support-engineer" class="role-link">Technical Support Engineer</a>
+<a href="/interview/technical-writer" class="role-link">Technical Writer</a>
+<a href="/interview/telemedicine-physician" class="role-link">Telemedicine Physician</a>
+<a href="/interview/territory-sales-manager" class="role-link">Territory Sales Manager</a>
+<a href="/interview/test-automation-engineer" class="role-link">Test Automation Engineer</a>
+<a href="/interview/threat-intelligence-analyst" class="role-link">Threat Intelligence Analyst</a>
+<a href="/interview/tour-guide" class="role-link">Tour Guide</a>
+<a href="/interview/trade-marketing-manager" class="role-link">Trade Marketing Manager</a>
+<a href="/interview/training-specialist" class="role-link">Training Specialist</a>
+<a href="/interview/travel-agent" class="role-link">Travel Agent</a>
+<a href="/interview/treasury-analyst" class="role-link">Treasury Analyst</a>
+<a href="/interview/typescript-developer" class="role-link">Typescript Developer</a>
+<a href="/interview/ui-designer" class="role-link">Ui Designer</a>
+<a href="/interview/ui-engineer" class="role-link">Ui Engineer</a>
+<a href="/interview/urban-designer" class="role-link">Urban Designer</a>
+<a href="/interview/ux-designer" class="role-link">Ux Designer</a>
+<a href="/interview/ux-lead" class="role-link">Ux Lead</a>
+<a href="/interview/ux-researcher" class="role-link">Ux Researcher</a>
+<a href="/interview/ux-ui-designer" class="role-link">Ux Ui Designer</a>
+<a href="/interview/ux-writer" class="role-link">Ux Writer</a>
+<a href="/interview/validation-engineer" class="role-link">Validation Engineer</a>
+<a href="/interview/vehicle-inspector" class="role-link">Vehicle Inspector</a>
+<a href="/interview/vendor-management-specialist" class="role-link">Vendor Management Specialist</a>
+<a href="/interview/vendor-manager" class="role-link">Vendor Manager</a>
+<a href="/interview/video-producer" class="role-link">Video Producer</a>
+<a href="/interview/visual-designer" class="role-link">Visual Designer</a>
+<a href="/interview/voice-ui-designer" class="role-link">Voice UI Designer</a>
+<a href="/interview/volunteer-coordinator" class="role-link">Volunteer Coordinator</a>
+<a href="/interview/vp-of-engineering" class="role-link">Vp Of Engineering</a>
+<a href="/interview/vp-of-marketing" class="role-link">Vp Of Marketing</a>
+<a href="/interview/vp-of-sales" class="role-link">Vp Of Sales</a>
+<a href="/interview/vuejs-developer" class="role-link">Vuejs Developer</a>
+<a href="/interview/vulnerability-analyst" class="role-link">Vulnerability Analyst</a>
+<a href="/interview/warehouse-manager" class="role-link">Warehouse Manager</a>
+<a href="/interview/warehouse-operations-manager" class="role-link">Warehouse Operations Manager</a>
+<a href="/interview/wealth-management-advisor" class="role-link">Wealth Management Advisor</a>
+<a href="/interview/web-designer" class="role-link">Web Designer</a>
+<a href="/interview/web-developer" class="role-link">Web Developer</a>
+<a href="/interview/webflow-developer" class="role-link">Webflow Developer</a>
+<a href="/interview/wildlife-biologist" class="role-link">Wildlife Biologist</a>
+<a href="/interview/windows-administrator" class="role-link">Windows Administrator</a>
+<a href="/interview/wordpress-developer" class="role-link">Wordpress Developer</a>
+    </div>
+  </section>
+  
   <footer class="footer">
     <a href="/">← Back to AceMyInterviews</a>
   </footer>
-
+  
   <script>
-    const search = document.getElementById('search');
-    const categories = document.querySelectorAll('.category');
-    
-    search.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase().trim();
-      
-      categories.forEach(cat => {
-        const links = cat.querySelectorAll('a[data-role]');
-        let visibleCount = 0;
-        
-        links.forEach(link => {
-          const role = link.dataset.role.toLowerCase();
-          const match = !query || role.includes(query);
-          link.style.display = match ? '' : 'none';
-          if (match) visibleCount++;
-        });
-        
-        cat.style.display = visibleCount === 0 ? 'none' : '';
+    function filterRoles() {
+      const search = document.getElementById('roleSearch').value.toLowerCase();
+      const links = document.querySelectorAll('.role-link');
+      links.forEach(link => {
+        const text = link.textContent.toLowerCase();
+        link.classList.toggle('hidden', !text.includes(search));
       });
-    });
+    }
   </script>
 </body>
 </html>
