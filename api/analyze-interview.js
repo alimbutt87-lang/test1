@@ -47,7 +47,7 @@ export default async function handler(req, res) {
 
     // Minimal follow-up instruction — only added when needed
     const followUpBlock = hasAnyFollowUps
-      ? `\nQuestions ${followUpQuestionNums.join(', ')} have [FOLLOW-UP] sections. For those, add to each questionScore: "hasFollowUp":true, "followUp":{"question":"...","score":<0-100>,"feedback":"...","strengths":[...],"improvements":[...],"coachingNote":"<what the follow-up tested and whether they addressed it>"}, "combinedScore":<Math.round(score*0.7+followUp.score*0.3)>. For questions without follow-ups: "hasFollowUp":false,"followUp":null,"noFollowUpReason":"thorough_answer" if the main answer was complete, else null.`
+      ? `\nQuestions ${followUpQuestionNums.join(', ')} have [FOLLOW-UP] sections. For those, add to each questionScore: "hasFollowUp":true, "followUp":{"score":<0-100>,"feedback":"<2-3 detailed sentences on what the follow-up answer added or failed to add>","strengths":["<specific>","<specific>"],"improvements":["<specific>"],"coachingNote":"<what the follow-up tested and whether they addressed it>"}, "combinedScore":<Math.round(score*0.7+followUp.score*0.3)>. For questions without follow-ups: "hasFollowUp":false,"followUp":null,"noFollowUpReason":"thorough_answer" if the main answer was complete, else null.`
       : '';
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -59,7 +59,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 2500,
+        max_tokens: 4096,
         messages: [{
           role: 'user',
           content: `You are an expert interview coach analyzing a candidate's SPOKEN interview performance for a ${jobTitle} position. The answers below were captured via voice transcription, so ignore any spelling/grammar issues - focus only on the CONTENT and SUBSTANCE of their responses.
