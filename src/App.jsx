@@ -1323,23 +1323,12 @@ Return ONLY valid JSON:
             pdf.setTextColor(...purpleColor);
             pdf.setFont('helvetica', 'bold');
             pdf.setFontSize(10);
-            pdf.text(`↪ Follow-up Question`, 24, yPos);
+            pdf.text(`↪ Follow-up Response`, 24, yPos);
             
             const fuScoreColor = q.followUp.score >= 80 ? primaryColor : q.followUp.score >= 70 ? [245, 158, 11] : failColor;
             pdf.setTextColor(...fuScoreColor);
             pdf.text(`${q.followUp.score}/100`, 170, yPos);
             yPos += 6;
-            
-            // Follow-up question text
-            pdf.setFont('helvetica', 'italic');
-            pdf.setFontSize(9);
-            pdf.setTextColor(...grayColor);
-            const fuQuestionLines = pdf.splitTextToSize(`"${q.followUp.question}"`, 160);
-            fuQuestionLines.slice(0, 2).forEach(line => {
-              yPos = checkNewPage(yPos, 8);
-              pdf.text(line, 24, yPos);
-              yPos += 5;
-            });
             
             // Coaching note
             if (q.followUp.coachingNote) {
@@ -2797,15 +2786,12 @@ Return ONLY valid JSON:
                       marginBottom: '8px'
                     }}>
                       <span style={{ fontSize: '13px', fontWeight: '600', color: '#a78bfa' }}>
-                        ↪️ Follow-up Question
+                        ↪️ Follow-up Response
                       </span>
                       <span style={{ fontSize: '16px', fontWeight: '700', color: getScoreColor(q.followUp.score) }}>
                         {q.followUp.score}/100
                       </span>
                     </div>
-                    <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.8)', fontStyle: 'italic', marginBottom: '8px', marginTop: 0 }}>
-                      "{q.followUp.question}"
-                    </p>
                     
                     {/* What was being tested */}
                     {q.followUp.coachingNote && (
