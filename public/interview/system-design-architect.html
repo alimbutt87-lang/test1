@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Design Architect Interview Questions – Practice with AI Simulator</title>
+  <meta name="description" content="Practice System Design Architect interview questions with our AI-powered simulator. Get questions tailored to your resume and job description with instant feedback.">
+  <meta name="keywords" content="system design architect interview questions, architecture interview, enterprise architect interview, technical architect interview, software architecture interview">
+  
+  <meta property="og:title" content="System Design Architect Interview Questions – Practice with AI Simulator">
+  <meta property="og:description" content="Practice System Design Architect interview questions with our AI-powered simulator. Get questions tailored to your resume and job description with instant feedback.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://acemyinterviews.io/interview/system-design-architect">
+  <meta property="og:image" content="https://acemyinterviews.io/og-image.png">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="System Design Architect Interview Questions – Practice with AI Simulator">
+  <meta name="twitter:description" content="Practice System Design Architect interview questions with our AI-powered simulator. Get questions tailored to your resume and job description with instant feedback.">
+  
+  <link rel="canonical" href="https://acemyinterviews.io/interview/system-design-architect">
+  
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How senior do I need to be for this role?", "acceptedAnswer": {"@type": "Answer", "text": "Most system design architect roles require 8-15+ years of experience with demonstrated ownership of large-scale systems. You should be comfortable discussing architecture at both the component and enterprise level."}}, {"@type": "Question", "name": "Will I need to write code in the interview?", "acceptedAnswer": {"@type": "Answer", "text": "Typically no. Architect interviews focus on whiteboard design, trade-off discussions, and architectural decision-making. However, you should demonstrate deep technical understanding that clearly comes from hands-on experience."}}, {"@type": "Question", "name": "How do I prepare for cross-functional questions?", "acceptedAnswer": {"@type": "Answer", "text": "Prepare examples where you influenced product, security, compliance, or infrastructure teams. Architects are evaluated on their ability to communicate technical concepts to non-technical stakeholders."}}, {"@type": "Question", "name": "What certifications help?", "acceptedAnswer": {"@type": "Answer", "text": "AWS Solutions Architect Professional, Google Cloud Professional Architect, or TOGAF are commonly valued. However, practical experience designing and operating large-scale systems matters more than certifications."}}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://acemyinterviews.io"}, {"@type": "ListItem", "position": 2, "name": "Interview Questions", "item": "https://acemyinterviews.io/interview"}, {"@type": "ListItem", "position": 3, "name": "System Design Architect Interview Questions", "item": "https://acemyinterviews.io/interview/system-design-architect"}]}</script>
+  
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-primary: #0f1419;
+      --bg-secondary: #1a1f2e;
+      --bg-card: #1e2330;
+      --bg-card-hover: #252b3b;
+      --accent-primary: #14b8a6;
+      --accent-primary-hover: #0d9488;
+      --accent-secondary: #2dd4bf;
+      --text-primary: #ffffff;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border-color: #2d3748;
+      --success: #10b981;
+      --max-width: 800px;
+      --max-width-wide: 1000px;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: var(--max-width-wide);
+      margin: 0 auto;
+    }
+    
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .header-cta {
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    
+    .header-cta:hover { background: var(--accent-primary-hover); }
+    
+    .breadcrumbs {
+      max-width: var(--max-width-wide);
+      margin: 0 auto;
+      padding: 16px 24px;
+      font-size: 0.875rem;
+    }
+    
+    .breadcrumbs a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    
+    .breadcrumbs a:hover { color: var(--accent-primary); }
+    .breadcrumbs span { color: var(--text-muted); margin: 0 8px; }
+    .breadcrumbs .current { color: var(--text-secondary); }
+    
+    .hero {
+      padding: 60px 24px 80px;
+      text-align: center;
+      background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+    }
+    
+    .hero-container { max-width: var(--max-width); margin: 0 auto; }
+    
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 800;
+      margin-bottom: 20px;
+      line-height: 1.2;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero p {
+      color: var(--text-secondary);
+      font-size: 1.125rem;
+      margin-bottom: 32px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+      padding: 16px 32px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 10px;
+      transition: all 0.2s;
+    }
+    
+    .cta-btn:hover {
+      background: var(--accent-primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px rgba(20, 184, 166, 0.3);
+    }
+    
+    .cta-btn svg { width: 20px; height: 20px; }
+    
+    .trust-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 40px;
+    }
+    
+    .trust-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    
+    .trust-badge svg { color: var(--success); width: 16px; height: 16px; }
+    
+    section { padding: 64px 24px; }
+    .container { max-width: var(--max-width); margin: 0 auto; }
+    
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      text-align: center;
+      color: var(--text-primary);
+    }
+    
+    .social-proof {
+      padding: 20px 24px;
+      text-align: center;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .social-proof p { color: var(--text-muted); font-size: 0.9rem; }
+    
+    .last-updated {
+      text-align: center;
+      padding: 12px 24px;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+    
+    .last-updated svg {
+      width: 14px;
+      height: 14px;
+      vertical-align: -2px;
+      margin-right: 4px;
+    }
+    
+    .intro-text {
+      font-size: 1.0625rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+    }
+    
+    .questions-section { background: var(--bg-secondary); }
+    .questions-list { list-style: none; display: grid; gap: 12px; }
+    
+    .questions-list li {
+      background: var(--bg-card);
+      padding: 18px 24px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      font-size: 0.9375rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      transition: all 0.2s;
+    }
+    
+    .questions-list li:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-primary);
+    }
+    
+    .questions-list li svg {
+      flex-shrink: 0;
+      color: var(--accent-primary);
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+    }
+    
+    .bridge-text {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text-muted);
+      text-align: center;
+    }
+    
+    .personalized-section { background: var(--bg-secondary); text-align: center; }
+    
+    .personalized-section p {
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+    
+    .features {
+      list-style: none;
+      display: inline-flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: left;
+      margin-bottom: 32px;
+    }
+    
+    .features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+    }
+    
+    .features li svg { color: var(--success); width: 20px; height: 20px; flex-shrink: 0; }
+    
+    .criteria-list { list-style: none; display: grid; gap: 12px; }
+    
+    .criteria-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+    }
+    
+    .criteria-list li svg { color: var(--accent-primary); width: 20px; height: 20px; flex-shrink: 0; }
+    
+    .faq-section { background: var(--bg-secondary); }
+    .faq-list { display: grid; gap: 12px; }
+    
+    details {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    details[open] { border-color: var(--accent-primary); }
+    
+    summary {
+      padding: 18px 24px;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-primary);
+      font-size: 0.9375rem;
+    }
+    
+    summary::-webkit-details-marker { display: none; }
+    
+    summary::after {
+      content: '+';
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      transition: transform 0.2s;
+    }
+    
+    details[open] summary::after { transform: rotate(45deg); }
+    
+    details p {
+      padding: 0 24px 18px;
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      line-height: 1.7;
+    }
+    
+    .related-section {
+      padding: 48px 24px;
+      border-top: 1px solid var(--border-color);
+    }
+    
+    .related-section h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+    }
+    
+    .related-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    
+    .related-links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 10px 16px;
+      border-radius: 8px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+    }
+    
+    .related-links a:hover {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+      background: var(--bg-card-hover);
+    }
+    
+    .related-links a svg { width: 16px; height: 16px; }
+    
+    .final-cta {
+      text-align: center;
+      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+      padding: 80px 24px;
+    }
+    
+    .final-cta h2 { font-size: 1.75rem; margin-bottom: 16px; }
+    
+    .final-cta p {
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .small-text { font-size: 0.875rem; color: var(--text-muted); margin-top: 16px; }
+    
+    .footer {
+      padding: 32px 24px;
+      text-align: center;
+      border-top: 1px solid var(--border-color);
+    }
+    
+    .footer a { color: var(--accent-primary); text-decoration: none; font-size: 0.9rem; }
+    .footer a:hover { text-decoration: underline; }
+    
+    @media (max-width: 640px) {
+      .hero { padding: 40px 20px 60px; }
+      section { padding: 48px 20px; }
+      .header { padding: 16px 20px; }
+      .trust-badges { flex-direction: column; align-items: center; }
+      .cta-btn { width: 100%; justify-content: center; }
+      .related-links { flex-direction: column; }
+      .related-links a { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="/" class="logo">
+      <div class="logo-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      AceMyInterviews
+    </a>
+    <a href="/" class="header-cta">Start Practicing</a>
+  </header>
+
+  <nav class="breadcrumbs">
+    <a href="/">Home</a>
+    <span>›</span>
+    <a href="/interview">Interview Questions</a>
+    <span>›</span>
+    <span class="current">System Design Architect</span>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-container">
+      <h1>System Design Architect Interview Questions & Practice Simulator</h1>
+      <p>Rehearse system design architect interview scenarios with camera recording and performance analysis.</p>
+      <a href="/" class="cta-btn">
+        Begin Your Practice Session →
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+      <div class="trust-badges">
+        <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>5 realistic interview questions</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>3 minutes per answer</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant pass/fail verdict</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Feedback on confidence, clarity, and delivery</span>
+      </div>
+    </div>
+  </section>
+  
+  <div class="social-proof"><p>Simulate real interview conditions before your actual interview</p></div>
+  
+  <div class="last-updated">
+    <svg viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+    </svg>
+    Last updated: February 2026
+  </div>
+  
+  <section>
+    <div class="container">
+      <p class="intro-text">System design architect interviews assess your ability to define the high-level structure of complex software systems, establish architectural standards, and guide engineering teams through critical design decisions. Interviewers evaluate your expertise in architectural patterns, cross-functional technical leadership, and your ability to balance business requirements with technical constraints at enterprise scale.</p>
+    </div>
+  </section>
+  
+  <section class="questions-section">
+    <div class="container">
+      <h2>Example System Design Architect Interview Questions</h2>
+      <ul class="questions-list">
+        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How would you redesign a monolithic application into a microservices architecture for a Fortune 500 company?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe your process for evaluating and selecting between competing architectural approaches.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you establish architectural decision records and ensure teams follow them?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Design a multi-region active-active architecture for a global financial platform.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How would you architect an event-driven system that guarantees exactly-once processing?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe how you would migrate a legacy system to the cloud without downtime.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you balance technical debt reduction with feature delivery in architectural planning?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Design a platform architecture that supports multiple product teams with independent deployment cycles.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How would you architect a system that must comply with both GDPR and SOC 2 requirements?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe your approach to capacity planning for a system expecting 10x growth in 18 months.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you evaluate when to build versus buy versus adopt open-source for critical infrastructure?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Design a disaster recovery architecture with RPO under 1 minute and RTO under 5 minutes.</span></li>
+      </ul>
+    </div>
+  </section>
+  
+  <section>
+    <div class="container">
+      <p class="bridge-text">System design architect interviews test strategic technical vision and leadership. AceMyInterviews generates architecture challenges tailored to your seniority and domain.</p>
+    </div>
+  </section>
+  
+  <section class="personalized-section">
+    <div class="container">
+      <h2>Practice Questions Tailored To Your Interview</h2>
+      <p>Your resume and job description are analyzed to create system design architect questions.</p>
+      <ul class="features">
+        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Enterprise-scale architecture challenges</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Architectural decision-making scenarios</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic timed simulation</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant feedback and pass/fail verdict</li>
+      </ul>
+      <a href="/" class="cta-btn">Begin Your Practice Session →</a>
+    </div>
+  </section>
+  
+  <section>
+    <div class="container">
+      <h2>What Interviewers Evaluate</h2>
+      <ul class="criteria-list">
+        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Enterprise architecture pattern mastery</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Strategic technical decision-making</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Cross-team communication and influence</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Risk assessment and mitigation planning</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Business and technical alignment</li>
+      </ul>
+    </div>
+  </section>
+  
+  <section class="faq-section">
+    <div class="container">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <details><summary>How senior do I need to be for this role?</summary><p>Most system design architect roles require 8-15+ years of experience with demonstrated ownership of large-scale systems. You should be comfortable discussing architecture at both the component and enterprise level.</p></details><details><summary>Will I need to write code in the interview?</summary><p>Typically no. Architect interviews focus on whiteboard design, trade-off discussions, and architectural decision-making. However, you should demonstrate deep technical understanding that clearly comes from hands-on experience.</p></details><details><summary>How do I prepare for cross-functional questions?</summary><p>Prepare examples where you influenced product, security, compliance, or infrastructure teams. Architects are evaluated on their ability to communicate technical concepts to non-technical stakeholders.</p></details><details><summary>What certifications help?</summary><p>AWS Solutions Architect Professional, Google Cloud Professional Architect, or TOGAF are commonly valued. However, practical experience designing and operating large-scale systems matters more than certifications.</p></details>
+      </div>
+    </div>
+  </section>
+  
+  <div class="related-section">
+    <div class="container">
+      <h3>Related Interview Questions</h3>
+      <div class="related-links">
+        <a href="/interview/system-design-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>System Design Engineer Interview Questions</a><a href="/interview/enterprise-architect"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Enterprise Architect Interview Questions</a><a href="/interview/technical-architect"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Technical Architect Interview Questions</a><a href="/interview/cloud-infrastructure-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Cloud Infrastructure Engineer Interview Questions</a><a href="/interview/platform-software-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Platform Software Engineer Interview Questions</a>
+      </div>
+    </div>
+  </div>
+  
+  <section class="final-cta">
+    <div class="container">
+      <h2>Ready To Practice System Design Architect Interview Questions?</h2>
+      <p>Practice system design architect interview questions tailored to your experience.</p>
+      <a href="/" class="cta-btn">Start Your Interview Simulation →</a>
+      <p class="small-text">Takes less than 15 minutes.</p>
+    </div>
+  </section>
+  
+  <footer class="footer">
+    <a href="/">← Back to AceMyInterviews</a>
+  </footer>
+</body>
+</html>

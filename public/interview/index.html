@@ -1,654 +1,747 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interview Questions by Role | AceMyInterviews</title>
-  <meta name="description" content="Practice interview questions for 564+ job roles. Get AI-powered feedback on your answers with our interview simulator.">
-  <meta name="keywords" content="interview questions, job interview practice, interview simulator, career preparation">
-  <meta property="og:title" content="Interview Questions by Role | AceMyInterviews">
-  <meta property="og:description" content="Practice interview questions for 564+ job roles with AI-powered feedback.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://acemyinterviews.io/interview">
-  <link rel="canonical" href="https://acemyinterviews.io/interview">
-  <link rel="icon" href="/favicon.ico">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {--bg-primary:#0f1419;--bg-secondary:#1a1f2e;--bg-card:#1e2330;--bg-card-hover:#252b3b;--accent-primary:#14b8a6;--accent-primary-hover:#0d9488;--text-primary:#ffffff;--text-secondary:#94a3b8;--text-muted:#64748b;--border-color:#2d3748;--success:#10b981}
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.6}
-    .header{padding:20px 24px;border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:0 auto}
-    .logo{font-size:1.25rem;font-weight:700;color:var(--text-primary);text-decoration:none;display:flex;align-items:center;gap:8px}
-    .logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent-primary),#2dd4bf);border-radius:8px;display:flex;align-items:center;justify-content:center}
-    .header-cta{background:var(--accent-primary);color:var(--bg-primary);padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.9rem}
-    .hero{padding:60px 24px;text-align:center;background:linear-gradient(180deg,var(--bg-secondary) 0%,var(--bg-primary) 100%)}
-    .hero h1{font-size:2.5rem;font-weight:800;margin-bottom:16px}
-    .hero p{color:var(--text-secondary);font-size:1.125rem;max-width:600px;margin:0 auto 32px}
-    .search-box{max-width:500px;margin:0 auto 20px;position:relative}
-    .search-box input{width:100%;padding:16px 20px 16px 48px;border-radius:12px;border:1px solid var(--border-color);background:var(--bg-card);color:var(--text-primary);font-size:1rem}
-    .search-box input::placeholder{color:var(--text-muted)}
-    .search-box svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--text-muted);width:20px;height:20px}
-    .stats{display:flex;justify-content:center;gap:32px;margin-top:24px;flex-wrap:wrap}
-    .stat{text-align:center}
-    .stat-value{font-size:1.75rem;font-weight:700;color:var(--accent-primary)}
-    .stat-label{font-size:0.875rem;color:var(--text-muted)}
-    .roles-section{padding:48px 24px;max-width:1200px;margin:0 auto}
-    .roles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
-    .role-link{display:block;padding:14px 18px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:10px;color:var(--text-primary);text-decoration:none;font-size:0.9375rem;transition:all 0.2s}
-    .role-link:hover{background:var(--bg-card-hover);border-color:var(--accent-primary);transform:translateY(-2px)}
-    .hidden{display:none !important}
-    .footer{padding:32px 24px;text-align:center;border-top:1px solid var(--border-color)}
-    .footer a{color:var(--accent-primary);text-decoration:none}
-    @media(max-width:640px){.hero h1{font-size:1.75rem}.stats{gap:16px}.stat-value{font-size:1.5rem}}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AceMyInterviews - AI Interview Practice for 103+ Job Roles</title>
+    <meta name="description" content="Practice interview questions for 103+ job roles with AI-powered feedback. Get instant performance analysis on your answers with camera recording.">
+    <meta name="keywords" content="interview practice, AI interview, job interview questions, interview preparation, mock interview">
+    <link rel="canonical" href="https://acemyinterviews.io/">
+    <meta property="og:title" content="AceMyInterviews - AI Interview Practice">
+    <meta property="og:description" content="Practice interview questions for 103+ job roles with AI-powered feedback.">
+    <meta property="og:url" content="https://acemyinterviews.io/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://acemyinterviews.io/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #0f1419; color: #e7e9ea; line-height: 1.6; }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        
+        /* Header */
+        .header { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .header-inner { display: flex; align-items: center; justify-content: space-between; }
+        .logo { font-size: 20px; font-weight: 800; color: #14b8a6; text-decoration: none; }
+        .header-cta { background: #14b8a6; color: #0f1419; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; transition: background 0.2s; }
+        .header-cta:hover { background: #0d9488; }
+        
+        /* Hero */
+        .hero { text-align: center; padding: 80px 0 40px; }
+        .hero h1 { font-size: 48px; font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
+        .hero h1 span { color: #14b8a6; }
+        .hero p { font-size: 18px; color: #8b98a5; max-width: 640px; margin: 0 auto 40px; }
+        
+        /* Search */
+        .search-container { max-width: 600px; margin: 0 auto 32px; }
+        .search-box { width: 100%; padding: 16px 20px 16px 48px; background: #1a1f26; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #e7e9ea; font-size: 16px; font-family: inherit; outline: none; transition: border-color 0.2s; }
+        .search-box:focus { border-color: #14b8a6; }
+        .search-wrapper { position: relative; }
+        .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #8b98a5; }
+        
+        /* Trust badges */
+        .trust-badges { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; padding: 24px 0 60px; }
+        .trust-badge { text-align: center; }
+        .trust-badge .number { font-size: 32px; font-weight: 800; color: #14b8a6; display: block; }
+        .trust-badge .label { font-size: 13px; color: #8b98a5; }
+        
+        /* Categories */
+        .category-section { margin-bottom: 48px; }
+        .category-title { font-size: 22px; font-weight: 700; color: #14b8a6; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid rgba(20,184,166,0.15); }
+        
+        .roles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+        
+        .role-card { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: #1a1f26; border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; text-decoration: none; color: #e7e9ea; transition: all 0.2s; }
+        .role-card:hover { background: #1e252d; border-color: rgba(20,184,166,0.3); transform: translateY(-1px); }
+        .role-icon { color: #14b8a6; flex-shrink: 0; }
+        .role-name { flex: 1; font-size: 14px; font-weight: 500; }
+        .role-arrow { color: #8b98a5; flex-shrink: 0; transition: transform 0.2s; }
+        .role-card:hover .role-arrow { transform: translateX(3px); color: #14b8a6; }
+        
+        /* No results */
+        .no-results { display: none; text-align: center; padding: 40px; color: #8b98a5; font-size: 16px; }
+        
+        /* Footer */
+        .footer { text-align: center; padding: 60px 0 40px; color: #8b98a5; font-size: 14px; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 40px; }
+        .footer a { color: #14b8a6; text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+        
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 16px; }
+            .trust-badges { gap: 24px; }
+            .trust-badge .number { font-size: 24px; }
+            .roles-grid { grid-template-columns: 1fr; }
+            .header-cta { padding: 8px 16px; font-size: 13px; }
+        }
+    </style>
 </head>
 <body>
-  <header class="header">
-    <a href="/" class="logo">
-      <div class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
-      AceMyInterviews
-    </a>
-    <a href="/" class="header-cta">Start Practicing</a>
-  </header>
-  
-  <section class="hero">
-    <h1>Interview Questions by Role</h1>
-    <p>Practice with AI-powered interview simulation for your target role. Get instant feedback on your answers.</p>
-    <div class="search-box">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" id="roleSearch" placeholder="Search 564 roles..." onkeyup="filterRoles()">
-    </div>
-    <div class="stats">
-      <div class="stat"><div class="stat-value">564+</div><div class="stat-label">Job Roles</div></div>
-      <div class="stat"><div class="stat-value">5</div><div class="stat-label">Questions per Session</div></div>
-      <div class="stat"><div class="stat-value">AI</div><div class="stat-label">Instant Feedback</div></div>
-    </div>
-  </section>
-  
-  <section class="roles-section">
-    <div class="roles-grid" id="rolesGrid">
-<a href="/interview/academic-advisor" class="role-link">Academic Advisor</a>
-<a href="/interview/accessibility-specialist" class="role-link">Accessibility Specialist</a>
-<a href="/interview/account-executive" class="role-link">Account Executive</a>
-<a href="/interview/account-manager" class="role-link">Account Manager</a>
-<a href="/interview/accountant" class="role-link">Accountant</a>
-<a href="/interview/acoustic-engineer" class="role-link">Acoustic Engineer</a>
-<a href="/interview/actuarial-analyst" class="role-link">Actuarial Analyst</a>
-<a href="/interview/actuary" class="role-link">Actuary</a>
-<a href="/interview/administrative-assistant" class="role-link">Administrative Assistant</a>
-<a href="/interview/admissions-counselor" class="role-link">Admissions Counselor</a>
-<a href="/interview/aerospace-engineer" class="role-link">Aerospace Engineer</a>
-<a href="/interview/affiliate-marketing-manager" class="role-link">Affiliate Marketing Manager</a>
-<a href="/interview/agile-coach" class="role-link">Agile Coach</a>
-<a href="/interview/agricultural-scientist" class="role-link">Agricultural Scientist</a>
-<a href="/interview/ai-consultant" class="role-link">AI Consultant</a>
-<a href="/interview/ai-cybersecurity-analyst" class="role-link">AI Cybersecurity Analyst</a>
-<a href="/interview/ai-engineer" class="role-link">Ai Engineer</a>
-<a href="/interview/ai-ethics-officer" class="role-link">Ai Ethics Officer</a>
-<a href="/interview/ai-product-manager" class="role-link">Ai Product Manager</a>
-<a href="/interview/ai-research-scientist" class="role-link">Ai Research Scientist</a>
-<a href="/interview/ai-solutions-architect" class="role-link">AI Solutions Architect</a>
-<a href="/interview/ai-trainer" class="role-link">AI Trainer</a>
-<a href="/interview/air-traffic-controller" class="role-link">Air Traffic Controller</a>
-<a href="/interview/aircraft-mechanic" class="role-link">Aircraft Mechanic</a>
-<a href="/interview/aml-analyst" class="role-link">AML Analyst</a>
-<a href="/interview/analytics-engineer" class="role-link">Analytics Engineer</a>
-<a href="/interview/analytics-manager" class="role-link">Analytics Manager</a>
-<a href="/interview/android-developer" class="role-link">Android Developer</a>
-<a href="/interview/angular-developer" class="role-link">Angular Developer</a>
-<a href="/interview/api-developer" class="role-link">Api Developer</a>
-<a href="/interview/application-security-engineer" class="role-link">Application Security Engineer</a>
-<a href="/interview/applied-ai-engineer" class="role-link">Applied Ai Engineer</a>
-<a href="/interview/associate-product-manager" class="role-link">Associate Product Manager</a>
-<a href="/interview/audit-associate" class="role-link">Audit Associate</a>
-<a href="/interview/automation-engineer" class="role-link">Automation Engineer</a>
-<a href="/interview/automotive-sales-manager" class="role-link">Automotive Sales Manager</a>
-<a href="/interview/automotive-service-manager" class="role-link">Automotive Service Manager</a>
-<a href="/interview/autonomous-vehicle-engineer" class="role-link">Autonomous Vehicle Engineer</a>
-<a href="/interview/aviation-safety-inspector" class="role-link">Aviation Safety Inspector</a>
-<a href="/interview/aws-engineer" class="role-link">Aws Engineer</a>
-<a href="/interview/aws-solutions-architect" class="role-link">Aws Solutions Architect</a>
-<a href="/interview/azure-engineer" class="role-link">Azure Engineer</a>
-<a href="/interview/azure-solutions-architect" class="role-link">Azure Solutions Architect</a>
-<a href="/interview/back-end-engineer" class="role-link">Back End Engineer</a>
-<a href="/interview/backend-developer" class="role-link">Backend Developer</a>
-<a href="/interview/backend-software-engineer" class="role-link">Backend Software Engineer</a>
-<a href="/interview/battery-storage-engineer" class="role-link">Battery Storage Engineer</a>
-<a href="/interview/benefits-specialist" class="role-link">Benefits Specialist</a>
-<a href="/interview/bi-analyst" class="role-link">Bi Analyst</a>
-<a href="/interview/biostatistician" class="role-link">Biostatistician</a>
-<a href="/interview/blockchain-developer" class="role-link">Blockchain Developer</a>
-<a href="/interview/bookkeeper" class="role-link">Bookkeeper</a>
-<a href="/interview/brand-designer" class="role-link">Brand Designer</a>
-<a href="/interview/brand-manager" class="role-link">Brand Manager</a>
-<a href="/interview/brand-strategist" class="role-link">Brand Strategist</a>
-<a href="/interview/broadcast-journalist" class="role-link">Broadcast Journalist</a>
-<a href="/interview/budget-analyst" class="role-link">Budget Analyst</a>
-<a href="/interview/build-engineer" class="role-link">Build Engineer</a>
-<a href="/interview/building-inspector" class="role-link">Building Inspector</a>
-<a href="/interview/business-analyst" class="role-link">Business Analyst</a>
-<a href="/interview/business-consultant" class="role-link">Business Consultant</a>
-<a href="/interview/business-development-manager" class="role-link">Business Development Manager</a>
-<a href="/interview/business-development-representative" class="role-link">Business Development Representative</a>
-<a href="/interview/business-intelligence-analyst" class="role-link">Business Intelligence Analyst</a>
-<a href="/interview/business-intelligence-developer" class="role-link">Business Intelligence Developer</a>
-<a href="/interview/business-operations-manager" class="role-link">Business Operations Manager</a>
-<a href="/interview/call-center-manager" class="role-link">Call Center Manager</a>
-<a href="/interview/call-center-representative" class="role-link">Call Center Representative</a>
-<a href="/interview/campaign-manager" class="role-link">Campaign Manager</a>
-<a href="/interview/carbon-accounting-analyst" class="role-link">Carbon Accounting Analyst</a>
-<a href="/interview/case-manager" class="role-link">Case Manager</a>
-<a href="/interview/catering-manager" class="role-link">Catering Manager</a>
-<a href="/interview/channel-marketing-manager" class="role-link">Channel Marketing Manager</a>
-<a href="/interview/channel-sales-manager" class="role-link">Channel Sales Manager</a>
-<a href="/interview/cinematographer" class="role-link">Cinematographer</a>
-<a href="/interview/city-planner" class="role-link">City Planner</a>
-<a href="/interview/civil-engineer" class="role-link">Civil Engineer</a>
-<a href="/interview/claims-adjuster" class="role-link">Claims Adjuster</a>
-<a href="/interview/client-services-manager" class="role-link">Client Services Manager</a>
-<a href="/interview/client-success-manager" class="role-link">Client Success Manager</a>
-<a href="/interview/clinical-pharmacist" class="role-link">Clinical Pharmacist</a>
-<a href="/interview/clinical-research-associate" class="role-link">Clinical Research Associate</a>
-<a href="/interview/clinical-research-coordinator" class="role-link">Clinical Research Coordinator</a>
-<a href="/interview/cloud-architect" class="role-link">Cloud Architect</a>
-<a href="/interview/cloud-devops-engineer" class="role-link">Cloud Devops Engineer</a>
-<a href="/interview/cloud-engineer" class="role-link">Cloud Engineer</a>
-<a href="/interview/cloud-security-engineer" class="role-link">Cloud Security Engineer</a>
-<a href="/interview/cloud-solutions-architect" class="role-link">Cloud Solutions Architect</a>
-<a href="/interview/cmo" class="role-link">Cmo</a>
-<a href="/interview/cnc-machinist" class="role-link">Cnc Machinist</a>
-<a href="/interview/commercial-real-estate-agent" class="role-link">Commercial Real Estate Agent</a>
-<a href="/interview/community-manager" class="role-link">Community Manager</a>
-<a href="/interview/community-outreach-manager" class="role-link">Community Outreach Manager</a>
-<a href="/interview/compensation-analyst" class="role-link">Compensation Analyst</a>
-<a href="/interview/compensation-and-benefits-analyst" class="role-link">Compensation and Benefits Analyst</a>
-<a href="/interview/compliance-analyst" class="role-link">Compliance Analyst</a>
-<a href="/interview/compliance-officer" class="role-link">Compliance Officer</a>
-<a href="/interview/computer-vision-engineer" class="role-link">Computer Vision Engineer</a>
-<a href="/interview/computer-vision-scientist" class="role-link">Computer Vision Scientist</a>
-<a href="/interview/concierge" class="role-link">Concierge</a>
-<a href="/interview/construction-project-manager" class="role-link">Construction Project Manager</a>
-<a href="/interview/consultant" class="role-link">Consultant</a>
-<a href="/interview/content-designer" class="role-link">Content Designer</a>
-<a href="/interview/content-manager" class="role-link">Content Manager</a>
-<a href="/interview/content-strategist" class="role-link">Content Strategist</a>
-<a href="/interview/content-writer" class="role-link">Content Writer</a>
-<a href="/interview/context-engineer" class="role-link">Context Engineer</a>
-<a href="/interview/contract-manager" class="role-link">Contract Manager</a>
-<a href="/interview/controls-engineer" class="role-link">Controls Engineer</a>
-<a href="/interview/conversational-ai-designer" class="role-link">Conversational AI Designer</a>
-<a href="/interview/copywriter" class="role-link">Copywriter</a>
-<a href="/interview/corporate-counsel" class="role-link">Corporate Counsel</a>
-<a href="/interview/corporate-finance-analyst" class="role-link">Corporate Finance Analyst</a>
-<a href="/interview/corporate-trainer" class="role-link">Corporate Trainer</a>
-<a href="/interview/cpp-software-engineer" class="role-link">Cpp Software Engineer</a>
-<a href="/interview/creative-producer" class="role-link">Creative Producer</a>
-<a href="/interview/credit-analyst" class="role-link">Credit Analyst</a>
-<a href="/interview/cro-specialist" class="role-link">CRO Specialist</a>
-<a href="/interview/cto" class="role-link">Cto</a>
-<a href="/interview/curriculum-developer" class="role-link">Curriculum Developer</a>
-<a href="/interview/customer-acquisition-manager" class="role-link">Customer Acquisition Manager</a>
-<a href="/interview/customer-experience-manager" class="role-link">Customer Experience Manager</a>
-<a href="/interview/customer-service-manager" class="role-link">Customer Service Manager</a>
-<a href="/interview/customer-service-representative" class="role-link">Customer Service Representative</a>
-<a href="/interview/customer-success-manager" class="role-link">Customer Success Manager</a>
-<a href="/interview/customer-success-specialist" class="role-link">Customer Success Specialist</a>
-<a href="/interview/customer-support-manager" class="role-link">Customer Support Manager</a>
-<a href="/interview/customer-support-specialist" class="role-link">Customer Support Specialist</a>
-<a href="/interview/cybersecurity-analyst" class="role-link">Cybersecurity Analyst</a>
-<a href="/interview/data-analyst" class="role-link">Data Analyst</a>
-<a href="/interview/data-analytics-manager" class="role-link">Data Analytics Manager</a>
-<a href="/interview/data-annotation-specialist" class="role-link">Data Annotation Specialist</a>
-<a href="/interview/data-architect" class="role-link">Data Architect</a>
-<a href="/interview/data-coordinator" class="role-link">Data Coordinator</a>
-<a href="/interview/data-engineer" class="role-link">Data Engineer</a>
-<a href="/interview/data-entry-specialist" class="role-link">Data Entry Specialist</a>
-<a href="/interview/data-governance-analyst" class="role-link">Data Governance Analyst</a>
-<a href="/interview/data-manager" class="role-link">Data Manager</a>
-<a href="/interview/data-platform-engineer" class="role-link">Data Platform Engineer</a>
-<a href="/interview/data-quality-analyst" class="role-link">Data Quality Analyst</a>
-<a href="/interview/data-quality-engineer" class="role-link">Data Quality Engineer</a>
-<a href="/interview/data-scientist" class="role-link">Data Scientist</a>
-<a href="/interview/database-administrator" class="role-link">Database Administrator</a>
-<a href="/interview/database-developer" class="role-link">Database Developer</a>
-<a href="/interview/database-reliability-engineer" class="role-link">Database Reliability Engineer</a>
-<a href="/interview/deal-desk-analyst" class="role-link">Deal Desk Analyst</a>
-<a href="/interview/decision-scientist" class="role-link">Decision Scientist</a>
-<a href="/interview/deep-learning-engineer" class="role-link">Deep Learning Engineer</a>
-<a href="/interview/demand-generation-manager" class="role-link">Demand Generation Manager</a>
-<a href="/interview/demand-planner" class="role-link">Demand Planner</a>
-<a href="/interview/demand-planning-analyst" class="role-link">Demand Planning Analyst</a>
-<a href="/interview/dental-assistant" class="role-link">Dental Assistant</a>
-<a href="/interview/dental-hygienist" class="role-link">Dental Hygienist</a>
-<a href="/interview/design-director" class="role-link">Design Director</a>
-<a href="/interview/design-manager" class="role-link">Design Manager</a>
-<a href="/interview/design-systems-designer" class="role-link">Design Systems Designer</a>
-<a href="/interview/design-systems-engineer" class="role-link">Design Systems Engineer</a>
-<a href="/interview/desktop-support-technician" class="role-link">Desktop Support Technician</a>
-<a href="/interview/developer-advocate" class="role-link">Developer Advocate</a>
-<a href="/interview/development-officer" class="role-link">Development Officer</a>
-<a href="/interview/devops-engineer" class="role-link">Devops Engineer</a>
-<a href="/interview/digital-designer" class="role-link">Digital Designer</a>
-<a href="/interview/digital-forensics-analyst" class="role-link">Digital Forensics Analyst</a>
-<a href="/interview/digital-marketing-manager" class="role-link">Digital Marketing Manager</a>
-<a href="/interview/diversity-and-inclusion-manager" class="role-link">Diversity And Inclusion Manager</a>
-<a href="/interview/django-developer" class="role-link">Django Developer</a>
-<a href="/interview/dotnet-developer" class="role-link">Dotnet Developer</a>
-<a href="/interview/e-commerce-manager" class="role-link">E Commerce Manager</a>
-<a href="/interview/e-commerce-specialist" class="role-link">E Commerce Specialist</a>
-<a href="/interview/e-learning-developer" class="role-link">E Learning Developer</a>
-<a href="/interview/edge-ai-engineer" class="role-link">Edge AI Engineer</a>
-<a href="/interview/edge-computing-engineer" class="role-link">Edge Computing Engineer</a>
-<a href="/interview/ediscovery-specialist" class="role-link">eDiscovery Specialist</a>
-<a href="/interview/education-consultant" class="role-link">Education Consultant</a>
-<a href="/interview/electrical-engineer" class="role-link">Electrical Engineer</a>
-<a href="/interview/electrician" class="role-link">Electrician</a>
-<a href="/interview/email-marketing-manager" class="role-link">Email Marketing Manager</a>
-<a href="/interview/email-marketing-specialist" class="role-link">Email Marketing Specialist</a>
-<a href="/interview/embedded-systems-engineer" class="role-link">Embedded Systems Engineer</a>
-<a href="/interview/employee-experience-manager" class="role-link">Employee Experience Manager</a>
-<a href="/interview/energy-auditor" class="role-link">Energy Auditor</a>
-<a href="/interview/engineering-manager" class="role-link">Engineering Manager</a>
-<a href="/interview/enterprise-account-executive" class="role-link">Enterprise Account Executive</a>
-<a href="/interview/entry-level-software-engineer" class="role-link">Entry Level Software Engineer</a>
-<a href="/interview/environmental-compliance-specialist" class="role-link">Environmental Compliance Specialist</a>
-<a href="/interview/environmental-scientist" class="role-link">Environmental Scientist</a>
-<a href="/interview/epidemiologist" class="role-link">Epidemiologist</a>
-<a href="/interview/esg-analyst" class="role-link">ESG Analyst</a>
-<a href="/interview/esl-teacher" class="role-link">Esl Teacher</a>
-<a href="/interview/estimator" class="role-link">Estimator</a>
-<a href="/interview/etl-developer" class="role-link">Etl Developer</a>
-<a href="/interview/event-coordinator" class="role-link">Event Coordinator</a>
-<a href="/interview/event-marketing-manager" class="role-link">Event Marketing Manager</a>
-<a href="/interview/events-manager" class="role-link">Events Manager</a>
-<a href="/interview/executive-assistant" class="role-link">Executive Assistant</a>
-<a href="/interview/farm-manager" class="role-link">Farm Manager</a>
-<a href="/interview/field-marketing-manager" class="role-link">Field Marketing Manager</a>
-<a href="/interview/film-editor" class="role-link">Film Editor</a>
-<a href="/interview/finance-manager" class="role-link">Finance Manager</a>
-<a href="/interview/financial-analyst" class="role-link">Financial Analyst</a>
-<a href="/interview/financial-controller" class="role-link">Financial Controller</a>
-<a href="/interview/financial-planning-analyst" class="role-link">Financial Planning Analyst</a>
-<a href="/interview/finops-analyst" class="role-link">FinOps Analyst</a>
-<a href="/interview/fintech-product-manager" class="role-link">Fintech Product Manager</a>
-<a href="/interview/fire-protection-engineer" class="role-link">Fire Protection Engineer</a>
-<a href="/interview/firefighter" class="role-link">Firefighter</a>
-<a href="/interview/firmware-engineer" class="role-link">Firmware Engineer</a>
-<a href="/interview/fitness-instructor" class="role-link">Fitness Instructor</a>
-<a href="/interview/fleet-manager" class="role-link">Fleet Manager</a>
-<a href="/interview/flutter-developer" class="role-link">Flutter Developer</a>
-<a href="/interview/foundation-program-officer" class="role-link">Foundation Program Officer</a>
-<a href="/interview/fraud-analyst" class="role-link">Fraud Analyst</a>
-<a href="/interview/front-desk-manager" class="role-link">Front Desk Manager</a>
-<a href="/interview/front-end-engineer" class="role-link">Front End Engineer</a>
-<a href="/interview/frontend-developer" class="role-link">Frontend Developer</a>
-<a href="/interview/frontend-software-engineer" class="role-link">Frontend Software Engineer</a>
-<a href="/interview/full-stack-developer" class="role-link">Full Stack Developer</a>
-<a href="/interview/full-stack-software-engineer" class="role-link">Full Stack Software Engineer</a>
-<a href="/interview/game-developer" class="role-link">Game Developer</a>
-<a href="/interview/gcp-engineer" class="role-link">Gcp Engineer</a>
-<a href="/interview/generative-ai-engineer" class="role-link">Generative Ai Engineer</a>
-<a href="/interview/genetic-counselor" class="role-link">Genetic Counselor</a>
-<a href="/interview/geospatial-analyst" class="role-link">Geospatial Analyst</a>
-<a href="/interview/golang-developer" class="role-link">Golang Developer</a>
-<a href="/interview/grant-writer" class="role-link">Grant Writer</a>
-<a href="/interview/graphic-designer" class="role-link">Graphic Designer</a>
-<a href="/interview/grc-analyst" class="role-link">GRC Analyst</a>
-<a href="/interview/growth-manager" class="role-link">Growth Manager</a>
-<a href="/interview/growth-marketing-manager" class="role-link">Growth Marketing Manager</a>
-<a href="/interview/growth-product-manager" class="role-link">Growth Product Manager</a>
-<a href="/interview/head-of-product" class="role-link">Head Of Product</a>
-<a href="/interview/health-informatics-specialist" class="role-link">Health Informatics Specialist</a>
-<a href="/interview/health-information-technician" class="role-link">Health Information Technician</a>
-<a href="/interview/healthcare-administrator" class="role-link">Healthcare Administrator</a>
-<a href="/interview/healthcare-data-analyst" class="role-link">Healthcare Data Analyst</a>
-<a href="/interview/help-desk-analyst" class="role-link">Help Desk Analyst</a>
-<a href="/interview/help-desk-technician" class="role-link">Help Desk Technician</a>
-<a href="/interview/hospital-case-manager" class="role-link">Hospital Case Manager</a>
-<a href="/interview/hotel-general-manager" class="role-link">Hotel General Manager</a>
-<a href="/interview/hr-business-partner" class="role-link">Hr Business Partner</a>
-<a href="/interview/hr-coordinator" class="role-link">Hr Coordinator</a>
-<a href="/interview/hr-director" class="role-link">Hr Director</a>
-<a href="/interview/hr-generalist" class="role-link">Hr Generalist</a>
-<a href="/interview/hr-manager" class="role-link">Hr Manager</a>
-<a href="/interview/hris-analyst" class="role-link">Hris Analyst</a>
-<a href="/interview/hvac-technician" class="role-link">Hvac Technician</a>
-<a href="/interview/iam-specialist" class="role-link">IAM Specialist</a>
-<a href="/interview/identity-access-management-analyst" class="role-link">Identity Access Management Analyst</a>
-<a href="/interview/immigration-paralegal" class="role-link">Immigration Paralegal</a>
-<a href="/interview/implementation-consultant" class="role-link">Implementation Consultant</a>
-<a href="/interview/incident-response-analyst" class="role-link">Incident Response Analyst</a>
-<a href="/interview/industrial-designer" class="role-link">Industrial Designer</a>
-<a href="/interview/influencer-marketing-manager" class="role-link">Influencer Marketing Manager</a>
-<a href="/interview/information-security-analyst" class="role-link">Information Security Analyst</a>
-<a href="/interview/infrastructure-security-engineer" class="role-link">Infrastructure Security Engineer</a>
-<a href="/interview/inside-sales-representative" class="role-link">Inside Sales Representative</a>
-<a href="/interview/insights-analyst" class="role-link">Insights Analyst</a>
-<a href="/interview/instructional-coordinator" class="role-link">Instructional Coordinator</a>
-<a href="/interview/instructional-designer" class="role-link">Instructional Designer</a>
-<a href="/interview/insurance-agent" class="role-link">Insurance Agent</a>
-<a href="/interview/insurance-broker" class="role-link">Insurance Broker</a>
-<a href="/interview/insurance-underwriter" class="role-link">Insurance Underwriter</a>
-<a href="/interview/interaction-designer" class="role-link">Interaction Designer</a>
-<a href="/interview/internal-auditor" class="role-link">Internal Auditor</a>
-<a href="/interview/inventory-analyst" class="role-link">Inventory Analyst</a>
-<a href="/interview/investment-analyst" class="role-link">Investment Analyst</a>
-<a href="/interview/ios-developer" class="role-link">Ios Developer</a>
-<a href="/interview/it-director" class="role-link">It Director</a>
-<a href="/interview/it-manager" class="role-link">It Manager</a>
-<a href="/interview/it-support-specialist" class="role-link">It Support Specialist</a>
-<a href="/interview/java-developer" class="role-link">Java Developer</a>
-<a href="/interview/java-software-engineer" class="role-link">Java Software Engineer</a>
-<a href="/interview/javascript-developer" class="role-link">Javascript Developer</a>
-<a href="/interview/junior-backend-developer" class="role-link">Junior Backend Developer</a>
-<a href="/interview/junior-business-analyst" class="role-link">Junior Business Analyst</a>
-<a href="/interview/junior-data-analyst" class="role-link">Junior Data Analyst</a>
-<a href="/interview/junior-data-engineer" class="role-link">Junior Data Engineer</a>
-<a href="/interview/junior-data-scientist" class="role-link">Junior Data Scientist</a>
-<a href="/interview/junior-devops-engineer" class="role-link">Junior Devops Engineer</a>
-<a href="/interview/junior-frontend-developer" class="role-link">Junior Frontend Developer</a>
-<a href="/interview/junior-full-stack-developer" class="role-link">Junior Full Stack Developer</a>
-<a href="/interview/junior-product-manager" class="role-link">Junior Product Manager</a>
-<a href="/interview/junior-software-engineer" class="role-link">Junior Software Engineer</a>
-<a href="/interview/junior-ux-designer" class="role-link">Junior Ux Designer</a>
-<a href="/interview/key-account-manager" class="role-link">Key Account Manager</a>
-<a href="/interview/knowledge-manager" class="role-link">Knowledge Manager</a>
-<a href="/interview/kotlin-developer" class="role-link">Kotlin Developer</a>
-<a href="/interview/kubernetes-engineer" class="role-link">Kubernetes Engineer</a>
-<a href="/interview/laravel-developer" class="role-link">Laravel Developer</a>
-<a href="/interview/large-language-model-engineer" class="role-link">Large Language Model Engineer</a>
-<a href="/interview/lead-product-manager" class="role-link">Lead Product Manager</a>
-<a href="/interview/lead-software-engineer" class="role-link">Lead Software Engineer</a>
-<a href="/interview/lean-manufacturing-specialist" class="role-link">Lean Manufacturing Specialist</a>
-<a href="/interview/learning-and-development-manager" class="role-link">Learning And Development Manager</a>
-<a href="/interview/learning-and-development-specialist" class="role-link">Learning and Development Specialist</a>
-<a href="/interview/leasing-agent" class="role-link">Leasing Agent</a>
-<a href="/interview/legal-assistant" class="role-link">Legal Assistant</a>
-<a href="/interview/legal-counsel" class="role-link">Legal Counsel</a>
-<a href="/interview/legal-operations-manager" class="role-link">Legal Operations Manager</a>
-<a href="/interview/legislative-assistant" class="role-link">Legislative Assistant</a>
-<a href="/interview/linux-administrator" class="role-link">Linux Administrator</a>
-<a href="/interview/llm-engineer" class="role-link">LLM Engineer</a>
-<a href="/interview/loan-officer" class="role-link">Loan Officer</a>
-<a href="/interview/logistics-coordinator" class="role-link">Logistics Coordinator</a>
-<a href="/interview/looker-developer" class="role-link">Looker Developer</a>
-<a href="/interview/loss-control-specialist" class="role-link">Loss Control Specialist</a>
-<a href="/interview/machine-learning-engineer" class="role-link">Machine Learning Engineer</a>
-<a href="/interview/machine-learning-platform-engineer" class="role-link">Machine Learning Platform Engineer</a>
-<a href="/interview/machine-learning-scientist" class="role-link">Machine Learning Scientist</a>
-<a href="/interview/maintenance-manager" class="role-link">Maintenance Manager</a>
-<a href="/interview/management-consultant" class="role-link">Management Consultant</a>
-<a href="/interview/manufacturing-engineer" class="role-link">Manufacturing Engineer</a>
-<a href="/interview/marketing-analyst" class="role-link">Marketing Analyst</a>
-<a href="/interview/marketing-automation-specialist" class="role-link">Marketing Automation Specialist</a>
-<a href="/interview/marketing-coordinator" class="role-link">Marketing Coordinator</a>
-<a href="/interview/marketing-data-analyst" class="role-link">Marketing Data Analyst</a>
-<a href="/interview/marketing-director" class="role-link">Marketing Director</a>
-<a href="/interview/marketing-manager" class="role-link">Marketing Manager</a>
-<a href="/interview/marketing-operations-manager" class="role-link">Marketing Operations Manager</a>
-<a href="/interview/marketing-specialist" class="role-link">Marketing Specialist</a>
-<a href="/interview/master-data-manager" class="role-link">Master Data Manager</a>
-<a href="/interview/mechanical-engineer" class="role-link">Mechanical Engineer</a>
-<a href="/interview/medical-assistant" class="role-link">Medical Assistant</a>
-<a href="/interview/medical-coder" class="role-link">Medical Coder</a>
-<a href="/interview/medical-laboratory-technician" class="role-link">Medical Laboratory Technician</a>
-<a href="/interview/medical-science-liaison" class="role-link">Medical Science Liaison</a>
-<a href="/interview/medical-writer" class="role-link">Medical Writer</a>
-<a href="/interview/mlops-engineer" class="role-link">Mlops Engineer</a>
-<a href="/interview/mobile-app-developer" class="role-link">Mobile App Developer</a>
-<a href="/interview/mortgage-loan-officer" class="role-link">Mortgage Loan Officer</a>
-<a href="/interview/motion-designer" class="role-link">Motion Designer</a>
-<a href="/interview/music-producer" class="role-link">Music Producer</a>
-<a href="/interview/national-account-manager" class="role-link">National Account Manager</a>
-<a href="/interview/network-administrator" class="role-link">Network Administrator</a>
-<a href="/interview/network-automation-engineer" class="role-link">Network Automation Engineer</a>
-<a href="/interview/network-engineer" class="role-link">Network Engineer</a>
-<a href="/interview/news-anchor" class="role-link">News Anchor</a>
-<a href="/interview/nlp-engineer" class="role-link">Nlp Engineer</a>
-<a href="/interview/nodejs-developer" class="role-link">Nodejs Developer</a>
-<a href="/interview/nonprofit-executive-director" class="role-link">Nonprofit Executive Director</a>
-<a href="/interview/nurse-practitioner" class="role-link">Nurse Practitioner</a>
-<a href="/interview/occupational-therapist" class="role-link">Occupational Therapist</a>
-<a href="/interview/office-manager" class="role-link">Office Manager</a>
-<a href="/interview/onboarding-specialist" class="role-link">Onboarding Specialist</a>
-<a href="/interview/operations-analyst" class="role-link">Operations Analyst</a>
-<a href="/interview/operations-coordinator" class="role-link">Operations Coordinator</a>
-<a href="/interview/operations-manager" class="role-link">Operations Manager</a>
-<a href="/interview/optical-engineer" class="role-link">Optical Engineer</a>
-<a href="/interview/organizational-development-consultant" class="role-link">Organizational Development Consultant</a>
-<a href="/interview/outside-sales-representative" class="role-link">Outside Sales Representative</a>
-<a href="/interview/packaging-engineer" class="role-link">Packaging Engineer</a>
-<a href="/interview/paid-media-manager" class="role-link">Paid Media Manager</a>
-<a href="/interview/paralegal" class="role-link">Paralegal</a>
-<a href="/interview/partnership-manager" class="role-link">Partnership Manager</a>
-<a href="/interview/partnerships-manager" class="role-link">Partnerships Manager</a>
-<a href="/interview/parts-manager" class="role-link">Parts Manager</a>
-<a href="/interview/patient-care-coordinator" class="role-link">Patient Care Coordinator</a>
-<a href="/interview/payroll-specialist" class="role-link">Payroll Specialist</a>
-<a href="/interview/penetration-tester" class="role-link">Penetration Tester</a>
-<a href="/interview/people-analytics-manager" class="role-link">People Analytics Manager</a>
-<a href="/interview/people-operations-manager" class="role-link">People Operations Manager</a>
-<a href="/interview/performance-marketing-manager" class="role-link">Performance Marketing Manager</a>
-<a href="/interview/personal-trainer" class="role-link">Personal Trainer</a>
-<a href="/interview/pharmacist" class="role-link">Pharmacist</a>
-<a href="/interview/pharmacy-technician" class="role-link">Pharmacy Technician</a>
-<a href="/interview/php-developer" class="role-link">Php Developer</a>
-<a href="/interview/physical-therapist" class="role-link">Physical Therapist</a>
-<a href="/interview/physician-assistant" class="role-link">Physician Assistant</a>
-<a href="/interview/plant-manager" class="role-link">Plant Manager</a>
-<a href="/interview/platform-engineer" class="role-link">Platform Engineer</a>
-<a href="/interview/platform-product-manager" class="role-link">Platform Product Manager</a>
-<a href="/interview/plumber" class="role-link">Plumber</a>
-<a href="/interview/podcast-producer" class="role-link">Podcast Producer</a>
-<a href="/interview/police-officer" class="role-link">Police Officer</a>
-<a href="/interview/policy-analyst" class="role-link">Policy Analyst</a>
-<a href="/interview/power-bi-developer" class="role-link">Power Bi Developer</a>
-<a href="/interview/ppc-specialist" class="role-link">Ppc Specialist</a>
-<a href="/interview/pr-specialist" class="role-link">Pr Specialist</a>
-<a href="/interview/presales-consultant" class="role-link">Presales Consultant</a>
-<a href="/interview/pricing-analyst" class="role-link">Pricing Analyst</a>
-<a href="/interview/principal-software-engineer" class="role-link">Principal Software Engineer</a>
-<a href="/interview/privacy-officer" class="role-link">Privacy Officer</a>
-<a href="/interview/process-engineer" class="role-link">Process Engineer</a>
-<a href="/interview/process-improvement-manager" class="role-link">Process Improvement Manager</a>
-<a href="/interview/process-improvement-specialist" class="role-link">Process Improvement Specialist</a>
-<a href="/interview/procurement-manager" class="role-link">Procurement Manager</a>
-<a href="/interview/procurement-specialist" class="role-link">Procurement Specialist</a>
-<a href="/interview/product-analyst" class="role-link">Product Analyst</a>
-<a href="/interview/product-analytics-manager" class="role-link">Product Analytics Manager</a>
-<a href="/interview/product-designer" class="role-link">Product Designer</a>
-<a href="/interview/product-manager" class="role-link">Product Manager</a>
-<a href="/interview/product-marketing-manager" class="role-link">Product Marketing Manager</a>
-<a href="/interview/product-operations-manager" class="role-link">Product Operations Manager</a>
-<a href="/interview/product-owner" class="role-link">Product Owner</a>
-<a href="/interview/product-strategy-manager" class="role-link">Product Strategy Manager</a>
-<a href="/interview/production-manager" class="role-link">Production Manager</a>
-<a href="/interview/program-coordinator" class="role-link">Program Coordinator</a>
-<a href="/interview/program-manager" class="role-link">Program Manager</a>
-<a href="/interview/project-manager" class="role-link">Project Manager</a>
-<a href="/interview/prompt-engineer" class="role-link">Prompt Engineer</a>
-<a href="/interview/property-manager" class="role-link">Property Manager</a>
-<a href="/interview/public-affairs-specialist" class="role-link">Public Affairs Specialist</a>
-<a href="/interview/python-developer" class="role-link">Python Developer</a>
-<a href="/interview/python-software-engineer" class="role-link">Python Software Engineer</a>
-<a href="/interview/qa-engineer" class="role-link">Qa Engineer</a>
-<a href="/interview/qa-tester" class="role-link">Qa Tester</a>
-<a href="/interview/quality-assurance-manager" class="role-link">Quality Assurance Manager</a>
-<a href="/interview/quality-assurance-specialist-pharma" class="role-link">Quality Assurance Specialist Pharma</a>
-<a href="/interview/quality-control-inspector" class="role-link">Quality Control Inspector</a>
-<a href="/interview/quantitative-analyst" class="role-link">Quantitative Analyst</a>
-<a href="/interview/quantitative-ux-researcher" class="role-link">Quantitative UX Researcher</a>
-<a href="/interview/quote-specialist" class="role-link">Quote Specialist</a>
-<a href="/interview/r-developer" class="role-link">R Developer</a>
-<a href="/interview/radiology-technician" class="role-link">Radiology Technician</a>
-<a href="/interview/react-developer" class="role-link">React Developer</a>
-<a href="/interview/real-estate-agent" class="role-link">Real Estate Agent</a>
-<a href="/interview/real-estate-appraiser" class="role-link">Real Estate Appraiser</a>
-<a href="/interview/real-estate-broker" class="role-link">Real Estate Broker</a>
-<a href="/interview/recruiter" class="role-link">Recruiter</a>
-<a href="/interview/recruiting-coordinator" class="role-link">Recruiting Coordinator</a>
-<a href="/interview/regional-sales-manager" class="role-link">Regional Sales Manager</a>
-<a href="/interview/registered-nurse" class="role-link">Registered Nurse</a>
-<a href="/interview/regulatory-affairs-specialist" class="role-link">Regulatory Affairs Specialist</a>
-<a href="/interview/release-manager" class="role-link">Release Manager</a>
-<a href="/interview/reliability-engineer" class="role-link">Reliability Engineer</a>
-<a href="/interview/renewable-energy-project-manager" class="role-link">Renewable Energy Project Manager</a>
-<a href="/interview/reporting-analyst" class="role-link">Reporting Analyst</a>
-<a href="/interview/research-analyst" class="role-link">Research Analyst</a>
-<a href="/interview/research-operations-manager" class="role-link">Research Operations Manager</a>
-<a href="/interview/research-scientist" class="role-link">Research Scientist</a>
-<a href="/interview/restaurant-general-manager" class="role-link">Restaurant General Manager</a>
-<a href="/interview/retail-marketing-manager" class="role-link">Retail Marketing Manager</a>
-<a href="/interview/revenue-operations-analyst" class="role-link">Revenue Operations Analyst</a>
-<a href="/interview/revenue-operations-manager" class="role-link">Revenue Operations Manager</a>
-<a href="/interview/risk-analyst" class="role-link">Risk Analyst</a>
-<a href="/interview/risk-manager" class="role-link">Risk Manager</a>
-<a href="/interview/robotics-engineer" class="role-link">Robotics Engineer</a>
-<a href="/interview/robotics-software-engineer" class="role-link">Robotics Software Engineer</a>
-<a href="/interview/ruby-developer" class="role-link">Ruby Developer</a>
-<a href="/interview/ruby-on-rails-developer" class="role-link">Ruby On Rails Developer</a>
-<a href="/interview/rust-developer" class="role-link">Rust Developer</a>
-<a href="/interview/saas-account-executive" class="role-link">Saas Account Executive</a>
-<a href="/interview/safety-manager" class="role-link">Safety Manager</a>
-<a href="/interview/sales-analyst" class="role-link">Sales Analyst</a>
-<a href="/interview/sales-associate" class="role-link">Sales Associate</a>
-<a href="/interview/sales-coordinator" class="role-link">Sales Coordinator</a>
-<a href="/interview/sales-development-representative" class="role-link">Sales Development Representative</a>
-<a href="/interview/sales-director" class="role-link">Sales Director</a>
-<a href="/interview/sales-enablement-manager" class="role-link">Sales Enablement Manager</a>
-<a href="/interview/sales-engineer" class="role-link">Sales Engineer</a>
-<a href="/interview/sales-manager" class="role-link">Sales Manager</a>
-<a href="/interview/sales-operations-analyst" class="role-link">Sales Operations Analyst</a>
-<a href="/interview/sales-representative" class="role-link">Sales Representative</a>
-<a href="/interview/salesforce-administrator" class="role-link">Salesforce Administrator</a>
-<a href="/interview/salesforce-developer" class="role-link">Salesforce Developer</a>
-<a href="/interview/sap-consultant" class="role-link">Sap Consultant</a>
-<a href="/interview/scala-developer" class="role-link">Scala Developer</a>
-<a href="/interview/school-principal" class="role-link">School Principal</a>
-<a href="/interview/scrum-master" class="role-link">Scrum Master</a>
-<a href="/interview/security-architect" class="role-link">Security Architect</a>
-<a href="/interview/security-consultant" class="role-link">Security Consultant</a>
-<a href="/interview/security-engineer" class="role-link">Security Engineer</a>
-<a href="/interview/security-operations-analyst" class="role-link">Security Operations Analyst</a>
-<a href="/interview/semiconductor-process-engineer" class="role-link">Semiconductor Process Engineer</a>
-<a href="/interview/senior-backend-developer" class="role-link">Senior Backend Developer</a>
-<a href="/interview/senior-business-analyst" class="role-link">Senior Business Analyst</a>
-<a href="/interview/senior-data-analyst" class="role-link">Senior Data Analyst</a>
-<a href="/interview/senior-data-engineer" class="role-link">Senior Data Engineer</a>
-<a href="/interview/senior-data-scientist" class="role-link">Senior Data Scientist</a>
-<a href="/interview/senior-devops-engineer" class="role-link">Senior Devops Engineer</a>
-<a href="/interview/senior-frontend-developer" class="role-link">Senior Frontend Developer</a>
-<a href="/interview/senior-full-stack-developer" class="role-link">Senior Full Stack Developer</a>
-<a href="/interview/senior-product-manager" class="role-link">Senior Product Manager</a>
-<a href="/interview/senior-software-engineer" class="role-link">Senior Software Engineer</a>
-<a href="/interview/senior-ux-designer" class="role-link">Senior Ux Designer</a>
-<a href="/interview/seo-manager" class="role-link">SEO Manager</a>
-<a href="/interview/seo-specialist" class="role-link">Seo Specialist</a>
-<a href="/interview/service-designer" class="role-link">Service Designer</a>
-<a href="/interview/servicenow-developer" class="role-link">Servicenow Developer</a>
-<a href="/interview/shopify-developer" class="role-link">Shopify Developer</a>
-<a href="/interview/site-reliability-engineer" class="role-link">Site Reliability Engineer</a>
-<a href="/interview/site-superintendent" class="role-link">Site Superintendent</a>
-<a href="/interview/soc-analyst" class="role-link">SOC Analyst</a>
-<a href="/interview/social-media-manager" class="role-link">Social Media Manager</a>
-<a href="/interview/social-worker" class="role-link">Social Worker</a>
-<a href="/interview/software-architect" class="role-link">Software Architect</a>
-<a href="/interview/software-development-manager" class="role-link">Software Development Manager</a>
-<a href="/interview/software-engineer" class="role-link">Software Engineer</a>
-<a href="/interview/software-engineer-intern" class="role-link">Software Engineer Intern</a>
-<a href="/interview/solutions-architect" class="role-link">Solutions Architect</a>
-<a href="/interview/solutions-consultant" class="role-link">Solutions Consultant</a>
-<a href="/interview/solutions-engineer" class="role-link">Solutions Engineer</a>
-<a href="/interview/sound-engineer" class="role-link">Sound Engineer</a>
-<a href="/interview/special-education-teacher" class="role-link">Special Education Teacher</a>
-<a href="/interview/speech-language-pathologist" class="role-link">Speech Language Pathologist</a>
-<a href="/interview/spring-boot-developer" class="role-link">Spring Boot Developer</a>
-<a href="/interview/sql-developer" class="role-link">Sql Developer</a>
-<a href="/interview/staff-accountant" class="role-link">Staff Accountant</a>
-<a href="/interview/staff-software-engineer" class="role-link">Staff Software Engineer</a>
-<a href="/interview/strategy-analyst" class="role-link">Strategy Analyst</a>
-<a href="/interview/structural-engineer" class="role-link">Structural Engineer</a>
-<a href="/interview/substitute-teacher" class="role-link">Substitute Teacher</a>
-<a href="/interview/supply-chain-analyst" class="role-link">Supply Chain Analyst</a>
-<a href="/interview/supply-chain-manager" class="role-link">Supply Chain Manager</a>
-<a href="/interview/support-engineer" class="role-link">Support Engineer</a>
-<a href="/interview/sustainability-consultant" class="role-link">Sustainability Consultant</a>
-<a href="/interview/sustainability-coordinator" class="role-link">Sustainability Coordinator</a>
-<a href="/interview/sustainability-manager" class="role-link">Sustainability Manager</a>
-<a href="/interview/swift-developer" class="role-link">Swift Developer</a>
-<a href="/interview/systems-administrator" class="role-link">Systems Administrator</a>
-<a href="/interview/systems-engineer" class="role-link">Systems Engineer</a>
-<a href="/interview/tableau-developer" class="role-link">Tableau Developer</a>
-<a href="/interview/talent-acquisition-partner" class="role-link">Talent Acquisition Partner</a>
-<a href="/interview/talent-acquisition-specialist" class="role-link">Talent Acquisition Specialist</a>
-<a href="/interview/talent-partner" class="role-link">Talent Partner</a>
-<a href="/interview/tax-analyst" class="role-link">Tax Analyst</a>
-<a href="/interview/teaching-assistant" class="role-link">Teaching Assistant</a>
-<a href="/interview/technical-account-manager" class="role-link">Technical Account Manager</a>
-<a href="/interview/technical-lead" class="role-link">Technical Lead</a>
-<a href="/interview/technical-product-manager" class="role-link">Technical Product Manager</a>
-<a href="/interview/technical-recruiter" class="role-link">Technical Recruiter</a>
-<a href="/interview/technical-sourcer" class="role-link">Technical Sourcer</a>
-<a href="/interview/technical-support-engineer" class="role-link">Technical Support Engineer</a>
-<a href="/interview/technical-writer" class="role-link">Technical Writer</a>
-<a href="/interview/telemedicine-physician" class="role-link">Telemedicine Physician</a>
-<a href="/interview/territory-sales-manager" class="role-link">Territory Sales Manager</a>
-<a href="/interview/test-automation-engineer" class="role-link">Test Automation Engineer</a>
-<a href="/interview/threat-intelligence-analyst" class="role-link">Threat Intelligence Analyst</a>
-<a href="/interview/tour-guide" class="role-link">Tour Guide</a>
-<a href="/interview/trade-marketing-manager" class="role-link">Trade Marketing Manager</a>
-<a href="/interview/training-specialist" class="role-link">Training Specialist</a>
-<a href="/interview/travel-agent" class="role-link">Travel Agent</a>
-<a href="/interview/treasury-analyst" class="role-link">Treasury Analyst</a>
-<a href="/interview/typescript-developer" class="role-link">Typescript Developer</a>
-<a href="/interview/ui-designer" class="role-link">Ui Designer</a>
-<a href="/interview/ui-engineer" class="role-link">Ui Engineer</a>
-<a href="/interview/urban-designer" class="role-link">Urban Designer</a>
-<a href="/interview/ux-designer" class="role-link">Ux Designer</a>
-<a href="/interview/ux-lead" class="role-link">Ux Lead</a>
-<a href="/interview/ux-researcher" class="role-link">Ux Researcher</a>
-<a href="/interview/ux-ui-designer" class="role-link">Ux Ui Designer</a>
-<a href="/interview/ux-writer" class="role-link">Ux Writer</a>
-<a href="/interview/validation-engineer" class="role-link">Validation Engineer</a>
-<a href="/interview/vehicle-inspector" class="role-link">Vehicle Inspector</a>
-<a href="/interview/vendor-management-specialist" class="role-link">Vendor Management Specialist</a>
-<a href="/interview/vendor-manager" class="role-link">Vendor Manager</a>
-<a href="/interview/video-producer" class="role-link">Video Producer</a>
-<a href="/interview/visual-designer" class="role-link">Visual Designer</a>
-<a href="/interview/voice-ui-designer" class="role-link">Voice UI Designer</a>
-<a href="/interview/volunteer-coordinator" class="role-link">Volunteer Coordinator</a>
-<a href="/interview/vp-of-engineering" class="role-link">Vp Of Engineering</a>
-<a href="/interview/vp-of-marketing" class="role-link">Vp Of Marketing</a>
-<a href="/interview/vp-of-sales" class="role-link">Vp Of Sales</a>
-<a href="/interview/vuejs-developer" class="role-link">Vuejs Developer</a>
-<a href="/interview/vulnerability-analyst" class="role-link">Vulnerability Analyst</a>
-<a href="/interview/warehouse-manager" class="role-link">Warehouse Manager</a>
-<a href="/interview/warehouse-operations-manager" class="role-link">Warehouse Operations Manager</a>
-<a href="/interview/wealth-management-advisor" class="role-link">Wealth Management Advisor</a>
-<a href="/interview/web-designer" class="role-link">Web Designer</a>
-<a href="/interview/web-developer" class="role-link">Web Developer</a>
-<a href="/interview/webflow-developer" class="role-link">Webflow Developer</a>
-<a href="/interview/wildlife-biologist" class="role-link">Wildlife Biologist</a>
-<a href="/interview/windows-administrator" class="role-link">Windows Administrator</a>
-<a href="/interview/wordpress-developer" class="role-link">Wordpress Developer</a>
-    </div>
-  </section>
-  
-  <footer class="footer">
-    <a href="/">← Back to AceMyInterviews</a>
-  </footer>
-  
-  <script>
-    function filterRoles() {
-      const search = document.getElementById('roleSearch').value.toLowerCase();
-      const links = document.querySelectorAll('.role-link');
-      links.forEach(link => {
-        const text = link.textContent.toLowerCase();
-        link.classList.toggle('hidden', !text.includes(search));
-      });
-    }
-  </script>
+    <header class="header">
+        <div class="container header-inner">
+            <a href="/" class="logo">AceMyInterviews</a>
+            <a href="/" class="header-cta">Start Practicing</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Ace Your <span>Interview</span></h1>
+                <p>Practice with AI-powered mock interviews tailored to your role. Get instant feedback on your answers with camera recording and performance analysis.</p>
+                
+                <div class="search-container">
+                    <div class="search-wrapper">
+                        <span class="search-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span>
+                        <input type="text" class="search-box" id="roleSearch" placeholder="Search for a role..." autocomplete="off">
+                    </div>
+                </div>
+                
+                <div class="trust-badges">
+                    <div class="trust-badge">
+                        <span class="number">103+</span>
+                        <span class="label">Job Roles</span>
+                    </div>
+                    <div class="trust-badge">
+                        <span class="number">5</span>
+                        <span class="label">Questions per Session</span>
+                    </div>
+                    <div class="trust-badge">
+                        <span class="number">AI</span>
+                        <span class="label">Instant Feedback</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="roles-section">
+            <div class="container">
+
+            <div class="category-section">
+                <h2 class="category-title">System Design & Architecture</h2>
+                <div class="roles-grid">
+                    <a href="/interview/system-design-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">System Design Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/system-design-architect" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">System Design Architect</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/distributed-systems-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Distributed Systems Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/distributed-systems-architect" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Distributed Systems Architect</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/application-architect" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Application Architect</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/enterprise-architect" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Enterprise Architect</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/technical-architect" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Technical Architect</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/infrastructure-architect" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Infrastructure Architect</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/scalability-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Scalability Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="category-section">
+                <h2 class="category-title">Platform & Infrastructure Engineering</h2>
+                <div class="roles-grid">
+                    <a href="/interview/platform-software-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Platform Software Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/infrastructure-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Infrastructure Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/infrastructure-software-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Infrastructure Software Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/infrastructure-developer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Infrastructure Developer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/cloud-infrastructure-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Cloud Infrastructure Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/cloud-platform-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Cloud Platform Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/cloud-software-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Cloud Software Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/cloud-automation-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Cloud Automation Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/systems-software-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Systems Software Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="category-section">
+                <h2 class="category-title">Reliability & Observability</h2>
+                <div class="roles-grid">
+                    <a href="/interview/performance-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Performance Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/performance-software-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Performance Software Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/systems-reliability-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Systems Reliability Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/platform-reliability-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Platform Reliability Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/infrastructure-reliability-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Infrastructure Reliability Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/observability-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Observability Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/monitoring-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Monitoring Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="category-section">
+                <h2 class="category-title">AI & Machine Learning Engineering</h2>
+                <div class="roles-grid">
+                    <a href="/interview/ai-software-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">AI Software Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/applied-machine-learning-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Applied Machine Learning Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/generative-ai-developer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Generative AI Developer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/foundation-model-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Foundation Model Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/prompt-engineering-specialist" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Prompt Engineering Specialist</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/ai-infrastructure-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">AI Infrastructure Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/ai-platform-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">AI Platform Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/ai-systems-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">AI Systems Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/ai-integration-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">AI Integration Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/ai-application-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">AI Application Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/inference-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Inference Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/model-optimization-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Model Optimization Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="category-section">
+                <h2 class="category-title">Retrieval & Vector Systems</h2>
+                <div class="roles-grid">
+                    <a href="/interview/retrieval-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Retrieval Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/rag-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">RAG Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/vector-database-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Vector Database Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="category-section">
+                <h2 class="category-title">Frontend Engineering</h2>
+                <div class="roles-grid">
+                    <a href="/interview/frontend-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Frontend Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/react-frontend-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">React Frontend Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/angular-frontend-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Angular Frontend Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/vue-frontend-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Vue Frontend Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/typescript-software-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Typescript Software Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/javascript-software-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Javascript Software Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="category-section">
+                <h2 class="category-title">Backend & API Engineering</h2>
+                <div class="roles-grid">
+                    <a href="/interview/api-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">API Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/microservices-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Microservices Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/microservices-developer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Microservices Developer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/backend-api-developer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Backend API Developer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/python-backend-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Python Backend Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/java-backend-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Java Backend Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/node-backend-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Node Backend Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/software-integration-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Software Integration Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="category-section">
+                <h2 class="category-title">Mobile Engineering</h2>
+                <div class="roles-grid">
+                    <a href="/interview/mobile-software-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Mobile Software Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/android-software-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Android Software Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/ios-software-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">IOS Software Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/react-native-developer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">React Native Developer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/flutter-software-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Flutter Software Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/cross-platform-developer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Cross Platform Developer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/mobile-application-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Mobile Application Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="category-section">
+                <h2 class="category-title">Data Engineering</h2>
+                <div class="roles-grid">
+                    <a href="/interview/data-warehouse-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Data Warehouse Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/data-integration-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Data Integration Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/big-data-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Big Data Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/big-data-developer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Big Data Developer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/streaming-data-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Streaming Data Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/realtime-data-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Realtime Data Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/data-infrastructure-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Data Infrastructure Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/data-pipeline-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Data Pipeline Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/data-migration-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Data Migration Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/data-analytics-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Data Analytics Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/data-visualization-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Data Visualization Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/data-operations-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Data Operations Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/bi-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">BI Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/experimentation-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Experimentation Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/analytics-consultant" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Analytics Consultant</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="category-section">
+                <h2 class="category-title">Security & Cybersecurity</h2>
+                <div class="roles-grid">
+                    <a href="/interview/application-security-analyst" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Application Security Analyst</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/cloud-security-analyst" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Cloud Security Analyst</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/cloud-security-architect" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Cloud Security Architect</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/security-software-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Security Software Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/infrastructure-security-analyst" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Infrastructure Security Analyst</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/threat-detection-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Threat Detection Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/detection-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Detection Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/security-automation-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Security Automation Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/red-team-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Red Team Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/blue-team-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Blue Team Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/security-researcher" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Security Researcher</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/security-analyst-intern" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Security Analyst Intern</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/cybersecurity-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Cybersecurity Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/cybersecurity-consultant" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Cybersecurity Consultant</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/cloud-iam-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Cloud IAM Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/devsecops-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">DevSecOps Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="category-section">
+                <h2 class="category-title">DevOps & Build Engineering</h2>
+                <div class="roles-grid">
+                    <a href="/interview/build-and-release-engineer" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Build and Release Engineer</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="category-section">
+                <h2 class="category-title">Product Management</h2>
+                <div class="roles-grid">
+                    <a href="/interview/product-growth-manager" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Product Growth Manager</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/growth-product-analyst" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Growth Product Analyst</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/growth-analyst" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Growth Analyst</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/technical-program-manager" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Technical Program Manager</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/platform-product-manager" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Platform Product Manager</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/ai-product-manager" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">AI Product Manager</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/data-product-manager" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Data Product Manager</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/product-strategy-analyst" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Product Strategy Analyst</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/digital-product-manager" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Digital Product Manager</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                    <a href="/interview/product-owner-agile" class="role-card">
+                        <span class="role-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                        <span class="role-name">Product Owner Agile</span>
+                        <span class="role-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                    </a>
+                </div>
+            </div>
+
+                <div class="no-results" id="noResults">
+                    No roles found matching your search. Try a different term.
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 <a href="/">AceMyInterviews</a>. AI-powered interview practice.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('roleSearch').addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.role-card');
+            const sections = document.querySelectorAll('.category-section');
+            const noResults = document.getElementById('noResults');
+            let anyVisible = false;
+
+            sections.forEach(section => {
+                const sectionCards = section.querySelectorAll('.role-card');
+                let sectionHasVisible = false;
+                sectionCards.forEach(card => {
+                    const name = card.querySelector('.role-name').textContent.toLowerCase();
+                    const match = !query || name.includes(query);
+                    card.style.display = match ? '' : 'none';
+                    if (match) { sectionHasVisible = true; anyVisible = true; }
+                });
+                section.style.display = sectionHasVisible ? '' : 'none';
+            });
+
+            noResults.style.display = anyVisible ? 'none' : 'block';
+        });
+    </script>
 </body>
 </html>
