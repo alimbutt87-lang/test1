@@ -1,558 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Site Reliability Engineer (SRE) Interview Questions – Practice with AI Simulator</title>
-  <meta name="description" content="Practice Site Reliability Engineer interview questions with our AI simulator. Questions tailored to your resume and job description with instant feedback.">
-  <meta name="keywords" content="site reliability engineer interview questions, SRE interview, reliability engineer interview, SRE interview questions, infrastructure reliability interview">
-  
-  <meta property="og:title" content="Site Reliability Engineer (SRE) Interview Questions – Practice with AI Simulator">
-  <meta property="og:description" content="Practice Site Reliability Engineer interview questions with our AI simulator. Questions tailored to your resume and job description with instant feedback.">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Site Reliability Engineer Interview Questions &amp; Practice Simulator</title>
+  <meta name="description" content="Practice SRE interview questions on SLOs, incident response, observability, and reliability system design. Includes answer frameworks, common mistakes, and an 8-question FAQ.">
+  <meta name="keywords" content="SRE interview questions, site reliability engineer interview questions, SRE interview preparation, SLO interview questions, incident response interview, reliability engineering interview">
+  <meta property="og:title" content="Site Reliability Engineer Interview Questions &amp; Practice Simulator">
+  <meta property="og:description" content="Practice SRE interview questions on SLOs, incident response, observability, and reliability system design. Includes answer frameworks, common mistakes, and an 8-question FAQ.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://acemyinterviews.io/interview/site-reliability-engineer">
   <meta property="og:image" content="https://acemyinterviews.io/og-image.png">
-  
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Site Reliability Engineer (SRE) Interview Questions – Practice with AI Simulator">
-  <meta name="twitter:description" content="Practice Site Reliability Engineer interview questions with our AI simulator. Questions tailored to your resume and job description with instant feedback.">
-  
+  <meta name="twitter:title" content="Site Reliability Engineer Interview Questions &amp; Practice Simulator">
+  <meta name="twitter:description" content="Practice SRE interview questions on SLOs, incident response, observability, and reliability system design. Includes answer frameworks, common mistakes, and an 8-question FAQ.">
   <link rel="canonical" href="https://acemyinterviews.io/interview/site-reliability-engineer">
-  
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How is SRE different from DevOps?","acceptedAnswer":{"@type":"Answer","text":"SRE is more focused on reliability, SLOs, and software engineering approaches to operations. Understanding these distinctions helps you position yourself effectively in Site Reliability Engineer interviews. Research the specific company's definition of the role, as titles and responsibilities vary significantly across organizations. During interviews, ask clarifying questions about expectations and team structure. This shows genuine interest and helps you determine if the role aligns with your career goals."}},{"@type":"Question","name":"Do I need to code?","acceptedAnswer":{"@type":"Answer","text":"Yes. SREs write code to automate and improve reliability. For Site Reliability Engineer positions, the specific experience requirements vary by company and level. Review the job description carefully and prepare examples that demonstrate relevant skills. Even if your background differs slightly from requirements, showing transferable skills, quick learning ability, and genuine enthusiasm for the role can make a strong impression on interviewers."}},{"@type":"Question","name":"Should I read the Google SRE book?","acceptedAnswer":{"@type":"Answer","text":"Yes. It's foundational for SRE concepts and terminology. When preparing for Site Reliability Engineer interviews, focus on building a compelling narrative around your experience. Connect your background to the role requirements, emphasizing transferable skills where direct experience is limited. Practice explaining your career journey and motivations clearly and concisely. In Site Reliability Engineer interviews, demonstrating both technical depth and clear communication is essential. Employers evaluate not just what you know, but how you approach problems and explain your thinking."}},{"@type":"Question","name":"How important is on-call experience?","acceptedAnswer":{"@type":"Answer","text":"Very important. Discuss how you've handled incidents and improved processes. For Site Reliability Engineer positions, the specific experience requirements vary by company and level. Review the job description carefully and prepare examples that demonstrate relevant skills. Even if your background differs slightly from requirements, showing transferable skills, quick learning ability, and genuine enthusiasm for the role can make a strong impression on interviewers."}}]}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://acemyinterviews.io"},{"@type":"ListItem","position":2,"name":"Interview Questions","item":"https://acemyinterviews.io/interview"},{"@type":"ListItem","position":3,"name":"Site Reliability Engineer Interview Questions","item":"https://acemyinterviews.io/interview/site-reliability-engineer"}]}</script>
-  
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is the difference between SRE and DevOps?", "acceptedAnswer": {"@type": "Answer", "text": "DevOps is a culture and set of practices focused on CI/CD, infrastructure automation, and breaking down dev/ops silos. SRE is a specific engineering discipline \u2014 originally defined by Google \u2014 that treats reliability as a measurable target using SLOs, error budgets, and structured incident management. An SRE implements DevOps principles but adds quantitative reliability frameworks."}}, {"@type": "Question", "name": "Do SRE interviews require coding?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Most SRE loops include at least one coding round at LeetCode-medium difficulty. Companies expect proficiency in Python, Go, or Java \u2014 not just Bash scripting. Some interviews also include systems-level coding tasks like log parsing or writing monitoring tools."}}, {"@type": "Question", "name": "What programming languages should I learn for SRE?", "acceptedAnswer": {"@type": "Answer", "text": "Python and Go are the most common. Python is widely used for automation and tooling; Go is popular for building observability and infrastructure tools. Java and C++ appear at companies with JVM-heavy or low-latency stacks. Pick one strongly and be conversant in a second."}}, {"@type": "Question", "name": "Is the Google SRE book still relevant for interviews?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The Google SRE book and its companion, The Site Reliability Workbook, define the vocabulary most interviewers use \u2014 SLOs, error budgets, toil, and blameless postmortems. Reading at least the core chapters on service-level objectives and incident management is expected preparation."}}, {"@type": "Question", "name": "How important is on-call experience for SRE roles?", "acceptedAnswer": {"@type": "Answer", "text": "Very important. On-call is central to SRE work, and interviewers assess your incident-response instincts, escalation judgment, and ability to stay calm under pressure. If you lack formal on-call experience, highlight any production-support work, incident participation, or postmortem contributions."}}, {"@type": "Question", "name": "What is an error budget in SRE?", "acceptedAnswer": {"@type": "Answer", "text": "An error budget is the maximum amount of unreliability your service is allowed over a defined period \u2014 derived from the SLO. If your SLO is 99.9% availability, your monthly error budget is roughly 43 minutes of downtime. When the budget is exhausted, the team shifts focus from features to reliability improvements."}}, {"@type": "Question", "name": "How hard are SRE interviews compared to software engineering interviews?", "acceptedAnswer": {"@type": "Answer", "text": "SRE interviews are comparable in coding difficulty but add dimensions that pure SWE interviews don't \u2014 incident-response simulations, reliability-focused system design, and operational judgment questions. The breadth is wider, covering both software engineering fundamentals and production operations expertise."}}, {"@type": "Question", "name": "Can I get an SRE role without prior SRE experience?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Many SREs transition from software engineering, DevOps, or systems administration. Emphasise any production ownership experience \u2014 on-call rotations, incident response, monitoring setup, or performance tuning. Familiarity with SLO concepts and the Google SRE book helps bridge the gap."}}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://acemyinterviews.io"}, {"@type": "ListItem", "position": 2, "name": "Interview Questions", "item": "https://acemyinterviews.io/interview"}, {"@type": "ListItem", "position": 3, "name": "Site Reliability Engineer Interview Questions", "item": "https://acemyinterviews.io/interview/site-reliability-engineer"}]}</script>
   <link rel="icon" href="/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
   <style>
-    :root {
-      --bg-primary: #0f1419;
-      --bg-secondary: #1a1f2e;
-      --bg-card: #1e2330;
-      --bg-card-hover: #252b3b;
-      --accent-primary: #14b8a6;
-      --accent-primary-hover: #0d9488;
-      --accent-secondary: #2dd4bf;
-      --text-primary: #ffffff;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      --border-color: #2d3748;
-      --success: #10b981;
-      --max-width: 800px;
-      --max-width-wide: 1000px;
-    }
-    
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-    
-    .header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: var(--max-width-wide);
-      margin: 0 auto;
-    }
-    
-    .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .logo-icon {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .header-cta {
-      background: var(--accent-primary);
-      color: var(--bg-primary);
-      padding: 10px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: background 0.2s;
-    }
-    
-    .header-cta:hover { background: var(--accent-primary-hover); }
-    
-    /* Breadcrumbs */
-    .breadcrumbs {
-      max-width: var(--max-width-wide);
-      margin: 0 auto;
-      padding: 16px 24px;
-      font-size: 0.875rem;
-    }
-    
-    .breadcrumbs a {
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    
-    .breadcrumbs a:hover { color: var(--accent-primary); }
-    
-    .breadcrumbs span { color: var(--text-muted); margin: 0 8px; }
-    
-    .breadcrumbs .current { color: var(--text-secondary); }
-    
-    .hero {
-      padding: 60px 24px 80px;
-      text-align: center;
-      background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-    }
-    
-    .hero-container { max-width: var(--max-width); margin: 0 auto; }
-    
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 2.75rem);
-      font-weight: 800;
-      margin-bottom: 20px;
-      line-height: 1.2;
-      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .hero p {
-      color: var(--text-secondary);
-      font-size: 1.125rem;
-      margin-bottom: 32px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .cta-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--accent-primary);
-      color: var(--bg-primary);
-      padding: 16px 32px;
-      font-size: 1rem;
-      font-weight: 600;
-      text-decoration: none;
-      border-radius: 10px;
-      transition: all 0.2s;
-    }
-    
-    .cta-btn:hover {
-      background: var(--accent-primary-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 40px rgba(20, 184, 166, 0.3);
-    }
-    
-    .cta-btn svg { width: 20px; height: 20px; }
-    
-    .trust-badges {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 40px;
-    }
-    
-    .trust-badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-    }
-    
-    .trust-badge svg { color: var(--success); width: 16px; height: 16px; }
-    
-    section { padding: 64px 24px; }
-    .container { max-width: var(--max-width); margin: 0 auto; }
-    
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 24px;
-      text-align: center;
-      color: var(--text-primary);
-    }
-    
-    .social-proof {
-      padding: 20px 24px;
-      text-align: center;
-      border-bottom: 1px solid var(--border-color);
-    }
-    
-    .social-proof p { color: var(--text-muted); font-size: 0.9rem; }
-    
-    /* Last Updated */
-    .last-updated {
-      text-align: center;
-      padding: 12px 24px;
-      font-size: 0.8125rem;
-      color: var(--text-muted);
-    }
-    
-    .last-updated svg {
-      width: 14px;
-      height: 14px;
-      vertical-align: -2px;
-      margin-right: 4px;
-    }
-    
-    .intro-text {
-      font-size: 1.0625rem;
-      line-height: 1.8;
-      color: var(--text-secondary);
-    }
-    
-    .questions-section { background: var(--bg-secondary); }
-    .questions-list { list-style: none; display: grid; gap: 12px; }
-    
-    .questions-list li {
-      background: var(--bg-card);
-      padding: 18px 24px;
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-      font-size: 0.9375rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      transition: all 0.2s;
-    }
-    
-    .questions-list li:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--accent-primary);
-    }
-    
-    .questions-list li svg {
-      flex-shrink: 0;
-      color: var(--accent-primary);
-      width: 20px;
-      height: 20px;
-      margin-top: 2px;
-    }
-    
-    .bridge-text {
-      font-size: 1rem;
-      line-height: 1.8;
-      color: var(--text-muted);
-      text-align: center;
-    }
-    
-    .personalized-section { background: var(--bg-secondary); text-align: center; }
-    
-    .personalized-section p {
-      color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto 32px;
-    }
-    
-    .features {
-      list-style: none;
-      display: inline-flex;
-      flex-direction: column;
-      gap: 12px;
-      text-align: left;
-      margin-bottom: 32px;
-    }
-    
-    .features li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-    }
-    
-    .features li svg { color: var(--success); width: 20px; height: 20px; flex-shrink: 0; }
-    
-    .criteria-list { list-style: none; display: grid; gap: 12px; }
-    
-    .criteria-list li {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 20px;
-      background: var(--bg-card);
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-    }
-    
-    .criteria-list li svg { color: var(--accent-primary); width: 20px; height: 20px; flex-shrink: 0; }
-    
-    .faq-section { background: var(--bg-secondary); }
-    .faq-list { display: grid; gap: 12px; }
-    
-    details {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    
-    details[open] { border-color: var(--accent-primary); }
-    
-    summary {
-      padding: 18px 24px;
-      font-weight: 600;
-      cursor: pointer;
-      list-style: none;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var(--text-primary);
-      font-size: 0.9375rem;
-    }
-    
-    summary::-webkit-details-marker { display: none; }
-    
-    summary::after {
-      content: '+';
-      font-size: 1.25rem;
-      font-weight: 400;
-      color: var(--text-muted);
-      transition: transform 0.2s;
-    }
-    
-    details[open] summary::after { transform: rotate(45deg); }
-    
-    details p {
-      padding: 0 24px 18px;
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-      line-height: 1.7;
-    }
-    
-    /* Related Links */
-    .related-section {
-      padding: 48px 24px;
-      border-top: 1px solid var(--border-color);
-    }
-    
-    .related-section h3 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      margin-bottom: 20px;
-      color: var(--text-primary);
-    }
-    
-    .related-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    
-    .related-links a {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      padding: 10px 16px;
-      border-radius: 8px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.875rem;
-      transition: all 0.2s;
-    }
-    
-    .related-links a:hover {
-      border-color: var(--accent-primary);
-      color: var(--accent-primary);
-      background: var(--bg-card-hover);
-    }
-    
-    .related-links a svg {
-      width: 16px;
-      height: 16px;
-    }
-    
-    .final-cta {
-      text-align: center;
-      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-      padding: 80px 24px;
-    }
-    
-    .final-cta h2 { font-size: 1.75rem; margin-bottom: 16px; }
-    
-    .final-cta p {
-      color: var(--text-secondary);
-      margin-bottom: 32px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .small-text { font-size: 0.875rem; color: var(--text-muted); margin-top: 16px; }
-    
-    .footer {
-      padding: 32px 24px;
-      text-align: center;
-      border-top: 1px solid var(--border-color);
-    }
-    
-    .footer a { color: var(--accent-primary); text-decoration: none; font-size: 0.9rem; }
-    .footer a:hover { text-decoration: underline; }
-    
-    @media (max-width: 640px) {
-      .hero { padding: 40px 20px 60px; }
-      section { padding: 48px 20px; }
-      .header { padding: 16px 20px; }
-      .trust-badges { flex-direction: column; align-items: center; }
-      .cta-btn { width: 100%; justify-content: center; }
-      .related-links { flex-direction: column; }
-      .related-links a { width: 100%; }
-    }
+    :root{--bg-primary:#0f1419;--bg-secondary:#1a1f2e;--bg-card:#1e2330;--bg-card-hover:#252b3b;--accent-primary:#14b8a6;--accent-primary-hover:#0d9488;--accent-secondary:#2dd4bf;--text-primary:#ffffff;--text-secondary:#94a3b8;--text-muted:#64748b;--border-color:#2d3748;--success:#10b981;--warning:#f59e0b;--max-width:800px;--max-width-wide:1000px}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased}
+    .header{padding:20px 24px;border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;max-width:var(--max-width-wide);margin:0 auto}
+    .logo{font-size:1.25rem;font-weight:700;color:var(--text-primary);text-decoration:none;display:flex;align-items:center;gap:8px}
+    .logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent-primary),var(--accent-secondary));border-radius:8px;display:flex;align-items:center;justify-content:center}
+    .header-cta{background:var(--accent-primary);color:var(--bg-primary);padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.9rem;transition:background 0.2s}.header-cta:hover{background:var(--accent-primary-hover)}
+    .breadcrumbs{max-width:var(--max-width-wide);margin:0 auto;padding:16px 24px;font-size:0.875rem}
+    .breadcrumbs a{color:var(--text-muted);text-decoration:none;transition:color 0.2s}.breadcrumbs a:hover{color:var(--accent-primary)}
+    .breadcrumbs span{color:var(--text-muted);margin:0 8px}.breadcrumbs .current{color:var(--text-secondary)}
+    .hero{padding:60px 24px 80px;text-align:center;background:linear-gradient(180deg,var(--bg-secondary) 0%,var(--bg-primary) 100%)}
+    .hero-container{max-width:var(--max-width);margin:0 auto}
+    .hero h1{font-size:clamp(2rem,5vw,2.75rem);font-weight:800;margin-bottom:20px;line-height:1.2;background:linear-gradient(135deg,var(--text-primary) 0%,var(--text-secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .hero p{color:var(--text-secondary);font-size:1.125rem;margin-bottom:32px;max-width:600px;margin-left:auto;margin-right:auto}
+    .cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent-primary);color:var(--bg-primary);padding:16px 32px;font-size:1rem;font-weight:600;text-decoration:none;border-radius:10px;transition:all 0.2s}
+    .cta-btn:hover{background:var(--accent-primary-hover);transform:translateY(-2px);box-shadow:0 10px 40px rgba(20,184,166,0.3)}.cta-btn svg{width:20px;height:20px}
+    .trust-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:40px}
+    .trust-badge{display:flex;align-items:center;gap:6px;background:var(--bg-card);border:1px solid var(--border-color);padding:10px 16px;border-radius:8px;font-size:0.875rem;color:var(--text-secondary)}.trust-badge svg{color:var(--success);width:16px;height:16px}
+    section{padding:64px 24px}.container{max-width:var(--max-width);margin:0 auto}
+    h2{font-size:1.5rem;font-weight:700;margin-bottom:24px;color:var(--text-primary)}h2.centered{text-align:center}
+    .social-proof{padding:20px 24px;text-align:center;border-bottom:1px solid var(--border-color)}.social-proof p{color:var(--text-muted);font-size:0.9rem}
+    .last-updated{text-align:center;padding:12px 24px;font-size:0.8125rem;color:var(--text-muted)}.last-updated svg{width:14px;height:14px;vertical-align:-2px;margin-right:4px}
+    .intro-text{font-size:1.0625rem;line-height:1.8;color:var(--text-secondary)}
+    .intro-text+.intro-text{margin-top:16px}
+    .section-intro{font-size:1rem;line-height:1.8;color:var(--text-secondary);margin-bottom:28px}
+    .section-intro a{color:var(--accent-primary);text-decoration:none}.section-intro a:hover{text-decoration:underline}
+    .questions-section{background:var(--bg-secondary)}
+    .questions-list{list-style:none;display:grid;gap:12px}
+    .questions-list li{background:var(--bg-card);padding:18px 24px;border-radius:10px;border:1px solid var(--border-color);color:var(--text-primary);font-size:0.9375rem;display:flex;align-items:flex-start;gap:12px;transition:all 0.2s}
+    .questions-list li:hover{background:var(--bg-card-hover);border-color:var(--accent-primary)}
+    .questions-list li svg{flex-shrink:0;color:var(--accent-primary);width:20px;height:20px;margin-top:2px}
+    .question-category{margin-bottom:36px}.question-category:last-child{margin-bottom:0}
+    .question-category h3{font-size:1.125rem;font-weight:600;color:var(--accent-primary);margin-bottom:16px}
+    .role-type-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:10px;padding:20px 24px;margin-bottom:12px}
+    .role-type-card h3{font-size:1rem;font-weight:600;color:var(--accent-primary);margin-bottom:8px}
+    .role-type-card p{color:var(--text-secondary);font-size:0.9375rem;line-height:1.7}
+    .process-step{display:flex;gap:16px;margin-bottom:20px;align-items:flex-start}.process-step:last-child{margin-bottom:0}
+    .step-number{width:32px;height:32px;min-width:32px;background:var(--accent-primary);color:var(--bg-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.875rem;margin-top:2px}
+    .step-content h4{font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin-bottom:4px}
+    .step-content p{color:var(--text-secondary);font-size:0.875rem;line-height:1.7}
+    .evaluator-note{margin-top:24px;padding:16px 20px;background:rgba(20,184,166,0.08);border-left:3px solid var(--accent-primary);border-radius:0 8px 8px 0;font-size:0.875rem;line-height:1.7;color:var(--text-secondary)}
+    .evaluator-note strong{color:var(--accent-secondary)}
+    .framework-section{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:28px 24px;margin-top:28px}
+    .framework-section h3{font-size:1.125rem;font-weight:600;color:var(--text-primary);margin-bottom:20px}
+    .framework-step{display:flex;gap:14px;margin-bottom:16px;align-items:flex-start}.framework-step:last-child{margin-bottom:0}
+    .framework-step .step-number{width:28px;height:28px;min-width:28px;font-size:0.8125rem}
+    .framework-step p{color:var(--text-secondary);font-size:0.875rem;line-height:1.7}
+    .mistake-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:10px;padding:18px 22px;margin-bottom:12px}
+    .mistake-card h4{font-size:0.9375rem;font-weight:600;color:var(--warning);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+    .mistake-card h4 svg{width:18px;height:18px;flex-shrink:0}
+    .mistake-card p{color:var(--text-secondary);font-size:0.875rem;line-height:1.7}
+    .mid-cta{text-align:center;margin-top:32px}
+    .criteria-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:10px;padding:16px 20px;margin-bottom:10px}
+    .criteria-card p{color:var(--text-secondary);font-size:0.9rem;line-height:1.7;display:flex;align-items:flex-start;gap:10px}
+    .criteria-card p svg{flex-shrink:0;color:var(--success);width:18px;height:18px;margin-top:3px}
+    .personalized-section{background:var(--bg-secondary);text-align:center}
+    .personalized-section p{color:var(--text-secondary);max-width:600px;margin:0 auto 32px}
+    .features{list-style:none;display:inline-flex;flex-direction:column;gap:12px;text-align:left;margin-bottom:32px}
+    .features li{display:flex;align-items:center;gap:10px;color:var(--text-secondary);font-size:0.9375rem}.features li svg{color:var(--success);width:20px;height:20px;flex-shrink:0}
+    .faq-section{background:var(--bg-secondary)}.faq-list{display:grid;gap:12px}
+    details{background:var(--bg-card);border:1px solid var(--border-color);border-radius:10px;overflow:hidden}details[open]{border-color:var(--accent-primary)}
+    summary{padding:18px 24px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;color:var(--text-primary);font-size:0.9375rem}
+    summary::-webkit-details-marker{display:none}summary::after{content:'+';font-size:1.25rem;font-weight:400;color:var(--text-muted);transition:transform 0.2s}
+    details[open] summary::after{transform:rotate(45deg)}details p{padding:0 24px 18px;color:var(--text-secondary);font-size:0.9375rem;line-height:1.7}
+    .related-section{padding:48px 24px;border-top:1px solid var(--border-color)}
+    .related-section h3{font-size:1.125rem;font-weight:600;margin-bottom:20px;color:var(--text-primary)}
+    .related-links{display:flex;flex-wrap:wrap;gap:12px}
+    .related-links a{display:inline-flex;align-items:center;gap:6px;background:var(--bg-card);border:1px solid var(--border-color);padding:10px 16px;border-radius:8px;color:var(--text-secondary);text-decoration:none;font-size:0.875rem;transition:all 0.2s}
+    .related-links a:hover{border-color:var(--accent-primary);color:var(--accent-primary);background:var(--bg-card-hover)}.related-links a svg{width:16px;height:16px}
+    .final-cta{text-align:center;background:linear-gradient(180deg,var(--bg-primary) 0%,var(--bg-secondary) 100%);padding:80px 24px}
+    .final-cta h2{font-size:1.75rem;margin-bottom:16px;text-align:center}
+    .final-cta p{color:var(--text-secondary);margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto}
+    .small-text{font-size:0.875rem;color:var(--text-muted);margin-top:16px}
+    .footer{padding:32px 24px;text-align:center;border-top:1px solid var(--border-color)}.footer a{color:var(--accent-primary);text-decoration:none;font-size:0.9rem}.footer a:hover{text-decoration:underline}
+    @media(max-width:640px){.hero{padding:40px 20px 60px}section{padding:48px 20px}.header{padding:16px 20px}.trust-badges{flex-direction:column;align-items:center}.cta-btn{width:100%;justify-content:center}.related-links{flex-direction:column}.related-links a{width:100%}}
   </style>
 </head>
 <body>
-  <header class="header">
-    <a href="/" class="logo">
-      <div class="logo-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
-      </div>
-      AceMyInterviews
-    </a>
-    <a href="/" class="header-cta">Start Practicing</a>
-  </header>
+  <header class="header"><a href="/" class="logo"><div class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>AceMyInterviews</a><a href="/" class="header-cta">Start Practicing</a></header>
+  <nav class="breadcrumbs"><a href="/">Home</a><span>›</span><a href="/interview">Interview Questions</a><span>›</span><span class="current">Site Reliability Engineer</span></nav>
 
-  <!-- Breadcrumbs -->
-  <nav class="breadcrumbs">
-    <a href="/">Home</a>
-    <span>›</span>
-    <a href="/interview">Interview Questions</a>
-    <span>›</span>
-    <span class="current">Site Reliability Engineer</span>
-  </nav>
+  <section class="hero"><div class="hero-container">
+    <h1>Site Reliability Engineer Interview Questions &amp; Practice Simulator</h1>
+    <p>Rehearse SRE interview scenarios covering SLOs, error budgets, incident management, and reliability system design — with AI-powered performance analysis.</p>
+    <a href="/" class="cta-btn">Practice with AI Interviewer →<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    <div class="trust-badges"><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic interview questions</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>3 minutes per answer</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant pass/fail verdict</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Feedback on confidence, clarity, and delivery</span></div>
+  </div></section>
 
-  <section class="hero">
-    <div class="hero-container">
-      <h1>Site Reliability Engineer Interview Questions & Practice Simulator</h1>
-      <p>Rehearse SRE interview scenarios with camera recording and performance analysis.</p>
-      <a href="/" class="cta-btn">
-        Begin Your Practice Session →
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </a>
-      <div class="trust-badges">
-        <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic interview questions</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>3 minutes per answer</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant pass/fail verdict</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Feedback on confidence, clarity, and delivery</span>
-      </div>
-    </div>
-  </section>
-  
-  <div class="social-proof"><p>Simulate real interview conditions before your actual interview</p></div>
-  
-  <!-- Last Updated -->
-  <div class="last-updated">
-    <svg viewBox="0 0 20 20" fill="currentColor">
-      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-    </svg>
-    Last updated: February 2026
-  </div>
-  
-  <section>
-    <div class="container">
-      <p class="intro-text">Site reliability engineers keep systems running reliably at scale. Interviews assess your understanding of SLOs/SLIs, incident management, and balancing reliability with velocity. Companies want engineers who can build self-healing systems and create sustainable on-call practices.</p>
-    </div>
-  </section>
-  
-  <section class="questions-section">
-    <div class="container">
-      <h2>Example Site Reliability Engineer Interview Questions</h2>
-      <ul class="questions-list">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you define and measure SLOs for a service?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe your approach to incident response.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you balance feature velocity with reliability work?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Tell me about a major outage you helped resolve.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you approach capacity planning?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe building observability for a complex system.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you reduce toil in operations?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>What's your philosophy on error budgets?</span></li>
-      </ul>
-    </div>
-  </section>
-  
-  <section>
-    <div class="container">
-      <p class="bridge-text">SRE interviews combine software engineering with operations expertise. AceMyInterviews generates questions tailored to your job description.</p>
-    </div>
-  </section>
-  
-  <section class="personalized-section">
-    <div class="container">
-      <h2>Practice Questions Tailored To Your Interview</h2>
-      <p>Your resume and job description are analyzed to create SRE questions.</p>
-      <ul class="features">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Reliability and SLO questions</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Incident response scenarios</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic timed simulation</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant feedback and pass/fail verdict</li>
-      </ul>
-      <a href="/" class="cta-btn">Begin Your Practice Session →</a>
-    </div>
-  </section>
-  
-  <section>
-    <div class="container">
-      <h2>What Interviewers Evaluate</h2>
-      <ul class="criteria-list">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>SLO/SLI understanding</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Incident management</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Automation and toil reduction</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>System design</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Coding ability</li>
-      </ul>
-    </div>
-  </section>
-  
-  <section class="faq-section">
-    <div class="container">
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-list">
-        <details><summary>How is SRE different from DevOps?</summary><p>SRE is more focused on reliability, SLOs, and software engineering approaches to operations. Understanding these distinctions helps you position yourself effectively in Site Reliability Engineer interviews. Research the specific company's definition of the role, as titles and responsibilities vary significantly across organizations. During interviews, ask clarifying questions about expectations and team structure. This shows genuine interest and helps you determine if the role aligns with your career goals.</p></details><details><summary>Do I need to code?</summary><p>Yes. SREs write code to automate and improve reliability. For Site Reliability Engineer positions, the specific experience requirements vary by company and level. Review the job description carefully and prepare examples that demonstrate relevant skills. Even if your background differs slightly from requirements, showing transferable skills, quick learning ability, and genuine enthusiasm for the role can make a strong impression on interviewers.</p></details><details><summary>Should I read the Google SRE book?</summary><p>Yes. It's foundational for SRE concepts and terminology. When preparing for Site Reliability Engineer interviews, focus on building a compelling narrative around your experience. Connect your background to the role requirements, emphasizing transferable skills where direct experience is limited. Practice explaining your career journey and motivations clearly and concisely. In Site Reliability Engineer interviews, demonstrating both technical depth and clear communication is essential. Employers evaluate not just what you know, but how you approach problems and explain your thinking.</p></details><details><summary>How important is on-call experience?</summary><p>Very important. Discuss how you've handled incidents and improved processes. For Site Reliability Engineer positions, the specific experience requirements vary by company and level. Review the job description carefully and prepare examples that demonstrate relevant skills. Even if your background differs slightly from requirements, showing transferable skills, quick learning ability, and genuine enthusiasm for the role can make a strong impression on interviewers.</p></details>
-      </div>
-    </div>
-  </section>
-  
-  <!-- Related Interview Questions (Internal Links) -->
-  <div class="related-section">
-    <div class="container">
-      <h3>Related Interview Questions</h3>
-      <div class="related-links">
-        <a href="/interview/marketing-analyst"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Marketing Analyst Interview Questions</a><a href="/interview/research-analyst"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Research Analyst Interview Questions</a><a href="/interview/business-consultant"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Business Consultant Interview Questions</a><a href="/interview/graphic-designer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Graphic Designer Interview Questions</a><a href="/interview/staff-accountant"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Staff Accountant Interview Questions</a>
-      </div>
-    </div>
-  </div>
-  
-  <section class="final-cta">
-    <div class="container">
-      <h2>Ready To Practice SRE Interview Questions?</h2>
-      <p>Practice SRE interview questions tailored to your experience.</p>
-      <a href="/" class="cta-btn">Start Your Interview Simulation →</a>
-      <p class="small-text">Takes less than 15 minutes.</p>
-    </div>
-  </section>
-  
-  <footer class="footer">
-    <a href="/">← Back to AceMyInterviews</a>
-  </footer>
+  <div class="social-proof"><p>Practice interview questions in a realistic simulation environment</p></div>
+  <div class="last-updated"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>Last updated: February 2026</div>
+
+  <section><div class="container">
+    <p class="intro-text">Site reliability engineers treat reliability as a measurable engineering discipline. Where DevOps engineers own the delivery pipeline and infrastructure automation, SREs own service-level objectives, error budgets, incident response, and the operational health of production systems. Interviews test whether you can define reliability targets, diagnose failures under pressure, and design systems that stay available at scale.</p>
+    <p class="intro-text">Below you'll find 40-plus questions organised by the categories that appear most often in SRE interview loops — from SLO definition through reliability-focused system design. Use them to practise with our AI interviewer or as a self-study checklist.</p>
+  </div></section>
+
+  <section class="questions-section"><div class="container">
+    <h2>Types of SRE Roles</h2>
+    <p class="section-intro">SRE job titles vary across organisations. Knowing which model your target company follows helps you emphasise the right experience.</p>
+    <div class="role-type-card"><h3>Product / Application SRE</h3><p>Embedded in a product team, owns the reliability of one or more services — sets SLOs, runs incident response, and partners with developers on architecture decisions that affect availability.</p></div><div class="role-type-card"><h3>Infrastructure / Platform SRE</h3><p>Owns foundational systems — compute platforms, networking, storage, and Kubernetes clusters — that product teams build on. Focuses on capacity planning, fleet management, and platform-wide observability.</p></div><div class="role-type-card"><h3>Centralized SRE / SRE Enablement</h3><p>Builds reliability tooling, SLO frameworks, and incident-management processes that other engineering teams adopt. Common in organisations following the Google consulting-SRE model.</p></div>
+  </div></section>
+
+  <section><div class="container">
+    <h2>What the SRE Interview Process Looks Like</h2>
+    <p class="section-intro">Most SRE loops include five to six rounds. The mix skews more toward coding and system design than a traditional ops interview, and companies increasingly add an incident-response simulation.</p>
+    <div class="process-step"><div class="step-number">1</div><div class="step-content"><h4>Recruiter Screen</h4><p>Covers your background, SRE experience, on-call history, and familiarity with SLO/SLI concepts. Expect questions about which production systems you've owned and what reliability metrics you tracked.</p></div></div><div class="process-step"><div class="step-number">2</div><div class="step-content"><h4>Coding Round</h4><p>Algorithms and data structures, not just scripting. Expect LeetCode-medium-level problems in Python, Go, or Java. Some companies add a second round focused on systems-level coding — log parsing, distributed-system simulations, or automation tooling.</p></div></div><div class="process-step"><div class="step-number">3</div><div class="step-content"><h4>Reliability System Design</h4><p>Design a system with explicit reliability requirements — target availability, latency percentiles, failure domains. You'll be expected to define SLOs, identify single points of failure, and explain your redundancy and failover strategy.</p></div></div><div class="process-step"><div class="step-number">4</div><div class="step-content"><h4>Incident Response Simulation</h4><p>Walk through a production outage in real time. The interviewer feeds you signals — dashboards, alerts, logs — and evaluates your troubleshooting methodology, communication during the incident, and how you'd structure the postmortem.</p></div></div><div class="process-step"><div class="step-number">5</div><div class="step-content"><h4>Observability & Troubleshooting</h4><p>Deep-dive on monitoring, alerting, and debugging. Expect questions on metrics vs logs vs traces, alert fatigue, SLO-based alerting, and how you'd instrument a service you've never seen before.</p></div></div><div class="process-step"><div class="step-number">6</div><div class="step-content"><h4>Behavioral / On-Call Culture</h4><p>Focuses on collaboration under pressure, on-call philosophy, blameless postmortems, and how you balance reliability work against feature velocity. STAR-format answers work well here.</p></div></div>
+  </div></section>
+
+  <section class="questions-section"><div class="container">
+    <h2>Behavioral &amp; Situational Questions</h2>
+    <p class="section-intro">SRE behavioral questions focus on how you operate under pressure, collaborate during incidents, and advocate for reliability investments when business stakeholders push for speed.</p>
+    <div class="question-category"><h3>Incident Leadership & On-Call</h3><ul class="questions-list"><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe a production outage where you were the incident commander. How did you coordinate the response?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Tell me about a time you were paged for an incident outside your area of expertise. What did you do?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How have you improved an on-call rotation to reduce burnout while maintaining response quality?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Give an example of a blameless postmortem you led. What changed as a result?</span></li></ul></div><div class="question-category"><h3>Reliability Advocacy & Trade-offs</h3><ul class="questions-list"><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe a time you pushed back on a feature launch because the service wasn't reliable enough. How did you make the case?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Tell me about a situation where you had to balance toil reduction against a product team's feature deadline.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How have you used error-budget data to influence a team's engineering priorities?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Give an example of a reliability investment you championed that had measurable impact on uptime or incident frequency.</span></li></ul></div><div class="question-category"><h3>Collaboration & Communication</h3><ul class="questions-list"><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you communicate production risk to non-technical stakeholders during an active incident?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe a time you onboarded a development team onto SRE practices — SLOs, on-call, postmortems. What resistance did you encounter?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Tell me about a cross-team debugging effort where the root cause spanned multiple services owned by different teams.</span></li></ul></div>
+  </div></section>
+
+  <section><div class="container">
+    <h2>SLOs, SLIs &amp; Error Budgets</h2>
+    <p class="section-intro">The defining topic of SRE. Interviewers expect you to move beyond textbook definitions — they want to see that you've set SLOs in production, built SLI pipelines, and used error budgets to make real decisions. If you're also preparing for infrastructure roles, our <a href="/interview/devops-engineer">DevOps Engineer interview guide</a> covers the CI/CD and IaC topics that complement SRE reliability work.</p>
+    <ul class="questions-list"><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How would you define an SLO for a real-time payments API where both latency and correctness matter?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Walk me through how you'd instrument SLIs for a multi-tier web application — what do you measure at each layer?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Your service has burned 80% of its monthly error budget in the first week. What actions do you take, and how do you communicate the situation to the product team?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you decide between availability-based and latency-based SLOs for a given service?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Explain how you'd implement SLO-based alerting that replaces threshold-based alerts. What are the advantages?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>A product manager wants a 99.99% availability SLO. How do you evaluate whether that target is realistic and cost-justified?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you handle SLO definitions for dependencies you don't control — third-party APIs, cloud provider services?</span></li></ul>
+    <div class="evaluator-note"><strong>What separates strong from weak answers:</strong> Strong candidates explain how they chose specific SLO targets (not just '99.9%'), how they measured SLIs at the edge vs backend, and what happened when the error budget was exhausted. Weak candidates recite definitions without connecting them to business impact.</div>
+  </div></section>
+
+  <section class="questions-section"><div class="container">
+    <h2>Incident Response, Observability &amp; Troubleshooting</h2>
+    <p class="section-intro">SRE interviews almost always include a live troubleshooting scenario. You'll need to demonstrate structured diagnosis, clear communication, and postmortem rigour — not just technical depth. Expect observability questions grounded in Google's Four Golden Signals — latency, traffic, errors, and saturation.</p>
+    <ul class="questions-list"><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>You see a sudden spike in p99 latency but p50 is unchanged. Walk me through your diagnosis process.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How would you design an observability stack for a microservices architecture — what combination of metrics, logs, and traces would you deploy?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe how you'd structure a postmortem for a 45-minute outage that affected 30% of users. What sections does it include, and who reviews it?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Your alerting system fires 200 alerts in an hour during a cascading failure. How do you cut through the noise to find the root cause?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you instrument a service to distinguish between a dependency failure and an issue in your own code?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Explain the difference between symptom-based and cause-based alerting. Which does SRE prefer, and why?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Walk me through how you'd use distributed tracing to debug a request that times out intermittently across five microservices.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you run a blameless postmortem in practice — what ground rules do you set, and how do you ensure action items actually get completed?</span></li></ul>
+    <div class="framework-section"><h3>How to Structure an Incident Response Answer</h3><div class="framework-step"><div class="step-number">1</div><p>Detect — Explain what signal (alert, customer report, dashboard anomaly) triggered the investigation.</p></div><div class="framework-step"><div class="step-number">2</div><p>Triage — Assess blast radius, affected users, and severity level. State whether you'd page additional responders.</p></div><div class="framework-step"><div class="step-number">3</div><p>Diagnose — Walk through your debugging path: dashboards → logs → traces → hypotheses. Explain what you ruled out and why.</p></div><div class="framework-step"><div class="step-number">4</div><p>Mitigate — Describe the immediate fix (rollback, traffic shift, feature flag, capacity scale-up) and why you chose it over alternatives.</p></div><div class="framework-step"><div class="step-number">5</div><p>Communicate — Explain how you kept stakeholders informed during the incident — status page updates, Slack channels, executive summaries.</p></div><div class="framework-step"><div class="step-number">6</div><p>Follow up — Outline the postmortem structure: timeline, root cause, contributing factors, action items with owners and deadlines.</p></div></div>
+  </div></section>
+
+  <section><div class="container">
+    <h2>Reliability System Design &amp; Capacity Planning</h2>
+    <p class="section-intro">SRE system design rounds differ from generic software design rounds — the interviewer cares less about feature completeness and more about failure modes, redundancy, capacity headroom, and how you'd keep the system reliable as it scales. Toil reduction and automation strategy are also fair game here.</p>
+    <ul class="questions-list"><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Design a globally distributed key-value store that targets 99.95% availability. Where are the single points of failure, and how do you eliminate them?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How would you capacity-plan for a service that experiences 10x traffic during a predictable annual event (e.g., Black Friday)?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Your team spends 40% of its time on manual, repetitive operational tasks. How do you identify which toil to automate first, and what's your decision framework?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Design the failover strategy for a multi-region application where the primary database is in us-east-1. What RPO and RTO targets would you propose?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How would you design a load-shedding mechanism that gracefully degrades a service under extreme traffic rather than returning errors?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Explain how you'd implement canary deployments with automatic rollback triggered by SLO violations.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>A legacy monolith has no SLOs, no structured logging, and a single point of failure in its database layer. How do you incrementally improve its reliability without a full rewrite?</span></li></ul>
+    <div class="mid-cta"><a href="/" class="cta-btn">Start Practising SRE Scenarios →</a></div>
+  </div></section>
+
+  <section class="questions-section"><div class="container">
+    <h2>Why Candidates Fail SRE Interviews</h2>
+    <div class="mistake-card"><h4><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg> Reciting SLO definitions without real examples</h4><p>Saying '99.9% means 8.7 hours of downtime per year' is table stakes. Interviewers want to hear how you chose a specific target, what trade-offs it created, and what happened when the budget ran out.</p></div><div class="mistake-card"><h4><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg> Treating incident response as a solo debugging exercise</h4><p>SRE incident management is about coordination — paging the right people, communicating status, and making mitigation decisions under uncertainty. Candidates who only describe technical debugging miss half the evaluation.</p></div><div class="mistake-card"><h4><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg> Confusing SRE with DevOps or sysadmin work</h4><p>If your answers focus on CI/CD pipelines, Terraform modules, or server provisioning, you're answering DevOps questions. SRE answers should centre on SLOs, error budgets, reliability engineering, and production ownership.</p></div><div class="mistake-card"><h4><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg> Designing for the happy path only</h4><p>In reliability system design, the interviewer deliberately introduces failures — network partitions, datacenter outages, dependency timeouts. Candidates who don't proactively address failure modes score poorly.</p></div><div class="mistake-card"><h4><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg> Skipping the postmortem follow-through</h4><p>Describing how you fixed an incident but not what changed afterwards suggests you treat reliability as reactive. Strong candidates explain the postmortem process, action items, and how they prevented recurrence.</p></div>
+  </div></section>
+
+  <section class="personalized-section"><div class="container">
+    <h2 class="centered">Practise SRE Scenarios with AI Feedback</h2>
+    <p>Rehearse incident response simulations, SLO discussions, and reliability system design with our AI interviewer — get feedback on your troubleshooting structure and communication clarity.</p>
+    <ul class="features"><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Questions tailored to your job description</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Questions based on your SRE experience</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic timed interview simulation</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant feedback and pass/fail verdict</li></ul>
+    <a href="/" class="cta-btn">Start Practising →</a>
+  </div></section>
+
+  <section><div class="container"><h2 class="centered">What Interviewers Evaluate in SRE Candidates</h2><div class="criteria-card"><p><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Can you define meaningful SLOs and use error budgets to drive engineering decisions — not just monitor dashboards?</p></div><div class="criteria-card"><p><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Do you troubleshoot production issues with a structured methodology, or do you guess and check?</p></div><div class="criteria-card"><p><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Can you design systems with reliability as a first-class requirement — failure modes, redundancy, graceful degradation?</p></div><div class="criteria-card"><p><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Do you communicate clearly during incidents and write postmortems that actually prevent recurrence?</p></div><div class="criteria-card"><p><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Can you quantify toil and make a business case for automation investments?</p></div><div class="criteria-card"><p><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Do you write production-quality code, not just scripts — algorithms, data structures, and systems-level programming?</p></div></div></section>
+
+  <section class="faq-section"><div class="container"><h2 class="centered">SRE Interview FAQs</h2><div class="faq-list"><details><summary>What is the difference between SRE and DevOps?</summary><p>DevOps is a culture and set of practices focused on CI/CD, infrastructure automation, and breaking down dev/ops silos. SRE is a specific engineering discipline — originally defined by Google — that treats reliability as a measurable target using SLOs, error budgets, and structured incident management. An SRE implements DevOps principles but adds quantitative reliability frameworks.</p></details><details><summary>Do SRE interviews require coding?</summary><p>Yes. Most SRE loops include at least one coding round at LeetCode-medium difficulty. Companies expect proficiency in Python, Go, or Java — not just Bash scripting. Some interviews also include systems-level coding tasks like log parsing or writing monitoring tools.</p></details><details><summary>What programming languages should I learn for SRE?</summary><p>Python and Go are the most common. Python is widely used for automation and tooling; Go is popular for building observability and infrastructure tools. Java and C++ appear at companies with JVM-heavy or low-latency stacks. Pick one strongly and be conversant in a second.</p></details><details><summary>Is the Google SRE book still relevant for interviews?</summary><p>Yes. The Google SRE book and its companion, The Site Reliability Workbook, define the vocabulary most interviewers use — SLOs, error budgets, toil, and blameless postmortems. Reading at least the core chapters on service-level objectives and incident management is expected preparation.</p></details><details><summary>How important is on-call experience for SRE roles?</summary><p>Very important. On-call is central to SRE work, and interviewers assess your incident-response instincts, escalation judgment, and ability to stay calm under pressure. If you lack formal on-call experience, highlight any production-support work, incident participation, or postmortem contributions.</p></details><details><summary>What is an error budget in SRE?</summary><p>An error budget is the maximum amount of unreliability your service is allowed over a defined period — derived from the SLO. If your SLO is 99.9% availability, your monthly error budget is roughly 43 minutes of downtime. When the budget is exhausted, the team shifts focus from features to reliability improvements.</p></details><details><summary>How hard are SRE interviews compared to software engineering interviews?</summary><p>SRE interviews are comparable in coding difficulty but add dimensions that pure SWE interviews don't — incident-response simulations, reliability-focused system design, and operational judgment questions. The breadth is wider, covering both software engineering fundamentals and production operations expertise.</p></details><details><summary>Can I get an SRE role without prior SRE experience?</summary><p>Yes. Many SREs transition from software engineering, DevOps, or systems administration. Emphasise any production ownership experience — on-call rotations, incident response, monitoring setup, or performance tuning. Familiarity with SLO concepts and the Google SRE book helps bridge the gap.</p></details></div></div></section>
+
+  <div class="related-section"><div class="container"><h3>SRE Questions by Experience Level</h3><div class="related-links"><a href="/interview/junior-site-reliability-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Junior SRE Interview Questions</a><a href="/interview/mid-level-site-reliability-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Mid-Level SRE Interview Questions</a><a href="/interview/senior-site-reliability-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Senior / Staff SRE Interview Questions</a></div></div></div>
+  <div class="related-section"><div class="container"><h3>Related Interview Guides</h3><div class="related-links"><a href="/interview/devops-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>DevOps Engineer Interview Questions</a><a href="/interview/backend-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Backend Developer Interview Questions</a><a href="/interview/software-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Software Engineer Interview Questions</a><a href="/interview/cloud-platform-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Cloud Engineer Interview Questions</a><a href="/interview/infrastructure-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Infrastructure Engineer Interview Questions</a></div></div></div>
+
+  <section class="final-cta"><div class="container">
+    <h2>Ready to Practise SRE Interview Questions?</h2>
+    <p>Rehearse incident-response simulations, SLO discussions, and reliability system design with our AI interviewer.</p>
+    <a href="/" class="cta-btn">Start a Mock Interview →</a>
+    <p class="small-text">Takes less than 15 minutes.</p>
+  </div></section>
+
+  <footer class="footer"><a href="/">← Back to AceMyInterviews</a></footer>
 </body>
 </html>

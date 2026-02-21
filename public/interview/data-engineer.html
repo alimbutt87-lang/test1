@@ -1,558 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Data Engineer Interview Questions – Practice with AI Simulator</title>
-  <meta name="description" content="Practice Data Engineer interview questions with our AI-powered simulator. Get questions tailored to your resume and job description with instant feedback.">
-  <meta name="keywords" content="data engineer interview questions, data engineering interview, ETL interview, data pipeline interview, big data engineer interview">
-  
-  <meta property="og:title" content="Data Engineer Interview Questions – Practice with AI Simulator">
-  <meta property="og:description" content="Practice Data Engineer interview questions with our AI-powered simulator. Get questions tailored to your resume and job description with instant feedback.">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Engineer Interview Questions &amp; Practice Simulator</title>
+  <meta name="description" content="Prepare for data engineer interviews with 40+ questions on SQL at scale, data modeling, ETL pipeline design, streaming, and warehouse architecture. Includes FAQ and expert tips.">
+  <meta name="keywords" content="data engineer interview questions, data engineering interview questions, data engineer technical interview, data engineer SQL interview questions, data engineer system design interview, data engineering interview preparation">
+  <meta property="og:title" content="Data Engineer Interview Questions &amp; Practice Simulator">
+  <meta property="og:description" content="Prepare for data engineer interviews with 40+ questions on SQL at scale, data modeling, ETL pipeline design, streaming, and warehouse architecture. Includes FAQ and expert tips.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://acemyinterviews.io/interview/data-engineer">
   <meta property="og:image" content="https://acemyinterviews.io/og-image.png">
-  
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Data Engineer Interview Questions – Practice with AI Simulator">
-  <meta name="twitter:description" content="Practice Data Engineer interview questions with our AI-powered simulator. Get questions tailored to your resume and job description with instant feedback.">
-  
+  <meta name="twitter:title" content="Data Engineer Interview Questions &amp; Practice Simulator">
+  <meta name="twitter:description" content="Prepare for data engineer interviews with 40+ questions on SQL at scale, data modeling, ETL pipeline design, streaming, and warehouse architecture. Includes FAQ and expert tips.">
   <link rel="canonical" href="https://acemyinterviews.io/interview/data-engineer">
-  
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How important is SQL?","acceptedAnswer":{"@type":"Answer","text":"This is an important consideration for Data Engineer candidates. Critical. Expect complex SQL questions and be ready to discuss query optimization. Take time to research the specific company and role requirements, as expectations can vary significantly across organizations. During your interview preparation, practice articulating your relevant experience and how it applies to the position. In Data Engineer interviews, demonstrating both technical depth and clear communication is essential. Employers evaluate not just what you know, but how you approach problems and explain your thinking."}},{"@type":"Question","name":"Should I know streaming and batch processing?","acceptedAnswer":{"@type":"Answer","text":"Understanding both is valuable. Know when to use each approach. For Data Engineer positions, interviewers typically expect you to demonstrate hands-on experience with the specific technologies mentioned in the job description. Beyond technical proficiency, they want to see that you understand best practices, can discuss tradeoffs between different approaches, and stay current with industry developments. Practice explaining your technical choices clearly, as communication skills matter as much as coding ability in interviews."}}]}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://acemyinterviews.io"},{"@type":"ListItem","position":2,"name":"Interview Questions","item":"https://acemyinterviews.io/interview"},{"@type":"ListItem","position":3,"name":"Data Engineer Interview Questions","item":"https://acemyinterviews.io/interview/data-engineer"}]}</script>
-  
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is SQL more important than Python for data engineer interviews?", "acceptedAnswer": {"@type": "Answer", "text": "SQL is typically the more heavily weighted skill. Most data engineer interviews include a dedicated SQL round, and SQL proficiency at scale is tested in modeling and pipeline discussions too. Python is important for ETL logic, data manipulation, and scripting, but you're less likely to face a standalone algorithm-style Python round. Prioritize SQL first, then Python for data processing."}}, {"@type": "Question", "name": "Are system design questions common in data engineer interviews?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, especially at mid-level and above. You'll be asked to design data pipelines, data platforms, or warehouse architectures end-to-end. These rounds test your ability to make tool and architecture decisions, reason through scale and reliability, and communicate tradeoffs \u2014 similar to SWE system design but focused on data flows."}}, {"@type": "Question", "name": "Do data engineer interviews include coding?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, but the coding is data-focused \u2014 not algorithm-heavy. Expect SQL live coding, Python data manipulation (parsing, transforming, aggregating), and sometimes PySpark or pandas exercises. You won't typically face LeetCode-style algorithm problems unless the role is at a company that uses them for all engineering hires."}}, {"@type": "Question", "name": "What is the difference between a data engineer and a data scientist interview?", "acceptedAnswer": {"@type": "Answer", "text": "Data engineer interviews emphasize SQL at scale, pipeline architecture, data modeling, and infrastructure reliability. Data scientist interviews focus on statistics, machine learning, experimentation, and business case studies. Data engineers build the systems that data scientists consume. There's overlap in SQL and Python, but the depth and focus are different."}}, {"@type": "Question", "name": "How hard are FAANG data engineer interviews?", "acceptedAnswer": {"@type": "Answer", "text": "FAANG data engineer interviews are challenging because they combine SQL depth, system design complexity, and sometimes general coding rounds. The system design round is often the most difficult \u2014 you'll design data pipelines at massive scale. Behavioral rounds are weighted heavily too, especially at Amazon (Leadership Principles). Expect 4-6 rounds over a full interview day."}}, {"@type": "Question", "name": "What tools should I prioritize learning for data engineer interviews?", "acceptedAnswer": {"@type": "Answer", "text": "SQL is non-negotiable. Beyond that, prioritize: Airflow (orchestration), Spark (large-scale processing), dbt (transformation), and one cloud data warehouse (Snowflake, BigQuery, or Redshift). For streaming roles, add Kafka. Understanding why you'd choose each tool matters more than knowing every feature."}}, {"@type": "Question", "name": "What is the difference between a data engineer and an analytics engineer?", "acceptedAnswer": {"@type": "Answer", "text": "Data engineers build and maintain the infrastructure \u2014 pipelines, orchestration, data platforms. Analytics engineers focus on the transformation layer \u2014 building clean, tested, documented data models using tools like dbt that analysts and scientists consume directly. Analytics engineer interviews lean heavier on SQL and modeling; data engineer interviews include more infrastructure and system design."}}, {"@type": "Question", "name": "How should I prepare for a data engineer system design round?", "acceptedAnswer": {"@type": "Answer", "text": "Practice designing data pipelines end-to-end: ingestion, transformation, storage, orchestration, and monitoring. For each design, be ready to discuss batch vs. streaming tradeoffs, fault tolerance, idempotency, schema evolution, and cost. Name specific tools and explain why you chose them. Mock interviews with feedback on your architectural reasoning are the most effective preparation."}}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://acemyinterviews.io"}, {"@type": "ListItem", "position": 2, "name": "Interview Questions", "item": "https://acemyinterviews.io/interview"}, {"@type": "ListItem", "position": 3, "name": "Data Engineer Interview Questions", "item": "https://acemyinterviews.io/interview/data-engineer"}]}</script>
   <link rel="icon" href="/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
   <style>
-    :root {
-      --bg-primary: #0f1419;
-      --bg-secondary: #1a1f2e;
-      --bg-card: #1e2330;
-      --bg-card-hover: #252b3b;
-      --accent-primary: #14b8a6;
-      --accent-primary-hover: #0d9488;
-      --accent-secondary: #2dd4bf;
-      --text-primary: #ffffff;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      --border-color: #2d3748;
-      --success: #10b981;
-      --max-width: 800px;
-      --max-width-wide: 1000px;
-    }
-    
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-    
-    .header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: var(--max-width-wide);
-      margin: 0 auto;
-    }
-    
-    .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .logo-icon {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .header-cta {
-      background: var(--accent-primary);
-      color: var(--bg-primary);
-      padding: 10px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: background 0.2s;
-    }
-    
-    .header-cta:hover { background: var(--accent-primary-hover); }
-    
-    /* Breadcrumbs */
-    .breadcrumbs {
-      max-width: var(--max-width-wide);
-      margin: 0 auto;
-      padding: 16px 24px;
-      font-size: 0.875rem;
-    }
-    
-    .breadcrumbs a {
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    
-    .breadcrumbs a:hover { color: var(--accent-primary); }
-    
-    .breadcrumbs span { color: var(--text-muted); margin: 0 8px; }
-    
-    .breadcrumbs .current { color: var(--text-secondary); }
-    
-    .hero {
-      padding: 60px 24px 80px;
-      text-align: center;
-      background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-    }
-    
-    .hero-container { max-width: var(--max-width); margin: 0 auto; }
-    
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 2.75rem);
-      font-weight: 800;
-      margin-bottom: 20px;
-      line-height: 1.2;
-      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .hero p {
-      color: var(--text-secondary);
-      font-size: 1.125rem;
-      margin-bottom: 32px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .cta-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--accent-primary);
-      color: var(--bg-primary);
-      padding: 16px 32px;
-      font-size: 1rem;
-      font-weight: 600;
-      text-decoration: none;
-      border-radius: 10px;
-      transition: all 0.2s;
-    }
-    
-    .cta-btn:hover {
-      background: var(--accent-primary-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 40px rgba(20, 184, 166, 0.3);
-    }
-    
-    .cta-btn svg { width: 20px; height: 20px; }
-    
-    .trust-badges {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 40px;
-    }
-    
-    .trust-badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-    }
-    
-    .trust-badge svg { color: var(--success); width: 16px; height: 16px; }
-    
-    section { padding: 64px 24px; }
-    .container { max-width: var(--max-width); margin: 0 auto; }
-    
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 24px;
-      text-align: center;
-      color: var(--text-primary);
-    }
-    
-    .social-proof {
-      padding: 20px 24px;
-      text-align: center;
-      border-bottom: 1px solid var(--border-color);
-    }
-    
-    .social-proof p { color: var(--text-muted); font-size: 0.9rem; }
-    
-    /* Last Updated */
-    .last-updated {
-      text-align: center;
-      padding: 12px 24px;
-      font-size: 0.8125rem;
-      color: var(--text-muted);
-    }
-    
-    .last-updated svg {
-      width: 14px;
-      height: 14px;
-      vertical-align: -2px;
-      margin-right: 4px;
-    }
-    
-    .intro-text {
-      font-size: 1.0625rem;
-      line-height: 1.8;
-      color: var(--text-secondary);
-    }
-    
-    .questions-section { background: var(--bg-secondary); }
-    .questions-list { list-style: none; display: grid; gap: 12px; }
-    
-    .questions-list li {
-      background: var(--bg-card);
-      padding: 18px 24px;
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-      font-size: 0.9375rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      transition: all 0.2s;
-    }
-    
-    .questions-list li:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--accent-primary);
-    }
-    
-    .questions-list li svg {
-      flex-shrink: 0;
-      color: var(--accent-primary);
-      width: 20px;
-      height: 20px;
-      margin-top: 2px;
-    }
-    
-    .bridge-text {
-      font-size: 1rem;
-      line-height: 1.8;
-      color: var(--text-muted);
-      text-align: center;
-    }
-    
-    .personalized-section { background: var(--bg-secondary); text-align: center; }
-    
-    .personalized-section p {
-      color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto 32px;
-    }
-    
-    .features {
-      list-style: none;
-      display: inline-flex;
-      flex-direction: column;
-      gap: 12px;
-      text-align: left;
-      margin-bottom: 32px;
-    }
-    
-    .features li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-    }
-    
-    .features li svg { color: var(--success); width: 20px; height: 20px; flex-shrink: 0; }
-    
-    .criteria-list { list-style: none; display: grid; gap: 12px; }
-    
-    .criteria-list li {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 20px;
-      background: var(--bg-card);
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-    }
-    
-    .criteria-list li svg { color: var(--accent-primary); width: 20px; height: 20px; flex-shrink: 0; }
-    
-    .faq-section { background: var(--bg-secondary); }
-    .faq-list { display: grid; gap: 12px; }
-    
-    details {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    
-    details[open] { border-color: var(--accent-primary); }
-    
-    summary {
-      padding: 18px 24px;
-      font-weight: 600;
-      cursor: pointer;
-      list-style: none;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var(--text-primary);
-      font-size: 0.9375rem;
-    }
-    
-    summary::-webkit-details-marker { display: none; }
-    
-    summary::after {
-      content: '+';
-      font-size: 1.25rem;
-      font-weight: 400;
-      color: var(--text-muted);
-      transition: transform 0.2s;
-    }
-    
-    details[open] summary::after { transform: rotate(45deg); }
-    
-    details p {
-      padding: 0 24px 18px;
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-      line-height: 1.7;
-    }
-    
-    /* Related Links */
-    .related-section {
-      padding: 48px 24px;
-      border-top: 1px solid var(--border-color);
-    }
-    
-    .related-section h3 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      margin-bottom: 20px;
-      color: var(--text-primary);
-    }
-    
-    .related-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    
-    .related-links a {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      padding: 10px 16px;
-      border-radius: 8px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.875rem;
-      transition: all 0.2s;
-    }
-    
-    .related-links a:hover {
-      border-color: var(--accent-primary);
-      color: var(--accent-primary);
-      background: var(--bg-card-hover);
-    }
-    
-    .related-links a svg {
-      width: 16px;
-      height: 16px;
-    }
-    
-    .final-cta {
-      text-align: center;
-      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-      padding: 80px 24px;
-    }
-    
-    .final-cta h2 { font-size: 1.75rem; margin-bottom: 16px; }
-    
-    .final-cta p {
-      color: var(--text-secondary);
-      margin-bottom: 32px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .small-text { font-size: 0.875rem; color: var(--text-muted); margin-top: 16px; }
-    
-    .footer {
-      padding: 32px 24px;
-      text-align: center;
-      border-top: 1px solid var(--border-color);
-    }
-    
-    .footer a { color: var(--accent-primary); text-decoration: none; font-size: 0.9rem; }
-    .footer a:hover { text-decoration: underline; }
-    
-    @media (max-width: 640px) {
-      .hero { padding: 40px 20px 60px; }
-      section { padding: 48px 20px; }
-      .header { padding: 16px 20px; }
-      .trust-badges { flex-direction: column; align-items: center; }
-      .cta-btn { width: 100%; justify-content: center; }
-      .related-links { flex-direction: column; }
-      .related-links a { width: 100%; }
-    }
+    :root{--bg-primary:#0f1419;--bg-secondary:#1a1f2e;--bg-card:#1e2330;--bg-card-hover:#252b3b;--accent-primary:#14b8a6;--accent-primary-hover:#0d9488;--accent-secondary:#2dd4bf;--text-primary:#ffffff;--text-secondary:#94a3b8;--text-muted:#64748b;--border-color:#2d3748;--success:#10b981;--warning:#f59e0b;--max-width:800px;--max-width-wide:1000px}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased}
+    .header{padding:20px 24px;border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;max-width:var(--max-width-wide);margin:0 auto}
+    .logo{font-size:1.25rem;font-weight:700;color:var(--text-primary);text-decoration:none;display:flex;align-items:center;gap:8px}
+    .logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent-primary),var(--accent-secondary));border-radius:8px;display:flex;align-items:center;justify-content:center}
+    .header-cta{background:var(--accent-primary);color:var(--bg-primary);padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.9rem;transition:background 0.2s}.header-cta:hover{background:var(--accent-primary-hover)}
+    .breadcrumbs{max-width:var(--max-width-wide);margin:0 auto;padding:16px 24px;font-size:0.875rem}
+    .breadcrumbs a{color:var(--text-muted);text-decoration:none;transition:color 0.2s}.breadcrumbs a:hover{color:var(--accent-primary)}
+    .breadcrumbs span{color:var(--text-muted);margin:0 8px}.breadcrumbs .current{color:var(--text-secondary)}
+    .hero{padding:60px 24px 80px;text-align:center;background:linear-gradient(180deg,var(--bg-secondary) 0%,var(--bg-primary) 100%)}
+    .hero-container{max-width:var(--max-width);margin:0 auto}
+    .hero h1{font-size:clamp(2rem,5vw,2.75rem);font-weight:800;margin-bottom:20px;line-height:1.2;background:linear-gradient(135deg,var(--text-primary) 0%,var(--text-secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .hero p{color:var(--text-secondary);font-size:1.125rem;margin-bottom:32px;max-width:600px;margin-left:auto;margin-right:auto}
+    .cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent-primary);color:var(--bg-primary);padding:16px 32px;font-size:1rem;font-weight:600;text-decoration:none;border-radius:10px;transition:all 0.2s}
+    .cta-btn:hover{background:var(--accent-primary-hover);transform:translateY(-2px);box-shadow:0 10px 40px rgba(20,184,166,0.3)}.cta-btn svg{width:20px;height:20px}
+    .trust-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:40px}
+    .trust-badge{display:flex;align-items:center;gap:6px;background:var(--bg-card);border:1px solid var(--border-color);padding:10px 16px;border-radius:8px;font-size:0.875rem;color:var(--text-secondary)}.trust-badge svg{color:var(--success);width:16px;height:16px}
+    section{padding:64px 24px}.container{max-width:var(--max-width);margin:0 auto}
+    h2{font-size:1.5rem;font-weight:700;margin-bottom:24px;color:var(--text-primary)}h2.centered{text-align:center}
+    .social-proof{padding:20px 24px;text-align:center;border-bottom:1px solid var(--border-color)}.social-proof p{color:var(--text-muted);font-size:0.9rem}
+    .last-updated{text-align:center;padding:12px 24px;font-size:0.8125rem;color:var(--text-muted)}.last-updated svg{width:14px;height:14px;vertical-align:-2px;margin-right:4px}
+    .intro-text{font-size:1.0625rem;line-height:1.8;color:var(--text-secondary)}
+    .section-intro{font-size:1rem;line-height:1.8;color:var(--text-secondary);margin-bottom:28px}
+    .questions-section{background:var(--bg-secondary)}
+    .questions-list{list-style:none;display:grid;gap:12px}
+    .questions-list li{background:var(--bg-card);padding:18px 24px;border-radius:10px;border:1px solid var(--border-color);color:var(--text-primary);font-size:0.9375rem;display:flex;align-items:flex-start;gap:12px;transition:all 0.2s}
+    .questions-list li:hover{background:var(--bg-card-hover);border-color:var(--accent-primary)}
+    .questions-list li svg{flex-shrink:0;color:var(--accent-primary);width:20px;height:20px;margin-top:2px}
+    .question-category{margin-bottom:36px}.question-category:last-child{margin-bottom:0}
+    .question-category h3{font-size:1.125rem;font-weight:600;color:var(--accent-primary);margin-bottom:16px}
+    .process-step{display:flex;gap:16px;margin-bottom:20px;align-items:flex-start}.process-step:last-child{margin-bottom:0}
+    .step-number{width:32px;height:32px;min-width:32px;background:var(--accent-primary);color:var(--bg-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.875rem;margin-top:2px}
+    .step-content h4{font-size:0.9375rem;font-weight:600;color:var(--text-primary);margin-bottom:4px}
+    .step-content p{color:var(--text-secondary);font-size:0.875rem;line-height:1.7}
+    .evaluator-note{margin-top:24px;padding:16px 20px;background:rgba(20,184,166,0.08);border-left:3px solid var(--accent-primary);border-radius:0 8px 8px 0;font-size:0.875rem;line-height:1.7;color:var(--text-secondary)}
+    .evaluator-note strong{color:var(--accent-secondary)}.evaluator-note ul{list-style:none;margin-top:10px;display:grid;gap:8px}
+    .evaluator-note li{display:flex;align-items:flex-start;gap:8px;color:var(--text-secondary)}.evaluator-note li svg{flex-shrink:0;color:var(--success);width:16px;height:16px;margin-top:3px}
+    .mistake-note{margin-top:16px;padding:16px 20px;background:rgba(245,158,11,0.08);border-left:3px solid var(--warning);border-radius:0 8px 8px 0;font-size:0.875rem;line-height:1.7}
+    .mistake-note strong{color:var(--warning)}.mistake-note ul{list-style:none;margin-top:10px;display:grid;gap:8px}
+    .mistake-note li{display:flex;align-items:flex-start;gap:8px;color:var(--text-secondary)}.mistake-note li svg{flex-shrink:0;color:var(--warning);width:16px;height:16px;margin-top:3px}
+    .inline-link-note{margin-top:24px;padding:14px 20px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:8px;font-size:0.875rem;color:var(--text-secondary)}
+    .inline-link-note a{color:var(--accent-primary);text-decoration:none}.inline-link-note a:hover{text-decoration:underline}
+    .mid-cta{text-align:center;margin-top:32px}
+    .criteria-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:10px;padding:18px 22px;margin-bottom:12px}
+    .criteria-card h4{font-size:0.9375rem;font-weight:600;color:var(--accent-primary);margin-bottom:6px}
+    .criteria-card p{color:var(--text-secondary);font-size:0.875rem;line-height:1.7}
+    .personalized-section{background:var(--bg-secondary);text-align:center}
+    .personalized-section p{color:var(--text-secondary);max-width:600px;margin:0 auto 32px}
+    .features{list-style:none;display:inline-flex;flex-direction:column;gap:12px;text-align:left;margin-bottom:32px}
+    .features li{display:flex;align-items:center;gap:10px;color:var(--text-secondary);font-size:0.9375rem}.features li svg{color:var(--success);width:20px;height:20px;flex-shrink:0}
+    .faq-section{background:var(--bg-secondary)}.faq-list{display:grid;gap:12px}
+    details{background:var(--bg-card);border:1px solid var(--border-color);border-radius:10px;overflow:hidden}details[open]{border-color:var(--accent-primary)}
+    summary{padding:18px 24px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;color:var(--text-primary);font-size:0.9375rem}
+    summary::-webkit-details-marker{display:none}summary::after{content:'+';font-size:1.25rem;font-weight:400;color:var(--text-muted);transition:transform 0.2s}
+    details[open] summary::after{transform:rotate(45deg)}details p{padding:0 24px 18px;color:var(--text-secondary);font-size:0.9375rem;line-height:1.7}
+    .related-section{padding:48px 24px;border-top:1px solid var(--border-color)}
+    .related-section h3{font-size:1.125rem;font-weight:600;margin-bottom:20px;color:var(--text-primary)}
+    .related-links{display:flex;flex-wrap:wrap;gap:12px}
+    .related-links a{display:inline-flex;align-items:center;gap:6px;background:var(--bg-card);border:1px solid var(--border-color);padding:10px 16px;border-radius:8px;color:var(--text-secondary);text-decoration:none;font-size:0.875rem;transition:all 0.2s}
+    .related-links a:hover{border-color:var(--accent-primary);color:var(--accent-primary);background:var(--bg-card-hover)}.related-links a svg{width:16px;height:16px}
+    .final-cta{text-align:center;background:linear-gradient(180deg,var(--bg-primary) 0%,var(--bg-secondary) 100%);padding:80px 24px}
+    .final-cta h2{font-size:1.75rem;margin-bottom:16px;text-align:center}
+    .final-cta p{color:var(--text-secondary);margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto}
+    .small-text{font-size:0.875rem;color:var(--text-muted);margin-top:16px}
+    .footer{padding:32px 24px;text-align:center;border-top:1px solid var(--border-color)}.footer a{color:var(--accent-primary);text-decoration:none;font-size:0.9rem}.footer a:hover{text-decoration:underline}
+    @media(max-width:640px){.hero{padding:40px 20px 60px}section{padding:48px 20px}.header{padding:16px 20px}.trust-badges{flex-direction:column;align-items:center}.cta-btn{width:100%;justify-content:center}.related-links{flex-direction:column}.related-links a{width:100%}}
   </style>
 </head>
 <body>
-  <header class="header">
-    <a href="/" class="logo">
-      <div class="logo-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
-      </div>
-      AceMyInterviews
-    </a>
-    <a href="/" class="header-cta">Start Practicing</a>
-  </header>
+  <header class="header"><a href="/" class="logo"><div class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>AceMyInterviews</a><a href="/" class="header-cta">Start Practicing</a></header>
+  <nav class="breadcrumbs"><a href="/">Home</a><span>›</span><a href="/interview">Interview Questions</a><span>›</span><span class="current">Data Engineer</span></nav>
 
-  <!-- Breadcrumbs -->
-  <nav class="breadcrumbs">
-    <a href="/">Home</a>
-    <span>›</span>
-    <a href="/interview">Interview Questions</a>
-    <span>›</span>
-    <span class="current">Data Engineer</span>
-  </nav>
+  <section class="hero"><div class="hero-container">
+    <h1>Data Engineer Interview Questions &amp; Practice Simulator</h1>
+    <p>Practice the SQL, data modeling, pipeline design, and system architecture questions that companies use to evaluate data engineers.</p>
+    <a href="/" class="cta-btn">Practice with AI Interviewer →<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    <div class="trust-badges"><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic interview questions</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>3 minutes per answer</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant pass/fail verdict</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Feedback on confidence, clarity, and delivery</span></div>
+  </div></section>
 
-  <section class="hero">
-    <div class="hero-container">
-      <h1>Data Engineer Interview Questions & Practice Simulator</h1>
-      <p>Practice realistic data engineer interview questions in a timed simulation.</p>
-      <a href="/" class="cta-btn">
-        Start Free Practice Interview →
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </a>
-      <div class="trust-badges">
-        <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic interview questions</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>3 minutes per answer</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant pass/fail verdict</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Feedback on confidence, clarity, and delivery</span>
-      </div>
-    </div>
-  </section>
-  
-  <div class="social-proof"><p>Prepare for interviews in a realistic simulation environment</p></div>
-  
-  <!-- Last Updated -->
-  <div class="last-updated">
-    <svg viewBox="0 0 20 20" fill="currentColor">
-      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-    </svg>
-    Last updated: February 2026
-  </div>
-  
-  <section>
-    <div class="container">
-      <p class="intro-text">Data engineer interviews test your ability to build reliable data pipelines that power analytics and machine learning. Interviewers dig into your SQL expertise, experience with tools like Spark and Airflow, and understanding of data modeling.</p>
-    </div>
-  </section>
-  
-  <section class="questions-section">
-    <div class="container">
-      <h2>Example Data Engineer Interview Questions</h2>
-      <ul class="questions-list">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe a data pipeline you built from scratch. What challenges did you face?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you handle data quality issues in production pipelines?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Tell me about a time you optimized a slow-running ETL process.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you approach data modeling for a new analytics use case?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe your experience with streaming vs. batch processing.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Tell me about a time you had to debug a data discrepancy.</span></li>
-      </ul>
-    </div>
-  </section>
-  
-  <section>
-    <div class="container">
-      <p class="bridge-text">Data engineering interviews vary significantly based on tech stack, data scale, and whether the team focuses on analytics, ML pipelines, or real-time systems. AceMyInterviews generates questions matched to your job description.</p>
-    </div>
-  </section>
-  
-  <section class="personalized-section">
-    <div class="container">
-      <h2>Practice Questions Tailored To Your Interview</h2>
-      <p>Your job description and resume are analyzed to create data engineering questions specific to your experience.</p>
-      <ul class="features">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Questions tailored to your job description</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Questions based on your data engineering experience</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic timed interview simulation</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant feedback and pass/fail verdict</li>
-      </ul>
-      <a href="/" class="cta-btn">Start Free Practice Interview →</a>
-    </div>
-  </section>
-  
-  <section>
-    <div class="container">
-      <h2>What Interviewers Evaluate</h2>
-      <ul class="criteria-list">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Data pipeline design and implementation</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>SQL proficiency and query optimization</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Experience with data processing frameworks</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Data modeling and warehouse design</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Data quality and reliability practices</li>
-      </ul>
-    </div>
-  </section>
-  
-  <section class="faq-section">
-    <div class="container">
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-list">
-        <details><summary>How important is SQL?</summary><p>This is an important consideration for Data Engineer candidates. Critical. Expect complex SQL questions and be ready to discuss query optimization. Take time to research the specific company and role requirements, as expectations can vary significantly across organizations. During your interview preparation, practice articulating your relevant experience and how it applies to the position. In Data Engineer interviews, demonstrating both technical depth and clear communication is essential. Employers evaluate not just what you know, but how you approach problems and explain your thinking.</p></details><details><summary>Should I know streaming and batch processing?</summary><p>Understanding both is valuable. Know when to use each approach. For Data Engineer positions, interviewers typically expect you to demonstrate hands-on experience with the specific technologies mentioned in the job description. Beyond technical proficiency, they want to see that you understand best practices, can discuss tradeoffs between different approaches, and stay current with industry developments. Practice explaining your technical choices clearly, as communication skills matter as much as coding ability in interviews.</p></details>
-      </div>
-    </div>
-  </section>
-  
-  <!-- Related Interview Questions (Internal Links) -->
-  <div class="related-section">
-    <div class="container">
-      <h3>Related Interview Questions</h3>
-      <div class="related-links">
-        <a href="/interview/data-analyst"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Data Analyst Interview Questions</a><a href="/interview/data-scientist"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Data Scientist Interview Questions</a><a href="/interview/machine-learning-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Machine Learning Engineer Interview Questions</a><a href="/interview/ai-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>AI Engineer Interview Questions</a><a href="/interview/bi-analyst"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>BI Analyst Interview Questions</a>
-      </div>
-    </div>
-  </div>
-  
-  <section class="final-cta">
-    <div class="container">
-      <h2>Ready To Practice Data Engineer Interview Questions?</h2>
-      <p>Practice data engineer interview questions tailored to your experience.</p>
-      <a href="/" class="cta-btn">Start Your Interview Simulation →</a>
-      <p class="small-text">Takes less than 15 minutes.</p>
-    </div>
-  </section>
-  
-  <footer class="footer">
-    <a href="/">← Back to AceMyInterviews</a>
-  </footer>
+  <div class="social-proof"><p>Practice interview questions in a realistic simulation environment</p></div>
+  <div class="last-updated"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>Last updated: February 2026</div>
+
+  <section><div class="container"><p class="intro-text">Data engineer interviews test your ability to build and maintain the infrastructure that powers analytics and machine learning — not just query data or build dashboards. Unlike data analyst roles that focus on business insights and visualization, data engineering interviews evaluate whether you can design reliable pipelines, model data for scale, optimize SQL on billion-row tables, and make architectural decisions across batch and streaming systems. Whether you're preparing for a role focused on analytics engineering, ML pipeline infrastructure, or real-time data systems, the questions below cover the full scope of what interviewers assess: SQL at production scale, data modeling and warehouse design, pipeline architecture, and behavioral competencies. AceMyInterviews lets you practice each data engineer technical interview question with an AI interviewer that evaluates both your architectural thinking and your ability to reason through tradeoffs on data volume, latency, and cost — the decisions that define senior data engineers.</p></div></section>
+
+  <section class="questions-section"><div class="container">
+    <h2>What to Expect in a Data Engineer Interview</h2>
+    <p class="section-intro">Data engineer interviews are more system-design-heavy than most analytics roles and more SQL-heavy than most software engineering roles. The data engineering interview process typically combines live coding with architecture design and modeling exercises.</p>
+    <div class="process-step"><div class="step-number">1</div><div class="step-content"><h4>Recruiter Screen</h4><p>A 30-minute call covering your background, tech stack experience (Spark, Airflow, dbt, cloud platforms), and the type of data engineering you've done — analytics pipelines, ML infrastructure, or real-time systems.</p></div></div><div class="process-step"><div class="step-number">2</div><div class="step-content"><h4>SQL Round</h4><p>A live SQL coding session where you write queries against realistic datasets. Expect multi-step problems involving window functions, CTEs, complex joins, and performance optimization. Interviewers evaluate query correctness, efficiency, and your awareness of how queries perform at scale.</p></div></div><div class="process-step"><div class="step-number">3</div><div class="step-content"><h4>Python / Coding Round</h4><p>A coding session focused on data manipulation — parsing files, transforming data structures, writing ETL logic. Not algorithm-heavy like SWE interviews; the emphasis is on clean, production-quality data processing code. PySpark or pandas questions are common.</p></div></div><div class="process-step"><div class="step-number">4</div><div class="step-content"><h4>Data Modeling Whiteboard</h4><p>You'll be given a business domain (e-commerce, fintech, SaaS metrics) and asked to design a data model from scratch. Interviewers evaluate your schema design, normalization decisions, and understanding of dimensional modeling patterns.</p></div></div><div class="process-step"><div class="step-number">5</div><div class="step-content"><h4>Pipeline / System Design Round</h4><p>The most heavily weighted round at many companies. You'll design a data pipeline or data platform end-to-end: ingestion, transformation, storage, orchestration, monitoring. Interviewers want to see that you can reason through batch vs. streaming, fault tolerance, and scalability.</p></div></div><div class="process-step"><div class="step-number">6</div><div class="step-content"><h4>Behavioral Round</h4><p>Focused on how you handle data quality incidents, collaborate with data scientists and analysts, and make technical decisions when requirements are ambiguous or stakeholders disagree on priorities.</p></div></div>
+  </div></section>
+
+  <section><div class="container">
+    <h2>Behavioral Interview Questions for Data Engineers</h2>
+    <p class="section-intro">Behavioral questions for data engineers focus on reliability, cross-team collaboration, and technical decision-making under ambiguity. Interviewers want to see that you build systems others can depend on and that you communicate effectively with data consumers.</p>
+    <div class="question-category"><h3>Reliability & Ownership</h3><ul class="questions-list"><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Tell me about a time a production pipeline broke and impacted downstream consumers. How did you handle it?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe a situation where you had to balance pipeline reliability against shipping speed. What tradeoff did you make?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Give an example of how you've improved data quality across a system you owned.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Tell me about a time you inherited a poorly designed pipeline. How did you decide what to fix first?</span></li></ul></div><div class="question-category"><h3>Cross-Team Collaboration</h3><ul class="questions-list"><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe a time you worked with data scientists to understand their data requirements and translate them into pipeline design.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Tell me about a situation where stakeholders disagreed on data definitions or metrics. How did you resolve it?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Give an example of how you've made your data infrastructure more self-service for analysts or scientists.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe a time you had to push back on a data request because it wasn't feasible at scale.</span></li></ul></div><div class="question-category"><h3>Technical Decision-Making</h3><ul class="questions-list"><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Tell me about a time you chose between batch and streaming for a data pipeline. What factors drove the decision?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe a situation where you had to migrate from one data tool or platform to another. How did you plan and execute the migration?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Give an example of a time you had to make an architecture decision with incomplete information about future data volume.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Tell me about a time you optimized a pipeline that was too slow or too expensive. What was your approach?</span></li></ul></div>
+  </div></section>
+
+  <section class="questions-section"><div class="container">
+    <h2>SQL at Scale — Data Engineer Interview Questions</h2>
+    <p class="section-intro">SQL is the most tested skill in data engineer interviews. But unlike data analyst SQL questions that focus on writing correct queries, data engineering SQL questions test your understanding of performance at scale — how queries execute on large datasets, when to use indexes, how to handle data skew, and how to write efficient transformations for warehouse environments like Snowflake, BigQuery, or Redshift.</p>
+    <ul class="questions-list"><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Write a query to calculate a rolling 7-day average of daily revenue, handling days with no transactions. Explain how this performs on a table with 500 million rows.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you optimize a query that's doing a full table scan on a 2TB table? Walk through your investigation and optimization steps.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Explain how you'd handle a heavily skewed join where one key has 10 million rows and most keys have fewer than 100. What strategies do you use?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>When do you use partitioning vs. clustering vs. indexing? Give a concrete example of each from a data warehouse context.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Write a query to identify duplicate records in a table with no unique key. How do you decide which duplicate to keep?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do window functions execute under the hood? When would you avoid them for performance reasons on very large datasets?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>You need to transform a normalized OLTP schema into a denormalized analytics table. Walk through your approach and the SQL patterns you'd use.</span></li></ul>
+    <div class="evaluator-note"><strong>What interviewers look for in SQL answers:</strong><ul><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>You consider query execution plans and performance, not just correctness</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>You're aware of how your queries perform at scale — millions and billions of rows, not thousands</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>You understand partitioning, data distribution, and how different warehouse engines optimize queries</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>You can explain tradeoffs between different SQL approaches (subquery vs. CTE vs. temp table, etc.)</li></ul></div>
+    <p class="inline-link-note">For business-focused SQL questions emphasizing reporting and visualization, see our <a href="/interview/data-analyst">data analyst interview questions</a>.</p>
+  </div></section>
+
+  <section><div class="container">
+    <h2>Data Modeling &amp; Warehouse Design Questions</h2>
+    <p class="section-intro">Data modeling is the second most tested area in data engineer interviews. Interviewers evaluate whether you can design schemas that balance query performance, storage efficiency, and maintainability. You should be comfortable with dimensional modeling (Kimball), the differences between star and snowflake schemas, and modern patterns like the medallion architecture used in lakehouse environments.</p>
+    <ul class="questions-list"><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Design a data warehouse schema for an e-commerce platform. Cover orders, products, customers, and inventory. Explain your choice between star and snowflake schema.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>What are slowly changing dimensions? Walk through Type 1, Type 2, and Type 3 approaches with a concrete example. When do you use each?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Explain the difference between Kimball and Inmon approaches to data warehousing. When would you choose one over the other?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Design a medallion architecture (bronze/silver/gold) for a SaaS company's event data using a lakehouse platform like Delta Lake or Apache Iceberg. What transformations happen at each layer?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you model fact tables vs. dimension tables? Give an example where the boundary between the two isn't obvious.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you handle schema evolution in a production data warehouse? What happens when a source system adds, removes, or renames columns?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>A data scientist needs a wide, denormalized table for feature engineering, but analysts need normalized tables for reporting. How do you serve both?</span></li></ul>
+  </div></section>
+
+  <section class="questions-section"><div class="container">
+    <h2>Data Pipelines, ETL &amp; Streaming Questions</h2>
+    <p class="section-intro">Pipeline design questions are the system design equivalent for data engineers. Interviewers evaluate your ability to architect end-to-end data flows — from ingestion through transformation to serving — while handling real-world challenges like schema changes, late-arriving data, failures, and scale. Naming specific tools (Airflow, Spark, dbt, Kafka, Flink) in your answers signals hands-on experience.</p>
+    <ul class="questions-list"><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Design a scalable ETL pipeline that ingests data from 50 microservices into a central data warehouse. Walk through ingestion, transformation, orchestration, and monitoring.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you ensure idempotency in a data pipeline? Why does it matter and what patterns do you use?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you backfill historical data when a pipeline logic change affects two years of records? Walk through your approach.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you design a pipeline for fault tolerance? What happens when a task fails midway through a DAG in Airflow?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you monitor data pipelines in production? What metrics and alerts do you set up to catch issues before consumers notice?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>When do you use batch processing vs. streaming? Walk through a scenario where you'd choose Kafka and Flink over Spark batch jobs.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you handle late-arriving data in a streaming pipeline? Explain event time vs. processing time and your watermark strategy.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you manage cost in a cloud data warehouse like Snowflake or BigQuery when query volume and data size are growing rapidly?</span></li></ul>
+    <div class="mid-cta"><a href="/" class="cta-btn">Start a Mock Pipeline Design Round →</a></div>
+  </div></section>
+
+  <section><div class="container">
+    <h2>Common Mistakes in Data Engineer Interviews</h2>
+    <div class="mistake-note"><strong><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg> Avoid these common pitfalls:</strong><ul><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg><span>Focusing on tool names without explaining architectural reasoning — saying 'I'd use Airflow and Spark' without explaining why or how</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg><span>Writing correct SQL without considering performance at scale — queries that work on 10,000 rows but break on 10 billion</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg><span>Ignoring data quality and monitoring — designing pipelines without explaining how you'd detect and handle failures or data drift</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg><span>Not considering cost implications — choosing always-on infrastructure when event-driven or serverless approaches would be cheaper at the given scale</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg><span>Weak data modeling fundamentals — jumping to pipeline design without first defining a clear schema and understanding the access patterns</span></li></ul></div>
+  </div></section>
+
+  <section class="personalized-section"><div class="container">
+    <h2 class="centered">Practice Pipeline Design Questions with AI</h2>
+    <p>Data engineer interviews often include a pipeline or system design round where you architect data flows end-to-end. Practice with an AI interviewer that evaluates your architectural decisions, tool choices, and ability to reason through scale and reliability tradeoffs.</p>
+    <ul class="features"><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Questions tailored to your job description</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Questions based on your data engineering experience</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic timed interview simulation</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant feedback and pass/fail verdict</li></ul>
+    <a href="/" class="cta-btn">Start a Mock Pipeline Design Round →</a>
+  </div></section>
+
+  <section><div class="container"><h2 class="centered">How Data Engineer Candidates Are Evaluated</h2><div class="criteria-card"><h4>SQL Proficiency at Scale</h4><p>Can you write correct, performant SQL that works on production-scale datasets? Do you understand query optimization, partitioning, and warehouse-specific execution patterns?</p></div><div class="criteria-card"><h4>Data Modeling</h4><p>Can you design schemas that serve multiple consumers efficiently? Do you understand dimensional modeling, normalization tradeoffs, and schema evolution?</p></div><div class="criteria-card"><h4>Pipeline Architecture</h4><p>Can you design reliable, scalable data pipelines? Do you reason through batch vs. streaming, fault tolerance, idempotency, and monitoring?</p></div><div class="criteria-card"><h4>Tool & Platform Knowledge</h4><p>Do you have hands-on experience with tools like Airflow, Spark, dbt, Kafka, and cloud data platforms (Snowflake, BigQuery, Redshift)? Can you explain why you'd choose one over another?</p></div><div class="criteria-card"><h4>Data Quality & Reliability</h4><p>Do you build pipelines that downstream consumers can trust? How do you detect, alert on, and resolve data quality issues in production?</p></div></div></section>
+
+  <section class="faq-section"><div class="container"><h2 class="centered">Frequently Asked Questions</h2><div class="faq-list"><details><summary>Is SQL more important than Python for data engineer interviews?</summary><p>SQL is typically the more heavily weighted skill. Most data engineer interviews include a dedicated SQL round, and SQL proficiency at scale is tested in modeling and pipeline discussions too. Python is important for ETL logic, data manipulation, and scripting, but you're less likely to face a standalone algorithm-style Python round. Prioritize SQL first, then Python for data processing.</p></details><details><summary>Are system design questions common in data engineer interviews?</summary><p>Yes, especially at mid-level and above. You'll be asked to design data pipelines, data platforms, or warehouse architectures end-to-end. These rounds test your ability to make tool and architecture decisions, reason through scale and reliability, and communicate tradeoffs — similar to SWE system design but focused on data flows.</p></details><details><summary>Do data engineer interviews include coding?</summary><p>Yes, but the coding is data-focused — not algorithm-heavy. Expect SQL live coding, Python data manipulation (parsing, transforming, aggregating), and sometimes PySpark or pandas exercises. You won't typically face LeetCode-style algorithm problems unless the role is at a company that uses them for all engineering hires.</p></details><details><summary>What is the difference between a data engineer and a data scientist interview?</summary><p>Data engineer interviews emphasize SQL at scale, pipeline architecture, data modeling, and infrastructure reliability. Data scientist interviews focus on statistics, machine learning, experimentation, and business case studies. Data engineers build the systems that data scientists consume. There's overlap in SQL and Python, but the depth and focus are different.</p></details><details><summary>How hard are FAANG data engineer interviews?</summary><p>FAANG data engineer interviews are challenging because they combine SQL depth, system design complexity, and sometimes general coding rounds. The system design round is often the most difficult — you'll design data pipelines at massive scale. Behavioral rounds are weighted heavily too, especially at Amazon (Leadership Principles). Expect 4-6 rounds over a full interview day.</p></details><details><summary>What tools should I prioritize learning for data engineer interviews?</summary><p>SQL is non-negotiable. Beyond that, prioritize: Airflow (orchestration), Spark (large-scale processing), dbt (transformation), and one cloud data warehouse (Snowflake, BigQuery, or Redshift). For streaming roles, add Kafka. Understanding why you'd choose each tool matters more than knowing every feature.</p></details><details><summary>What is the difference between a data engineer and an analytics engineer?</summary><p>Data engineers build and maintain the infrastructure — pipelines, orchestration, data platforms. Analytics engineers focus on the transformation layer — building clean, tested, documented data models using tools like dbt that analysts and scientists consume directly. Analytics engineer interviews lean heavier on SQL and modeling; data engineer interviews include more infrastructure and system design.</p></details><details><summary>How should I prepare for a data engineer system design round?</summary><p>Practice designing data pipelines end-to-end: ingestion, transformation, storage, orchestration, and monitoring. For each design, be ready to discuss batch vs. streaming tradeoffs, fault tolerance, idempotency, schema evolution, and cost. Name specific tools and explain why you chose them. Mock interviews with feedback on your architectural reasoning are the most effective preparation.</p></details></div></div></section>
+
+  <div class="related-section"><div class="container"><h3>Explore by Data Engineer Level</h3><div class="related-links"><a href="/interview/junior-data-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Junior Data Engineer Interview Questions</a><a href="/interview/senior-data-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Senior Data Engineer Interview Questions</a><a href="/interview/staff-data-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Staff / Principal Data Engineer Interview Questions</a></div></div></div>
+  <div class="related-section"><div class="container"><h3>Related Interview Questions</h3><div class="related-links"><a href="/interview/data-analyst"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Data Analyst Interview Questions</a><a href="/interview/data-scientist"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Data Scientist Interview Questions</a><a href="/interview/applied-machine-learning-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Machine Learning Engineer Interview Questions</a><a href="/interview/backend-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Backend Developer Interview Questions</a><a href="/interview/devops-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>DevOps Engineer Interview Questions</a></div></div></div>
+
+  <section class="final-cta"><div class="container">
+    <h2>Ready to Ace Your Data Engineer Interview?</h2>
+    <p>Practice SQL at scale, data modeling, and pipeline design questions with an AI interviewer built for data engineering roles.</p>
+    <a href="/" class="cta-btn">Start Practicing Free →</a>
+    <p class="small-text">Takes less than 15 minutes.</p>
+  </div></section>
+
+  <footer class="footer"><a href="/">← Back to AceMyInterviews</a></footer>
 </body>
 </html>
