@@ -672,8 +672,16 @@ Return ONLY valid JSON:
       const audioUrl = URL.createObjectURL(audioBlob);
       
       return new Promise((resolve) => {
-        const audio = new Audio(audioUrl);
-        audioRef.current = audio;
+        // Reuse existing Audio element to preserve mobile audio unlock
+        if (!audioRef.current) {
+          audioRef.current = new Audio();
+        }
+        
+        const audio = audioRef.current;
+        
+        // Clear previous event listeners to avoid stale closures
+        audio.onended = null;
+        audio.onerror = null;
         
         audio.onended = () => {
           setIsSpeaking(false);
@@ -688,7 +696,8 @@ Return ONLY valid JSON:
           resolve();
         };
         
-        // Try to play audio
+        // Set new source and play
+        audio.src = audioUrl;
         audio.play()
           .then(() => {
             console.log('Audio playing...');
@@ -818,6 +827,14 @@ Return ONLY valid JSON:
 
   // Handle mobile start button tap - enables audio playback
   const handleMobileStart = async () => {
+    // Pre-create and warm up Audio element from user gesture to unlock audio playback
+    if (!audioRef.current) {
+      audioRef.current = new Audio();
+    }
+    // Trigger a silent play to unlock audio context on mobile browsers
+    audioRef.current.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
+    try { await audioRef.current.play(); } catch(e) { /* silent unlock attempt */ }
+    
     setMobileAudioReady(true);
     setWaitingForMobileStart(false);
     
@@ -870,11 +887,11 @@ Return ONLY valid JSON:
     setIsTimerRunning(false);
     stopRecording();
     
-    // Stop any currently playing audio (ElevenLabs or browser)
+    // Stop any currently playing audio but keep the Audio element for reuse
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
-      audioRef.current = null;
+      // Don't null out audioRef - we reuse it to preserve mobile audio unlock
     }
     window.speechSynthesis?.cancel();
     setIsSpeaking(false);
