@@ -65,10 +65,7 @@ export default function InterviewSimulator() {
   // Track previous stage for back navigation
   const [previousStage, setPreviousStage] = useState('landing');
   
-  // Mobile audio - need user tap to enable audio on mobile
-  const [mobileAudioReady, setMobileAudioReady] = useState(false);
-  const [waitingForMobileStart, setWaitingForMobileStart] = useState(false);
-  const [waitingForMobileNext, setWaitingForMobileNext] = useState(false);
+  // Mobile audio state (kept for potential future use)
   
   const timerRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -109,10 +106,8 @@ export default function InterviewSimulator() {
       setUser(session?.user ?? null);
       if (session?.user) {
         setUserName(session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || '');
-        // Only load user data if not in an active interview (prevents mid-interview re-renders)
-        if (!['interview', 'generating', 'analyzing'].includes(stage)) {
-          loadUserData(session.user.id);
-        }
+        // Load user data when they sign in
+        loadUserData(session.user.id);
         
         // Identify user in Mixpanel
         if (window.mixpanel) {
@@ -153,7 +148,7 @@ export default function InterviewSimulator() {
       videoRef.current.srcObject = videoStreamRef.current;
       videoRef.current.play().catch(e => console.log('Video play error:', e));
     }
-  }, [stage, videoEnabled, waitingForMobileStart, waitingForMobileNext]);
+  }, [stage, videoEnabled]);
 
   // Load user data from Supabase
   const loadUserData = async (userId) => {
@@ -660,6 +655,40 @@ Return ONLY valid JSON:
     setIsSpeaking(true);
     setIsRecording(false);
     
+    // On mobile, always use browser speechSynthesis - it works reliably on iOS/Android
+    // without needing audio element unlock from user gestures
+    if (isMobile) {
+      return new Promise((resolve) => {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.rate = 0.95;
+          utterance.pitch = 1.0;
+          
+          let resolved = false;
+          const safeResolve = () => {
+            if (!resolved) {
+              resolved = true;
+              setIsSpeaking(false);
+              resolve();
+            }
+          };
+          
+          utterance.onend = safeResolve;
+          utterance.onerror = safeResolve;
+          
+          // Safety timeout in case speechSynthesis hangs
+          setTimeout(safeResolve, 30000);
+          
+          window.speechSynthesis.speak(utterance);
+        } else {
+          setIsSpeaking(false);
+          resolve();
+        }
+      });
+    }
+    
+    // Desktop: use Polly API for high-quality voice
     try {
       const response = await fetch('/api/speak', {
         method: 'POST',
@@ -675,54 +704,31 @@ Return ONLY valid JSON:
       const audioUrl = URL.createObjectURL(audioBlob);
       
       return new Promise((resolve) => {
-        let resolved = false;
-        const safeResolve = () => {
-          if (!resolved) {
-            resolved = true;
-            setIsSpeaking(false);
-            URL.revokeObjectURL(audioUrl);
-            resolve();
-          }
-        };
+        const audio = new Audio(audioUrl);
+        audioRef.current = audio;
         
-        // Safety timeout - if audio doesn't play or end within 30 seconds, move on
-        const timeout = setTimeout(() => {
-          console.warn('Audio playback timed out - moving on');
-          if (audioRef.current) {
-            audioRef.current.pause();
-          }
-          safeResolve();
-        }, 30000);
-        
-        // Create fresh Audio element if none exists (mobile handlers pre-create one)
-        if (!audioRef.current) {
-          audioRef.current = new Audio();
-        }
-        
-        const audio = audioRef.current;
-        
-        // Remove ALL previous event listeners by replacing with fresh ones
         audio.onended = () => {
-          clearTimeout(timeout);
-          safeResolve();
+          setIsSpeaking(false);
+          URL.revokeObjectURL(audioUrl);
+          resolve();
         };
         
-        audio.onerror = () => {
-          clearTimeout(timeout);
-          safeResolve();
+        audio.onerror = (e) => {
+          console.error('Audio playback error:', e);
+          setIsSpeaking(false);
+          URL.revokeObjectURL(audioUrl);
+          resolve();
         };
         
-        // Set new source and play
-        audio.src = audioUrl;
-        audio.load(); // Force reload the new source
         audio.play()
           .then(() => {
             console.log('Audio playing...');
           })
           .catch((e) => {
             console.error('Audio play() blocked:', e);
-            clearTimeout(timeout);
-            safeResolve();
+            setIsSpeaking(false);
+            URL.revokeObjectURL(audioUrl);
+            resolve();
           });
       });
       
@@ -802,16 +808,10 @@ Return ONLY valid JSON:
         startSnapshotCapture();
       }
       
-      // On mobile, wait for user tap before playing audio
-      if (isMobile && !mobileAudioReady) {
-        setWaitingForMobileStart(true);
-        // Audio will be triggered by the "Start Interview" button tap
-      } else {
-        // Desktop: play audio immediately
-        await speakQuestion(`Welcome to your interview for the ${jobTitle} position. I'll be asking you 5 questions. You have 3 minutes to answer each question. Please speak clearly and take your time. Let's begin.`);
-        await speakQuestion(`Question 1: ${parsedQuestions[0]}`);
-        startRecordingPhase();
-      }
+      // Play intro and first question (speechSynthesis on mobile, Polly on desktop)
+      await speakQuestion(`Welcome to your interview for the ${jobTitle} position. I'll be asking you 5 questions. You have 3 minutes to answer each question. Please speak clearly and take your time. Let's begin.`);
+      await speakQuestion(`Question 1: ${parsedQuestions[0]}`);
+      startRecordingPhase();
     } catch (error) {
       console.error('Error:', error);
       // Fallback
@@ -830,45 +830,9 @@ Return ONLY valid JSON:
         startSnapshotCapture();
       }
       
-      // On mobile, wait for user tap before playing audio
-      if (isMobile && !mobileAudioReady) {
-        setWaitingForMobileStart(true);
-      } else {
-        await speakQuestion(`Welcome to your interview. Let's begin with question 1: ${fallback[0]}`);
-        startRecordingPhase();
-      }
+      await speakQuestion(`Welcome to your interview. Let's begin with question 1: ${fallback[0]}`);
+      startRecordingPhase();
     }
-  };
-
-  // Handle mobile start button tap - enables audio playback
-  const handleMobileStart = async () => {
-    setMobileAudioReady(true);
-    setWaitingForMobileStart(false);
-    
-    // Create audio element from this user gesture context
-    audioRef.current = new Audio();
-    
-    // Now play the intro and first question (still within user gesture context)
-    await speakQuestion(`Welcome to your interview for the ${jobTitle} position. I'll be asking you 5 questions. You have 3 minutes to answer each question. Please speak clearly and take your time. Let's begin.`);
-    await speakQuestion(`Question 1: ${questions[0]}`);
-    startRecordingPhase();
-  };
-
-  // Handle mobile tap to hear next question - fresh user gesture unlocks audio
-  const handleMobileNextQuestion = async () => {
-    setWaitingForMobileNext(false);
-    
-    // Create fresh audio element from this user gesture context
-    audioRef.current = new Audio();
-    
-    // Reattach camera stream after overlay switch
-    if (videoEnabled && videoStreamRef.current && videoRef.current) {
-      videoRef.current.srcObject = videoStreamRef.current;
-      videoRef.current.play().catch(e => console.log('Video reattach error:', e));
-    }
-    
-    await speakQuestion(`Question ${currentQuestionIndex + 1}: ${questions[currentQuestionIndex]}`);
-    startRecordingPhase();
   };
 
   const startRecordingPhase = () => {
@@ -890,33 +854,12 @@ Return ONLY valid JSON:
   };
 
   const stopRecording = () => {
-    return new Promise((resolve) => {
-      if (recognitionRef.current) {
-        try {
-          // Listen for the actual end event to confirm mic is fully released
-          const onEnd = () => {
-            recognitionRef.current.removeEventListener('end', onEnd);
-            setIsRecording(false);
-            resolve();
-          };
-          recognitionRef.current.addEventListener('end', onEnd);
-          recognitionRef.current.stop();
-          
-          // Safety: if onend doesn't fire within 2 seconds, resolve anyway
-          setTimeout(() => {
-            recognitionRef.current?.removeEventListener('end', onEnd);
-            setIsRecording(false);
-            resolve();
-          }, 2000);
-        } catch (e) {
-          setIsRecording(false);
-          resolve();
-        }
-      } else {
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.stop();
         setIsRecording(false);
-        resolve();
-      }
-    });
+      } catch (e) {}
+    }
   };
 
   // Timer logic
@@ -933,15 +876,13 @@ Return ONLY valid JSON:
 
   const handleNextQuestion = async () => {
     setIsTimerRunning(false);
+    stopRecording();
     
-    // Wait for speech recognition to fully stop and release the mic
-    await stopRecording();
-    
-    // Stop any currently playing audio but keep the Audio element for reuse
+    // Stop any currently playing audio (ElevenLabs or browser)
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
-      // Don't null out audioRef - we reuse it to preserve mobile audio unlock
+      audioRef.current = null;
     }
     window.speechSynthesis?.cancel();
     setIsSpeaking(false);
@@ -970,13 +911,8 @@ Return ONLY valid JSON:
       const nextIndex = currentQuestionIndex + 1;
       setCurrentQuestionIndex(nextIndex);
       
-      // On mobile, wait for user tap before playing audio (fresh gesture needed)
-      if (isMobile) {
-        setWaitingForMobileNext(true);
-      } else {
-        await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
-        startRecordingPhase();
-      }
+      await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
+      startRecordingPhase();
     } else {
       // Interview complete - analyze answers
       setStage('analyzing');
@@ -2255,71 +2191,6 @@ Return ONLY valid JSON:
   if (stage === 'interview') {
     const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
     const timerColor = timeLeft <= 30 ? '#ef4444' : timeLeft <= 60 ? '#f59e0b' : '#00d9ff';
-    
-    // Mobile start overlay - waiting for user tap to enable audio
-    if (waitingForMobileStart) {
-      return (
-        <div style={styles.container}>
-          <div style={styles.heroGlow}></div>
-          {/* Hidden video element to keep camera stream attached */}
-          {videoEnabled && (
-            <video
-              ref={videoRef}
-              autoPlay
-              muted
-              playsInline
-              style={{ position: 'absolute', width: 1, height: 1, opacity: 0 }}
-            />
-          )}
-          <div style={styles.mobileStartOverlay}>
-            <div style={styles.mobileStartCard}>
-              <h2 style={styles.mobileStartTitle}>🎤 Ready to Begin?</h2>
-              <p style={styles.mobileStartText}>
-                Tap below to start your interview. The AI interviewer will ask you {questions.length} questions.
-              </p>
-              <button style={styles.mobileStartBtn} onClick={handleMobileStart}>
-                ▶️ Start Interview
-              </button>
-              <p style={styles.mobileStartHint}>
-                Make sure your volume is up to hear the questions
-              </p>
-            </div>
-          </div>
-        </div>
-      );
-    }
-    
-    // Mobile next question overlay - waiting for user tap to play next question audio
-    if (waitingForMobileNext) {
-      return (
-        <div style={styles.container}>
-          <div style={styles.heroGlow}></div>
-          {videoEnabled && (
-            <video
-              ref={videoRef}
-              autoPlay
-              muted
-              playsInline
-              style={{ position: 'absolute', width: 1, height: 1, opacity: 0 }}
-            />
-          )}
-          <div style={styles.mobileStartOverlay}>
-            <div style={styles.mobileStartCard}>
-              <h2 style={styles.mobileStartTitle}>✅ Answer Recorded!</h2>
-              <p style={styles.mobileStartText}>
-                Ready for question {currentQuestionIndex + 1} of {questions.length}?
-              </p>
-              <button style={styles.mobileStartBtn} onClick={handleMobileNextQuestion}>
-                ▶️ Hear Next Question
-              </button>
-              <p style={styles.mobileStartHint}>
-                Tap to hear the AI ask your next question
-              </p>
-            </div>
-          </div>
-        </div>
-      );
-    }
     
     return (
       <div style={styles.container}>
