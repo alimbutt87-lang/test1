@@ -1044,9 +1044,10 @@ Return ONLY valid JSON:
                 ? 'audio/mp4'
                 : '';
           
-          const options = mimeType ? { mimeType } : {};
+          const options = mimeType ? { mimeType, audioBitsPerSecond: 16000 } : { audioBitsPerSecond: 16000 };
           const recorder = new MediaRecorder(stream, options);
           mediaRecorderRef.current = recorder;
+          mediaRecorderRef.current._mimeType = mimeType || 'audio/webm'; // Store for later
           
           recorder.ondataavailable = (event) => {
             if (event.data.size > 0) {
@@ -1094,7 +1095,8 @@ Return ONLY valid JSON:
               try {
                 setCurrentTranscript('⏳ Transcribing your answer...');
                 
-                const audioBlob = new Blob(audioChunksRef.current, { type: recorder.mimeType || 'audio/webm' });
+                const storedMimeType = mediaRecorderRef.current?._mimeType || recorder.mimeType || 'audio/webm';
+                const audioBlob = new Blob(audioChunksRef.current, { type: storedMimeType });
                 
                 // Convert to base64
                 const reader = new FileReader();
@@ -1107,7 +1109,7 @@ Return ONLY valid JSON:
                 const response = await fetch('/api/transcribe', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ audio: base64, mimeType: recorder.mimeType || 'audio/webm' })
+                  body: JSON.stringify({ audio: base64, mimeType: storedMimeType })
                 });
                 
                 if (response.ok) {
