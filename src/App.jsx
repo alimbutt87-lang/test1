@@ -109,8 +109,10 @@ export default function InterviewSimulator() {
       setUser(session?.user ?? null);
       if (session?.user) {
         setUserName(session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || '');
-        // Load user data when they sign in
-        loadUserData(session.user.id);
+        // Only load user data if not in an active interview (prevents mid-interview re-renders)
+        if (!['interview', 'generating', 'analyzing'].includes(stage)) {
+          loadUserData(session.user.id);
+        }
         
         // Identify user in Mixpanel
         if (window.mixpanel) {
@@ -151,7 +153,7 @@ export default function InterviewSimulator() {
       videoRef.current.srcObject = videoStreamRef.current;
       videoRef.current.play().catch(e => console.log('Video play error:', e));
     }
-  }, [stage, videoEnabled, waitingForMobileStart]);
+  }, [stage, videoEnabled, waitingForMobileStart, waitingForMobileNext]);
 
   // Load user data from Supabase
   const loadUserData = async (userId) => {
@@ -692,61 +694,34 @@ Return ONLY valid JSON:
           safeResolve();
         }, 30000);
         
-        // Reuse existing Audio element to preserve mobile audio unlock
+        // Create fresh Audio element if none exists (mobile handlers pre-create one)
         if (!audioRef.current) {
           audioRef.current = new Audio();
         }
         
         const audio = audioRef.current;
         
-        // Clear previous event listeners to avoid stale closures
-        audio.onended = null;
-        audio.onerror = null;
-        audio.onpause = null;
-        audio.onstalled = null;
-        
+        // Remove ALL previous event listeners by replacing with fresh ones
         audio.onended = () => {
           clearTimeout(timeout);
           safeResolve();
         };
         
-        audio.onerror = (e) => {
-          console.error('Audio playback error:', e);
+        audio.onerror = () => {
           clearTimeout(timeout);
           safeResolve();
         };
         
-        // Detect if audio gets stuck
-        audio.onstalled = () => {
-          console.warn('Audio stalled - waiting 3s then moving on');
-          setTimeout(() => {
-            if (!resolved) {
-              audio.pause();
-              clearTimeout(timeout);
-              safeResolve();
-            }
-          }, 3000);
-        };
-        
         // Set new source and play
         audio.src = audioUrl;
+        audio.load(); // Force reload the new source
         audio.play()
           .then(() => {
             console.log('Audio playing...');
-            // Extra safety: check if audio is actually progressing after 2 seconds
-            setTimeout(() => {
-              if (!resolved && audio.currentTime === 0 && !audio.paused) {
-                console.warn('Audio not progressing - forcing resolve');
-                audio.pause();
-                clearTimeout(timeout);
-                safeResolve();
-              }
-            }, 2000);
           })
           .catch((e) => {
             console.error('Audio play() blocked:', e);
             clearTimeout(timeout);
-            // On mobile, just proceed without audio
             safeResolve();
           });
       });
@@ -867,13 +842,13 @@ Return ONLY valid JSON:
 
   // Handle mobile start button tap - enables audio playback
   const handleMobileStart = async () => {
-    // Pre-create and warm up Audio element from user gesture to unlock audio playback
-    if (!audioRef.current) {
-      audioRef.current = new Audio();
-    }
-    // Trigger a silent play to unlock audio context on mobile browsers
-    audioRef.current.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
-    try { await audioRef.current.play(); } catch(e) { /* silent unlock attempt */ }
+    // Create the reusable audio element and unlock it with a silent play from user gesture
+    const silentUnlock = new Audio();
+    silentUnlock.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
+    try { await silentUnlock.play(); } catch(e) { /* expected on some browsers */ }
+    
+    // Now create the reusable audio element - it inherits the unlocked audio session
+    audioRef.current = new Audio();
     
     setMobileAudioReady(true);
     setWaitingForMobileStart(false);
@@ -888,12 +863,19 @@ Return ONLY valid JSON:
   const handleMobileNextQuestion = async () => {
     setWaitingForMobileNext(false);
     
-    // Fresh user gesture - re-warm the audio element
-    if (!audioRef.current) {
-      audioRef.current = new Audio();
+    // Fresh user gesture - unlock audio session with a throwaway silent play
+    const silentUnlock = new Audio();
+    silentUnlock.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
+    try { await silentUnlock.play(); } catch(e) { /* expected */ }
+    
+    // Create fresh audio element for this question
+    audioRef.current = new Audio();
+    
+    // Reattach camera stream after overlay switch
+    if (videoEnabled && videoStreamRef.current && videoRef.current) {
+      videoRef.current.srcObject = videoStreamRef.current;
+      videoRef.current.play().catch(e => console.log('Video reattach error:', e));
     }
-    audioRef.current.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
-    try { await audioRef.current.play(); } catch(e) { /* silent unlock */ }
     
     await speakQuestion(`Question ${currentQuestionIndex + 1}: ${questions[currentQuestionIndex]}`);
     startRecordingPhase();
