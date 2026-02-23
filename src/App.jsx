@@ -830,6 +830,7 @@ Return ONLY valid JSON:
 
   // Handle mobile tap to hear next question
   const handleMobileNextQuestion = async () => {
+    alert('ENTERED FUNCTION');
     setWaitingForMobileNext(false);
     setIsSpeaking(true);
     setIsRecording(false);
@@ -2314,10 +2315,7 @@ Return ONLY valid JSON:
               <p style={styles.mobileStartText}>
                 Ready for question {currentQuestionIndex + 1} of {questions.length}?
               </p>
-              <button style={styles.mobileStartBtn} onClick={() => {
-                alert('Button tapped! Index: ' + currentQuestionIndex + ', Questions loaded: ' + questions.length);
-                handleMobileNextQuestion();
-              }}>
+              <button style={styles.mobileStartBtn} onClick={handleMobileNextQuestion}>
                 ▶️ Hear Next Question
               </button>
               <p style={styles.mobileStartHint}>
