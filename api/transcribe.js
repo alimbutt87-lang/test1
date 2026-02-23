@@ -1,3 +1,5 @@
+export const maxDuration = 60; // Vercel Pro allows up to 60 seconds
+
 export const config = {
   api: {
     bodyParser: {
