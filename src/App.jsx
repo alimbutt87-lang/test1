@@ -30,6 +30,7 @@ export default function InterviewSimulator() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [isTranscribing, setIsTranscribing] = useState(false);
   const [currentTranscript, setCurrentTranscript] = useState('');
   const [finalResults, setFinalResults] = useState(null);
   const [pastInterviews, setPastInterviews] = useState([]);
@@ -1093,6 +1094,7 @@ Return ONLY valid JSON:
             // Send audio to Whisper for transcription
             if (audioChunksRef.current.length > 0) {
               try {
+                setIsTranscribing(true);
                 setCurrentTranscript('⏳ Transcribing your answer...');
                 
                 const storedMimeType = mediaRecorderRef.current?._mimeType || recorder.mimeType || 'audio/webm';
@@ -1125,6 +1127,8 @@ Return ONLY valid JSON:
               } catch (err) {
                 console.error('Whisper error:', err);
                 transcriptRef.current = '[Transcription error]';
+              } finally {
+                setIsTranscribing(false);
               }
             }
             
@@ -1172,11 +1176,11 @@ Return ONLY valid JSON:
       timerRef.current = setTimeout(() => {
         setTimeLeft(prev => prev - 1);
       }, 1000);
-    } else if (timeLeft === 0 && isTimerRunning) {
+    } else if (timeLeft === 0 && isTimerRunning && !isTranscribing) {
       handleNextQuestion();
     }
     return () => clearTimeout(timerRef.current);
-  }, [isTimerRunning, timeLeft]);
+  }, [isTimerRunning, timeLeft, isTranscribing]);
 
   const handleNextQuestion = async () => {
     setIsTimerRunning(false);
@@ -2679,17 +2683,17 @@ Return ONLY valid JSON:
           <button 
             style={{
               ...styles.primaryBtn,
-              opacity: isSpeaking ? 0.5 : 1,
-              cursor: isSpeaking ? 'not-allowed' : 'pointer'
+              opacity: (isSpeaking || isTranscribing) ? 0.5 : 1,
+              cursor: (isSpeaking || isTranscribing) ? 'not-allowed' : 'pointer'
             }} 
             onClick={handleNextQuestion}
-            disabled={isSpeaking}
+            disabled={isSpeaking || isTranscribing}
           >
-            {isSpeaking ? 'Please wait...' : (currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'Finish Interview')}
+            {isSpeaking ? 'Please wait...' : isTranscribing ? '⏳ Transcribing...' : (currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'Finish Interview')}
             <span style={styles.btnArrow}>→</span>
           </button>
           
-          <p style={styles.skipNote}>{isSpeaking ? 'Wait for AI to finish speaking' : 'Click above when you\'re done answering, or wait for the timer'}</p>
+          <p style={styles.skipNote}>{isSpeaking ? 'Wait for AI to finish speaking' : isTranscribing ? 'Processing your answer...' : 'Click above when you\'re done answering, or wait for the timer'}</p>
         </div>
       </div>
     );
