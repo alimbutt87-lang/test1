@@ -830,42 +830,34 @@ Return ONLY valid JSON:
 
   // Handle mobile tap to hear next question
   const handleMobileNextQuestion = async () => {
-    alert('ENTERED FUNCTION');
     setWaitingForMobileNext(false);
     setIsSpeaking(true);
     setIsRecording(false);
     
+    // Reattach camera after overlay switch
+    setTimeout(() => {
+      if (videoEnabled && videoStreamRef.current && videoRef.current) {
+        videoRef.current.srcObject = videoStreamRef.current;
+        videoRef.current.play().catch(() => {});
+      }
+    }, 100);
+    
     try {
-      const audio = new Audio();
-      audioRef.current = audio;
-      
-      // Start fetch in parallel
-      const fetchPromise = fetch('/api/speak', {
+      // Fetch audio from Polly
+      const response = await fetch('/api/speak', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: `Question ${currentQuestionIndex + 1}: ${questions[currentQuestionIndex]}` })
       });
       
-      // Play silence to unlock
-      audio.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
-      try {
-        await audio.play();
-      } catch(e) {
-        alert('Silent play failed: ' + e.message);
-      }
-      
-      const response = await fetchPromise;
-      alert('Fetch done. Status: ' + response.status);
-      
-      if (!response.ok) throw new Error('Speech API error: ' + response.status);
+      if (!response.ok) throw new Error('Speech API error');
       
       const audioBlob = await response.blob();
-      alert('Blob size: ' + audioBlob.size);
       const audioUrl = URL.createObjectURL(audioBlob);
       
       await new Promise((resolve) => {
         let resolved = false;
-        const done = (reason) => {
+        const done = () => {
           if (!resolved) {
             resolved = true;
             setIsSpeaking(false);
@@ -874,28 +866,31 @@ Return ONLY valid JSON:
           }
         };
         
-        audio.onended = () => done('ended');
-        audio.onerror = (e) => { alert('Audio error event'); done('error'); };
+        const audio = new Audio(audioUrl);
+        audioRef.current = audio;
         
-        audio.src = audioUrl;
-        audio.play()
-          .then(() => { /* playing */ })
-          .catch((e) => {
-            alert('Real play failed: ' + e.message);
-            done('play rejected');
-          });
+        // Primary: onended
+        audio.onended = done;
+        audio.onerror = done;
         
-        setTimeout(() => {
-          alert('TIMEOUT - audio never played/ended');
-          done('timeout');
-        }, 15000);
+        // Backup: poll timeupdate - if audio has duration and currentTime reaches it, we're done
+        // This catches cases where onended doesn't fire on iOS
+        audio.ontimeupdate = () => {
+          if (audio.duration && audio.currentTime >= audio.duration - 0.1) {
+            done();
+          }
+        };
+        
+        // Safety timeout - never hang forever
+        setTimeout(done, 20000);
+        
+        audio.play().catch(done);
       });
       
       startRecordingPhase();
     } catch (error) {
-      alert('Catch block: ' + error.message);
+      console.error('Mobile next question error:', error);
       setIsSpeaking(false);
-      await fallbackSpeak(`Question ${currentQuestionIndex + 1}: ${questions[currentQuestionIndex]}`);
       startRecordingPhase();
     }
   };
@@ -977,7 +972,6 @@ Return ONLY valid JSON:
       setCurrentQuestionIndex(nextIndex);
       
       if (isMobile) {
-        // On mobile, need a fresh user tap to play audio
         setWaitingForMobileNext(true);
       } else {
         await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
@@ -2295,7 +2289,7 @@ Return ONLY valid JSON:
       );
     }
     
-    // Mobile next question overlay - waiting for user tap to hear next question
+    // Mobile next question overlay
     if (waitingForMobileNext) {
       return (
         <div style={styles.container}>
@@ -2370,20 +2364,6 @@ Return ONLY valid JSON:
             )}
             <p style={styles.questionText}>{questions[currentQuestionIndex]}</p>
           </div>
-          
-          {/* DEBUG - remove after fixing */}
-          <pre id="mobile-debug" style={{
-            fontSize: '10px',
-            color: '#0f0',
-            background: 'rgba(0,0,0,0.8)',
-            padding: '8px',
-            borderRadius: '4px',
-            maxHeight: '150px',
-            overflow: 'auto',
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'break-all',
-            margin: '8px 0'
-          }}>Debug log:</pre>
           
           {/* Recording status */}
           <div style={styles.recordingSection}>
