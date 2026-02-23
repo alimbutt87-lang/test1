@@ -151,7 +151,7 @@ export default function InterviewSimulator() {
       videoRef.current.srcObject = videoStreamRef.current;
       videoRef.current.play().catch(e => console.log('Video play error:', e));
     }
-  }, [stage, videoEnabled, waitingForMobileStart]);
+  }, [stage, videoEnabled, waitingForMobileStart, waitingForMobileNext]);
 
   // Load user data from Supabase
   const loadUserData = async (userId) => {
@@ -828,13 +828,75 @@ Return ONLY valid JSON:
     startRecordingPhase();
   };
 
-  // Handle mobile tap to hear next question - fresh user gesture enables audio
+  // Handle mobile tap to hear next question
   const handleMobileNextQuestion = async () => {
     setWaitingForMobileNext(false);
+    setIsSpeaking(true);
+    setIsRecording(false);
     
-    // speakQuestion is called directly from this tap - iOS allows audio.play() here
-    await speakQuestion(`Question ${currentQuestionIndex + 1}: ${questions[currentQuestionIndex]}`);
-    startRecordingPhase();
+    try {
+      // Immediately create and play a silent audio from the tap gesture
+      // This "unlocks" this Audio object for future playback on iOS
+      const audio = new Audio();
+      audioRef.current = audio;
+      
+      // Start fetching the real audio in parallel
+      const fetchPromise = fetch('/api/speak', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: `Question ${currentQuestionIndex + 1}: ${questions[currentQuestionIndex]}` })
+      });
+      
+      // Play silence immediately from the user gesture to unlock the audio element
+      audio.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
+      await audio.play().catch(() => {});
+      
+      // Now fetch the real audio
+      const response = await fetchPromise;
+      if (!response.ok) throw new Error('Speech API error');
+      
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      
+      // Swap in the real audio source - the Audio element is already "unlocked"
+      await new Promise((resolve) => {
+        audio.onended = () => {
+          setIsSpeaking(false);
+          URL.revokeObjectURL(audioUrl);
+          resolve();
+        };
+        audio.onerror = () => {
+          setIsSpeaking(false);
+          URL.revokeObjectURL(audioUrl);
+          resolve();
+        };
+        
+        audio.src = audioUrl;
+        audio.play()
+          .then(() => console.log('Q audio playing...'))
+          .catch((e) => {
+            console.error('Audio play failed:', e);
+            setIsSpeaking(false);
+            URL.revokeObjectURL(audioUrl);
+            resolve();
+          });
+        
+        // Safety timeout - never hang more than 15 seconds
+        setTimeout(() => {
+          setIsSpeaking(false);
+          URL.revokeObjectURL(audioUrl);
+          resolve();
+        }, 15000);
+      });
+      
+      startRecordingPhase();
+    } catch (error) {
+      console.error('Mobile next question error:', error);
+      setIsSpeaking(false);
+      // Fall back to browser speech
+      await fallbackSpeak(`Question ${currentQuestionIndex + 1}: ${questions[currentQuestionIndex]}`);
+      startRecordingPhase();
+    }
   };
 
   const startRecordingPhase = () => {
