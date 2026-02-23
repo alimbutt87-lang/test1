@@ -77,7 +77,7 @@ export default function InterviewSimulator() {
   const speechSynthRef = useRef(null);
   const audioRef = useRef(null);
   
-  // Pre-fetched audio for next question (mobile only)
+  // Pre-fetched audio for ALL questions (mobile only) - array of {url, audio} objects
   const prefetchedAudioRef = useRef(null);
   
   // Video refs
@@ -785,24 +785,35 @@ Return ONLY valid JSON:
       // On mobile, wait for user tap before playing audio
       if (isMobile && !mobileAudioReady) {
         setWaitingForMobileStart(true);
-        // Pre-fetch intro and Q1 audio while user sees the "Ready to Begin?" screen
+        // Pre-fetch ALL audio while user sees the "Ready to Begin?" screen
         try {
           const introText = `Welcome to your interview for the ${jobTitle} position. I'll be asking you 5 questions. You have 3 minutes to answer each question. Please speak clearly and take your time. Let's begin.`;
-          const q1Text = `Question 1: ${parsedQuestions[0]}`;
-          const [introRes, q1Res] = await Promise.all([
-            fetch('/api/speak', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: introText }) }),
-            fetch('/api/speak', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: q1Text }) })
-          ]);
-          if (introRes.ok && q1Res.ok) {
-            const introBlob = await introRes.blob();
-            const q1Blob = await q1Res.blob();
-            prefetchedAudioRef.current = {
-              intro: URL.createObjectURL(introBlob),
-              q1: URL.createObjectURL(q1Blob)
-            };
-          }
+          const allTexts = [introText, ...parsedQuestions.map((q, i) => `Question ${i + 1}: ${q}`)];
+          
+          const allResponses = await Promise.all(
+            allTexts.map(text => 
+              fetch('/api/speak', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) })
+            )
+          );
+          
+          const allBlobs = await Promise.all(allResponses.map(r => r.ok ? r.blob() : null));
+          
+          const allAudio = allBlobs.map(blob => {
+            if (!blob) return null;
+            const url = URL.createObjectURL(blob);
+            const audio = new Audio();
+            audio.preload = 'auto';
+            audio.src = url;
+            audio.load();
+            return { url, audio };
+          });
+          
+          // allAudio[0] = intro, allAudio[1] = Q1, allAudio[2] = Q2, etc.
+          prefetchedAudioRef.current = allAudio;
+          console.log('Pre-fetched all ' + allAudio.length + ' audio clips');
         } catch (e) {
-          console.error('Prefetch Q1 failed:', e);
+          console.error('Prefetch all failed:', e);
+          prefetchedAudioRef.current = null;
         }
       } else {
         // Desktop: play audio immediately
@@ -832,14 +843,27 @@ Return ONLY valid JSON:
       if (isMobile && !mobileAudioReady) {
         setWaitingForMobileStart(true);
         try {
-          const text = `Welcome to your interview. Let's begin with question 1: ${fallback[0]}`;
-          const res = await fetch('/api/speak', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
-          if (res.ok) {
-            const blob = await res.blob();
-            prefetchedAudioRef.current = { combined: URL.createObjectURL(blob) };
-          }
+          const introText = `Welcome to your interview. Let's begin.`;
+          const allTexts = [introText, ...fallback.map((q, i) => `Question ${i + 1}: ${q}`)];
+          const allResponses = await Promise.all(
+            allTexts.map(text =>
+              fetch('/api/speak', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) })
+            )
+          );
+          const allBlobs = await Promise.all(allResponses.map(r => r.ok ? r.blob() : null));
+          const allAudio = allBlobs.map(blob => {
+            if (!blob) return null;
+            const url = URL.createObjectURL(blob);
+            const audio = new Audio();
+            audio.preload = 'auto';
+            audio.src = url;
+            audio.load();
+            return { url, audio };
+          });
+          prefetchedAudioRef.current = allAudio;
         } catch (e) {
           console.error('Prefetch fallback failed:', e);
+          prefetchedAudioRef.current = null;
         }
       } else {
         await speakQuestion(`Welcome to your interview. Let's begin with question 1: ${fallback[0]}`);
@@ -863,32 +887,30 @@ Return ONLY valid JSON:
       }
     }, 100);
     
-    const prefetched = prefetchedAudioRef.current;
-    prefetchedAudioRef.current = null;
+    const allAudio = prefetchedAudioRef.current;
     
-    if (prefetched && (prefetched.intro || prefetched.combined)) {
-      // Play prefetched audio IMMEDIATELY from this tap - no await, no fetch
-      const audioUrls = prefetched.combined 
-        ? [prefetched.combined] 
-        : [prefetched.intro, prefetched.q1].filter(Boolean);
-      
-      let urlIndex = 0;
+    if (allAudio && allAudio.length >= 2 && allAudio[0] && allAudio[1]) {
+      // Play intro (index 0) then Q1 (index 1) sequentially
+      const toPlay = [allAudio[0], allAudio[1]];
+      let idx = 0;
       
       const playNext = () => {
-        if (urlIndex >= audioUrls.length) {
+        if (idx >= toPlay.length) {
           setIsSpeaking(false);
           startRecordingPhase();
           return;
         }
         
-        const audio = new Audio(audioUrls[urlIndex]);
+        const item = toPlay[idx];
+        const audio = item.audio;
         audioRef.current = audio;
-        urlIndex++;
+        idx++;
         
         let finished = false;
         const done = () => {
           if (finished) return;
           finished = true;
+          URL.revokeObjectURL(item.url);
           playNext();
         };
         
@@ -913,35 +935,8 @@ Return ONLY valid JSON:
     }
   };
 
-  // Pre-fetch audio for the next question so it's ready when the user taps
-  const prefetchNextQuestionAudio = (nextIndex) => {
-    if (nextIndex >= questions.length) return;
-    
-    const text = `Question ${nextIndex + 1}: ${questions[nextIndex]}`;
-    fetch('/api/speak', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text })
-    })
-      .then(res => res.blob())
-      .then(blob => {
-        const url = URL.createObjectURL(blob);
-        // Pre-create and preload the Audio element so it's fully ready to play
-        const preloadedAudio = new Audio();
-        preloadedAudio.preload = 'auto';
-        preloadedAudio.src = url;
-        preloadedAudio.load();
-        prefetchedAudioRef.current = { url, audio: preloadedAudio };
-        console.log('Pre-fetched and preloaded audio for Q' + (nextIndex + 1));
-      })
-      .catch(err => {
-        console.error('Prefetch failed:', err);
-        prefetchedAudioRef.current = null;
-      });
-  };
-
   // Handle mobile tap to hear next question
-  // Audio is already pre-fetched and preloaded, so audio.play() happens instantly from the tap
+  // Audio is already pre-fetched and preloaded in the array
   const handleMobileNextQuestion = () => {
     setWaitingForMobileNext(false);
     setIsSpeaking(true);
@@ -955,12 +950,15 @@ Return ONLY valid JSON:
       }
     }, 100);
     
-    const prefetched = prefetchedAudioRef.current;
-    prefetchedAudioRef.current = null;
+    // allAudio[0] = intro, allAudio[1] = Q1, allAudio[2] = Q2, etc.
+    // currentQuestionIndex is already updated to the new question (0-based)
+    // So Q2 = index 1 = allAudio[2], Q3 = index 2 = allAudio[3], etc.
+    const allAudio = prefetchedAudioRef.current;
+    const audioIndex = currentQuestionIndex + 1; // +1 because index 0 is intro
     
-    if (prefetched && prefetched.audio) {
-      // Use the pre-created, preloaded Audio element — play IMMEDIATELY
-      const audio = prefetched.audio;
+    if (allAudio && allAudio[audioIndex] && allAudio[audioIndex].audio) {
+      const item = allAudio[audioIndex];
+      const audio = item.audio;
       audioRef.current = audio;
       
       let finished = false;
@@ -968,7 +966,7 @@ Return ONLY valid JSON:
         if (finished) return;
         finished = true;
         setIsSpeaking(false);
-        URL.revokeObjectURL(prefetched.url);
+        URL.revokeObjectURL(item.url);
         startRecordingPhase();
       };
       
@@ -1001,11 +999,6 @@ Return ONLY valid JSON:
     setIsTimerRunning(true);
     // Don't clear transcript here - it's already cleared in handleNextQuestion
     startRecording();
-    
-    // On mobile, pre-fetch audio for the NEXT question while user is answering
-    if (isMobile && currentQuestionIndex < questions.length - 1) {
-      prefetchNextQuestionAudio(currentQuestionIndex + 1);
-    }
   };
 
   const startRecording = () => {
