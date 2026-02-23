@@ -2554,6 +2554,25 @@ Return ONLY valid JSON:
                 />
               </div>
             )}
+            
+            {/* Live transcript preview - mobile only, for debugging speech recognition */}
+            {isMobile && !isSpeaking && currentTranscript && (
+              <div style={{
+                marginTop: '12px',
+                padding: '10px 14px',
+                background: 'rgba(0, 217, 255, 0.05)',
+                border: '1px solid rgba(0, 217, 255, 0.15)',
+                borderRadius: '8px',
+                maxHeight: '80px',
+                overflowY: 'auto',
+                fontSize: '13px',
+                color: 'rgba(255,255,255,0.7)',
+                lineHeight: '1.4'
+              }}>
+                <span style={{ color: 'rgba(0, 217, 255, 0.6)', fontSize: '11px', fontWeight: 600 }}>📝 Transcript: </span>
+                {currentTranscript.length > 150 ? '...' + currentTranscript.slice(-150) : currentTranscript}
+              </div>
+            )}
           </div>
           
           <button 
