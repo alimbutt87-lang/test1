@@ -77,6 +77,9 @@ export default function InterviewSimulator() {
   const speechSynthRef = useRef(null);
   const audioRef = useRef(null);
   
+  // Pre-fetched audio for next question (mobile only)
+  const prefetchedAudioRef = useRef(null);
+  
   // Video refs
   const videoRef = useRef(null);
   const videoStreamRef = useRef(null);
@@ -828,8 +831,30 @@ Return ONLY valid JSON:
     startRecordingPhase();
   };
 
+  // Pre-fetch audio for the next question so it's ready when the user taps
+  const prefetchNextQuestionAudio = (nextIndex) => {
+    if (nextIndex >= questions.length) return;
+    
+    const text = `Question ${nextIndex + 1}: ${questions[nextIndex]}`;
+    fetch('/api/speak', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    })
+      .then(res => res.blob())
+      .then(blob => {
+        prefetchedAudioRef.current = URL.createObjectURL(blob);
+        console.log('Pre-fetched audio for Q' + (nextIndex + 1));
+      })
+      .catch(err => {
+        console.error('Prefetch failed:', err);
+        prefetchedAudioRef.current = null;
+      });
+  };
+
   // Handle mobile tap to hear next question
-  const handleMobileNextQuestion = async () => {
+  // Audio is already pre-fetched, so audio.play() happens synchronously from the tap
+  const handleMobileNextQuestion = () => {
     setWaitingForMobileNext(false);
     setIsSpeaking(true);
     setIsRecording(false);
@@ -842,54 +867,46 @@ Return ONLY valid JSON:
       }
     }, 100);
     
-    try {
-      // Fetch audio from Polly
-      const response = await fetch('/api/speak', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: `Question ${currentQuestionIndex + 1}: ${questions[currentQuestionIndex]}` })
+    if (prefetchedAudioRef.current) {
+      // Audio is pre-fetched — play IMMEDIATELY from this tap (no await, no fetch)
+      const audio = new Audio(prefetchedAudioRef.current);
+      audioRef.current = audio;
+      
+      let finished = false;
+      const done = () => {
+        if (finished) return;
+        finished = true;
+        setIsSpeaking(false);
+        startRecordingPhase();
+      };
+      
+      audio.onended = done;
+      audio.onerror = done;
+      
+      // Backup: poll for completion (iOS sometimes doesn't fire onended)
+      audio.ontimeupdate = () => {
+        if (audio.duration && audio.currentTime >= audio.duration - 0.3) {
+          audio.ontimeupdate = null;
+          done();
+        }
+      };
+      
+      // Safety timeout
+      setTimeout(() => {
+        if (audioRef.current === audio) {
+          done();
+        }
+      }, 20000);
+      
+      audio.play().catch(() => {
+        // If play still fails, skip audio and start recording
+        done();
       });
       
-      if (!response.ok) throw new Error('Speech API error');
-      
-      const audioBlob = await response.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
-      
-      await new Promise((resolve) => {
-        let resolved = false;
-        const done = () => {
-          if (!resolved) {
-            resolved = true;
-            setIsSpeaking(false);
-            URL.revokeObjectURL(audioUrl);
-            resolve();
-          }
-        };
-        
-        const audio = new Audio(audioUrl);
-        audioRef.current = audio;
-        
-        // Primary: onended
-        audio.onended = done;
-        audio.onerror = done;
-        
-        // Backup: poll timeupdate - if audio has duration and currentTime reaches it, we're done
-        // This catches cases where onended doesn't fire on iOS
-        audio.ontimeupdate = () => {
-          if (audio.duration && audio.currentTime >= audio.duration - 0.1) {
-            done();
-          }
-        };
-        
-        // Safety timeout - never hang forever
-        setTimeout(done, 20000);
-        
-        audio.play().catch(done);
-      });
-      
-      startRecordingPhase();
-    } catch (error) {
-      console.error('Mobile next question error:', error);
+      // Clear the prefetched ref
+      prefetchedAudioRef.current = null;
+    } else {
+      // Prefetch failed or not ready — skip audio, just start recording
       setIsSpeaking(false);
       startRecordingPhase();
     }
@@ -900,6 +917,11 @@ Return ONLY valid JSON:
     setIsTimerRunning(true);
     // Don't clear transcript here - it's already cleared in handleNextQuestion
     startRecording();
+    
+    // On mobile, pre-fetch audio for the NEXT question while user is answering
+    if (isMobile && currentQuestionIndex < questions.length - 1) {
+      prefetchNextQuestionAudio(currentQuestionIndex + 1);
+    }
   };
 
   const startRecording = () => {
