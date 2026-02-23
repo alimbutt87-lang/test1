@@ -834,78 +834,65 @@ Return ONLY valid JSON:
     setIsSpeaking(true);
     setIsRecording(false);
     
-    // DEBUG: show step-by-step progress on screen
-    const debugEl = document.getElementById('mobile-debug');
-    const log = (msg) => {
-      console.log(msg);
-      if (debugEl) debugEl.textContent += '\n' + msg;
-    };
-    
     try {
-      log('Step 1: Creating audio element...');
       const audio = new Audio();
       audioRef.current = audio;
       
-      log('Step 2: Starting Polly fetch...');
-      log(`Question index: ${currentQuestionIndex}, Question: ${questions[currentQuestionIndex]?.substring(0, 30)}...`);
-      
+      // Start fetch in parallel
       const fetchPromise = fetch('/api/speak', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: `Question ${currentQuestionIndex + 1}: ${questions[currentQuestionIndex]}` })
       });
       
-      log('Step 3: Playing silent audio to unlock...');
+      // Play silence to unlock
       audio.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
       try {
         await audio.play();
-        log('Step 3: Silent play SUCCESS');
       } catch(e) {
-        log('Step 3: Silent play FAILED: ' + e.message);
+        alert('Silent play failed: ' + e.message);
       }
       
-      log('Step 4: Waiting for Polly response...');
       const response = await fetchPromise;
-      log('Step 4: Polly response status: ' + response.status);
+      alert('Fetch done. Status: ' + response.status);
       
       if (!response.ok) throw new Error('Speech API error: ' + response.status);
       
       const audioBlob = await response.blob();
-      log('Step 5: Got audio blob, size: ' + audioBlob.size);
+      alert('Blob size: ' + audioBlob.size);
       const audioUrl = URL.createObjectURL(audioBlob);
       
-      log('Step 6: Playing real audio...');
       await new Promise((resolve) => {
         let resolved = false;
         const done = (reason) => {
           if (!resolved) {
             resolved = true;
-            log('Step 7: Audio done - ' + reason);
             setIsSpeaking(false);
             URL.revokeObjectURL(audioUrl);
             resolve();
           }
         };
         
-        audio.onended = () => done('onended');
-        audio.onerror = (e) => done('onerror: ' + e.message);
+        audio.onended = () => done('ended');
+        audio.onerror = (e) => { alert('Audio error event'); done('error'); };
         
         audio.src = audioUrl;
         audio.play()
-          .then(() => log('Step 6: play() resolved OK'))
+          .then(() => { /* playing */ })
           .catch((e) => {
-            log('Step 6: play() REJECTED: ' + e.message);
+            alert('Real play failed: ' + e.message);
             done('play rejected');
           });
         
-        // Safety timeout
-        setTimeout(() => done('TIMEOUT after 15s'), 15000);
+        setTimeout(() => {
+          alert('TIMEOUT - audio never played/ended');
+          done('timeout');
+        }, 15000);
       });
       
-      log('Step 8: Starting recording phase...');
       startRecordingPhase();
     } catch (error) {
-      log('ERROR: ' + error.message);
+      alert('Catch block: ' + error.message);
       setIsSpeaking(false);
       await fallbackSpeak(`Question ${currentQuestionIndex + 1}: ${questions[currentQuestionIndex]}`);
       startRecordingPhase();
