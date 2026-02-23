@@ -1430,6 +1430,9 @@ Return ONLY valid JSON:
     setVideoSnapshots([]);
     setVideoFeedback(null);
     setWaitingForMobileStart(false);
+    setWaitingForMobileNext(false);
+    setMobileAudioReady(false);
+    prefetchedAudioRef.current = null;
     
     // Try to get mic permission, but don't block if it fails
     try {
