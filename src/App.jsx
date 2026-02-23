@@ -1025,6 +1025,47 @@ Return ONLY valid JSON:
   };
 
   const startRecording = () => {
+    // On mobile, recreate the recognition object each time to avoid stale iOS state
+    if (isMobile) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        recognitionRef.current = new SpeechRecognition();
+        recognitionRef.current.continuous = true;
+        recognitionRef.current.interimResults = true;
+        recognitionRef.current.lang = 'en-US';
+        
+        recognitionRef.current.onresult = (event) => {
+          let transcript = '';
+          for (let i = 0; i < event.results.length; i++) {
+            transcript += event.results[i][0].transcript;
+          }
+          const accumulated = accumulatedTranscriptRef.current + transcript;
+          setCurrentTranscript(accumulated);
+          transcriptRef.current = accumulated;
+        };
+        
+        recognitionRef.current.onerror = (event) => {
+          console.error('Speech recognition error:', event.error);
+          if (event.error === 'not-allowed') {
+            setMicPermission(false);
+          }
+        };
+        
+        recognitionRef.current.onend = () => {
+          if (transcriptRef.current) {
+            accumulatedTranscriptRef.current = transcriptRef.current;
+          }
+          if (isRecordingRef.current) {
+            try {
+              recognitionRef.current.start();
+            } catch (e) {
+              console.error('Failed to restart recognition:', e);
+            }
+          }
+        };
+      }
+    }
+    
     if (recognitionRef.current) {
       try {
         recognitionRef.current.start();
