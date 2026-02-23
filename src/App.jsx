@@ -925,8 +925,14 @@ Return ONLY valid JSON:
     })
       .then(res => res.blob())
       .then(blob => {
-        prefetchedAudioRef.current = URL.createObjectURL(blob);
-        console.log('Pre-fetched audio for Q' + (nextIndex + 1));
+        const url = URL.createObjectURL(blob);
+        // Pre-create and preload the Audio element so it's fully ready to play
+        const preloadedAudio = new Audio();
+        preloadedAudio.preload = 'auto';
+        preloadedAudio.src = url;
+        preloadedAudio.load();
+        prefetchedAudioRef.current = { url, audio: preloadedAudio };
+        console.log('Pre-fetched and preloaded audio for Q' + (nextIndex + 1));
       })
       .catch(err => {
         console.error('Prefetch failed:', err);
@@ -935,7 +941,7 @@ Return ONLY valid JSON:
   };
 
   // Handle mobile tap to hear next question
-  // Audio is already pre-fetched, so audio.play() happens synchronously from the tap
+  // Audio is already pre-fetched and preloaded, so audio.play() happens instantly from the tap
   const handleMobileNextQuestion = () => {
     setWaitingForMobileNext(false);
     setIsSpeaking(true);
@@ -949,9 +955,12 @@ Return ONLY valid JSON:
       }
     }, 100);
     
-    if (prefetchedAudioRef.current) {
-      // Audio is pre-fetched — play IMMEDIATELY from this tap (no await, no fetch)
-      const audio = new Audio(prefetchedAudioRef.current);
+    const prefetched = prefetchedAudioRef.current;
+    prefetchedAudioRef.current = null;
+    
+    if (prefetched && prefetched.audio) {
+      // Use the pre-created, preloaded Audio element — play IMMEDIATELY
+      const audio = prefetched.audio;
       audioRef.current = audio;
       
       let finished = false;
@@ -959,6 +968,7 @@ Return ONLY valid JSON:
         if (finished) return;
         finished = true;
         setIsSpeaking(false);
+        URL.revokeObjectURL(prefetched.url);
         startRecordingPhase();
       };
       
@@ -975,18 +985,10 @@ Return ONLY valid JSON:
       
       // Safety timeout
       setTimeout(() => {
-        if (audioRef.current === audio) {
-          done();
-        }
+        if (!finished) done();
       }, 20000);
       
-      audio.play().catch(() => {
-        // If play still fails, skip audio and start recording
-        done();
-      });
-      
-      // Clear the prefetched ref
-      prefetchedAudioRef.current = null;
+      audio.play().catch(done);
     } else {
       // Prefetch failed or not ready — skip audio, just start recording
       setIsSpeaking(false);
@@ -1018,12 +1020,31 @@ Return ONLY valid JSON:
   };
 
   const stopRecording = () => {
-    if (recognitionRef.current) {
-      try {
-        recognitionRef.current.stop();
+    return new Promise((resolve) => {
+      if (recognitionRef.current) {
+        try {
+          const onEnd = () => {
+            recognitionRef.current.removeEventListener('end', onEnd);
+            setIsRecording(false);
+            resolve();
+          };
+          recognitionRef.current.addEventListener('end', onEnd);
+          recognitionRef.current.stop();
+          // Safety: resolve after 1.5s even if onend doesn't fire
+          setTimeout(() => {
+            recognitionRef.current?.removeEventListener('end', onEnd);
+            setIsRecording(false);
+            resolve();
+          }, 1500);
+        } catch (e) {
+          setIsRecording(false);
+          resolve();
+        }
+      } else {
         setIsRecording(false);
-      } catch (e) {}
-    }
+        resolve();
+      }
+    });
   };
 
   // Timer logic
@@ -1040,7 +1061,7 @@ Return ONLY valid JSON:
 
   const handleNextQuestion = async () => {
     setIsTimerRunning(false);
-    stopRecording();
+    await stopRecording();
     
     // Stop any currently playing audio (ElevenLabs or browser)
     if (audioRef.current) {
