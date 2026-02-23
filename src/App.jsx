@@ -2327,7 +2327,10 @@ Return ONLY valid JSON:
               <p style={styles.mobileStartText}>
                 Ready for question {currentQuestionIndex + 1} of {questions.length}?
               </p>
-              <button style={styles.mobileStartBtn} onClick={handleMobileNextQuestion}>
+              <button style={styles.mobileStartBtn} onClick={() => {
+                alert('Button tapped! Index: ' + currentQuestionIndex + ', Questions loaded: ' + questions.length);
+                handleMobileNextQuestion();
+              }}>
                 ▶️ Hear Next Question
               </button>
               <p style={styles.mobileStartHint}>
