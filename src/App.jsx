@@ -65,7 +65,10 @@ export default function InterviewSimulator() {
   // Track previous stage for back navigation
   const [previousStage, setPreviousStage] = useState('landing');
   
-  // Mobile audio state (kept for potential future use)
+  // Mobile audio - need user tap to enable audio on mobile
+  const [mobileAudioReady, setMobileAudioReady] = useState(false);
+  const [waitingForMobileStart, setWaitingForMobileStart] = useState(false);
+  const [waitingForMobileNext, setWaitingForMobileNext] = useState(false);
   
   const timerRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -148,7 +151,7 @@ export default function InterviewSimulator() {
       videoRef.current.srcObject = videoStreamRef.current;
       videoRef.current.play().catch(e => console.log('Video play error:', e));
     }
-  }, [stage, videoEnabled]);
+  }, [stage, videoEnabled, waitingForMobileStart]);
 
   // Load user data from Supabase
   const loadUserData = async (userId) => {
@@ -655,40 +658,6 @@ Return ONLY valid JSON:
     setIsSpeaking(true);
     setIsRecording(false);
     
-    // On mobile, always use browser speechSynthesis - it works reliably on iOS/Android
-    // without needing audio element unlock from user gestures
-    if (isMobile) {
-      return new Promise((resolve) => {
-        if ('speechSynthesis' in window) {
-          window.speechSynthesis.cancel();
-          const utterance = new SpeechSynthesisUtterance(text);
-          utterance.rate = 0.95;
-          utterance.pitch = 1.0;
-          
-          let resolved = false;
-          const safeResolve = () => {
-            if (!resolved) {
-              resolved = true;
-              setIsSpeaking(false);
-              resolve();
-            }
-          };
-          
-          utterance.onend = safeResolve;
-          utterance.onerror = safeResolve;
-          
-          // Safety timeout in case speechSynthesis hangs
-          setTimeout(safeResolve, 30000);
-          
-          window.speechSynthesis.speak(utterance);
-        } else {
-          setIsSpeaking(false);
-          resolve();
-        }
-      });
-    }
-    
-    // Desktop: use Polly API for high-quality voice
     try {
       const response = await fetch('/api/speak', {
         method: 'POST',
@@ -720,6 +689,7 @@ Return ONLY valid JSON:
           resolve();
         };
         
+        // Try to play audio
         audio.play()
           .then(() => {
             console.log('Audio playing...');
@@ -728,6 +698,7 @@ Return ONLY valid JSON:
             console.error('Audio play() blocked:', e);
             setIsSpeaking(false);
             URL.revokeObjectURL(audioUrl);
+            // On mobile, just proceed without audio
             resolve();
           });
       });
@@ -808,10 +779,16 @@ Return ONLY valid JSON:
         startSnapshotCapture();
       }
       
-      // Play intro and first question (speechSynthesis on mobile, Polly on desktop)
-      await speakQuestion(`Welcome to your interview for the ${jobTitle} position. I'll be asking you 5 questions. You have 3 minutes to answer each question. Please speak clearly and take your time. Let's begin.`);
-      await speakQuestion(`Question 1: ${parsedQuestions[0]}`);
-      startRecordingPhase();
+      // On mobile, wait for user tap before playing audio
+      if (isMobile && !mobileAudioReady) {
+        setWaitingForMobileStart(true);
+        // Audio will be triggered by the "Start Interview" button tap
+      } else {
+        // Desktop: play audio immediately
+        await speakQuestion(`Welcome to your interview for the ${jobTitle} position. I'll be asking you 5 questions. You have 3 minutes to answer each question. Please speak clearly and take your time. Let's begin.`);
+        await speakQuestion(`Question 1: ${parsedQuestions[0]}`);
+        startRecordingPhase();
+      }
     } catch (error) {
       console.error('Error:', error);
       // Fallback
@@ -830,9 +807,34 @@ Return ONLY valid JSON:
         startSnapshotCapture();
       }
       
-      await speakQuestion(`Welcome to your interview. Let's begin with question 1: ${fallback[0]}`);
-      startRecordingPhase();
+      // On mobile, wait for user tap before playing audio
+      if (isMobile && !mobileAudioReady) {
+        setWaitingForMobileStart(true);
+      } else {
+        await speakQuestion(`Welcome to your interview. Let's begin with question 1: ${fallback[0]}`);
+        startRecordingPhase();
+      }
     }
+  };
+
+  // Handle mobile start button tap - enables audio playback
+  const handleMobileStart = async () => {
+    setMobileAudioReady(true);
+    setWaitingForMobileStart(false);
+    
+    // Now play the intro and first question
+    await speakQuestion(`Welcome to your interview for the ${jobTitle} position. I'll be asking you 5 questions. You have 3 minutes to answer each question. Please speak clearly and take your time. Let's begin.`);
+    await speakQuestion(`Question 1: ${questions[0]}`);
+    startRecordingPhase();
+  };
+
+  // Handle mobile tap to hear next question - fresh user gesture enables audio
+  const handleMobileNextQuestion = async () => {
+    setWaitingForMobileNext(false);
+    
+    // speakQuestion is called directly from this tap - iOS allows audio.play() here
+    await speakQuestion(`Question ${currentQuestionIndex + 1}: ${questions[currentQuestionIndex]}`);
+    startRecordingPhase();
   };
 
   const startRecordingPhase = () => {
@@ -911,8 +913,13 @@ Return ONLY valid JSON:
       const nextIndex = currentQuestionIndex + 1;
       setCurrentQuestionIndex(nextIndex);
       
-      await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
-      startRecordingPhase();
+      if (isMobile) {
+        // On mobile, need a fresh user tap to play audio
+        setWaitingForMobileNext(true);
+      } else {
+        await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
+        startRecordingPhase();
+      }
     } else {
       // Interview complete - analyze answers
       setStage('analyzing');
@@ -2191,6 +2198,71 @@ Return ONLY valid JSON:
   if (stage === 'interview') {
     const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
     const timerColor = timeLeft <= 30 ? '#ef4444' : timeLeft <= 60 ? '#f59e0b' : '#00d9ff';
+    
+    // Mobile start overlay - waiting for user tap to enable audio
+    if (waitingForMobileStart) {
+      return (
+        <div style={styles.container}>
+          <div style={styles.heroGlow}></div>
+          {/* Hidden video element to keep camera stream attached */}
+          {videoEnabled && (
+            <video
+              ref={videoRef}
+              autoPlay
+              muted
+              playsInline
+              style={{ position: 'absolute', width: 1, height: 1, opacity: 0 }}
+            />
+          )}
+          <div style={styles.mobileStartOverlay}>
+            <div style={styles.mobileStartCard}>
+              <h2 style={styles.mobileStartTitle}>🎤 Ready to Begin?</h2>
+              <p style={styles.mobileStartText}>
+                Tap below to start your interview. The AI interviewer will ask you {questions.length} questions.
+              </p>
+              <button style={styles.mobileStartBtn} onClick={handleMobileStart}>
+                ▶️ Start Interview
+              </button>
+              <p style={styles.mobileStartHint}>
+                Make sure your volume is up to hear the questions
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
+    // Mobile next question overlay - waiting for user tap to hear next question
+    if (waitingForMobileNext) {
+      return (
+        <div style={styles.container}>
+          <div style={styles.heroGlow}></div>
+          {videoEnabled && (
+            <video
+              ref={videoRef}
+              autoPlay
+              muted
+              playsInline
+              style={{ position: 'absolute', width: 1, height: 1, opacity: 0 }}
+            />
+          )}
+          <div style={styles.mobileStartOverlay}>
+            <div style={styles.mobileStartCard}>
+              <h2 style={styles.mobileStartTitle}>✅ Answer Recorded!</h2>
+              <p style={styles.mobileStartText}>
+                Ready for question {currentQuestionIndex + 1} of {questions.length}?
+              </p>
+              <button style={styles.mobileStartBtn} onClick={handleMobileNextQuestion}>
+                ▶️ Hear Next Question
+              </button>
+              <p style={styles.mobileStartHint}>
+                Tap to hear the AI ask your next question
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
     
     return (
       <div style={styles.container}>
