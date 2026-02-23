@@ -1094,7 +1094,6 @@ Return ONLY valid JSON:
             // Send audio to Whisper for transcription
             if (audioChunksRef.current.length > 0) {
               try {
-                setIsTranscribing(true);
                 setCurrentTranscript('⏳ Transcribing your answer...');
                 
                 const storedMimeType = mediaRecorderRef.current?._mimeType || recorder.mimeType || 'audio/webm';
@@ -1127,8 +1126,6 @@ Return ONLY valid JSON:
               } catch (err) {
                 console.error('Whisper error:', err);
                 transcriptRef.current = '[Transcription error]';
-              } finally {
-                setIsTranscribing(false);
               }
             }
             
@@ -1183,7 +1180,9 @@ Return ONLY valid JSON:
   }, [isTimerRunning, timeLeft, isTranscribing]);
 
   const handleNextQuestion = async () => {
+    if (isTranscribing) return; // Prevent double-tap
     setIsTimerRunning(false);
+    if (isMobile) setIsTranscribing(true); // Disable button immediately
     await stopRecording();
     
     // Stop any currently playing audio (ElevenLabs or browser)
@@ -1228,6 +1227,7 @@ Return ONLY valid JSON:
             setVideoSnapshots(prev => [...prev.slice(-9), snapshot]);
           }
         }
+        setIsTranscribing(false);
         setWaitingForMobileNext(true);
       } else {
         await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
@@ -1235,6 +1235,7 @@ Return ONLY valid JSON:
       }
     } else {
       // Interview complete - analyze answers
+      setIsTranscribing(false);
       setStage('analyzing');
       setIsAnalyzing(true);
       await analyzeAllAnswers(newAnswers);
