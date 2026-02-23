@@ -1018,52 +1018,57 @@ Return ONLY valid JSON:
     }
   };
 
-  const startRecordingPhase = () => {
+  const startRecordingPhase = async () => {
     setTimeLeft(180); // Always reset to 3 minutes
     setIsTimerRunning(true);
     // Don't clear transcript here - it's already cleared in handleNextQuestion
-    startRecording();
+    await startRecording();
   };
 
-  const startRecording = () => {
+  const startRecording = async () => {
     if (isMobile) {
       // Mobile: use MediaRecorder to capture audio for Whisper transcription
-      // This works in ALL browsers (including Chrome on iOS)
       setCurrentTranscript('🎙️ Recording... (transcription on submit)');
       transcriptRef.current = '';
       accumulatedTranscriptRef.current = '';
       audioChunksRef.current = [];
       
-      navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(stream => {
-          // Try different MIME types for compatibility
-          const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
-            ? 'audio/webm;codecs=opus'
-            : MediaRecorder.isTypeSupported('audio/webm') 
-              ? 'audio/webm'
-              : MediaRecorder.isTypeSupported('audio/mp4')
-                ? 'audio/mp4'
-                : '';
-          
-          const options = mimeType ? { mimeType, audioBitsPerSecond: 16000 } : { audioBitsPerSecond: 16000 };
-          const recorder = new MediaRecorder(stream, options);
-          mediaRecorderRef.current = recorder;
-          mediaRecorderRef.current._mimeType = mimeType || 'audio/webm'; // Store for later
-          
-          recorder.ondataavailable = (event) => {
-            if (event.data.size > 0) {
-              audioChunksRef.current.push(event.data);
-            }
-          };
-          
-          recorder.start(1000); // Collect chunks every second
-          setIsRecording(true);
-          isRecordingRef.current = true;
-        })
-        .catch(err => {
-          console.error('MediaRecorder failed:', err);
-          setIsRecording(false);
-        });
+      try {
+        // Small delay to let audio session release from playback
+        await new Promise(r => setTimeout(r, 300));
+        
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        
+        // Try different MIME types for compatibility
+        const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
+          ? 'audio/webm;codecs=opus'
+          : MediaRecorder.isTypeSupported('audio/webm') 
+            ? 'audio/webm'
+            : MediaRecorder.isTypeSupported('audio/mp4')
+              ? 'audio/mp4'
+              : '';
+        
+        const options = mimeType ? { mimeType, audioBitsPerSecond: 16000 } : { audioBitsPerSecond: 16000 };
+        const recorder = new MediaRecorder(stream, options);
+        mediaRecorderRef.current = recorder;
+        mediaRecorderRef.current._mimeType = mimeType || 'audio/webm';
+        mediaRecorderRef.current._stream = stream; // Store stream ref for cleanup
+        
+        recorder.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            audioChunksRef.current.push(event.data);
+          }
+        };
+        
+        recorder.start(1000); // Collect chunks every second
+        setIsRecording(true);
+        isRecordingRef.current = true;
+        console.log('MediaRecorder started, mimeType:', mimeType);
+      } catch (err) {
+        console.error('MediaRecorder failed:', err);
+        setCurrentTranscript('⚠️ Mic error - please check permissions');
+        setIsRecording(false);
+      }
     } else {
       // Desktop: use Web Speech API (live transcription)
       if (recognitionRef.current) {
@@ -1088,7 +1093,8 @@ Return ONLY valid JSON:
         if (recorder && recorder.state !== 'inactive') {
           recorder.onstop = async () => {
             // Stop all mic tracks
-            recorder.stream.getTracks().forEach(track => track.stop());
+            const stream = mediaRecorderRef.current?._stream || recorder.stream;
+            if (stream) stream.getTracks().forEach(track => track.stop());
             setIsRecording(false);
             
             // Send audio to Whisper for transcription
