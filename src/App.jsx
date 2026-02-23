@@ -842,18 +842,13 @@ Return ONLY valid JSON:
 
   // Handle mobile start button tap - enables audio playback
   const handleMobileStart = async () => {
-    // Create the reusable audio element and unlock it with a silent play from user gesture
-    const silentUnlock = new Audio();
-    silentUnlock.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
-    try { await silentUnlock.play(); } catch(e) { /* expected on some browsers */ }
-    
-    // Now create the reusable audio element - it inherits the unlocked audio session
-    audioRef.current = new Audio();
-    
     setMobileAudioReady(true);
     setWaitingForMobileStart(false);
     
-    // Now play the intro and first question
+    // Create audio element from this user gesture context
+    audioRef.current = new Audio();
+    
+    // Now play the intro and first question (still within user gesture context)
     await speakQuestion(`Welcome to your interview for the ${jobTitle} position. I'll be asking you 5 questions. You have 3 minutes to answer each question. Please speak clearly and take your time. Let's begin.`);
     await speakQuestion(`Question 1: ${questions[0]}`);
     startRecordingPhase();
@@ -863,12 +858,7 @@ Return ONLY valid JSON:
   const handleMobileNextQuestion = async () => {
     setWaitingForMobileNext(false);
     
-    // Fresh user gesture - unlock audio session with a throwaway silent play
-    const silentUnlock = new Audio();
-    silentUnlock.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
-    try { await silentUnlock.play(); } catch(e) { /* expected */ }
-    
-    // Create fresh audio element for this question
+    // Create fresh audio element from this user gesture context
     audioRef.current = new Audio();
     
     // Reattach camera stream after overlay switch
