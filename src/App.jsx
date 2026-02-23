@@ -1025,85 +1025,143 @@ Return ONLY valid JSON:
   };
 
   const startRecording = () => {
-    // On mobile, recreate the recognition object each time to avoid stale iOS state
     if (isMobile) {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (SpeechRecognition) {
-        recognitionRef.current = new SpeechRecognition();
-        recognitionRef.current.continuous = true;
-        recognitionRef.current.interimResults = true;
-        recognitionRef.current.lang = 'en-US';
-        
-        recognitionRef.current.onresult = (event) => {
-          let transcript = '';
-          for (let i = 0; i < event.results.length; i++) {
-            transcript += event.results[i][0].transcript;
-          }
-          const accumulated = accumulatedTranscriptRef.current + transcript;
-          setCurrentTranscript(accumulated);
-          transcriptRef.current = accumulated;
-        };
-        
-        recognitionRef.current.onerror = (event) => {
-          console.error('Speech recognition error:', event.error);
-          if (event.error === 'not-allowed') {
-            setMicPermission(false);
-          }
-        };
-        
-        recognitionRef.current.onend = () => {
-          if (transcriptRef.current) {
-            accumulatedTranscriptRef.current = transcriptRef.current;
-          }
-          if (isRecordingRef.current) {
-            try {
-              recognitionRef.current.start();
-            } catch (e) {
-              console.error('Failed to restart recognition:', e);
+      // Mobile: use MediaRecorder to capture audio for Whisper transcription
+      // This works in ALL browsers (including Chrome on iOS)
+      setCurrentTranscript('🎙️ Recording... (transcription on submit)');
+      transcriptRef.current = '';
+      accumulatedTranscriptRef.current = '';
+      audioChunksRef.current = [];
+      
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+          // Try different MIME types for compatibility
+          const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
+            ? 'audio/webm;codecs=opus'
+            : MediaRecorder.isTypeSupported('audio/webm') 
+              ? 'audio/webm'
+              : MediaRecorder.isTypeSupported('audio/mp4')
+                ? 'audio/mp4'
+                : '';
+          
+          const options = mimeType ? { mimeType } : {};
+          const recorder = new MediaRecorder(stream, options);
+          mediaRecorderRef.current = recorder;
+          
+          recorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+              audioChunksRef.current.push(event.data);
             }
-          }
-        };
-      }
-    }
-    
-    if (recognitionRef.current) {
-      try {
-        recognitionRef.current.start();
-        setIsRecording(true);
-        isRecordingRef.current = true;
-      } catch (e) {
-        console.error('Failed to start recognition:', e);
+          };
+          
+          recorder.start(1000); // Collect chunks every second
+          setIsRecording(true);
+          isRecordingRef.current = true;
+        })
+        .catch(err => {
+          console.error('MediaRecorder failed:', err);
+          setIsRecording(false);
+        });
+    } else {
+      // Desktop: use Web Speech API (live transcription)
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.start();
+          setIsRecording(true);
+          isRecordingRef.current = true;
+        } catch (e) {
+          console.error('Failed to start recognition:', e);
+        }
       }
     }
   };
 
   const stopRecording = () => {
-    isRecordingRef.current = false; // Prevent auto-restart
-    return new Promise((resolve) => {
-      if (recognitionRef.current) {
-        try {
-          const onEnd = () => {
-            recognitionRef.current.removeEventListener('end', onEnd);
+    isRecordingRef.current = false;
+    
+    if (isMobile) {
+      // Mobile: stop MediaRecorder and send to Whisper
+      return new Promise((resolve) => {
+        const recorder = mediaRecorderRef.current;
+        if (recorder && recorder.state !== 'inactive') {
+          recorder.onstop = async () => {
+            // Stop all mic tracks
+            recorder.stream.getTracks().forEach(track => track.stop());
             setIsRecording(false);
+            
+            // Send audio to Whisper for transcription
+            if (audioChunksRef.current.length > 0) {
+              try {
+                setCurrentTranscript('⏳ Transcribing your answer...');
+                
+                const audioBlob = new Blob(audioChunksRef.current, { type: recorder.mimeType || 'audio/webm' });
+                
+                // Convert to base64
+                const reader = new FileReader();
+                const base64 = await new Promise((res, rej) => {
+                  reader.onloadend = () => res(reader.result.split(',')[1]);
+                  reader.onerror = rej;
+                  reader.readAsDataURL(audioBlob);
+                });
+                
+                const response = await fetch('/api/transcribe', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ audio: base64, mimeType: recorder.mimeType || 'audio/webm' })
+                });
+                
+                if (response.ok) {
+                  const data = await response.json();
+                  const transcript = data.transcript || '[No speech detected]';
+                  setCurrentTranscript(transcript);
+                  transcriptRef.current = transcript;
+                  console.log('Whisper transcript:', transcript.substring(0, 100));
+                } else {
+                  console.error('Transcription failed:', response.status);
+                  transcriptRef.current = '[Transcription failed]';
+                }
+              } catch (err) {
+                console.error('Whisper error:', err);
+                transcriptRef.current = '[Transcription error]';
+              }
+            }
+            
+            audioChunksRef.current = [];
             resolve();
           };
-          recognitionRef.current.addEventListener('end', onEnd);
-          recognitionRef.current.stop();
-          // Safety: resolve after 1.5s even if onend doesn't fire
-          setTimeout(() => {
-            recognitionRef.current?.removeEventListener('end', onEnd);
-            setIsRecording(false);
-            resolve();
-          }, 1500);
-        } catch (e) {
+          recorder.stop();
+        } else {
           setIsRecording(false);
           resolve();
         }
-      } else {
-        setIsRecording(false);
-        resolve();
-      }
-    });
+      });
+    } else {
+      // Desktop: stop Web Speech API
+      return new Promise((resolve) => {
+        if (recognitionRef.current) {
+          try {
+            const onEnd = () => {
+              recognitionRef.current.removeEventListener('end', onEnd);
+              setIsRecording(false);
+              resolve();
+            };
+            recognitionRef.current.addEventListener('end', onEnd);
+            recognitionRef.current.stop();
+            setTimeout(() => {
+              recognitionRef.current?.removeEventListener('end', onEnd);
+              setIsRecording(false);
+              resolve();
+            }, 1500);
+          } catch (e) {
+            setIsRecording(false);
+            resolve();
+          }
+        } else {
+          setIsRecording(false);
+          resolve();
+        }
+      });
+    }
   };
 
   // Timer logic
