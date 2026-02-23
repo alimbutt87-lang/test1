@@ -85,6 +85,8 @@ export default function InterviewSimulator() {
   const videoStreamRef = useRef(null);
   const snapshotIntervalRef = useRef(null);
   const transcriptRef = useRef(''); // Store transcript in ref for reliable access
+  const isRecordingRef = useRef(false); // Track recording state for speech recognition onend
+  const accumulatedTranscriptRef = useRef(''); // Accumulate transcript across iOS recognition restarts
 
   // Check if mobile
   const [isMobile, setIsMobile] = useState(false);
@@ -483,14 +485,35 @@ export default function InterviewSimulator() {
         for (let i = 0; i < event.results.length; i++) {
           transcript += event.results[i][0].transcript;
         }
-        setCurrentTranscript(transcript);
-        transcriptRef.current = transcript; // Also store in ref for reliable access
+        // On iOS, recognition restarts lose previous results.
+        // Prepend any previously accumulated text.
+        const accumulated = accumulatedTranscriptRef.current + transcript;
+        setCurrentTranscript(accumulated);
+        transcriptRef.current = accumulated;
       };
 
       recognitionRef.current.onerror = (event) => {
         console.error('Speech recognition error:', event.error);
         if (event.error === 'not-allowed') {
           setMicPermission(false);
+        }
+      };
+
+      // iOS/mobile: recognition frequently stops itself after pauses in speech.
+      // Auto-restart it to keep capturing the full answer.
+      recognitionRef.current.onend = () => {
+        // Save what we have so far before restart (results will reset)
+        if (transcriptRef.current) {
+          accumulatedTranscriptRef.current = transcriptRef.current;
+        }
+        // Only restart if we're still in recording mode (not intentionally stopped)
+        if (isRecordingRef.current) {
+          try {
+            recognitionRef.current.start();
+            console.log('Speech recognition auto-restarted');
+          } catch (e) {
+            console.error('Failed to restart recognition:', e);
+          }
         }
       };
     }
@@ -1006,6 +1029,7 @@ Return ONLY valid JSON:
       try {
         recognitionRef.current.start();
         setIsRecording(true);
+        isRecordingRef.current = true;
       } catch (e) {
         console.error('Failed to start recognition:', e);
       }
@@ -1013,6 +1037,7 @@ Return ONLY valid JSON:
   };
 
   const stopRecording = () => {
+    isRecordingRef.current = false; // Prevent auto-restart
     return new Promise((resolve) => {
       if (recognitionRef.current) {
         try {
@@ -1081,6 +1106,7 @@ Return ONLY valid JSON:
     // Clear transcript state AND ref
     setCurrentTranscript('');
     transcriptRef.current = '';
+    accumulatedTranscriptRef.current = '';
     
     // Reset timer immediately for next question
     setTimeLeft(180);
@@ -1090,6 +1116,13 @@ Return ONLY valid JSON:
       setCurrentQuestionIndex(nextIndex);
       
       if (isMobile) {
+        // Capture a snapshot before switching to overlay (which detaches video)
+        if (videoEnabled) {
+          const snapshot = captureSnapshot();
+          if (snapshot) {
+            setVideoSnapshots(prev => [...prev.slice(-9), snapshot]);
+          }
+        }
         setWaitingForMobileNext(true);
       } else {
         await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
