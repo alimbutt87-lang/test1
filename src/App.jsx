@@ -834,66 +834,79 @@ Return ONLY valid JSON:
     setIsSpeaking(true);
     setIsRecording(false);
     
+    // DEBUG: show step-by-step progress on screen
+    const debugEl = document.getElementById('mobile-debug');
+    const log = (msg) => {
+      console.log(msg);
+      if (debugEl) debugEl.textContent += '\n' + msg;
+    };
+    
     try {
-      // Immediately create and play a silent audio from the tap gesture
-      // This "unlocks" this Audio object for future playback on iOS
+      log('Step 1: Creating audio element...');
       const audio = new Audio();
       audioRef.current = audio;
       
-      // Start fetching the real audio in parallel
+      log('Step 2: Starting Polly fetch...');
+      log(`Question index: ${currentQuestionIndex}, Question: ${questions[currentQuestionIndex]?.substring(0, 30)}...`);
+      
       const fetchPromise = fetch('/api/speak', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: `Question ${currentQuestionIndex + 1}: ${questions[currentQuestionIndex]}` })
       });
       
-      // Play silence immediately from the user gesture to unlock the audio element
+      log('Step 3: Playing silent audio to unlock...');
       audio.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
-      await audio.play().catch(() => {});
+      try {
+        await audio.play();
+        log('Step 3: Silent play SUCCESS');
+      } catch(e) {
+        log('Step 3: Silent play FAILED: ' + e.message);
+      }
       
-      // Now fetch the real audio
+      log('Step 4: Waiting for Polly response...');
       const response = await fetchPromise;
-      if (!response.ok) throw new Error('Speech API error');
+      log('Step 4: Polly response status: ' + response.status);
+      
+      if (!response.ok) throw new Error('Speech API error: ' + response.status);
       
       const audioBlob = await response.blob();
+      log('Step 5: Got audio blob, size: ' + audioBlob.size);
       const audioUrl = URL.createObjectURL(audioBlob);
       
-      // Swap in the real audio source - the Audio element is already "unlocked"
+      log('Step 6: Playing real audio...');
       await new Promise((resolve) => {
-        audio.onended = () => {
-          setIsSpeaking(false);
-          URL.revokeObjectURL(audioUrl);
-          resolve();
-        };
-        audio.onerror = () => {
-          setIsSpeaking(false);
-          URL.revokeObjectURL(audioUrl);
-          resolve();
-        };
-        
-        audio.src = audioUrl;
-        audio.play()
-          .then(() => console.log('Q audio playing...'))
-          .catch((e) => {
-            console.error('Audio play failed:', e);
+        let resolved = false;
+        const done = (reason) => {
+          if (!resolved) {
+            resolved = true;
+            log('Step 7: Audio done - ' + reason);
             setIsSpeaking(false);
             URL.revokeObjectURL(audioUrl);
             resolve();
+          }
+        };
+        
+        audio.onended = () => done('onended');
+        audio.onerror = (e) => done('onerror: ' + e.message);
+        
+        audio.src = audioUrl;
+        audio.play()
+          .then(() => log('Step 6: play() resolved OK'))
+          .catch((e) => {
+            log('Step 6: play() REJECTED: ' + e.message);
+            done('play rejected');
           });
         
-        // Safety timeout - never hang more than 15 seconds
-        setTimeout(() => {
-          setIsSpeaking(false);
-          URL.revokeObjectURL(audioUrl);
-          resolve();
-        }, 15000);
+        // Safety timeout
+        setTimeout(() => done('TIMEOUT after 15s'), 15000);
       });
       
+      log('Step 8: Starting recording phase...');
       startRecordingPhase();
     } catch (error) {
-      console.error('Mobile next question error:', error);
+      log('ERROR: ' + error.message);
       setIsSpeaking(false);
-      // Fall back to browser speech
       await fallbackSpeak(`Question ${currentQuestionIndex + 1}: ${questions[currentQuestionIndex]}`);
       startRecordingPhase();
     }
@@ -2369,6 +2382,20 @@ Return ONLY valid JSON:
             )}
             <p style={styles.questionText}>{questions[currentQuestionIndex]}</p>
           </div>
+          
+          {/* DEBUG - remove after fixing */}
+          <pre id="mobile-debug" style={{
+            fontSize: '10px',
+            color: '#0f0',
+            background: 'rgba(0,0,0,0.8)',
+            padding: '8px',
+            borderRadius: '4px',
+            maxHeight: '150px',
+            overflow: 'auto',
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-all',
+            margin: '8px 0'
+          }}>Debug log:</pre>
           
           {/* Recording status */}
           <div style={styles.recordingSection}>
