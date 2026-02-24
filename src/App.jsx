@@ -2465,6 +2465,9 @@ Return ONLY valid JSON:
                 gap: '8px',
               }}
               onClick={() => {
+                if (window.mixpanel) {
+                  window.mixpanel.track('mobile_gate_copy_link');
+                }
                 navigator.clipboard.writeText('https://acemyinterviews.io').then(() => {
                   setMobileGateMessage('Link copied! Open it on your desktop.');
                 }).catch(() => {
@@ -2472,7 +2475,7 @@ Return ONLY valid JSON:
                 });
               }}
             >
-              📋 Copy desktop link
+              📋 Copy link
             </button>
 
             {/* Email link button */}
@@ -2493,12 +2496,15 @@ Return ONLY valid JSON:
                 gap: '8px',
               }}
               onClick={() => {
+                if (window.mixpanel) {
+                  window.mixpanel.track('mobile_gate_email_link');
+                }
                 const subject = encodeURIComponent('Your interview practice link');
                 const body = encodeURIComponent('Open this on your desktop to start your interview practice:\n\nhttps://acemyinterviews.io');
                 window.location.href = `mailto:${user?.email || ''}?subject=${subject}&body=${body}`;
               }}
             >
-              ✉️ Email myself the link
+              ✉️ Email me the link
             </button>
 
             {/* Success message */}
@@ -2561,10 +2567,21 @@ Return ONLY valid JSON:
                   }}
                 />
                 <button
-                  onClick={() => {
+                  onClick={async () => {
                     if (mobileGateEmail && mobileGateEmail.includes('@')) {
+                      try {
+                        await supabase.from('mobile_waitlist').insert({
+                          email: mobileGateEmail,
+                          user_id: user?.id || null,
+                          created_at: new Date().toISOString(),
+                        });
+                      } catch (e) {
+                        console.error('Failed to save email:', e);
+                      }
+                      if (window.mixpanel) {
+                        window.mixpanel.track('mobile_gate_alert_me', { email: mobileGateEmail });
+                      }
                       setMobileGateMessage("You're on the list! We'll notify you when mobile is ready.");
-                      // TODO: save email to database for notification
                     }
                   }}
                   style={{
