@@ -1692,12 +1692,6 @@ Return ONLY valid JSON:
   };
 
   const handleStartInterview = async (source = 'landing') => {
-    // On mobile, show gate screen instead of starting interview
-    if (isMobile) {
-      setStage('mobileGate');
-      return;
-    }
-    
     // In TEST_MODE, always allow access
     // In production, check if user is subscribed or has free trial remaining
     if (!TEST_MODE && !isSubscribed && completedInterviews >= 1) {
@@ -2789,7 +2783,11 @@ Return ONLY valid JSON:
                     video_enabled: videoEnabled
                   });
                 }
-                generateQuestions();
+                if (isMobile) {
+                  setStage('mobileGate');
+                } else {
+                  generateQuestions();
+                }
               }
             }}
             disabled={!jobTitle.trim()}
