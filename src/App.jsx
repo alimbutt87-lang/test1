@@ -74,6 +74,8 @@ export default function InterviewSimulator() {
   const timerRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
+  const micStreamRef = useRef(null); // Persistent mic stream - grabbed once, reused per question
+  const micMimeTypeRef = useRef(''); // MIME type for MediaRecorder
   const recognitionRef = useRef(null);
   const speechSynthRef = useRef(null);
   const audioRef = useRef(null);
@@ -1018,11 +1020,11 @@ Return ONLY valid JSON:
     }
   };
 
-  const startRecordingPhase = async () => {
+  const startRecordingPhase = () => {
     setTimeLeft(180); // Always reset to 3 minutes
     setIsTimerRunning(true);
     // Don't clear transcript here - it's already cleared in handleNextQuestion
-    await startRecording();
+    startRecording(); // async but we don't need to await it here
   };
 
   const startRecording = async () => {
@@ -1034,25 +1036,27 @@ Return ONLY valid JSON:
       audioChunksRef.current = [];
       
       try {
-        // Small delay to let audio session release from playback
-        await new Promise(r => setTimeout(r, 300));
+        // Get mic stream once, reuse for all questions
+        if (!micStreamRef.current || micStreamRef.current.getTracks().every(t => t.readyState === 'ended')) {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          micStreamRef.current = stream;
+          
+          // Determine best MIME type once
+          micMimeTypeRef.current = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
+            ? 'audio/webm;codecs=opus'
+            : MediaRecorder.isTypeSupported('audio/webm') 
+              ? 'audio/webm'
+              : MediaRecorder.isTypeSupported('audio/mp4')
+                ? 'audio/mp4'
+                : '';
+        }
         
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        
-        // Try different MIME types for compatibility
-        const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
-          ? 'audio/webm;codecs=opus'
-          : MediaRecorder.isTypeSupported('audio/webm') 
-            ? 'audio/webm'
-            : MediaRecorder.isTypeSupported('audio/mp4')
-              ? 'audio/mp4'
-              : '';
-        
-        const options = mimeType ? { mimeType, audioBitsPerSecond: 16000 } : { audioBitsPerSecond: 16000 };
-        const recorder = new MediaRecorder(stream, options);
+        // Create new MediaRecorder from existing stream (fast, synchronous)
+        const options = micMimeTypeRef.current 
+          ? { mimeType: micMimeTypeRef.current, audioBitsPerSecond: 16000 } 
+          : { audioBitsPerSecond: 16000 };
+        const recorder = new MediaRecorder(micStreamRef.current, options);
         mediaRecorderRef.current = recorder;
-        mediaRecorderRef.current._mimeType = mimeType || 'audio/webm';
-        mediaRecorderRef.current._stream = stream; // Store stream ref for cleanup
         
         recorder.ondataavailable = (event) => {
           if (event.data.size > 0) {
@@ -1060,10 +1064,9 @@ Return ONLY valid JSON:
           }
         };
         
-        recorder.start(1000); // Collect chunks every second
+        recorder.start(1000);
         setIsRecording(true);
         isRecordingRef.current = true;
-        console.log('MediaRecorder started, mimeType:', mimeType);
       } catch (err) {
         console.error('MediaRecorder failed:', err);
         setCurrentTranscript('⚠️ Mic error - please check permissions');
@@ -1092,9 +1095,7 @@ Return ONLY valid JSON:
         const recorder = mediaRecorderRef.current;
         if (recorder && recorder.state !== 'inactive') {
           recorder.onstop = async () => {
-            // Stop all mic tracks
-            const stream = mediaRecorderRef.current?._stream || recorder.stream;
-            if (stream) stream.getTracks().forEach(track => track.stop());
+            // DON'T stop mic tracks - keep stream alive for next question
             setIsRecording(false);
             
             // Send audio to Whisper for transcription
@@ -1102,7 +1103,7 @@ Return ONLY valid JSON:
               try {
                 setCurrentTranscript('⏳ Transcribing your answer...');
                 
-                const storedMimeType = mediaRecorderRef.current?._mimeType || recorder.mimeType || 'audio/webm';
+                const storedMimeType = micMimeTypeRef.current || recorder.mimeType || 'audio/webm';
                 const audioBlob = new Blob(audioChunksRef.current, { type: storedMimeType });
                 
                 // Convert to base64
@@ -1240,7 +1241,11 @@ Return ONLY valid JSON:
         startRecordingPhase();
       }
     } else {
-      // Interview complete - analyze answers
+      // Interview complete - clean up mic and analyze answers
+      if (micStreamRef.current) {
+        micStreamRef.current.getTracks().forEach(track => track.stop());
+        micStreamRef.current = null;
+      }
       setIsTranscribing(false);
       setStage('analyzing');
       setIsAnalyzing(true);
