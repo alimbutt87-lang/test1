@@ -15,11 +15,40 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { answers, jobTitle } = req.body;
+    const { answers, jobTitle, followUpMetadata = {} } = req.body;
 
-    const answersText = answers.map((a, i) => 
-      `Question ${i + 1}: ${a.question}\nCandidate's Answer: ${a.answer}\nTime Spent: ${a.timeSpent} seconds`
-    ).join('\n\n');
+    // Separate main answers from follow-up answers
+    const mainAnswers = answers.filter(a => !a.isFollowUp);
+    const followUpAnswers = answers.filter(a => a.isFollowUp);
+
+    // Build follow-up lookup
+    const followUpMap = {};
+    followUpAnswers.forEach(fa => {
+      followUpMap[fa.parentQuestionIndex] = {
+        question: fa.question,
+        answer: fa.answer,
+        timeSpent: fa.timeSpent,
+        ...(followUpMetadata[fa.parentQuestionIndex] || {})
+      };
+    });
+
+    const hasAnyFollowUps = followUpAnswers.length > 0;
+    const followUpQuestionNums = Object.keys(followUpMap).map(i => parseInt(i) + 1);
+
+    // Build interview text — keep it lean
+    const answersText = mainAnswers.map((a, i) => {
+      const fu = followUpMap[i];
+      let text = `Q${i + 1}: ${a.question}\nAnswer: ${a.answer}\nTime: ${a.timeSpent}s`;
+      if (fu) {
+        text += `\n[FOLLOW-UP Q${i + 1}]: ${fu.question}\nFollow-up answer: ${fu.answer}\nTime: ${fu.timeSpent}s`;
+      }
+      return text;
+    }).join('\n\n');
+
+    // Minimal follow-up instruction — only added when needed
+    const followUpBlock = hasAnyFollowUps
+      ? `\nQuestions ${followUpQuestionNums.join(', ')} have [FOLLOW-UP] sections. For those, add to each questionScore: "hasFollowUp":true, "followUp":{"score":<0-100>,"feedback":"<2-3 detailed sentences on what the follow-up answer added or failed to add>","strengths":["<specific>","<specific>"],"improvements":["<specific>"],"coachingNote":"<what the follow-up tested and whether they addressed it>"}, "combinedScore":<Math.round(score*0.7+followUp.score*0.3)>. For questions without follow-ups: "hasFollowUp":false,"followUp":null,"noFollowUpReason":"thorough_answer" if the main answer was complete, else null.`
+      : '';
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -30,7 +59,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 2500,
+        max_tokens: 4096,
         messages: [{
           role: 'user',
           content: `You are an expert interview coach analyzing a candidate's SPOKEN interview performance for a ${jobTitle} position. The answers below were captured via voice transcription, so ignore any spelling/grammar issues - focus only on the CONTENT and SUBSTANCE of their responses.
@@ -40,53 +69,87 @@ ${answersText}
 
 Analyze each answer and provide a comprehensive scorecard. Be fair but rigorous - this is a real interview assessment. Remember: this is transcribed speech, so evaluate what they SAID, not how it's written.
 
-Return ONLY valid JSON in this exact format:
+Scoring: be strict. Vague answers without concrete examples = 40-60. Mentioning a concept without backing it up = 50-65 max. Only answers with specific examples, metrics, and clear structure score 75+. Incomplete or irrelevant answers score below 30.
+${followUpBlock}
+Return ONLY valid JSON:
 {
-  "overallScore": <number 0-100>,
-  "passed": <boolean - true if score >= 70>,
-  "verdict": "<one sentence: 'Congratulations! You got the job!' or 'Unfortunately, you did not pass this interview.'>",
-  "summary": "<2-3 sentence overall assessment>",
-  "questionScores": [
-    {
-      "questionNum": 1,
-      "score": <0-100>,
-      "feedback": "<specific feedback for this answer - focus on content, structure, examples, not grammar>",
-      "strengths": ["<strength1>", "<strength2>"],
-      "improvements": ["<improvement1>", "<improvement2>"]
-    }
-  ],
+  "overallScore": <0-100>,
+  "passed": <true if >= 70>,
+  "verdict": "<'Congratulations! You got the job!' or 'Unfortunately, you did not pass this interview.'>",
+  "summary": "<2-3 sentence assessment>",
+  "questionScores": [{"questionNum":1,"score":<0-100>,"feedback":"<2-3 specific sentences>","strengths":["<specific>","<specific>"],"improvements":["<specific>","<specific>"]}],
   "categories": {
-    "clarity": {"score": <0-100>, "feedback": "<was their point clear and easy to follow?>"},
-    "relevance": {"score": <0-100>, "feedback": "<did they actually answer the question asked?>"},
-    "depth": {"score": <0-100>, "feedback": "<did they provide enough detail and specifics?>"},
-    "confidence": {"score": <0-100>, "feedback": "<did they sound confident and assured?>"},
-    "conciseness": {"score": <0-100>, "feedback": "<were they focused or did they ramble?>"},
-    "starMethod": {"score": <0-100>, "feedback": "<did they use Situation, Task, Action, Result for behavioral questions?>"},
-    "technicalAccuracy": {"score": <0-100>, "feedback": "<was their technical knowledge accurate?>"},
-    "enthusiasm": {"score": <0-100>, "feedback": "<did they show genuine interest in the role?>"}
+    "clarity": {"score": <0-100>, "feedback": "<specific>"},
+    "relevance": {"score": <0-100>, "feedback": "<specific>"},
+    "depth": {"score": <0-100>, "feedback": "<specific>"},
+    "confidence": {"score": <0-100>, "feedback": "<specific>"},
+    "conciseness": {"score": <0-100>, "feedback": "<specific>"},
+    "starMethod": {"score": <0-100>, "feedback": "<specific>"},
+    "technicalAccuracy": {"score": <0-100>, "feedback": "<specific>"},
+    "enthusiasm": {"score": <0-100>, "feedback": "<specific>"}
   },
-  "topStrengths": ["<strength1>", "<strength2>", "<strength3>"],
-  "criticalImprovements": ["<improvement1>", "<improvement2>", "<improvement3>"],
-  "coachingTip": "<one specific, actionable tip for their next interview>"
+  "topStrengths": ["<1>","<2>","<3>"],
+  "criticalImprovements": ["<1>","<2>","<3>"],
+  "coachingTip": "<specific actionable tip>"
 }`
         }]
       })
     });
 
     const data = await response.json();
-    
+
     if (!response.ok) {
-      console.error('Anthropic API error:', data);
-      throw new Error('Failed to analyze interview');
+      console.error('API error:', JSON.stringify(data));
+      throw new Error(`API ${response.status}: ${data?.error?.message || 'unknown'}`);
     }
 
-    const text = data.content[0].text;
-    const cleanText = text.replace(/```json|```/g, '').trim();
-    const results = JSON.parse(cleanText);
+    let results;
+    try {
+      const text = data.content[0].text;
+      const cleanText = text.replace(/```json|```/g, '').trim();
+      results = JSON.parse(cleanText);
+    } catch (e) {
+      console.error('Parse failed:', data.content?.[0]?.text?.substring(0, 500));
+      throw new Error('JSON parse failed');
+    }
+
+    // Post-process: ensure follow-up fields are correct using our metadata
+    if (hasAnyFollowUps) {
+      results.questionScores.forEach((q, idx) => {
+        const fu = followUpMap[idx];
+        if (fu) {
+          q.hasFollowUp = true;
+          if (q.followUp) {
+            q.followUp.followUpType = fu.followUpType || q.followUp.followUpType || null;
+            q.followUp.whatWasMissing = fu.whatWasMissing || q.followUp.whatWasMissing || null;
+            if (!q.followUp.question) q.followUp.question = fu.question;
+          } else {
+            // Claude missed it — create from our data
+            q.followUp = {
+              question: fu.question,
+              score: null,
+              feedback: 'Follow-up recorded but detailed analysis unavailable.',
+              strengths: [], improvements: [],
+              coachingNote: fu.whatWasMissing ? `Probing for: ${fu.whatWasMissing}` : null,
+              followUpType: fu.followUpType || null,
+              whatWasMissing: fu.whatWasMissing || null
+            };
+          }
+          if (q.followUp.score != null && !q.combinedScore) {
+            q.combinedScore = Math.round(q.score * 0.7 + q.followUp.score * 0.3);
+          }
+        } else {
+          q.hasFollowUp = false;
+          q.followUp = null;
+          const meta = followUpMetadata[idx];
+          q.noFollowUpReason = (meta?.reason === 'thorough_answer') ? 'thorough_answer' : (meta?.reason || null);
+        }
+      });
+    }
 
     res.status(200).json({ results });
   } catch (error) {
-    console.error('Error analyzing interview:', error);
-    res.status(500).json({ error: 'Failed to analyze interview' });
+    console.error('analyze-interview error:', error.message);
+    res.status(500).json({ error: 'Failed to analyze interview', detail: error.message });
   }
 }
