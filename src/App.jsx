@@ -70,6 +70,8 @@ export default function InterviewSimulator() {
   const [mobileAudioReady, setMobileAudioReady] = useState(false);
   const [waitingForMobileStart, setWaitingForMobileStart] = useState(false);
   const [waitingForMobileNext, setWaitingForMobileNext] = useState(false);
+  const [mobileGateEmail, setMobileGateEmail] = useState('');
+  const [mobileGateMessage, setMobileGateMessage] = useState('');
   
   const timerRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -837,6 +839,21 @@ Return ONLY valid JSON:
           // allAudio[0] = intro, allAudio[1] = Q1, allAudio[2] = Q2, etc.
           prefetchedAudioRef.current = allAudio;
           console.log('Pre-fetched all ' + allAudio.length + ' audio clips');
+          
+          // Also grab mic stream now so Q1 recording starts instantly
+          try {
+            const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            micStreamRef.current = micStream;
+            micMimeTypeRef.current = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
+              ? 'audio/webm;codecs=opus'
+              : MediaRecorder.isTypeSupported('audio/webm') 
+                ? 'audio/webm'
+                : MediaRecorder.isTypeSupported('audio/mp4')
+                  ? 'audio/mp4'
+                  : '';
+          } catch (e) {
+            console.error('Mic pre-grab failed:', e);
+          }
         } catch (e) {
           console.error('Prefetch all failed:', e);
           prefetchedAudioRef.current = null;
@@ -890,6 +907,23 @@ Return ONLY valid JSON:
         } catch (e) {
           console.error('Prefetch fallback failed:', e);
           prefetchedAudioRef.current = null;
+        }
+        
+        // Also grab mic stream now so Q1 recording starts instantly
+        try {
+          if (!micStreamRef.current) {
+            const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            micStreamRef.current = micStream;
+            micMimeTypeRef.current = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
+              ? 'audio/webm;codecs=opus'
+              : MediaRecorder.isTypeSupported('audio/webm') 
+                ? 'audio/webm'
+                : MediaRecorder.isTypeSupported('audio/mp4')
+                  ? 'audio/mp4'
+                  : '';
+          }
+        } catch (e) {
+          console.error('Mic pre-grab failed:', e);
         }
       } else {
         await speakQuestion(`Welcome to your interview. Let's begin with question 1: ${fallback[0]}`);
@@ -1658,6 +1692,12 @@ Return ONLY valid JSON:
   };
 
   const handleStartInterview = async (source = 'landing') => {
+    // On mobile, show gate screen instead of starting interview
+    if (isMobile) {
+      setStage('mobileGate');
+      return;
+    }
+    
     // In TEST_MODE, always allow access
     // In production, check if user is subscribed or has free trial remaining
     if (!TEST_MODE && !isSubscribed && completedInterviews >= 1) {
@@ -2311,6 +2351,264 @@ Return ONLY valid JSON:
           <button style={styles.secondaryBtn} onClick={() => setStage('results')}>
             ← Back to results
           </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Mobile Gate Screen
+  if (stage === 'mobileGate') {
+    return (
+      <div style={styles.container}>
+        <div style={styles.heroGlow}></div>
+        <div style={{
+          position: 'relative',
+          zIndex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '32px 24px',
+          textAlign: 'center',
+          maxWidth: '420px',
+          width: '100%',
+          minHeight: '100vh',
+        }}>
+          {/* Desktop icon */}
+          <div style={{
+            width: '88px',
+            height: '88px',
+            borderRadius: '22px',
+            background: 'linear-gradient(135deg, rgba(0, 217, 255, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: '28px',
+            border: '1px solid rgba(0, 217, 255, 0.2)',
+          }}>
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#00d9ff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
+            </svg>
+          </div>
+
+          <h1 style={{
+            fontSize: '24px',
+            fontWeight: 700,
+            letterSpacing: '-0.3px',
+            marginBottom: '12px',
+            lineHeight: 1.3,
+            color: '#ffffff',
+          }}>
+            Your full interview<br />experience awaits
+          </h1>
+          <p style={{
+            fontSize: '15px',
+            color: 'rgba(255,255,255,0.6)',
+            lineHeight: 1.6,
+            maxWidth: '340px',
+            marginBottom: '32px',
+          }}>
+            Open on a laptop or desktop to unlock everything — video analysis, voice recognition, real-time feedback, and more.
+          </p>
+
+          {/* Reasons */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+            width: '100%',
+            maxWidth: '340px',
+            marginBottom: '36px',
+          }}>
+            {[
+              { icon: '✨', title: 'Tailored to you', desc: 'Questions based on your role and job description' },
+              { icon: '⏱️', title: 'Timed responses & follow-ups', desc: 'Dynamic follow-up questions with in-depth scoring' },
+              { icon: '🎥', title: 'Video & voice analysis', desc: 'Feedback on delivery, confidence, and body language' },
+            ].map((item, i) => (
+              <div key={i} style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '12px',
+                textAlign: 'left',
+              }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '10px',
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  fontSize: '18px',
+                }}>
+                  {item.icon}
+                </div>
+                <div>
+                  <div style={{ fontSize: '14px', fontWeight: 600, color: '#ffffff', marginBottom: '2px' }}>{item.title}</div>
+                  <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.4 }}>{item.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Actions */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            width: '100%',
+            maxWidth: '340px',
+          }}>
+            {/* Copy link button */}
+            <button
+              style={{
+                ...styles.primaryBtn,
+                width: '100%',
+                padding: '14px 24px',
+                fontSize: '15px',
+                gap: '8px',
+              }}
+              onClick={() => {
+                navigator.clipboard.writeText('https://acemyinterviews.io').then(() => {
+                  setMobileGateMessage('Link copied! Open it on your desktop.');
+                }).catch(() => {
+                  setMobileGateMessage('Copy this: acemyinterviews.io');
+                });
+              }}
+            >
+              📋 Copy desktop link
+            </button>
+
+            {/* Email link button */}
+            <button
+              style={{
+                width: '100%',
+                padding: '14px 24px',
+                background: 'rgba(255,255,255,0.07)',
+                color: '#ffffff',
+                border: '1px solid rgba(255,255,255,0.15)',
+                borderRadius: '12px',
+                fontSize: '15px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+              }}
+              onClick={() => {
+                const subject = encodeURIComponent('Your interview practice link');
+                const body = encodeURIComponent('Open this on your desktop to start your interview practice:\n\nhttps://acemyinterviews.io');
+                window.location.href = `mailto:${user?.email || ''}?subject=${subject}&body=${body}`;
+              }}
+            >
+              ✉️ Email myself the link
+            </button>
+
+            {/* Success message */}
+            {mobileGateMessage && (
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '8px',
+                marginTop: '8px',
+              }}>
+                <div style={{
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '50%',
+                  background: 'rgba(16, 185, 129, 0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '22px',
+                }}>
+                  ✓
+                </div>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: '#10b981' }}>{mobileGateMessage}</div>
+              </div>
+            )}
+
+            {/* Divider */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              margin: '4px 0',
+            }}>
+              <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
+              <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)' }}>or</span>
+              <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
+            </div>
+
+            {/* Notify when mobile is ready */}
+            <div>
+              <div style={{
+                display: 'flex',
+                gap: '8px',
+              }}>
+                <input
+                  type="email"
+                  placeholder="your@email.com"
+                  value={mobileGateEmail}
+                  onChange={(e) => setMobileGateEmail(e.target.value)}
+                  style={{
+                    flex: 1,
+                    padding: '12px 16px',
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    borderRadius: '10px',
+                    fontSize: '14px',
+                    color: '#ffffff',
+                    outline: 'none',
+                  }}
+                />
+                <button
+                  onClick={() => {
+                    if (mobileGateEmail && mobileGateEmail.includes('@')) {
+                      setMobileGateMessage("You're on the list! We'll notify you when mobile is ready.");
+                      // TODO: save email to database for notification
+                    }
+                  }}
+                  style={{
+                    padding: '12px 18px',
+                    background: 'rgba(255,255,255,0.1)',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    borderRadius: '10px',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    color: '#ffffff',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  Alert me
+                </button>
+              </div>
+              <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', textAlign: 'left', marginTop: '6px' }}>
+                Get notified when mobile is ready
+              </div>
+            </div>
+
+            {/* Back to dashboard */}
+            <button
+              onClick={() => setStage('landing')}
+              style={{
+                marginTop: '8px',
+                background: 'none',
+                border: 'none',
+                color: 'rgba(255,255,255,0.4)',
+                fontSize: '13px',
+                cursor: 'pointer',
+                textDecoration: 'underline',
+              }}
+            >
+              ← Back to dashboard
+            </button>
+          </div>
         </div>
       </div>
     );
