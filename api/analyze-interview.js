@@ -69,7 +69,7 @@ export default async function handler(req, res) {
 Interview Responses:
 ${answersText}
 
-Analyze each answer and provide a comprehensive scorecard. Be fair but rigorous - this is a real interview assessment. Remember: this is transcribed speech, so evaluate what they SAID, not how it's written.
+Analyze each answer and provide a comprehensive scorecard. For each question, write detailed feedback (3-5 sentences minimum) explaining what was strong, what was missing, and exactly how to improve. Be specific — reference what the candidate actually said. Be fair but rigorous - this is a real interview assessment. Remember: this is transcribed speech, so evaluate what they SAID, not how it's written.
 
 Scoring: be strict. Vague answers without concrete examples = 40-60. Mentioning a concept without backing it up = 50-65 max. Only answers with specific examples, metrics, and clear structure score 75+. Incomplete or irrelevant answers score below 30.
 ${followUpBlock}
