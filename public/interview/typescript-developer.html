@@ -3,556 +3,142 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TypeScript Developer Interview Questions – Practice with AI Simulator</title>
-  <meta name="description" content="Practice TypeScript Developer interview questions with our AI simulator. Questions tailored to your resume and job description with instant feedback now.">
-  <meta name="keywords" content="typescript developer interview questions, TypeScript interview, TS developer interview, TypeScript engineer interview, typed JavaScript interview">
-  
-  <meta property="og:title" content="TypeScript Developer Interview Questions – Practice with AI Simulator">
-  <meta property="og:description" content="Practice TypeScript Developer interview questions with our AI simulator. Questions tailored to your resume and job description with instant feedback now.">
+  <title>TypeScript Developer Interview Questions &amp; Answers (2026 Guide)</title>
+  <meta name="description" content="Prepare for TypeScript developer interviews with questions on the type system, generics, advanced types, React and Node.js patterns, and JS-to-TS migration. Includes code examples, answer frameworks, and an AI practice simulator.">
+  <meta name="keywords" content="TypeScript interview questions, TypeScript developer interview, generics interview, conditional types, React TypeScript, Node.js TypeScript, type system interview">
+  <meta property="og:title" content="TypeScript Developer Interview Questions &amp; Answers (2026 Guide)">
+  <meta property="og:description" content="Prepare for TypeScript developer interviews with questions on the type system, generics, advanced types, React and Node.js patterns, and JS-to-TS migration.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.acemyinterviews.io/interview/typescript-developer">
   <meta property="og:image" content="https://www.acemyinterviews.io/og-image.png">
-  
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="TypeScript Developer Interview Questions – Practice with AI Simulator">
-  <meta name="twitter:description" content="Practice TypeScript Developer interview questions with our AI simulator. Questions tailored to your resume and job description with instant feedback now.">
-  
+  <meta name="twitter:title" content="TypeScript Developer Interview Questions &amp; Answers (2026 Guide)">
+  <meta name="twitter:description" content="Prepare for TypeScript developer interviews with questions on the type system, generics, advanced types, React and Node.js patterns, and JS-to-TS migration.">
   <link rel="canonical" href="https://www.acemyinterviews.io/interview/typescript-developer">
-  
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I need to know JavaScript well for TypeScript interviews?","acceptedAnswer":{"@type":"Answer","text":"Yes—TypeScript is JavaScript with types. Strong JS fundamentals are essential. For TypeScript Developer positions, the specific experience requirements vary by company and level. Review the job description carefully and prepare examples that demonstrate relevant skills. Even if your background differs slightly from requirements, showing transferable skills, quick learning ability, and genuine enthusiasm for the role can make a strong impression on interviewers."}},{"@type":"Question","name":"What TypeScript features should I focus on?","acceptedAnswer":{"@type":"Answer","text":"Know interfaces, types, generics, union/intersection types, type guards, and utility types like Partial, Pick, and Omit. For TypeScript Developer interviews specifically, employers value candidates who demonstrate self-awareness about their strengths and areas for growth. Be honest about your experience level while showing enthusiasm for learning and contributing. Prepare thoughtful questions that show you've researched the company and role. In TypeScript Developer interviews, demonstrating both technical depth and clear communication is essential. Employers evaluate not just what you know, but how you approach problems and explain your thinking."}},{"@type":"Question","name":"Will I face questions on strict mode?","acceptedAnswer":{"@type":"Answer","text":"Possibly. Understand the difference between strict and lenient TypeScript configurations and the tradeoffs. When preparing for TypeScript Developer interviews, focus on building a compelling narrative around your experience. Connect your background to the role requirements, emphasizing transferable skills where direct experience is limited. Practice explaining your career journey and motivations clearly and concisely. In TypeScript Developer interviews, demonstrating both technical depth and clear communication is essential. Employers evaluate not just what you know, but how you approach problems and explain your thinking."}},{"@type":"Question","name":"How do I demonstrate TypeScript expertise?","acceptedAnswer":{"@type":"Answer","text":"This is an important consideration for TypeScript Developer candidates. Show you can design type-safe APIs, use generics effectively, and balance type safety with practicality. Take time to research the specific company and role requirements, as expectations can vary significantly across organizations. During your interview preparation, practice articulating your relevant experience and how it applies to the position. In TypeScript Developer interviews, demonstrating both technical depth and clear communication is essential. Employers evaluate not just what you know, but how you approach problems and explain your thinking."}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I need to know JavaScript well for a TypeScript interview?","acceptedAnswer":{"@type":"Answer","text":"Yes. TypeScript is a superset of JavaScript, so interviewers expect solid JavaScript fundamentals — closures, prototypal inheritance, the event loop, async/await, and ES6+ features. TypeScript adds a type system on top; it doesn't replace runtime behavior. Most questions involve writing actual code where the JavaScript underneath must be correct."}},{"@type":"Question","name":"What TypeScript features should I focus on for interviews?","acceptedAnswer":{"@type":"Answer","text":"Prioritize: type system fundamentals (interfaces, types, unions, intersections, narrowing), generics (constraints, inference), strict null handling, utility types (Partial, Required, Pick, Omit, Record), and discriminated unions. For senior roles, also prepare conditional types, mapped types, template literal types, and the infer keyword."}},{"@type":"Question","name":"Will I face coding questions in a TypeScript interview?","acceptedAnswer":{"@type":"Answer","text":"Almost certainly. Expect to write typed functions, implement type guards, create generic utilities, and refactor untyped JavaScript. Some interviews include live coding in an IDE where the compiler catches errors in real time."}},{"@type":"Question","name":"Is deep knowledge of TypeScript's compiler expected?","acceptedAnswer":{"@type":"Answer","text":"For most roles, working knowledge of tsconfig.json — strict mode flags, module resolution, and target settings — is sufficient. Senior roles and library authors may face questions about declaration files, module augmentation, and advanced compiler options."}},{"@type":"Question","name":"How do expectations differ for junior versus senior roles?","acceptedAnswer":{"@type":"Answer","text":"Junior: basic annotations, interfaces vs types, unions, nullable handling. Mid-level: generics, type guards, utility types, framework-specific patterns. Senior: conditional types, mapped types, infer, migration strategy, type system design for library abstractions, and pragmatic decisions about where strict typing adds value."}},{"@type":"Question","name":"Should I prepare TypeScript-specific system design questions?","acceptedAnswer":{"@type":"Answer","text":"For senior roles, yes. You may design a type-safe API client, typed state management, or a generic component library. These test whether you can use the type system architecturally — how types flow through a system across module boundaries."}}]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.acemyinterviews.io"},{"@type":"ListItem","position":2,"name":"Interview Questions","item":"https://www.acemyinterviews.io/interview"},{"@type":"ListItem","position":3,"name":"TypeScript Developer Interview Questions","item":"https://www.acemyinterviews.io/interview/typescript-developer"}]}</script>
-  
   <link rel="icon" href="/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
   <style>
-    :root {
-      --bg-primary: #0f1419;
-      --bg-secondary: #1a1f2e;
-      --bg-card: #1e2330;
-      --bg-card-hover: #252b3b;
-      --accent-primary: #14b8a6;
-      --accent-primary-hover: #0d9488;
-      --accent-secondary: #2dd4bf;
-      --text-primary: #ffffff;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      --border-color: #2d3748;
-      --success: #10b981;
-      --max-width: 800px;
-      --max-width-wide: 1000px;
-    }
-    
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-    
-    .header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: var(--max-width-wide);
-      margin: 0 auto;
-    }
-    
-    .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .logo-icon {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .header-cta {
-      background: var(--accent-primary);
-      color: var(--bg-primary);
-      padding: 10px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: background 0.2s;
-    }
-    
-    .header-cta:hover { background: var(--accent-primary-hover); }
-    
-    /* Breadcrumbs */
-    .breadcrumbs {
-      max-width: var(--max-width-wide);
-      margin: 0 auto;
-      padding: 16px 24px;
-      font-size: 0.875rem;
-    }
-    
-    .breadcrumbs a {
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    
-    .breadcrumbs a:hover { color: var(--accent-primary); }
-    
-    .breadcrumbs span { color: var(--text-muted); margin: 0 8px; }
-    
-    .breadcrumbs .current { color: var(--text-secondary); }
-    
-    .hero {
-      padding: 60px 24px 80px;
-      text-align: center;
-      background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-    }
-    
-    .hero-container { max-width: var(--max-width); margin: 0 auto; }
-    
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 2.75rem);
-      font-weight: 800;
-      margin-bottom: 20px;
-      line-height: 1.2;
-      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .hero p {
-      color: var(--text-secondary);
-      font-size: 1.125rem;
-      margin-bottom: 32px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .cta-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--accent-primary);
-      color: var(--bg-primary);
-      padding: 16px 32px;
-      font-size: 1rem;
-      font-weight: 600;
-      text-decoration: none;
-      border-radius: 10px;
-      transition: all 0.2s;
-    }
-    
-    .cta-btn:hover {
-      background: var(--accent-primary-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 40px rgba(20, 184, 166, 0.3);
-    }
-    
-    .cta-btn svg { width: 20px; height: 20px; }
-    
-    .trust-badges {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 40px;
-    }
-    
-    .trust-badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-    }
-    
-    .trust-badge svg { color: var(--success); width: 16px; height: 16px; }
-    
-    section { padding: 64px 24px; }
-    .container { max-width: var(--max-width); margin: 0 auto; }
-    
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 24px;
-      text-align: center;
-      color: var(--text-primary);
-    }
-    
-    .social-proof {
-      padding: 20px 24px;
-      text-align: center;
-      border-bottom: 1px solid var(--border-color);
-    }
-    
-    .social-proof p { color: var(--text-muted); font-size: 0.9rem; }
-    
-    /* Last Updated */
-    .last-updated {
-      text-align: center;
-      padding: 12px 24px;
-      font-size: 0.8125rem;
-      color: var(--text-muted);
-    }
-    
-    .last-updated svg {
-      width: 14px;
-      height: 14px;
-      vertical-align: -2px;
-      margin-right: 4px;
-    }
-    
-    .intro-text {
-      font-size: 1.0625rem;
-      line-height: 1.8;
-      color: var(--text-secondary);
-    }
-    
-    .questions-section { background: var(--bg-secondary); }
-    .questions-list { list-style: none; display: grid; gap: 12px; }
-    
-    .questions-list li {
-      background: var(--bg-card);
-      padding: 18px 24px;
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-      font-size: 0.9375rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      transition: all 0.2s;
-    }
-    
-    .questions-list li:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--accent-primary);
-    }
-    
-    .questions-list li svg {
-      flex-shrink: 0;
-      color: var(--accent-primary);
-      width: 20px;
-      height: 20px;
-      margin-top: 2px;
-    }
-    
-    .bridge-text {
-      font-size: 1rem;
-      line-height: 1.8;
-      color: var(--text-muted);
-      text-align: center;
-    }
-    
-    .personalized-section { background: var(--bg-secondary); text-align: center; }
-    
-    .personalized-section p {
-      color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto 32px;
-    }
-    
-    .features {
-      list-style: none;
-      display: inline-flex;
-      flex-direction: column;
-      gap: 12px;
-      text-align: left;
-      margin-bottom: 32px;
-    }
-    
-    .features li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-    }
-    
-    .features li svg { color: var(--success); width: 20px; height: 20px; flex-shrink: 0; }
-    
-    .criteria-list { list-style: none; display: grid; gap: 12px; }
-    
-    .criteria-list li {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 20px;
-      background: var(--bg-card);
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-    }
-    
-    .criteria-list li svg { color: var(--accent-primary); width: 20px; height: 20px; flex-shrink: 0; }
-    
-    .faq-section { background: var(--bg-secondary); }
-    .faq-list { display: grid; gap: 12px; }
-    
-    details {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    
-    details[open] { border-color: var(--accent-primary); }
-    
-    summary {
-      padding: 18px 24px;
-      font-weight: 600;
-      cursor: pointer;
-      list-style: none;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var(--text-primary);
-      font-size: 0.9375rem;
-    }
-    
-    summary::-webkit-details-marker { display: none; }
-    
-    summary::after {
-      content: '+';
-      font-size: 1.25rem;
-      font-weight: 400;
-      color: var(--text-muted);
-      transition: transform 0.2s;
-    }
-    
-    details[open] summary::after { transform: rotate(45deg); }
-    
-    details p {
-      padding: 0 24px 18px;
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-      line-height: 1.7;
-    }
-    
-    /* Related Links */
-    .related-section {
-      padding: 48px 24px;
-      border-top: 1px solid var(--border-color);
-    }
-    
-    .related-section h3 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      margin-bottom: 20px;
-      color: var(--text-primary);
-    }
-    
-    .related-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    
-    .related-links a {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      padding: 10px 16px;
-      border-radius: 8px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.875rem;
-      transition: all 0.2s;
-    }
-    
-    .related-links a:hover {
-      border-color: var(--accent-primary);
-      color: var(--accent-primary);
-      background: var(--bg-card-hover);
-    }
-    
-    .related-links a svg {
-      width: 16px;
-      height: 16px;
-    }
-    
-    .final-cta {
-      text-align: center;
-      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-      padding: 80px 24px;
-    }
-    
-    .final-cta h2 { font-size: 1.75rem; margin-bottom: 16px; }
-    
-    .final-cta p {
-      color: var(--text-secondary);
-      margin-bottom: 32px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .small-text { font-size: 0.875rem; color: var(--text-muted); margin-top: 16px; }
-    
-    .footer {
-      padding: 32px 24px;
-      text-align: center;
-      border-top: 1px solid var(--border-color);
-    }
-    
-    .footer a { color: var(--accent-primary); text-decoration: none; font-size: 0.9rem; }
-    .footer a:hover { text-decoration: underline; }
-    
-    @media (max-width: 640px) {
-      .hero { padding: 40px 20px 60px; }
-      section { padding: 48px 20px; }
-      .header { padding: 16px 20px; }
-      .trust-badges { flex-direction: column; align-items: center; }
-      .cta-btn { width: 100%; justify-content: center; }
-      .related-links { flex-direction: column; }
-      .related-links a { width: 100%; }
-    }
+:root{--bg-primary:#0f1419;--bg-secondary:#1a1f2e;--bg-card:#1e2330;--bg-card-hover:#252b3b;--accent-primary:#14b8a6;--accent-primary-hover:#0d9488;--accent-secondary:#2dd4bf;--text-primary:#fff;--text-secondary:#94a3b8;--text-muted:#64748b;--border-color:#2d3748;--success:#10b981;--max-width:800px;--max-width-wide:1000px}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased}.header{padding:20px 24px;border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;max-width:var(--max-width-wide);margin:0 auto}.logo{font-size:1.25rem;font-weight:700;color:var(--text-primary);text-decoration:none;display:flex;align-items:center;gap:8px}.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent-primary),var(--accent-secondary));border-radius:8px;display:flex;align-items:center;justify-content:center}.header-cta{background:var(--accent-primary);color:var(--bg-primary);padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;font-size:.9rem;transition:background .2s}.header-cta:hover{background:var(--accent-primary-hover)}.breadcrumbs{max-width:var(--max-width-wide);margin:0 auto;padding:16px 24px;font-size:.875rem}.breadcrumbs a{color:var(--text-muted);text-decoration:none}.breadcrumbs a:hover{color:var(--accent-primary)}.breadcrumbs span{color:var(--text-muted);margin:0 8px}.breadcrumbs .current{color:var(--text-secondary)}.hero{padding:60px 24px 80px;text-align:center;background:linear-gradient(180deg,var(--bg-secondary) 0%,var(--bg-primary) 100%)}.hero-container{max-width:var(--max-width);margin:0 auto}.hero h1{font-size:clamp(2rem,5vw,2.75rem);font-weight:800;margin-bottom:20px;line-height:1.2;background:linear-gradient(135deg,var(--text-primary) 0%,var(--text-secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.hero p{color:var(--text-secondary);font-size:1.125rem;margin-bottom:32px;max-width:650px;margin-left:auto;margin-right:auto;line-height:1.7}.cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent-primary);color:var(--bg-primary);padding:16px 32px;font-size:1rem;font-weight:600;text-decoration:none;border-radius:10px;transition:all .2s}.cta-btn:hover{background:var(--accent-primary-hover);transform:translateY(-2px);box-shadow:0 10px 40px rgba(20,184,166,.3)}.trust-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:40px}.trust-badge{display:flex;align-items:center;gap:6px;background:var(--bg-card);border:1px solid var(--border-color);padding:10px 16px;border-radius:8px;font-size:.875rem;color:var(--text-secondary)}.trust-badge svg{color:var(--success);width:16px;height:16px}section{padding:64px 24px}.container{max-width:var(--max-width);margin:0 auto}h2{font-size:1.5rem;font-weight:700;margin-bottom:24px;color:var(--text-primary)}h2.centered{text-align:center}h3{font-size:1.25rem;font-weight:600;color:var(--text-primary);margin-bottom:16px}.social-proof{padding:20px 24px;text-align:center;border-bottom:1px solid var(--border-color)}.social-proof p{color:var(--text-muted);font-size:.9rem}.last-updated{text-align:center;padding:12px 24px;font-size:.8125rem;color:var(--text-muted)}.last-updated svg{width:14px;height:14px;vertical-align:-2px;margin-right:4px}.toc{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:28px 32px}.toc-title{font-size:.875rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:16px}.toc-list{list-style:none;display:grid;gap:10px}.toc-list li a{color:var(--accent-primary);text-decoration:none;font-size:.9375rem;font-weight:500;display:flex;align-items:center;gap:8px}.toc-list li a:hover{color:var(--accent-secondary)}.toc-list li a::before{content:'';width:6px;height:6px;background:var(--accent-primary);border-radius:50%;flex-shrink:0}.content-text{font-size:1.0625rem;line-height:1.8;color:var(--text-secondary);margin-bottom:20px}.content-text:last-child{margin-bottom:0}.content-text a,.section-intro a{color:var(--accent-primary);text-decoration:none}.content-text a:hover,.section-intro a:hover{text-decoration:underline}.section-intro{font-size:1.0625rem;line-height:1.8;color:var(--text-secondary);margin-bottom:32px}.comparison-wrapper{overflow-x:auto;margin:32px 0;border-radius:12px;border:1px solid var(--border-color)}.comparison-table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:640px}.comparison-table th{background:var(--bg-card);padding:14px 16px;text-align:left;font-weight:600;color:var(--text-primary);border-bottom:2px solid var(--border-color)}.comparison-table th a{color:var(--accent-primary);text-decoration:none}.comparison-table th a:hover{text-decoration:underline}.comparison-table th:first-child{color:var(--text-muted);font-weight:500}.comparison-table td{padding:14px 16px;color:var(--text-secondary);border-bottom:1px solid var(--border-color);vertical-align:top;line-height:1.5}.comparison-table td:first-child{font-weight:600;color:var(--text-primary)}.comparison-table tr:last-child td{border-bottom:none}.question-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:32px;margin-bottom:24px}.question-card:hover{border-color:rgba(20,184,166,.3)}.question-card-title{font-size:1.125rem;font-weight:700;color:var(--text-primary);margin-bottom:20px;display:flex;align-items:flex-start;gap:12px;line-height:1.4}.question-card-title svg{color:var(--accent-primary);width:22px;height:22px;flex-shrink:0;margin-top:2px}.qcs{margin-bottom:20px}.qcs:last-child{margin-bottom:0}.qcl{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--accent-primary);margin-bottom:8px}.qcs p{font-size:.9375rem;line-height:1.7;color:var(--text-secondary)}.evaluate-list{list-style:none;display:grid;gap:6px}.evaluate-list li{font-size:.9375rem;color:var(--text-secondary);display:flex;align-items:center;gap:8px}.evaluate-list li::before{content:'';width:5px;height:5px;background:var(--accent-primary);border-radius:50%;flex-shrink:0}.sample-answer{background:var(--bg-primary);border:1px solid var(--border-color);border-radius:8px;padding:20px 24px;margin-top:4px}.sample-answer p{font-size:.9rem;line-height:1.75;color:var(--text-secondary);font-style:italic}.code-block{background:#0d1117;border:1px solid var(--border-color);border-radius:8px;padding:16px 20px;margin:12px 0;overflow-x:auto;font-family:'Fira Code',monospace;font-size:.8125rem;line-height:1.6;color:#c9d1d9}.code-block .kw{color:#ff7b72}.code-block .tp{color:#79c0ff}.code-block .st{color:#a5d6ff}.code-block .cm{color:#8b949e}.mid-cta{background:linear-gradient(135deg,var(--bg-secondary) 0%,var(--bg-card) 100%);border:1px solid var(--border-color);border-radius:16px;padding:48px 40px;text-align:center}.mid-cta h2{margin-bottom:16px;text-align:center}.mid-cta .content-text{max-width:600px;margin:0 auto 32px}.section-dark{background:var(--bg-secondary)}.faq-section{background:var(--bg-secondary)}.faq-list{display:grid;gap:12px}details{background:var(--bg-card);border:1px solid var(--border-color);border-radius:10px}details[open]{border-color:var(--accent-primary)}summary{padding:20px 24px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;font-size:.9375rem}summary::-webkit-details-marker{display:none}summary::after{content:'+';font-size:1.25rem;color:var(--text-muted);font-weight:400;flex-shrink:0;margin-left:12px}details[open] summary::after{content:'\2212'}details p{padding:0 24px 20px;color:var(--text-secondary);line-height:1.7;font-size:.9375rem}details p a{color:var(--accent-primary);text-decoration:none}details p a:hover{text-decoration:underline}.related-section{padding:48px 24px;border-top:1px solid var(--border-color)}.related-section h3{text-align:center;margin-bottom:24px;color:var(--text-primary);font-size:1.25rem;font-weight:600}.related-links{display:grid;gap:8px;max-width:var(--max-width);margin:0 auto}.related-links a{display:flex;align-items:center;gap:10px;padding:14px 20px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:10px;color:var(--text-secondary);text-decoration:none;font-size:.9375rem;font-weight:500;transition:all .2s}.related-links a:hover{border-color:var(--accent-primary);color:var(--accent-primary);background:var(--bg-card-hover)}.related-links a svg{width:16px;height:16px;flex-shrink:0}.final-cta{background:linear-gradient(180deg,var(--bg-primary) 0%,var(--bg-secondary) 100%);text-align:center;padding:80px 24px}.final-cta h2{font-size:1.75rem;margin-bottom:16px;text-align:center}.final-cta .content-text{max-width:600px;margin:0 auto 32px}.footer{padding:32px 24px;text-align:center;border-top:1px solid var(--border-color)}.footer a{color:var(--text-muted);text-decoration:none;font-size:.875rem}.footer a:hover{color:var(--accent-primary)}@media(max-width:640px){.hero{padding:40px 20px 60px}section{padding:48px 20px}.question-card{padding:24px 20px}.mid-cta{padding:36px 24px}.toc{padding:20px 24px}.comparison-table{font-size:.8rem}}
   </style>
 </head>
 <body>
-  <header class="header">
-    <a href="/" class="logo">
-      <div class="logo-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
-      </div>
-      AceMyInterviews
-    </a>
-    <a href="/" class="header-cta">Start Practicing</a>
-  </header>
+  <div class="header"><a href="/" class="logo"><div class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>AceMyInterviews</a><a href="/" class="header-cta">Start Practicing</a></div>
+  <div class="breadcrumbs"><a href="/">Home</a><span>›</span><a href="/interview">Interview Questions</a><span>›</span><span class="current">TypeScript Developer</span></div>
+  <div class="hero"><div class="hero-container"><h1>TypeScript Developer Interview Questions &amp; Answers (2026 Guide)</h1><p>TypeScript interviews in 2026 go well beyond 'explain interface vs type.' Expect questions on generics with constraints, conditional and mapped types, discriminated unions, type narrowing strategies, and how to type real-world patterns in React and Node.js. This guide covers the full scope with code examples and answer frameworks.</p><a href="/" class="cta-btn">Start Free Practice Interview →</a><div class="trust-badges"><div class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Type system fundamentals with code examples</div><div class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Generics, conditional types &amp; advanced patterns</div><div class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>React + TypeScript &amp; Node.js patterns</div><div class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Migration strategies &amp; typing challenges</div></div></div></div>
+  <div class="social-proof"><p>AI-powered mock interviews tailored to TypeScript developer roles</p></div>
+  <div class="last-updated"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>Last updated: February 2026</div>
 
-  <!-- Breadcrumbs -->
-  <nav class="breadcrumbs">
-    <a href="/">Home</a>
-    <span>›</span>
-    <a href="/interview">Interview Questions</a>
-    <span>›</span>
-    <span class="current">TypeScript Developer</span>
-  </nav>
+  <section><div class="container"><nav class="toc"><div class="toc-title">In This Guide</div><ol class="toc-list"><li><a href="#what-ts-interviews-cover">What TypeScript Interviews Cover in 2026</a></li><li><a href="#ts-vs-js">TypeScript vs JavaScript: What Changes in Interviews</a></li><li><a href="#type-system-fundamentals">Type System Fundamentals</a></li><li><a href="#generics-advanced-types">Generics &amp; Advanced Types</a></li><li><a href="#practical-patterns">Practical TypeScript Patterns</a></li><li><a href="#framework-typescript">Framework-Specific TypeScript Questions</a></li><li><a href="#migration-adoption">Migration &amp; Adoption Questions</a></li><li><a href="#behavioral-questions">Behavioral Questions</a></li><li><a href="#faq">FAQ</a></li></ol></nav></div></section>
 
-  <section class="hero">
-    <div class="hero-container">
-      <h1>TypeScript Developer Interview Questions & Practice Simulator</h1>
-      <p>Practice realistic TypeScript developer interview questions in a timed simulation environment.</p>
-      <a href="/" class="cta-btn">
-        Start Free Practice Interview →
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </a>
-      <div class="trust-badges">
-        <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic interview questions</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>3 minutes per answer</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant pass/fail verdict</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Feedback on confidence, clarity, and delivery</span>
-      </div>
+  <section><div class="container"><p class="content-text">TypeScript has moved from 'nice to have' to the default for most professional JavaScript development. The result: TypeScript interviews have gotten significantly deeper. You'll still be asked about fundamentals like union types and type guards, but you'll also face questions about typing complex patterns: generic API response wrappers, discriminated unions for state machines, conditional types that transform other types, and framework-specific patterns like typing React hooks or Express middleware.</p><p class="content-text">The strongest candidates demonstrate that they use TypeScript's type system to make impossible states impossible — not just to satisfy the compiler. This guide is organized by topic area: type system fundamentals first, then generics and advanced types, practical patterns, framework-specific TypeScript, migration strategies, and behavioral questions.</p></div></section>
+
+  <section id="what-ts-interviews-cover"><div class="container"><h2>What TypeScript Interviews Cover in 2026</h2><p class="content-text">Type system fluency — reading and writing generics, union and intersection types, mapped types, and conditional types. Interviewers assess whether you think in types or add them after the fact.</p><p class="content-text">Type narrowing and control flow — type guards, discriminated unions, the <code>in</code> operator, <code>instanceof</code> checks, and assertion functions. Can you write code where the compiler proves correctness at each branch?</p><p class="content-text">Generics and type-level programming — the dividing line between junior and senior TypeScript. Generic constraints, inference, and reusable type-safe abstractions.</p><p class="content-text">Practical typing challenges — third-party libraries without definitions, dynamic object shapes, API responses, event handlers, and complex state management.</p><p class="content-text">Framework-specific patterns — React prop typing, hooks, context, higher-order components. For Node.js: middleware typing, request/response types, database models.</p><p class="content-text">Migration and adoption — migration strategy, handling <code>any</code> types, incremental adoption, and strict mode configuration.</p></div></section>
+
+  <section id="ts-vs-js" class="section-dark"><div class="container"><h2>TypeScript vs JavaScript: What Changes in Interviews</h2><p class="section-intro">If you're coming from a <a href="/interview/javascript-developer">JavaScript background</a>, understanding what TypeScript interviews add helps focus your preparation. TypeScript interviews don't replace JavaScript knowledge — they layer type system skills on top.</p><div class="comparison-wrapper"><table class="comparison-table"><thead><tr><th>Dimension</th><th>TypeScript Interview</th><th><a href="/interview/javascript-developer">JavaScript Interview</a></th></tr></thead><tbody><tr><td>Core focus</td><td>Type system mastery, compile-time safety, using types to model domain logic</td><td>Runtime behavior, closures, prototypes, event loop, async patterns, DOM</td></tr><tr><td>Code questions</td><td>Typed functions with generics, type guards, utility types, complex typed patterns</td><td>Algorithms, data structures, async operations, closures and scope</td></tr><tr><td>Error handling</td><td>Compile-time prevention — discriminated unions, exhaustive checks, strict null handling</td><td>Runtime — try/catch, error boundaries, defensive coding, validation</td></tr><tr><td>Architecture</td><td>Type-safe API contracts, generic abstractions, module type exports, declaration files</td><td>Module patterns, dependency injection, event-driven architecture</td></tr><tr><td>Framework knowledge</td><td>Typing React components/hooks, typing Express middleware, generic API wrappers</td><td>React lifecycle, Node.js streams, Express routing, browser APIs</td></tr><tr><td>Senior topics</td><td>Conditional types, mapped types, template literal types, type-level programming</td><td>Performance optimization, memory management, build tooling, security</td></tr></tbody></table></div></div></section>
+  <section id="type-system-fundamentals"><div class="container"><h2>Type System Fundamentals</h2><p class="section-intro">These questions test your core understanding of TypeScript's type system. Every interview includes at least two or three fundamentals questions — even for senior roles.</p>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What's the difference between <code>interface</code> and <code>type</code> in TypeScript? When would you use each?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>The most common TypeScript interview opener. Reveals whether you understand the actual technical differences versus just having a style preference.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Precise understanding of interface vs type capabilities</li><li>Practical judgment about when each is appropriate</li><li>Knowledge of declaration merging</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>Cover actual differences: (1) Declaration merging — interfaces merge when declared twice (essential for library augmentation), types error on redeclaration. (2) Extends vs intersection — interfaces use <code>extends</code> with better error messages on conflicts; types use <code>&amp;</code> which silently produces <code>never</code> for conflicting properties. (3) Computed properties — types support mapped types and conditional types that interfaces can't. (4) Union types — only <code>type</code> can represent unions. Practical guidance: interfaces for object shapes that might be extended; types for unions, intersections, mapped types, and anything beyond plain object shapes.</p></div>
+<div class="qcs"><div class="qcl">Sample Answer</div><div class="sample-answer"><p>The core differences are technical, not just stylistic. Interfaces support declaration merging — declaring <code>interface Window</code> twice merges them, which is essential for augmenting third-party types. Types don't merge; redeclaring is a compile error. Interfaces use <code>extends</code> for composition, which gives clear errors on property conflicts. Types use <code>&amp;</code> intersection, which silently produces <code>never</code> for conflicting property types — a subtle bug source. But types can do things interfaces can't: union types, mapped types, conditional types, and template literal types. My practical rule: interfaces for object shapes that define contracts (component props, API responses, class implementations), types for everything else (unions, utility types, computed types, type-level logic).</p></div></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Explain union types and intersection types. How does TypeScript narrow union types?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>Unions and intersections are fundamental. Interviewers want to see you understand how narrowing works, not just the syntax.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Understanding of set-theoretic type operations</li><li>Type narrowing techniques</li><li>Practical usage patterns</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>Union (<code>A | B</code>): value can be A or B, access only common members unless narrowed. Intersection (<code>A &amp; B</code>): must satisfy both, all members accessible. Narrowing techniques: (1) <code>typeof</code> — narrows primitives. (2) <code>in</code> operator — checks property existence. (3) <code>instanceof</code> — narrows to class instances. (4) Discriminated unions — shared literal property as discriminant for exhaustive narrowing. (5) Custom type guards — <code>function isUser(x: unknown): x is User</code>. (6) Assertion functions — <code>asserts x is User</code> that throw on failure.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What's the difference between <code>unknown</code> and <code>any</code>? When would you use each?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>Tests whether you understand TypeScript's safety philosophy. <code>any</code> opts out; <code>unknown</code> preserves safety.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Type safety mindset</li><li>Understanding of type-safe escape hatches</li><li>Practical judgment</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p><code>any</code> disables type checking — assign anything, use it as anything without checks. <code>unknown</code> is type-safe: assign anything to it, but must narrow before using it. Use <code>unknown</code> for: function parameters needing validation, parsing external data (API responses, JSON.parse), catch blocks. Use <code>any</code> only for: gradual JS migration, temporarily while prototyping. Rule: prefer <code>unknown</code> in every case. <code>any</code> is a safety escape hatch; <code>unknown</code> is a safety checkpoint.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you handle nullable types safely? Explain strict null checks.</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>Null/undefined errors are the most common JavaScript runtime bug. TypeScript's strict null checking is the primary defense.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Understanding of strictNullChecks</li><li>Narrowing nullable types</li><li>Optional chaining and nullish coalescing</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>With <code>strictNullChecks</code> (always enable it), null and undefined are separate types. Techniques: (1) Optional properties — <code>name?: string</code> means <code>string | undefined</code>. (2) Null narrowing — <code>if (value !== null)</code>. (3) Optional chaining — <code>obj?.prop?.method()</code>. (4) Nullish coalescing — <code>value ?? default</code> (only null/undefined, not falsy like 0 or ''). (5) Non-null assertion — <code>value!</code>, use sparingly. (6) Best: model nullability with discriminated unions so each state only has the properties that make sense.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What are type guards and how do you create custom ones?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>Type guards bridge runtime JavaScript and compile-time TypeScript. They're how you write checks the compiler understands.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Understanding of type predicates</li><li>Ability to write custom guards</li><li>Awareness of when built-in narrowing isn't enough</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>Built-in: <code>typeof</code>, <code>instanceof</code>, <code>in</code>, equality checks. Custom guards use the <code>is</code> keyword: <code>function isString(x: unknown): x is string</code>. The return type tells TypeScript to narrow in the truthy branch. Use for: validating API responses, discriminating complex types without literal discriminants, replacing <code>as</code> assertions with runtime-checked narrowing. Important: the compiler trusts your guard — if you return true incorrectly, you've introduced a lie TypeScript can't catch.</p></div>
+</div>
+  </div></section>
+  <section id="generics-advanced-types" class="section-dark"><div class="container"><h2>Generics &amp; Advanced Types</h2><p class="section-intro">Generics are the dividing line between basic and advanced TypeScript. These questions test whether you can build reusable, type-safe abstractions — the skill that separates developers who use TypeScript from developers who think in TypeScript.</p>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Explain generics in TypeScript. When and why would you use them?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>Generics are the foundation of reusable type-safe code. Tests whether you understand them deeply enough to use them effectively.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Understanding of parametric polymorphism</li><li>Ability to identify when generics add value</li><li>Practical usage patterns</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>Generics parameterize types — write logic once, type system fills in specifics. Key concepts: (1) Type parameters — <code>function identity&lt;T&gt;(value: T): T</code> preserves input type in output. (2) Constraints — <code>&lt;T extends HasId&gt;</code> limits what T can be. (3) Inference — TypeScript usually infers T from usage. (4) Default parameters — <code>&lt;T = string&gt;</code> provides fallback. Use for: API response wrappers, collection utilities, factory functions, anything where the specific type varies but structure doesn't.</p></div>
+<div class="qcs"><div class="qcl">Sample Answer</div><div class="sample-answer"><p>The real power is in constraints and inference. For example, a function that extracts a property from an object: <code>function getProperty&lt;T, K extends keyof T&gt;(obj: T, key: K): T[K]</code>. TypeScript infers both T and K from the arguments, the return type is correctly narrowed (string for a string property, number for a number property), and passing an invalid key is a compile error. I use generics most for: API response wrappers where the response shape varies by endpoint, collection utility functions preserving element types, factory patterns where the created type comes from input, and React components with configurable data shapes.</p></div></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What are conditional types and how would you use them in practice?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>Conditional types are the most powerful feature in TypeScript's type system. Understanding them signals senior-level capability.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Advanced type-level programming</li><li>Ability to read and write conditional types</li><li>Practical application</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>Syntax: <code>T extends U ? X : Y</code>. Key patterns: (1) Type filtering — <code>NonNullable&lt;T&gt; = T extends null | undefined ? never : T</code>. (2) Type extraction with <code>infer</code> — <code>ReturnType&lt;T&gt; = T extends (...args: any[]) =&gt; infer R ? R : never</code>. The <code>infer</code> keyword captures a type from a pattern match. (3) Distributive behavior — when T is a union, the conditional distributes over each member. (4) Recursive conditional types — for deeply nested structures like unwrapping nested Promises.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Explain mapped types. How would you create a utility type that makes all properties optional and nullable?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>Mapped types are how TypeScript transforms existing types — the basis for Partial, Required, Readonly, and most utility types.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Mapped type syntax understanding</li><li>Ability to create custom utility types</li><li>Knowledge of built-in utility types</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>Mapped types iterate over keys and transform each property: <code>{ [K in keyof T]: NewType }</code>. Built-in examples: <code>Partial&lt;T&gt;</code>, <code>Required&lt;T&gt;</code>, <code>Readonly&lt;T&gt;</code>, <code>Pick&lt;T, K&gt;</code>, <code>Omit&lt;T, K&gt;</code>. Modifiers: <code>+?</code> and <code>-?</code> add/remove optional. Custom example: <code>type PartialNullable&lt;T&gt; = { [K in keyof T]?: T[K] | null }</code> makes all properties optional AND nullable. Combine with other utility types: <code>type RequireSome&lt;T, K extends keyof T&gt; = Partial&lt;T&gt; &amp; Required&lt;Pick&lt;T, K&gt;&gt;</code> makes specific properties required.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What are template literal types and how are they useful?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>Template literal types enable string-level type safety. Tests whether you're current with the language.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Awareness of modern TypeScript features</li><li>Ability to apply template literals to real problems</li><li>Type-level string manipulation</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>Create string types from combinations: <code>type Greeting = `hello ${string}`</code>. Practical uses: (1) Event names — <code>type HandlerName = `on${Capitalize&lt;keyof EventMap&gt;}`</code> produces 'onClick' | 'onFocus'. (2) CSS property typing — <code>type CSSLength = `${number}${'px' | 'rem' | 'em'}`</code>. (3) API route typing — ensuring URL patterns match. (4) Combined with mapped types — creating getter/setter types from property names.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do <code>keyof</code> and <code>typeof</code> work at the type level?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>These operators bridge runtime values and compile-time types. Essential for generic, DRY type definitions.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Understanding of type-level operators</li><li>Ability to derive types from existing code</li><li>DRY type patterns</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p><code>keyof T</code> produces a union of T's property names as string literals. <code>typeof value</code> (at type level) extracts the type of a runtime value. Together they derive types from code: <code>const STATUS = { pending: 'PENDING', active: 'ACTIVE' } as const; type StatusKey = keyof typeof STATUS</code> gives <code>'pending' | 'active'</code>. Patterns: <code>keyof</code> for property access safety in generic functions, <code>typeof</code> for deriving types from config objects and constants.</p></div>
+</div>
+  </div></section>
+  <section id="practical-patterns"><div class="container"><h2>Practical TypeScript Patterns</h2><p class="section-intro">These questions test your ability to apply the type system to real-world problems — the patterns you'd use daily in production TypeScript code.</p>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you use discriminated unions to model application state?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>Discriminated unions are TypeScript's most powerful pattern for state that has different shapes depending on context. This is how you make impossible states impossible.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>State modeling skill</li><li>Understanding of exhaustive checking</li><li>Ability to design type-safe APIs</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>A discriminated union uses a shared literal property (discriminant) to differentiate variants. TypeScript's control flow narrows based on it. Benefits: (1) Each variant only has properties that make sense for it — no misleading optional properties. (2) Switch on the discriminant is exhaustively checked. (3) IDE autocomplete works perfectly per branch. Classic example: <code>type AsyncData&lt;T&gt; = { status: 'idle' } | { status: 'loading' } | { status: 'success'; data: T } | { status: 'error'; error: Error }</code>. The <code>data</code> field only exists when status is 'success'. You can't accidentally access it in the loading state.</p></div>
+<div class="qcs"><div class="qcl">Sample Answer</div><div class="sample-answer"><p>Discriminated unions are my go-to for any state with multiple modes. Compare the optional-properties approach with discriminated unions: the optional-properties version (<code>{ loading: boolean; data?: User; error?: Error }</code>) allows invalid combinations — loading=true with data set, or both data and error present. The discriminated union (<code>{ status: 'loading' } | { status: 'success'; data: User } | { status: 'error'; error: Error }</code>) makes those states literally unrepresentable. I also add an exhaustive check helper: <code>function assertNever(x: never): never { throw new Error('Unexpected: ' + x); }</code>. In the default case of a switch, calling <code>assertNever(state)</code> becomes a compile error if any variant isn't handled — so adding a new variant forces you to handle it everywhere.</p></div></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you type function overloads? When are they preferable to unions?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>Function overloads are common in real-world TypeScript but have sharp edges.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Understanding of overload signatures</li><li>Implementation signature rules</li><li>When to use overloads vs unions</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>Multiple call signatures, single implementation. The implementation signature must be compatible with all overloads but isn't visible to callers. Use when: return type depends on input type in ways generics can't express, or different parameter counts map to different behaviors. Alternative: union types or generic conditional returns are often simpler. Example: <code>function parse(input: string): string[]; function parse(input: string[]): string;</code> — the return type depends on the input type.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you work with third-party libraries that don't have type definitions?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>A daily reality in TypeScript development. Tests practical workflow.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Practical problem-solving</li><li>Understanding of declaration files</li><li>Ability to create type stubs</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>Escalating approach: (1) Check DefinitelyTyped — <code>npm install @types/library-name</code>. (2) Check if the library ships its own types. (3) Create a <code>.d.ts</code> file with <code>declare module 'library-name'</code> describing the API surface you use. Start minimal, expand as needed. (4) Use <code>any</code> as last resort — but isolate untyped code in a wrapper module so <code>any</code> doesn't leak.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Explain the <code>satisfies</code> operator. How does it differ from annotations and assertions?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>The <code>satisfies</code> operator (TS 4.9+) solves a real problem. Tests whether you're current with the language.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Knowledge of modern TypeScript</li><li>Understanding of type widening/narrowing trade-offs</li><li>Practical usage</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>The problem: annotations widen the type, assertions bypass checking. <code>satisfies</code> validates a value matches a type while preserving the narrower inferred type. Annotation <code>const x: Theme = value</code> widens to Theme. Assertion <code>const x = value as Theme</code> trusts blindly. Satisfies <code>const x = value satisfies Theme</code> validates AND preserves literals. So <code>theme.primary</code> is type <code>'red'</code> not <code>Color</code>.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you make TypeScript enforce exhaustive handling of all cases in a union?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>Exhaustive checking is one of the strongest safety guarantees TypeScript provides.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Understanding of the never type</li><li>Exhaustive switch patterns</li><li>Defensive programming with types</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>Two approaches: (1) The <code>never</code> trick — in the default branch, assign the discriminant to <code>const _exhaustive: never = action</code>. If any case is unhandled, TypeScript errors because the type isn't actually <code>never</code>. (2) Return type enforcement — with <code>noImplicitReturns</code> enabled, a function that returns from each case will error if a case is missing. The never trick is more explicit and works even in void functions.</p></div>
+</div>
+  </div></section>
+  <section id="framework-typescript" class="section-dark"><div class="container"><h2>Framework-Specific TypeScript Questions</h2><p class="section-intro">Most TypeScript roles are framework-specific — React, Node.js, or both. These questions test whether you can apply the type system to the patterns that matter in each framework.</p>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you type React component props, including children, event handlers, and optional props with defaults?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>React + TypeScript is the most common interview context. Prop typing is foundational.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>React + TypeScript fluency</li><li>Prop type patterns</li><li>Practical component design</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>Core patterns: (1) Props interface for each component. (2) Children — <code>React.ReactNode</code> for anything renderable, <code>React.ReactElement</code> for JSX. (3) Events — <code>React.MouseEvent&lt;HTMLButtonElement&gt;</code>, <code>React.ChangeEvent&lt;HTMLInputElement&gt;</code>. (4) Default props — destructuring defaults in function signature. (5) Extending HTML elements — <code>React.ComponentPropsWithoutRef&lt;'button'&gt;</code> gives all native button props. Pattern: <code>interface ButtonProps extends React.ComponentPropsWithoutRef&lt;'button'&gt; { variant: 'primary' | 'secondary'; isLoading?: boolean }</code>.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you type React hooks — specifically useState, useRef, and custom hooks?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>Hook typing is a daily task. Getting it wrong leads to subtle null handling bugs.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Hook typing fluency</li><li>Generic inference in hooks</li><li>Null handling in refs</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p><code>useState</code>: infers from initial value. Provide explicit generic when initial doesn't represent full type — <code>useState&lt;User | null&gt;(null)</code>. <code>useRef</code>: two patterns. <code>useRef&lt;HTMLDivElement&gt;(null)</code> for DOM refs (readonly .current, <code>RefObject</code>). <code>useRef&lt;number&gt;(0)</code> for mutable values (writable .current, <code>MutableRefObject</code>). Custom hooks: type return explicitly, especially tuples — <code>return [value, setValue] as const</code> or define return type.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you type Express middleware and route handlers in Node.js?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>Express typing is notoriously tricky. Tests backend TypeScript skill.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Node.js + TypeScript experience</li><li>Declaration merging for Express</li><li>Middleware typing patterns</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>Core patterns: (1) Route handler — <code>Request&lt;Params, ResBody, ReqBody, Query&gt;</code> generics for type-safe params and body. (2) Response typing — ensure handlers return expected shape. (3) Middleware augmentation — declaration merging to add <code>req.user</code> after auth middleware via <code>declare global { namespace Express { interface Request { user?: AuthUser } } }</code>. (4) Error handler — four-parameter <code>(err, req, res, next)</code> signature.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How would you build a generic, type-safe API client in TypeScript?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>Combines generics, inference, and architecture. Common senior-level question.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Generic API design</li><li>Type inference strategy</li><li>Practical architecture</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>Design a client where the endpoint determines request and response types automatically. Define a route map type pairing endpoints with their types, then a generic fetch function that infers everything. Example: <code>interface ApiRoutes { 'GET /users': { response: User[]; params: { limit?: number } }; 'POST /users': { response: User; body: CreateUserInput } }</code>. Then <code>async function api&lt;R extends keyof ApiRoutes&gt;(route: R, options?: Omit&lt;ApiRoutes[R], 'response'&gt;): Promise&lt;ApiRoutes[R]['response']&gt;</code>. Callers get full type safety with zero annotations.</p></div>
+</div>
+  </div></section>
+  <section id="migration-adoption"><div class="container"><h2>Migration &amp; Adoption Questions</h2><p class="section-intro">Many companies are mid-migration from JavaScript to TypeScript. These questions test whether you can plan and execute a migration pragmatically — without blocking feature development.</p>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How would you migrate a large JavaScript codebase to TypeScript?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>JS-to-TS migration tests both technical skill and project management judgment. The wrong approach blocks development for months.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Migration strategy</li><li>Pragmatism vs perfectionism</li><li>Ability to plan incremental changes</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>Phased approach: (1) Enable alongside JS — <code>allowJs: true</code>, .js and .ts coexist. No big-bang rewrite. (2) Add <code>// @ts-check</code> to existing JS files for gradual checking. (3) Convert incrementally — start with leaf modules (utilities, helpers), work inward. (4) Start loose, tighten over time — <code>strict: false</code> initially, enable checks one at a time. (5) Set the <code>any</code> boundary — untyped code at edges gets <code>any</code>, new code must be typed. Boundary shrinks over time. (6) Prioritize high-churn files.</p></div>
+<div class="qcs"><div class="qcl">Sample Answer</div><div class="sample-answer"><p>I approach migration as gradual adoption, not rewrite. Phase one: add TypeScript to the build alongside JavaScript — <code>allowJs: true</code>, <code>strict: false</code>. Every existing .js file works unchanged, new files can be .ts. Takes a day, blocks nobody. Phase two: annotate boundaries — add type declarations for the most-used internal APIs. Phase three: incremental conversion starting with leaf modules. I prioritize files that change frequently since those benefit most from type checking. Phase four: tighten strictness one flag at a time. <code>strictNullChecks</code> first (catches the most bugs), then <code>noImplicitAny</code>, then the rest. Each flag is a separate PR. The key principle: at every point the codebase is fully functional. No feature branch converting everything for two months.</p></div></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What is strict mode? Should you always enable it?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>Strict mode is a collection of flags that significantly increase safety. Tests whether you know what each flag does.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Compiler configuration knowledge</li><li>Understanding of safety trade-offs</li><li>Practical judgment</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p><code>strict: true</code> enables: <code>strictNullChecks</code>, <code>noImplicitAny</code>, <code>strictFunctionTypes</code>, <code>strictBindCallApply</code>, <code>strictPropertyInitialization</code>, <code>noImplicitThis</code>, <code>alwaysStrict</code>. New projects: always enable. Existing projects: enable incrementally. Biggest wins: <code>strictNullChecks</code> and <code>noImplicitAny</code> catch the most real bugs. Some flags like <code>strictPropertyInitialization</code> can be noisy with dependency injection or ORM patterns.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you handle the tension between type safety and developer velocity?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>The central trade-off in TypeScript adoption. Tests pragmatic decision-making.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Pragmatism</li><li>Assessing where type safety delivers most value</li><li>Team leadership perspective</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>Types have diminishing returns. Strategy: (1) Type boundaries aggressively — API contracts, props, function signatures, module exports. (2) Let inference work internally — don't annotate what the compiler knows. (3) Accept <code>any</code> at edges — isolate in wrappers. (4) Invest in types that prevent bug categories — discriminated unions, branded types, readonly. (5) Don't type-golf — if a type takes 20 minutes to write and is incomprehensible, simplify. The point is productivity, not cleverness.</p></div>
+</div>
+  </div></section>
+  <section id="behavioral-questions" class="section-dark"><div class="container"><h2>Behavioral Questions</h2><p class="section-intro">TypeScript behavioral questions focus on how you work with types in a team context — advocating for safety, reviewing typed code, and making pragmatic decisions about strictness.</p>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Tell me about a time TypeScript's type system caught a bug that would have reached production.</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>Concrete examples of type system value are more convincing than abstract arguments.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Appreciation for type safety</li><li>Ability to articulate TypeScript's value with evidence</li><li>Attention to near-misses</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>STAR format. Best examples: a refactoring caught across 50+ files by the compiler, a null access caught by strict null checks, a discriminated union preventing an impossible state, a generic catching a wrong parameter. Show you noticed the save and can quantify impact.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you convince a team that's resistant to TypeScript adoption?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>TypeScript adoption is often a team decision. Tests leadership and communication.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Communication skills</li><li>Empathy for different viewpoints</li><li>Pragmatic adoption strategy</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>Principles: (1) Address concerns directly — 'slows me down,' 'too verbose,' 'JS is fine' each have valid cores. (2) Show, don't tell — convert one module, demonstrate bugs caught, show IDE improvement. (3) Start with pain points — frequent null errors? Start with <code>strictNullChecks</code>. (4) Lower the barrier — <code>allowJs</code>, gradual adoption. (5) Respect the learning curve — pair programming and reviews help.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you handle code reviews for TypeScript?</div><div class="qcs"><div class="qcl">Why They Ask It</div><p>Code review is where type quality is maintained or degraded over time.</p></div><div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Code review discipline</li><li>Type quality standards</li><li>Ability to spot type-safety gaps</li></ul></div><div class="qcs"><div class="qcl">Answer Framework</div><p>Type-specific checklist: (1) <code>any</code> usage — justified? Can it be narrowed? Isolated in a wrapper? (2) Type assertions (<code>as</code>) — safer alternative with guards? (3) Non-null assertions (<code>!</code>) — actually guaranteed? (4) Overly broad types — <code>string</code> where a union of literals would be safer. (5) Missing return types on exports — they're documentation and catch drift. (6) Generic constraints — properly constrained or using <code>any</code> unnecessarily?</p></div>
+</div>
+  </div></section>
+
+  <section id="cta-mid"><div class="container"><div class="mid-cta">
+    <h2 class="centered">Practice TypeScript Interview Questions with AI</h2>
+    <p class="content-text">TypeScript interviews test both type system knowledge and your ability to explain type design decisions clearly. Our AI simulator generates tailored questions, times your responses, and provides detailed feedback on technical depth and code clarity.</p>
+    <a href="/" class="cta-btn">Start Free Practice Interview →</a>
+    <p style="color:var(--text-muted);font-size:.875rem;margin-top:16px">Tailored to TypeScript developer roles. No credit card required.</p>
+  </div></div></section>
+
+  <section id="faq" class="faq-section"><div class="container">
+    <h2 class="centered">Frequently Asked Questions</h2>
+    <div class="faq-list">
+      <details><summary>Do I need to know JavaScript well for a TypeScript interview?</summary><p>Yes. TypeScript is a superset of JavaScript, so interviewers expect solid JavaScript fundamentals — closures, prototypal inheritance, the event loop, async/await, and ES6+ features. TypeScript adds a type system on top; it doesn't replace runtime behavior. Most interview questions involve writing actual code where the JavaScript underneath must be correct. If your JavaScript foundations are weak, focus on those first. See our <a href="/interview/javascript-developer">JavaScript developer interview guide</a> for preparation.</p></details>
+      <details><summary>What TypeScript features should I focus on for interviews?</summary><p>Prioritize in this order: type system fundamentals (interfaces, types, unions, intersections, type narrowing), generics (constraints, inference, generic functions and types), strict null handling (optional chaining, nullish coalescing, strictNullChecks), utility types (Partial, Required, Pick, Omit, Record), and discriminated unions. For senior roles, also prepare conditional types, mapped types, template literal types, and the infer keyword. Framework-specific typing (React props, hooks, Express middleware) is essential if the role specifies a framework.</p></details>
+      <details><summary>Will I face coding questions in a TypeScript interview?</summary><p>Almost certainly. TypeScript interviews are code-heavy. Expect to write typed functions, implement type guards, create generic utilities, and potentially refactor untyped JavaScript into TypeScript. Some interviews include live coding in an IDE where the compiler catches errors in real time — so you need to be comfortable writing types that compile, not just types that look right.</p></details>
+      <details><summary>Is deep knowledge of TypeScript's compiler expected?</summary><p>For most roles, working knowledge of tsconfig.json — especially strict mode flags, module resolution, and target settings — is sufficient. Senior roles and library/framework authors may face questions about declaration files, module augmentation, and advanced compiler options. Understanding what strict mode enables and why each flag matters is expected at all levels.</p></details>
+      <details><summary>How do expectations differ for junior versus senior roles?</summary><p>Junior roles focus on fundamentals: basic annotations, interfaces vs types, unions, nullable handling. Mid-level adds generics, type guards, utility types, and framework-specific patterns. Senior expects advanced type-level programming (conditional types, mapped types, infer), migration strategy experience, type system design for library abstractions, and pragmatic decisions about where strict typing adds value.</p></details>
+      <details><summary>Should I prepare TypeScript-specific system design questions?</summary><p>For senior roles, yes. You may design a type-safe API client, typed state management, or a generic component library. These test whether you can use the type system architecturally — how types flow through a system across module boundaries.</p></details>
     </div>
-  </section>
-  
-  <div class="social-proof"><p>Simulate real interview conditions before your actual interview</p></div>
-  
-  <!-- Last Updated -->
-  <div class="last-updated">
-    <svg viewBox="0 0 20 20" fill="currentColor">
-      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-    </svg>
-    Last updated: February 2026
-  </div>
-  
-  <section>
-    <div class="container">
-      <p class="intro-text">TypeScript has become the standard for large-scale JavaScript applications. Interviews assess your understanding of the type system, generics, and how to leverage TypeScript for safer, more maintainable code. Expect questions on type inference, advanced types, and when to use strict typing versus flexibility. Companies want developers who can design type-safe systems while maintaining developer productivity.</p>
-    </div>
-  </section>
-  
-  <section class="questions-section">
-    <div class="container">
-      <h2>Example TypeScript Developer Interview Questions</h2>
-      <ul class="questions-list">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Explain the difference between interface and type in TypeScript.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do generics work and when would you use them?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>What are union and intersection types? Give examples of each.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you handle nullable types safely in TypeScript?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Explain the 'unknown' type versus 'any'. When would you use each?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you type a function that can accept different parameter types?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe your approach to migrating a JavaScript codebase to TypeScript.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you work with third-party libraries that don't have type definitions?</span></li>
-      </ul>
-    </div>
-  </section>
-  
-  <section>
-    <div class="container">
-      <p class="bridge-text">TypeScript interviews vary based on whether the role focuses on frontend frameworks, Node.js backend, or full stack development. AceMyInterviews generates questions tailored to your specific job description.</p>
-    </div>
-  </section>
-  
-  <section class="personalized-section">
-    <div class="container">
-      <h2>Practice Questions Tailored To Your Interview</h2>
-      <p>Your resume and job description are analyzed to create TypeScript questions matched to your target role. Practice on camera and receive feedback.</p>
-      <ul class="features">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Questions on type system and advanced features</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Framework-specific TypeScript patterns</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic timed interview simulation</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant feedback and pass/fail verdict</li>
-      </ul>
-      <a href="/" class="cta-btn">Start Free Practice Interview →</a>
-    </div>
-  </section>
-  
-  <section>
-    <div class="container">
-      <h2>What Interviewers Evaluate</h2>
-      <ul class="criteria-list">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Type system understanding and best practices</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Generics and advanced type patterns</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>JavaScript fundamentals (TypeScript builds on JS)</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Framework integration (React, Node, etc.)</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Migration and adoption strategies</li>
-      </ul>
-    </div>
-  </section>
-  
-  <section class="faq-section">
-    <div class="container">
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-list">
-        <details><summary>Do I need to know JavaScript well for TypeScript interviews?</summary><p>Yes—TypeScript is JavaScript with types. Strong JS fundamentals are essential. For TypeScript Developer positions, the specific experience requirements vary by company and level. Review the job description carefully and prepare examples that demonstrate relevant skills. Even if your background differs slightly from requirements, showing transferable skills, quick learning ability, and genuine enthusiasm for the role can make a strong impression on interviewers.</p></details><details><summary>What TypeScript features should I focus on?</summary><p>Know interfaces, types, generics, union/intersection types, type guards, and utility types like Partial, Pick, and Omit. For TypeScript Developer interviews specifically, employers value candidates who demonstrate self-awareness about their strengths and areas for growth. Be honest about your experience level while showing enthusiasm for learning and contributing. Prepare thoughtful questions that show you've researched the company and role. In TypeScript Developer interviews, demonstrating both technical depth and clear communication is essential. Employers evaluate not just what you know, but how you approach problems and explain your thinking.</p></details><details><summary>Will I face questions on strict mode?</summary><p>Possibly. Understand the difference between strict and lenient TypeScript configurations and the tradeoffs. When preparing for TypeScript Developer interviews, focus on building a compelling narrative around your experience. Connect your background to the role requirements, emphasizing transferable skills where direct experience is limited. Practice explaining your career journey and motivations clearly and concisely. In TypeScript Developer interviews, demonstrating both technical depth and clear communication is essential. Employers evaluate not just what you know, but how you approach problems and explain your thinking.</p></details><details><summary>How do I demonstrate TypeScript expertise?</summary><p>This is an important consideration for TypeScript Developer candidates. Show you can design type-safe APIs, use generics effectively, and balance type safety with practicality. Take time to research the specific company and role requirements, as expectations can vary significantly across organizations. During your interview preparation, practice articulating your relevant experience and how it applies to the position. In TypeScript Developer interviews, demonstrating both technical depth and clear communication is essential. Employers evaluate not just what you know, but how you approach problems and explain your thinking.</p></details>
-      </div>
-    </div>
-  </section>
-  
-  <!-- Related Interview Questions (Internal Links) -->
-  <div class="related-section">
-    <div class="container">
-      <h3>Related Interview Questions</h3>
-      <div class="related-links">
-        <a href="/interview/android-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Android Developer Interview Questions</a><a href="/interview/research-analyst"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Research Analyst Interview Questions</a><a href="/interview/financial-analyst"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Financial Analyst Interview Questions</a><a href="/interview/hr-manager"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>HR Manager Interview Questions</a><a href="/interview/sales-associate"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Sales Associate Interview Questions</a>
-      </div>
-    </div>
-  </div>
-  
-  <section class="final-cta">
-    <div class="container">
-      <h2>See How You Perform In A Real Interview Simulation</h2>
-      <p>Practice TypeScript developer interview questions tailored to your experience and receive instant feedback.</p>
-      <a href="/" class="cta-btn">Start Practicing Now →</a>
-      <p class="small-text">Takes less than 15 minutes.</p>
-    </div>
-  </section>
-  
-  <footer class="footer">
-    <a href="/">← Back to AceMyInterviews</a>
-  </footer>
+  </div></section>
+
+  <div class="related-section"><h3>Explore Related Interview Questions</h3><div class="related-links">
+    <a href="/interview/javascript-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>JavaScript Developer Interview Questions</a>
+    <a href="/interview/react-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>React Developer Interview Questions</a>
+    <a href="/interview/nodejs-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>Node.js Developer Interview Questions</a>
+    <a href="/interview/frontend-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>Frontend Developer Interview Questions</a>
+  </div></div>
+
+  <section class="final-cta"><div class="container">
+    <h2>Ready to Prepare for Your TypeScript Interview?</h2>
+    <p class="content-text">Upload your resume and the job description. Our AI generates targeted questions based on the specific role — covering type system fundamentals, generics, framework-specific patterns, and migration strategy. Practice with timed responses, camera on, and detailed scoring on both technical accuracy and explanation clarity.</p>
+    <a href="/" class="cta-btn">Start Free Practice Interview →</a>
+    <p style="color:var(--text-muted);font-size:.875rem;margin-top:16px">Personalized TypeScript developer interview prep. No credit card required.</p>
+  </div></section>
+
+  <footer class="footer"><a href="/">© 2026 AceMyInterviews</a></footer>
 </body>
 </html>

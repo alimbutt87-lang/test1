@@ -3,549 +3,230 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generative AI Engineer Interview Questions & Practice Simulator</title>
-  <meta name="description" content="Master Generative AI Engineer interviews with AI-powered practice. Get realistic questions on LLMs, prompt engineering, and model fine-tuning. Instant feedback included.">
-  <meta name="keywords" content="generative ai engineer interview questions, generative ai engineer interview, generative ai engineer career">
-  
-  <meta property="og:title" content="Generative AI Engineer Interview Questions & Practice Simulator">
-  <meta property="og:description" content="Master Generative AI Engineer interviews with AI-powered practice. Get realistic questions on LLMs, prompt engineering, and model fine-tuning. Instant feedback included.">
+  <title>Generative AI Engineer Interview Questions &amp; Answers (2026 Guide)</title>
+  <meta name="description" content="Generative AI engineer interview questions covering transformer architectures, fine-tuning, RLHF, prompt optimization, and production LLM systems. Includes answer frameworks, sample answers, and a free practice simulator.">
+  <meta name="keywords" content="generative AI engineer interview questions, generative AI interview, transformer interview questions, fine-tuning interview, RLHF interview questions, LLM production interview">
+  <meta property="og:title" content="Generative AI Engineer Interview Questions &amp; Answers (2026 Guide)">
+  <meta property="og:description" content="Generative AI engineer interview questions covering transformer architectures, fine-tuning, RLHF, prompt optimization, and production LLM systems. Includes answer frameworks, sample answers, and a free practice simulator.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.acemyinterviews.io/interview/generative-ai-engineer">
   <meta property="og:image" content="https://www.acemyinterviews.io/og-image.png">
-  
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Generative AI Engineer Interview Questions & Practice Simulator">
-  <meta name="twitter:description" content="Master Generative AI Engineer interviews with AI-powered practice. Get realistic questions on LLMs, prompt engineering, and model fine-tuning. Instant feedback included.">
-  
+  <meta name="twitter:title" content="Generative AI Engineer Interview Questions &amp; Answers (2026 Guide)">
+  <meta name="twitter:description" content="Generative AI engineer interview questions covering transformer architectures, fine-tuning, RLHF, prompt optimization, and production LLM systems. Includes answer frameworks, sample answers, and a free practice simulator.">
   <link rel="canonical" href="https://www.acemyinterviews.io/interview/generative-ai-engineer">
-  
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I need to know the math behind transformers?", "acceptedAnswer": {"@type": "Answer", "text": "Understanding the core concepts is important, but deep mathematical expertise isn't always required. Interviewers value practitioners who understand how transformers work at a high level and can explain key concepts like attention mechanisms clearly. Focus on being able to explain trade-offs and when to use different approaches."}}, {"@type": "Question", "name": "What's the difference between prompt engineering and fine-tuning?", "acceptedAnswer": {"@type": "Answer", "text": "Prompt engineering involves crafting the right prompts and few-shot examples to get desired outputs from existing models. Fine-tuning involves training a pre-trained model on your specific data. Prompt engineering is faster and cheaper; fine-tuning provides better performance for specialized tasks. Be ready to discuss when to use each."}}, {"@type": "Question", "name": "Which LLMs should I be familiar with?", "acceptedAnswer": {"@type": "Answer", "text": "Familiarity with GPT-4, Claude, and open-source models like Llama is valuable. Understand their strengths, limitations, and use cases. Knowledge of the ecosystem (LangChain, LlamaIndex, Hugging Face) is increasingly important."}}, {"@type": "Question", "name": "What production challenges should I be prepared to discuss?", "acceptedAnswer": {"@type": "Answer", "text": "Be ready to discuss latency optimization, cost management, handling API rate limits, managing tokens efficiently, monitoring model quality drift, and implementing fallback mechanisms. Real-world experience with these challenges makes you stand out."}}, {"@type": "Question", "name": "How important is RAG in interviews?", "acceptedAnswer": {"@type": "Answer", "text": "Very important. RAG (Retrieval-Augmented Generation) is increasingly critical for production systems. Understand vector databases, embedding models, and how to integrate them into applications."}}]}</script>
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.acemyinterviews.io"}, {"@type": "ListItem", "position": 2, "name": "Interview Questions", "item": "https://www.acemyinterviews.io/interview"}, {"@type": "ListItem", "position": 3, "name": "Generative AI Engineer Interview Questions", "item": "https://www.acemyinterviews.io/interview/generative-ai-engineer"}]}</script>
-  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I need to know the math behind transformers for a generative AI engineer interview?","acceptedAnswer":{"@type":"Answer","text":"You need conceptual understanding, not proof-level math. You should be able to explain what self-attention does, why it scales quadratically, and how temperature affects generation. Deeper mathematical fluency is expected mainly at foundation model labs."}},{"@type":"Question","name":"What is the difference between a generative AI engineer and a prompt engineer?","acceptedAnswer":{"@type":"Answer","text":"A generative AI engineer works across the full stack of generative AI systems from model selection and fine-tuning to production deployment. A prompt engineer focuses primarily on designing and optimizing prompts. Generative AI engineer interviews go much deeper technically."}},{"@type":"Question","name":"Which LLMs and frameworks should I know for a generative AI engineer interview?","acceptedAnswer":{"@type":"Answer","text":"Know the major model families and their trade-offs. On frameworks, know Hugging Face Transformers, an inference optimization tool like vLLM, and a fine-tuning library like PEFT. Interviewers care more about why you chose tools than which specific ones."}},{"@type":"Question","name":"How important is RAG knowledge in generative AI engineer interviews?","acceptedAnswer":{"@type":"Answer","text":"Very important. RAG is the most common architecture pattern in production generative AI. You should design a RAG pipeline end-to-end and understand that most bad RAG outputs are caused by retrieval failures, not generation failures."}},{"@type":"Question","name":"Are generative AI engineer interviews different from AI engineer interviews?","acceptedAnswer":{"@type":"Answer","text":"Yes. AI engineer interviews focus on the application layer. Generative AI engineer interviews go deeper into transformer architectures, fine-tuning techniques, RLHF, decoding strategies, and inference optimization."}},{"@type":"Question","name":"Should I have fine-tuning experience to interview as a generative AI engineer?","acceptedAnswer":{"@type":"Answer","text":"Hands-on experience is a significant advantage but not always required. What is universally required is understanding when and why to fine-tune and the trade-offs between prompt engineering, RAG, and fine-tuning."}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.acemyinterviews.io"},{"@type":"ListItem","position":2,"name":"Interview Questions","item":"https://www.acemyinterviews.io/interview"},{"@type":"ListItem","position":3,"name":"Generative AI Engineer Interview Questions","item":"https://www.acemyinterviews.io/interview/generative-ai-engineer"}]}</script>
   <link rel="icon" href="/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
   <style>
-    :root {
-      --bg-primary: #0f1419;
-      --bg-secondary: #1a1f2e;
-      --bg-card: #1e2330;
-      --bg-card-hover: #252b3b;
-      --accent-primary: #14b8a6;
-      --accent-primary-hover: #0d9488;
-      --accent-secondary: #2dd4bf;
-      --text-primary: #ffffff;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      --border-color: #2d3748;
-      --success: #10b981;
-      --max-width: 800px;
-      --max-width-wide: 1000px;
-    }
-    
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-    
-    .header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: var(--max-width-wide);
-      margin: 0 auto;
-    }
-    
-    .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .logo-icon {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .header-cta {
-      background: var(--accent-primary);
-      color: var(--bg-primary);
-      padding: 10px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: background 0.2s;
-    }
-    
-    .header-cta:hover { background: var(--accent-primary-hover); }
-    
-    .breadcrumbs {
-      max-width: var(--max-width-wide);
-      margin: 0 auto;
-      padding: 16px 24px;
-      font-size: 0.875rem;
-    }
-    
-    .breadcrumbs a {
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    
-    .breadcrumbs a:hover { color: var(--accent-primary); }
-    
-    .breadcrumbs span { color: var(--text-muted); margin: 0 8px; }
-    
-    .breadcrumbs .current { color: var(--text-secondary); }
-    
-    .hero {
-      padding: 60px 24px 80px;
-      text-align: center;
-      background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-    }
-    
-    .hero-container { max-width: var(--max-width); margin: 0 auto; }
-    
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 2.75rem);
-      font-weight: 800;
-      margin-bottom: 20px;
-      line-height: 1.2;
-      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .hero p {
-      color: var(--text-secondary);
-      font-size: 1.125rem;
-      margin-bottom: 32px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .cta-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--accent-primary);
-      color: var(--bg-primary);
-      padding: 16px 32px;
-      font-size: 1rem;
-      font-weight: 600;
-      text-decoration: none;
-      border-radius: 10px;
-      transition: all 0.2s;
-    }
-    
-    .cta-btn:hover {
-      background: var(--accent-primary-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 40px rgba(20, 184, 166, 0.3);
-    }
-    
-    .cta-btn svg { width: 20px; height: 20px; }
-    
-    .trust-badges {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 40px;
-    }
-    
-    .trust-badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-    }
-    
-    .trust-badge svg { color: var(--success); width: 16px; height: 16px; }
-    
-    section { padding: 64px 24px; }
-    .container { max-width: var(--max-width); margin: 0 auto; }
-    
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 24px;
-      text-align: center;
-      color: var(--text-primary);
-    }
-    
-    .social-proof {
-      padding: 20px 24px;
-      text-align: center;
-      border-bottom: 1px solid var(--border-color);
-    }
-    
-    .social-proof p { color: var(--text-muted); font-size: 0.9rem; }
-    
-    .last-updated {
-      text-align: center;
-      padding: 12px 24px;
-      font-size: 0.8125rem;
-      color: var(--text-muted);
-    }
-    
-    .last-updated svg {
-      width: 14px;
-      height: 14px;
-      vertical-align: -2px;
-      margin-right: 4px;
-    }
-    
-    .intro-text {
-      font-size: 1.0625rem;
-      line-height: 1.8;
-      color: var(--text-secondary);
-    }
-    
-    .questions-section { background: var(--bg-secondary); }
-    .questions-list { list-style: none; display: grid; gap: 12px; }
-    
-    .questions-list li {
-      background: var(--bg-card);
-      padding: 18px 24px;
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-      font-size: 0.9375rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      transition: all 0.2s;
-    }
-    
-    .questions-list li:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--accent-primary);
-    }
-    
-    .questions-list li svg {
-      flex-shrink: 0;
-      color: var(--accent-primary);
-      width: 20px;
-      height: 20px;
-      margin-top: 2px;
-    }
-    
-    .bridge-text {
-      font-size: 1rem;
-      line-height: 1.8;
-      color: var(--text-muted);
-      text-align: center;
-    }
-    
-    .personalized-section { background: var(--bg-secondary); text-align: center; }
-    
-    .personalized-section p {
-      color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto 32px;
-    }
-    
-    .features {
-      list-style: none;
-      display: inline-flex;
-      flex-direction: column;
-      gap: 12px;
-      text-align: left;
-      margin-bottom: 32px;
-    }
-    
-    .features li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-    }
-    
-    .features li svg { color: var(--success); width: 20px; height: 20px; flex-shrink: 0; }
-    
-    .criteria-list { list-style: none; display: grid; gap: 12px; }
-    
-    .criteria-list li {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 20px;
-      background: var(--bg-card);
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-    }
-    
-    .criteria-list li svg { color: var(--accent-primary); width: 20px; height: 20px; flex-shrink: 0; }
-    
-    .faq-section { background: var(--bg-secondary); }
-    .faq-list { display: grid; gap: 12px; }
-    
-    details {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    
-    details[open] { border-color: var(--accent-primary); }
-    
-    summary {
-      padding: 18px 24px;
-      font-weight: 600;
-      cursor: pointer;
-      list-style: none;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var(--text-primary);
-      font-size: 0.9375rem;
-    }
-    
-    summary::-webkit-details-marker { display: none; }
-    
-    summary::after {
-      content: '+';
-      font-size: 1.25rem;
-      font-weight: 400;
-      color: var(--text-muted);
-      transition: transform 0.2s;
-    }
-    
-    details[open] summary::after { transform: rotate(45deg); }
-    
-    details p {
-      padding: 0 24px 18px;
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-      line-height: 1.7;
-    }
-    
-    .related-section {
-      padding: 48px 24px;
-      border-top: 1px solid var(--border-color);
-    }
-    
-    .related-section h3 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      margin-bottom: 20px;
-      color: var(--text-primary);
-    }
-    
-    .related-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    
-    .related-links a {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      padding: 10px 16px;
-      border-radius: 8px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.875rem;
-      transition: all 0.2s;
-    }
-    
-    .related-links a:hover {
-      border-color: var(--accent-primary);
-      color: var(--accent-primary);
-      background: var(--bg-card-hover);
-    }
-    
-    .related-links a svg {
-      width: 16px;
-      height: 16px;
-    }
-    
-    .final-cta {
-      text-align: center;
-      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-      padding: 80px 24px;
-    }
-    
-    .final-cta h2 { font-size: 1.75rem; margin-bottom: 16px; }
-    
-    .final-cta p {
-      color: var(--text-secondary);
-      margin-bottom: 32px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .small-text { font-size: 0.875rem; color: var(--text-muted); margin-top: 16px; }
-    
-    .footer {
-      padding: 32px 24px;
-      text-align: center;
-      border-top: 1px solid var(--border-color);
-    }
-    
-    .footer a { color: var(--accent-primary); text-decoration: none; font-size: 0.9rem; }
-    .footer a:hover { text-decoration: underline; }
-    
-    @media (max-width: 640px) {
-      .hero { padding: 40px 20px 60px; }
-      section { padding: 48px 20px; }
-      .header { padding: 16px 20px; }
-      .trust-badges { flex-direction: column; align-items: center; }
-      .cta-btn { width: 100%; justify-content: center; }
-      .related-links { flex-direction: column; }
-      .related-links a { width: 100%; }
-    }
+:root{--bg-primary:#0f1419;--bg-secondary:#1a1f2e;--bg-card:#1e2330;--bg-card-hover:#252b3b;--accent-primary:#14b8a6;--accent-primary-hover:#0d9488;--accent-secondary:#2dd4bf;--text-primary:#fff;--text-secondary:#94a3b8;--text-muted:#64748b;--border-color:#2d3748;--success:#10b981;--max-width:800px;--max-width-wide:1000px}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased}.header{padding:20px 24px;border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;max-width:var(--max-width-wide);margin:0 auto}.logo{font-size:1.25rem;font-weight:700;color:var(--text-primary);text-decoration:none;display:flex;align-items:center;gap:8px}.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent-primary),var(--accent-secondary));border-radius:8px;display:flex;align-items:center;justify-content:center}.header-cta{background:var(--accent-primary);color:var(--bg-primary);padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;font-size:.9rem;transition:background .2s}.header-cta:hover{background:var(--accent-primary-hover)}.breadcrumbs{max-width:var(--max-width-wide);margin:0 auto;padding:16px 24px;font-size:.875rem}.breadcrumbs a{color:var(--text-muted);text-decoration:none}.breadcrumbs a:hover{color:var(--accent-primary)}.breadcrumbs span{color:var(--text-muted);margin:0 8px}.breadcrumbs .current{color:var(--text-secondary)}.hero{padding:60px 24px 80px;text-align:center;background:linear-gradient(180deg,var(--bg-secondary) 0%,var(--bg-primary) 100%)}.hero-container{max-width:var(--max-width);margin:0 auto}.hero h1{font-size:clamp(2rem,5vw,2.75rem);font-weight:800;margin-bottom:20px;line-height:1.2;background:linear-gradient(135deg,var(--text-primary) 0%,var(--text-secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.hero p{color:var(--text-secondary);font-size:1.125rem;margin-bottom:32px;max-width:650px;margin-left:auto;margin-right:auto;line-height:1.7}.cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent-primary);color:var(--bg-primary);padding:16px 32px;font-size:1rem;font-weight:600;text-decoration:none;border-radius:10px;transition:all .2s}.cta-btn:hover{background:var(--accent-primary-hover);transform:translateY(-2px);box-shadow:0 10px 40px rgba(20,184,166,.3)}.trust-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:40px}.trust-badge{display:flex;align-items:center;gap:6px;background:var(--bg-card);border:1px solid var(--border-color);padding:10px 16px;border-radius:8px;font-size:.875rem;color:var(--text-secondary)}.trust-badge svg{color:var(--success);width:16px;height:16px}section{padding:64px 24px}.container{max-width:var(--max-width);margin:0 auto}h2{font-size:1.5rem;font-weight:700;margin-bottom:24px;color:var(--text-primary)}h2.centered{text-align:center}.social-proof{padding:20px 24px;text-align:center;border-bottom:1px solid var(--border-color)}.social-proof p{color:var(--text-muted);font-size:.9rem}.last-updated{text-align:center;padding:12px 24px;font-size:.8125rem;color:var(--text-muted)}.last-updated svg{width:14px;height:14px;vertical-align:-2px;margin-right:4px}.toc{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:28px 32px}.toc-title{font-size:.875rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:16px}.toc-list{list-style:none;display:grid;gap:10px}.toc-list li a{color:var(--accent-primary);text-decoration:none;font-size:.9375rem;font-weight:500;display:flex;align-items:center;gap:8px}.toc-list li a:hover{color:var(--accent-secondary)}.toc-list li a::before{content:'';width:6px;height:6px;background:var(--accent-primary);border-radius:50%;flex-shrink:0}.content-text{font-size:1.0625rem;line-height:1.8;color:var(--text-secondary);margin-bottom:20px}.content-text:last-child{margin-bottom:0}.section-intro{font-size:1.0625rem;line-height:1.8;color:var(--text-secondary);margin-bottom:32px}.comparison-wrapper{overflow-x:auto;margin:32px 0;border-radius:12px;border:1px solid var(--border-color)}.comparison-table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:640px}.comparison-table th{background:var(--bg-card);padding:14px 16px;text-align:left;font-weight:600;color:var(--text-primary);border-bottom:2px solid var(--border-color)}.comparison-table th:first-child{color:var(--text-muted);font-weight:500}.comparison-table td{padding:14px 16px;color:var(--text-secondary);border-bottom:1px solid var(--border-color);vertical-align:top;line-height:1.5}.comparison-table td:first-child{font-weight:600;color:var(--text-primary)}.comparison-table tr:last-child td{border-bottom:none}.follow-up-text{font-size:.9375rem;line-height:1.7;color:var(--text-secondary);margin-top:24px;padding:20px 24px;background:var(--bg-card);border-left:3px solid var(--accent-primary);border-radius:0 8px 8px 0}.question-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:32px;margin-bottom:24px}.question-card:hover{border-color:rgba(20,184,166,.3)}.question-card-title{font-size:1.125rem;font-weight:700;color:var(--text-primary);margin-bottom:20px;display:flex;align-items:flex-start;gap:12px;line-height:1.4}.question-card-title svg{color:var(--accent-primary);width:22px;height:22px;flex-shrink:0;margin-top:2px}.qcs{margin-bottom:20px}.qcs:last-child{margin-bottom:0}.qcl{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--accent-primary);margin-bottom:8px}.qcs p{font-size:.9375rem;line-height:1.7;color:var(--text-secondary)}.evaluate-list{list-style:none;display:grid;gap:6px}.evaluate-list li{font-size:.9375rem;color:var(--text-secondary);display:flex;align-items:center;gap:8px}.evaluate-list li::before{content:'';width:5px;height:5px;background:var(--accent-primary);border-radius:50%;flex-shrink:0}.sample-answer{background:var(--bg-primary);border:1px solid var(--border-color);border-radius:8px;padding:20px 24px;margin-top:4px}.sample-answer p{font-size:.9rem;line-height:1.75;color:var(--text-secondary);font-style:italic}.mid-cta{background:linear-gradient(135deg,var(--bg-secondary) 0%,var(--bg-card) 100%);border:1px solid var(--border-color);border-radius:16px;padding:48px 40px;text-align:center}.mid-cta h2{margin-bottom:16px;text-align:center}.mid-cta .content-text{max-width:600px;margin:0 auto 32px}.mcf{list-style:none;display:grid;gap:10px;max-width:440px;margin:0 auto 32px;text-align:left}.mcf li{display:flex;align-items:center;gap:10px;font-size:.9375rem;color:var(--text-secondary)}.mcf li svg{color:var(--success);width:18px;height:18px;flex-shrink:0}.section-dark{background:var(--bg-secondary)}.faq-section{background:var(--bg-secondary)}.faq-list{display:grid;gap:12px}details{background:var(--bg-card);border:1px solid var(--border-color);border-radius:10px}details[open]{border-color:var(--accent-primary)}summary{padding:20px 24px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;font-size:.9375rem}summary::-webkit-details-marker{display:none}summary::after{content:'+';font-size:1.25rem;color:var(--text-muted);font-weight:400;flex-shrink:0;margin-left:12px}details[open] summary::after{content:'\2212'}details p{padding:0 24px 20px;color:var(--text-secondary);line-height:1.7;font-size:.9375rem}.ed{margin-top:20px}.edt{font-weight:600;color:var(--text-primary);margin-bottom:4px}.ed p{font-size:.9375rem;color:var(--text-secondary);line-height:1.7}.related-section{padding:48px 24px;border-top:1px solid var(--border-color)}.related-section h3{text-align:center;margin-bottom:24px;color:var(--text-primary);font-size:1.25rem;font-weight:600}.related-links{display:grid;gap:8px;max-width:var(--max-width);margin:0 auto}.related-links a{display:flex;align-items:center;gap:10px;padding:14px 20px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:10px;color:var(--text-secondary);text-decoration:none;font-size:.9375rem;font-weight:500;transition:all .2s}.related-links a:hover{border-color:var(--accent-primary);color:var(--accent-primary);background:var(--bg-card-hover)}.related-links a svg{width:16px;height:16px;flex-shrink:0}.final-cta{background:linear-gradient(180deg,var(--bg-primary) 0%,var(--bg-secondary) 100%);text-align:center;padding:80px 24px}.final-cta h2{font-size:1.75rem;margin-bottom:16px;text-align:center}.final-cta .content-text{max-width:600px;margin:0 auto 32px}.final-cta .small-text{margin-top:16px;color:var(--text-muted);font-size:.875rem}.footer{padding:32px 24px;text-align:center;border-top:1px solid var(--border-color)}.footer a{color:var(--text-muted);text-decoration:none;font-size:.875rem}.footer a:hover{color:var(--accent-primary)}@media(max-width:640px){.hero{padding:40px 20px 60px}section{padding:48px 20px}.question-card{padding:24px 20px}.mid-cta{padding:36px 24px}.toc{padding:20px 24px}.comparison-table{font-size:.8rem}}
   </style>
 </head>
 <body>
-  <header class="header">
-    <a href="/" class="logo">
-      <div class="logo-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
-      </div>
-      AceMyInterviews
-    </a>
-    <a href="/" class="header-cta">Start Practicing</a>
-  </header>
-
-  <nav class="breadcrumbs">
-    <a href="/">Home</a>
-    <span>›</span>
-    <a href="/interview">Interview Questions</a>
-    <span>›</span>
-    <span class="current">Generative AI Engineer</span>
-  </nav>
-
-  <section class="hero">
-    <div class="hero-container">
-      <h1>Generative AI Engineer Interview Questions & Practice Simulator</h1>
-      <p>Master your generative ai engineer interview with AI-powered practice and instant feedback.</p>
-      <a href="/" class="cta-btn">
-        Start Free Practice Interview →
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </a>
-      <div class="trust-badges">
-        <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic interview questions</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>3 minutes per answer</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant pass/fail verdict</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Feedback on confidence, clarity, and delivery</span>
-      </div>
-    </div>
-  </section>
-  
+  <div class="header"><a href="/" class="logo"><div class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>AceMyInterviews</a><a href="/" class="header-cta">Start Practicing</a></div>
+  <div class="breadcrumbs"><a href="/">Home</a><span>›</span><a href="/interview">Interview Questions</a><span>›</span><span class="current">Generative AI Engineer</span></div>
+  <div class="hero"><div class="hero-container"><h1>Generative AI Engineer Interview Questions &amp; Answers (2026 Guide)</h1><p>Technical and behavioral interview questions on transformer architectures, fine-tuning, RLHF, prompt optimization, and production generative AI systems — with answer frameworks, sample responses, and a free AI interview simulator.</p><a href="/" class="cta-btn">Start Free Practice Interview →</a><div class="trust-badges"><div class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic interview questions</div><div class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>3 minutes per answer</div><div class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant pass/fail verdict</div><div class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Feedback on confidence, clarity, and delivery</div></div></div></div>
   <div class="social-proof"><p>Simulate real interview conditions before your actual interview</p></div>
-  
-  <div class="last-updated">
-    <svg viewBox="0 0 20 20" fill="currentColor">
-      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-    </svg>
-    Last updated: February 2026
-  </div>
-  
-  <section>
-    <div class="container">
-      <p class="intro-text">Generative AI engineers design and optimize large language models and generative systems, working at the intersection of machine learning research and production implementation. Modern interviews assess your understanding of transformer architectures, fine-tuning techniques, prompt engineering best practices, and your ability to build scalable AI applications. This simulator prepares you with realistic scenario-based questions that mirror what top AI companies ask.</p>
+  <div class="last-updated"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>Last updated: February 2026</div>
+
+  <section><div class="container"><nav class="toc"><div class="toc-title">In This Guide</div><ol class="toc-list"><li><a href="#what-generative-ai-engineers-do">What Generative AI Engineers Do in 2026</a></li><li><a href="#generative-ai-vs-ai-vs-ml">Generative AI Engineer vs AI Engineer vs ML Engineer</a></li><li><a href="#transformer-architecture-questions">Transformer &amp; Architecture Questions</a></li><li><a href="#fine-tuning-training-questions">Fine-Tuning &amp; Training Questions</a></li><li><a href="#prompt-engineering-questions">Prompt Engineering &amp; Optimization Questions</a></li><li><a href="#production-llm-questions">Production LLM Systems Questions</a></li><li><a href="#evaluation-safety-questions">Evaluation &amp; Safety Questions</a></li><li><a href="#behavioral-questions">Behavioral Interview Questions</a></li><li><a href="#what-interviewers-evaluate">What Interviewers Are Really Evaluating</a></li><li><a href="#how-to-prepare">How To Prepare</a></li><li><a href="#faq">Frequently Asked Questions</a></li></ol></nav></div></section>
+
+  <section><div class="container"><p class="content-text">Generative AI engineer interviews go deeper than general AI engineer interviews. While AI engineers are primarily evaluated on their ability to build applications using AI models, generative AI engineers are expected to understand what happens inside the models — transformer architectures, attention mechanisms, fine-tuning strategies, alignment techniques like RLHF, and the trade-offs behind different generation approaches.</p><p class="content-text">The generative AI engineer role has become one of the most in-demand positions in tech, particularly at AI-native companies and enterprises investing in custom model capabilities. Companies building foundation models, fine-tuning open-source LLMs, or developing advanced generative features need engineers who understand the model layer, not just the API layer.</p><p class="content-text">The most common reason candidates fail generative AI engineer interviews isn't a lack of knowledge — it's an inability to explain model-level decisions clearly. Interviewers want to hear you reason through why you'd choose LoRA over full fine-tuning, how you'd evaluate whether a fine-tuned model is actually better, or what happens when you increase temperature during generation and why.</p><p class="content-text">This guide covers the questions that actually come up in generative AI engineer interviews, organized by topic, with answer frameworks and sample responses for the highest-stakes questions.</p></div></section>
+
+  <section id="what-generative-ai-engineers-do"><div class="container"><h2>What Generative AI Engineers Do in 2026</h2><p class="content-text">Generative AI engineers work closer to the model layer than general AI engineers. Where an AI engineer might spend most of their time integrating LLM APIs and building application features, a generative AI engineer focuses on optimizing, customizing, and deploying generative models themselves.</p><p class="content-text">Day-to-day, generative AI engineers work on fine-tuning and adapting large language models for specific domains or tasks, designing and optimizing prompt strategies for complex generation workflows, building evaluation pipelines to measure generative output quality, implementing alignment and safety techniques (RLHF, constitutional AI, guardrails), optimizing inference performance — latency, throughput, memory, and cost, and developing RAG and retrieval systems that feed context into generative models.</p><p class="content-text">The role sits between ML engineering (which focuses on model training infrastructure) and AI engineering (which focuses on application building). Generative AI engineers are expected to understand model internals well enough to make informed decisions about fine-tuning, decoding strategies, and model selection — but also pragmatic enough to ship production systems.</p><p class="content-text">This distinction matters in interviews. You'll face deeper technical questions about how models work than in a general AI engineer interview, but you'll also need to demonstrate that you can translate that knowledge into production systems that serve real users.</p></div></section>
+
+  <section id="generative-ai-vs-ai-vs-ml" class="section-dark"><div class="container"><h2>Generative AI Engineer vs AI Engineer vs ML Engineer</h2><p class="section-intro">Interviewers frequently ask how your role differs from related positions. Having a crisp answer demonstrates self-awareness and helps you position your experience effectively.</p><div class="comparison-wrapper"><table class="comparison-table"><thead><tr><th></th><th>Generative AI Engineer</th><th>AI Engineer</th><th>ML Engineer</th></tr></thead><tbody><tr><td>Primary focus</td><td>Building, customizing, and optimizing generative models and LLM systems</td><td>Building applications and features powered by AI models</td><td>Training, optimizing, and deploying ML models across all types</td></tr><tr><td>Model relationship</td><td>Works on and inside generative models — fine-tuning, alignment, optimization</td><td>Uses models primarily through APIs and integration</td><td>Trains models from scratch across ML disciplines</td></tr><tr><td>Key technical depth</td><td>Transformer internals, fine-tuning (LoRA, QLoRA), RLHF, decoding strategies, generation quality</td><td>Prompt engineering, RAG, API integration, AI UX design</td><td>Model architectures, distributed training, feature engineering, MLOps</td></tr><tr><td>Typical interview focus</td><td>Architecture knowledge, fine-tuning trade-offs, evaluation methods, generation optimization</td><td>System design, LLM trade-offs, production thinking, stakeholder communication</td><td>ML fundamentals, coding, model training, optimization</td></tr><tr><td>Tools and frameworks</td><td>Hugging Face, vLLM, DeepSpeed, PEFT, custom training loops</td><td>LLM APIs (OpenAI, Anthropic), vector databases, LangChain</td><td>PyTorch, TensorFlow, Spark, Kubeflow, MLflow</td></tr><tr><td>2026 demand</td><td>Very high — especially at AI-native companies and enterprises customizing models</td><td>Very high — broadest demand across all industries</td><td>High — core infrastructure role, stable demand</td></tr></tbody></table></div><div class="follow-up-text">In interviews, if you have experience across multiple areas, lead with your generative AI depth. Interviewers hiring for this role specifically want to see model-level understanding, not just application-level work. If you're transitioning from ML engineering, emphasize your experience with language models and generation tasks. If you're coming from AI engineering, emphasize any fine-tuning, evaluation, or model optimization work you've done.</div></div></section>
+
+  <section id="transformer-architecture-questions"><div class="container"><h2>Transformer &amp; Architecture Questions</h2><p class="section-intro">These questions test your understanding of how generative models actually work under the hood. You don't need to recite the original Attention Is All You Need paper from memory, but you need to explain key concepts clearly and connect them to practical engineering decisions.</p>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Explain the transformer architecture and why it became the foundation for modern generative AI.</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>This is a foundational question that tests whether you understand the model you're working with, not just how to call its API.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Understanding of self-attention mechanism</li><li>Knowledge of why transformers replaced RNNs/LSTMs</li><li>Ability to explain technical concepts clearly</li><li>Connection between architecture and practical capabilities</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Explain the core innovation: self-attention allows the model to weigh the relevance of every token against every other token in parallel, replacing the sequential processing of RNNs. Cover the key components — multi-head attention, positional encodings, feed-forward layers, and the encoder-decoder vs. decoder-only distinction.</p></div>
+<div class="qcs"><div class="qcl">Sample Answer</div><div class="sample-answer"><p>The transformer architecture replaced recurrent models by introducing self-attention — a mechanism where each token in a sequence can attend to every other token simultaneously, rather than processing sequentially. This solved two fundamental problems: it enabled massive parallelization during training, which is why we can train on billions of tokens, and it allowed models to capture long-range dependencies that RNNs struggled with due to vanishing gradients. The architecture has multi-head attention layers that let the model learn different types of relationships between tokens simultaneously, combined with feed-forward networks and layer normalization. For generative AI specifically, most modern LLMs use the decoder-only variant — they're trained to predict the next token autoregressively, which is what gives them their generative capability. Practically, understanding this architecture helps me make informed decisions about context window trade-offs, why certain prompting strategies work, and where performance bottlenecks occur during inference.</p></div></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What is the attention mechanism and how does it affect model behavior in practice?</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>Attention is the core mechanism behind LLMs. Interviewers want to know you understand it deeply enough to debug issues and make informed engineering decisions.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Mathematical understanding of attention (at least conceptual)</li><li>Practical implications for context windows and prompt design</li><li>Awareness of attention-related limitations</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Explain attention as computing relevance scores between query and key vectors, then using those scores to weight value vectors. Cover the quadratic scaling problem (attention scales with sequence length squared), how this affects context window size and cost, and practical implications — why position in the prompt matters, why models can 'lose' information in long contexts, and how techniques like sparse attention or sliding window attention address limitations.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Explain the difference between encoder-decoder and decoder-only architectures. When would you use each?</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>This tests architectural understanding and practical judgment about model selection.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Understanding of architectural variants</li><li>Knowledge of when each is appropriate</li><li>Familiarity with modern model landscape</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Encoder-decoder models (like T5, BART) process input through an encoder then generate output through a decoder — good for tasks with distinct input/output like translation or summarization. Decoder-only models (like GPT, Llama) process everything as a single sequence — they've become dominant for generative AI because they're simpler to scale and more flexible for open-ended generation.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do different decoding strategies (greedy, beam search, top-k, top-p, temperature) affect generation quality?</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>This directly affects the output quality of any generative system you build. It's a practical, hands-on question.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Understanding of how generation actually works at inference time</li><li>Ability to tune generation for different use cases</li><li>Practical experience optimizing output quality</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Walk through each strategy: greedy decoding (always picks highest probability token — fast but repetitive), beam search (explores multiple paths — better quality but slower), top-k sampling (randomly samples from top k tokens — adds variety), top-p/nucleus sampling (samples from smallest set whose probability sums to p — adaptive variety), and temperature (scales logits before sampling — higher = more random, lower = more deterministic). Explain when you'd use each.</p></div>
+</div>
+  </div></section>
+
+  <section id="fine-tuning-training-questions" class="section-dark"><div class="container"><h2>Fine-Tuning &amp; Training Questions</h2><p class="section-intro">Fine-tuning questions are a major differentiator in generative AI engineer interviews. Interviewers want to see that you understand the full spectrum — from parameter-efficient fine-tuning to full fine-tuning — and can make informed decisions about when each approach is appropriate.</p>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>When would you fine-tune a model vs. use prompt engineering or RAG? Walk me through your decision framework.</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>This is the single most important decision in generative AI engineering. Your answer reveals your depth of experience and practical judgment.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Decision-making framework for the core trade-off</li><li>Understanding of cost, quality, and maintenance implications</li><li>Practical experience with all three approaches</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Present a clear decision hierarchy: start with prompt engineering (fastest, cheapest, most flexible), add RAG when the model needs external knowledge, and fine-tune only when you need to change the model's fundamental behavior.</p></div>
+<div class="qcs"><div class="qcl">Sample Answer</div><div class="sample-answer"><p>My decision framework has three levels. Prompt engineering is my default — it's the fastest to iterate, easiest to maintain, and handles the majority of use cases: instruction following, formatting, tone adjustment, and simple domain adaptation. When the model needs knowledge it doesn't have — company-specific data, recent documents, or domain corpora — I add RAG rather than fine-tuning, because RAG keeps the knowledge layer separate and updatable without retraining. I only reach for fine-tuning when I need to change the model's fundamental behavior in ways that prompting can't reliably achieve. Real examples: training a model to consistently output in a very specific JSON schema across thousands of edge cases, teaching domain-specific reasoning patterns in legal or medical contexts, or adapting a model's writing style to match a brand voice so precisely that few-shot prompting isn't sufficient. Even then, I start with LoRA or QLoRA rather than full fine-tuning, because parameter-efficient methods give me 90% of the benefit at a fraction of the cost. The hidden cost most people miss is maintenance — every time the base model gets a major update, your fine-tune may need to be redone.</p></div></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Explain LoRA, QLoRA, and full fine-tuning. What are the trade-offs?</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>Parameter-efficient fine-tuning is core to modern generative AI engineering. This tests your depth on a critical technique.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Understanding of parameter-efficient fine-tuning methods</li><li>Knowledge of when to use each</li><li>Awareness of practical constraints (memory, compute, quality)</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>LoRA (Low-Rank Adaptation) freezes the base model and trains small low-rank matrices that modify specific layers — dramatically reducing trainable parameters and memory. QLoRA adds quantization (4-bit) to further reduce memory, enabling fine-tuning of large models on consumer hardware. Full fine-tuning updates all model parameters — gives the most flexibility but requires the most compute and risks catastrophic forgetting.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How does RLHF (Reinforcement Learning from Human Feedback) work, and what are the alternatives?</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>RLHF is how most commercial LLMs are aligned. Understanding it signals depth in generative AI.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Understanding of alignment techniques</li><li>Knowledge of the RLHF pipeline</li><li>Awareness of alternatives (DPO, constitutional AI, RLAIF)</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Walk through the RLHF pipeline: collect human preference data (comparisons between model outputs), train a reward model on those preferences, then optimize the language model using the reward model via PPO. Discuss challenges: reward hacking, distribution of human annotators, cost of human labeling. Then cover alternatives — DPO (Direct Preference Optimization) which skips the reward model, constitutional AI which uses AI feedback instead of human feedback, and RLAIF.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you create a high-quality fine-tuning dataset?</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>Data quality is the biggest determinant of fine-tuning success. This tests your practical experience.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Data curation methodology</li><li>Understanding of data quality vs. quantity</li><li>Awareness of common pitfalls</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Cover key principles: quality matters far more than quantity (hundreds of excellent examples beat thousands of mediocre ones), diversity of examples prevents overfitting to narrow patterns, consistent formatting teaches the model your expected structure. Discuss how you source data, quality control processes, and common mistakes (training on too-similar examples, including contradictory examples, insufficient diversity).</p></div>
+</div>
+  </div></section>
+
+  <section id="prompt-engineering-questions"><div class="container"><h2>Prompt Engineering &amp; Optimization Questions</h2><p class="section-intro">Prompt engineering is a daily skill for generative AI engineers. Interview questions in this area test whether you approach prompting systematically rather than through trial and error.</p>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Walk me through your approach to prompt optimization for a production use case.</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>This tests whether you treat prompt engineering as an engineering discipline with systematic methodology, not just ad-hoc tweaking.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Systematic approach to prompt development</li><li>Evaluation methodology</li><li>Understanding of prompt engineering techniques</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Describe your process: start with a clear task definition and success criteria, build an evaluation dataset, establish baseline performance, then iterate systematically. Cover specific techniques — few-shot examples, chain-of-thought prompting, role/persona assignment, structured output formatting, and system prompt design. Emphasize that you measure every change against your evaluation set.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Explain chain-of-thought prompting and when it helps vs. when it doesn't.</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>Chain-of-thought is one of the most powerful prompting techniques. Knowing its limitations shows depth.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Understanding of reasoning techniques</li><li>Knowledge of when CoT helps and when it hurts</li><li>Practical prompting judgment</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Chain-of-thought asks the model to reason step-by-step before giving a final answer. It significantly improves performance on math, logic, and multi-step reasoning tasks. However, it increases latency and cost (more output tokens), and can actually hurt performance on simple factual retrieval tasks where the 'reasoning' adds noise. Discuss variants — zero-shot CoT vs. few-shot CoT, and tree-of-thought for complex planning.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you handle prompt injection and adversarial inputs in a generative AI system?</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>Prompt injection is a real security concern in production LLM systems. This tests your awareness of safety in generative AI.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Security awareness for LLM applications</li><li>Knowledge of prompt injection techniques and defenses</li><li>Practical safety implementation</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Cover the attack surface: direct prompt injection (user manipulates the prompt), indirect prompt injection (malicious content in retrieved documents), and jailbreaking attempts. Discuss defenses: input sanitization, separate system/user prompts with clear boundaries, output filtering, instruction hierarchy, and monitoring for unusual patterns. Emphasize that defense-in-depth is essential.</p></div>
+</div>
+  </div></section>
+
+  <section id="production-llm-questions" class="section-dark"><div class="container"><h2>Production LLM Systems Questions</h2><p class="section-intro">These questions test whether you can take generative AI from prototype to production. Many candidates can build impressive demos but struggle with the engineering required to run generative systems reliably at scale.</p>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you optimize LLM inference for production — reducing latency, cost, and memory usage?</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>Inference optimization is critical for any production generative AI system. This is a core engineering skill.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Knowledge of inference optimization techniques</li><li>Understanding of latency/cost/quality trade-offs</li><li>Production engineering mindset</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Cover key optimization techniques: model quantization (INT8, INT4) to reduce memory and speed up inference, KV-cache optimization to avoid recomputing attention for previous tokens, batching strategies (continuous batching) to improve throughput, speculative decoding to speed up autoregressive generation, model distillation to create smaller task-specific models, and serving infrastructure (vLLM, TensorRT-LLM, TGI).</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How would you build a system that serves multiple LLMs with different characteristics?</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>Model routing is becoming standard in production generative AI systems. This tests your system design skills.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>System architecture for multi-model serving</li><li>Understanding of model routing strategies</li><li>Cost optimization thinking</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Discuss the architecture: a routing layer that classifies incoming requests by complexity, then routes to the appropriate model. Simple queries go to smaller, faster, cheaper models; complex queries go to larger models. Cover how you build the router, how you evaluate routing accuracy, and the infrastructure for serving multiple models efficiently.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Describe your approach to building a RAG system that actually works well in production.</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>RAG is the most common pattern in generative AI applications. 'Actually works well' signals they want production-grade depth, not a tutorial-level answer.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Production-grade RAG knowledge</li><li>Understanding of retrieval quality challenges</li><li>End-to-end system thinking</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Go beyond the basic RAG tutorial: discuss chunking strategies, embedding model selection and fine-tuning embeddings for your domain, hybrid search (semantic + keyword), re-ranking retrieved results, handling retrieval failures gracefully, and building evaluation pipelines for retrieval quality.</p></div>
+<div class="qcs"><div class="qcl">Sample Answer</div><div class="sample-answer"><p>Most RAG tutorials make it look simple — chunk, embed, retrieve, generate. In production, each of those steps has failure modes you have to engineer around. For chunking, I test multiple strategies: fixed-size with overlap, semantic chunking at paragraph boundaries, and hierarchical chunking where I store both summaries and detailed chunks. For retrieval, I always use hybrid search — pure semantic search misses exact matches, and pure keyword search misses paraphrased queries. I combine BM25 with vector similarity and use a cross-encoder re-ranker on the top results before passing to the LLM. The biggest lesson from production is that most bad RAG outputs are actually retrieval failures, not generation failures. So I invest heavily in retrieval evaluation: I build test sets of question-source document pairs and measure retrieval precision and recall continuously. When retrieval fails, I implement explicit fallback behavior — the model should say it doesn't have enough information rather than confidently generating from insufficient context.</p></div></div>
+</div>
+  </div></section>
+
+  <section id="evaluation-safety-questions"><div class="container"><h2>Evaluation &amp; Safety Questions</h2><p class="section-intro">Evaluation is uniquely challenging for generative AI because outputs are open-ended and subjective. Safety is non-negotiable for production deployment. These questions test your rigor in both areas.</p>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you evaluate the quality of a generative AI system? What metrics and methods do you use?</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>Evaluation methodology is what separates serious generative AI engineers from prototype builders.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Knowledge of evaluation methods beyond basic metrics</li><li>Practical eval pipeline experience</li><li>Understanding of human vs. automated evaluation trade-offs</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Cover the full spectrum: automated reference-based metrics (BLEU, ROUGE — useful but limited), LLM-as-judge evaluation (using a separate model to score outputs), human evaluation (when it's necessary, how to structure it), and task-specific rubrics. Discuss how you build evaluation datasets, handle subjectivity, and create continuous evaluation pipelines.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you detect and reduce hallucinations in a generative system?</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>Hallucination is the biggest trust issue in generative AI. Your answer reveals production maturity.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Understanding of hallucination types and causes</li><li>Practical mitigation strategies</li><li>Monitoring and measurement approach</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Distinguish between intrinsic hallucinations (contradicting the source) and extrinsic hallucinations (adding unsupported information). Discuss mitigation layers: grounding with retrieved context, constrained generation, citation requirements, confidence scoring, output verification pipelines, and human review for high-stakes outputs.</p></div>
+</div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you approach bias detection and mitigation in a generative AI system?</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>Responsible AI is a growing concern for every company deploying generative systems.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Awareness of bias sources in generative AI</li><li>Practical mitigation strategies</li><li>Balanced approach — not dismissive but not paralyzed</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Discuss bias sources: training data biases, fine-tuning data biases, and prompt-induced biases. Cover evaluation approaches — testing across demographic groups, red-teaming, and bias benchmarks. Discuss practical mitigation: balanced training data, bias-aware prompting, output filtering, and human review processes.</p></div>
+</div>
+  </div></section>
+
+  <section id="behavioral-questions"><div class="container"><h2>Behavioral Interview Questions</h2><p class="section-intro">Behavioral questions in generative AI engineer interviews focus on how you handle the unique challenges of working with generative models — non-determinism, rapid change, stakeholder expectations, and the tension between moving fast and shipping responsibly.</p>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Tell me about a time a generative AI system you built produced unexpected or harmful outputs. How did you handle it?</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>Generative systems produce surprises. This tests your incident response skills and safety mindset.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Incident response and debugging approach</li><li>Safety awareness and proactive mitigation</li><li>Communication during incidents</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Use STAR framework with emphasis on: how you discovered the issue, your immediate response (did you have kill switches?), root cause analysis, what you implemented to prevent recurrence, and how you communicated with stakeholders.</p></div></div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Describe a time you had to choose between model quality and shipping speed. What did you decide and why?</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>Generative AI has a perfectionism trap — you can always make the model slightly better. This tests your pragmatism.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Engineering judgment under ambiguity</li><li>Risk assessment ability</li><li>Decision-making with incomplete information</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Share a specific scenario: what was the quality gap, what was the business urgency, and how did you evaluate the risk of shipping vs. waiting? Strong answers include how you mitigated risk — maybe you shipped with extra guardrails, monitoring, or a limited rollout.</p></div></div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you stay current with the rapidly evolving generative AI landscape?</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>The field changes monthly. Interviewers want to see that you have a system for staying current, not just ad-hoc reading.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Learning habits and methodology</li><li>Ability to filter signal from noise</li><li>How quickly you adopt new techniques</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Describe your specific process: which papers and researchers you follow, how you evaluate whether a new technique is worth adopting, how you experiment with new approaches, and how you share knowledge with your team. Be specific about your sources and how you decide what to act on.</p></div></div>
+<div class="question-card"><div class="question-card-title"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Tell me about a time you had to push back on a stakeholder's request for a generative AI feature because it wasn't feasible or responsible.</div>
+<div class="qcs"><div class="qcl">Why They Ask It</div><p>AI hype creates unrealistic expectations. This tests your ability to manage up with honesty and constructiveness.</p></div>
+<div class="qcs"><div class="qcl">What They Evaluate</div><ul class="evaluate-list"><li>Stakeholder management skills</li><li>Ability to communicate technical limitations clearly</li><li>Constructive problem-solving when saying no</li></ul></div>
+<div class="qcs"><div class="qcl">Answer Framework</div><p>Describe what was requested, why it was problematic, how you explained this to the stakeholder, and — critically — what alternative you proposed. Strong answers show you didn't just say 'no' but redirected to something valuable and achievable.</p></div></div>
+  </div></section>
+
+  <section id="what-interviewers-evaluate" class="section-dark"><div class="container">
+    <h2>What Interviewers Are Really Evaluating</h2>
+    <p class="content-text">Generative AI engineer interviews assess seven core dimensions — and understanding these gives you a major advantage in how you frame your answers:</p>
+    <div class="ed" style="margin-top:24px"><div class="edt">Model-level understanding</div><p>Can you explain how generative models work, not just how to use them? Interviewers want to see that you understand transformer architecture, attention, fine-tuning, and generation strategies well enough to make informed engineering decisions.</p></div>
+    <div class="ed"><div class="edt">Fine-tuning judgment</div><p>Do you know when to fine-tune and when not to? The best generative AI engineers are pragmatic about this — they don't fine-tune everything, but they know exactly when it's the right tool.</p></div>
+    <div class="ed"><div class="edt">Evaluation rigor</div><p>Do you have a systematic way to measure whether your generative system is working? This is one of the hardest problems in the field, and candidates who show a thoughtful evaluation process stand out.</p></div>
+    <div class="ed"><div class="edt">Production maturity</div><p>Have you shipped generative systems to real users, or only built prototypes? Interviewers listen for signals of production experience: monitoring, latency optimization, cost management, rollback strategies.</p></div>
+    <div class="ed"><div class="edt">Safety and responsibility</div><p>Do you proactively think about what can go wrong? Hallucinations, bias, prompt injection, misuse — interviewers want to see that safety is built into your process, not bolted on after.</p></div>
+    <div class="ed"><div class="edt">Communication clarity</div><p>Can you explain generative AI concepts to people who aren't experts? This is tested in every behavioral question and in how you explain technical decisions.</p></div>
+    <div class="ed"><div class="edt">Adaptability</div><p>The field changes constantly. Interviewers want to see that you learn fast, experiment with new approaches, and don't cling to yesterday's best practices.</p></div>
+  </div></section>
+
+  <section id="how-to-prepare"><div class="container">
+    <h2>How To Prepare for a Generative AI Engineer Interview</h2>
+    <p class="content-text">Preparation for generative AI engineer interviews should go deeper than general AI engineer prep. Focus on these areas:</p>
+    <p class="content-text">First, make sure you can explain transformer architectures, attention mechanisms, and decoding strategies clearly and concisely. You don't need to derive the math on a whiteboard, but you need to be able to explain why these things matter for practical engineering decisions. If someone asks why you chose a specific temperature setting, you should be able to connect that to how the softmax over logits works.</p>
+    <p class="content-text">Second, build depth in fine-tuning. Understand LoRA, QLoRA, full fine-tuning, and RLHF well enough to discuss trade-offs fluently. Know when you'd choose each approach and why. If you have hands-on fine-tuning experience, prepare to walk through a specific project in detail.</p>
+    <p class="content-text">Third, prepare concrete examples of generative AI systems you've built or worked on. For each, be ready to explain your architecture decisions, how you evaluated quality, what went wrong and how you fixed it, and what you'd do differently. Generative AI engineer interviews are heavily scenario-based — the more specific your examples, the stronger your answers.</p>
+    <p class="content-text">Fourth, practice speaking your answers out loud under time pressure. Generative AI engineer interviews are conversation-heavy with follow-up questions that probe your depth. Reading about transformer architectures is very different from explaining them clearly under interview pressure. A realistic simulation — timed, on camera, with follow-up questions — is the most effective preparation method.</p>
+  </div></section>
+
+  <section id="practice-cta-mid"><div class="container"><div class="mid-cta">
+    <h2 class="centered">Practice With Questions Tailored to Your Interview</h2>
+    <p class="content-text">AceMyInterviews generates generative AI engineer interview questions based on your specific job description and resume. You answer on camera with a timer — just like a real interview — and get detailed feedback on both your answers and how you deliver them. If your answer is vague or incomplete, the AI asks follow-up questions, exactly like a real interviewer would.</p>
+    <ul class="mcf">
+      <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Questions tailored to your specific job description</li>
+      <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Questions based on your generative AI experience level</li>
+      <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Timed responses with camera — realistic interview conditions</li>
+      <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Follow-up questions when your answers need more depth</li>
+      <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Detailed scoring on content, confidence, and clarity</li>
+    </ul>
+    <a href="/" class="cta-btn">Start Free Practice Interview →</a>
+  </div></div></section>
+
+  <section id="faq" class="faq-section"><div class="container">
+    <h2 class="centered">Frequently Asked Questions</h2>
+    <div class="faq-list">
+      <details><summary>Do I need to know the math behind transformers for a generative AI engineer interview?</summary><p>You need conceptual understanding, not proof-level math. You should be able to explain what self-attention does (computing relevance scores between tokens), why it scales quadratically with sequence length, and how positional encodings work at a high level. You should understand what softmax does in the attention computation and how temperature affects the probability distribution during generation. But you typically won't be asked to derive backpropagation through attention layers or write the attention formula from memory. The exception is if you're interviewing at a foundation model lab where the role involves model research — in that case, deeper mathematical fluency is expected. For most generative AI engineer roles at product companies, the emphasis is on practical understanding: can you connect architectural concepts to engineering decisions?</p></details>
+      <details><summary>What's the difference between a generative AI engineer and a prompt engineer?</summary><p>A generative AI engineer works across the full stack of generative AI systems — from model selection and fine-tuning to prompt optimization, RAG architecture, evaluation pipelines, inference optimization, and production deployment. Prompt engineering is one skill within that broader toolkit. A prompt engineer, by contrast, focuses primarily on designing and optimizing prompts to get the best outputs from language models. It's a narrower role that doesn't typically involve fine-tuning, model serving, or system architecture. In interviews, generative AI engineer questions go much deeper technically — you'll face questions about transformer internals, fine-tuning methods, inference optimization, and production system design, not just prompting strategies. If you're coming from a prompt engineering background, prepare to demonstrate depth beyond prompting.</p></details>
+      <details><summary>Which LLMs and frameworks should I know for a generative AI engineer interview?</summary><p>You should be familiar with the major model families and understand their trade-offs: leading OpenAI models, Claude, Gemini, Llama, and Mistral. More important than knowing every model is having a framework for evaluating and comparing them. On the frameworks side, know Hugging Face Transformers (the standard for working with open-source models), at least one inference optimization tool (vLLM, TensorRT-LLM, or text-generation-inference), a fine-tuning library (PEFT/LoRA implementations), and optionally an orchestration framework (LangChain or LlamaIndex, though opinions vary on these). Interviewers care less about which specific tools you've used and more about whether you can articulate why you chose them and what the trade-offs are.</p></details>
+      <details><summary>How important is RAG knowledge in generative AI engineer interviews?</summary><p>Very important. RAG (retrieval-augmented generation) is the most common architecture pattern in production generative AI applications, and almost every generative AI engineer interview includes at least one RAG-related question. You should be able to design a RAG pipeline end-to-end: document chunking, embedding generation, vector storage and indexing, retrieval strategies (semantic, hybrid, re-ranking), context injection into prompts, and evaluation of retrieval quality. The key insight interviewers look for is that you understand RAG failures — most bad RAG outputs are caused by retrieval failures (wrong documents retrieved or important documents missed), not generation failures. Candidates who can discuss retrieval evaluation, hybrid search, re-ranking, and graceful handling of retrieval failures stand out significantly.</p></details>
+      <details><summary>Are generative AI engineer interviews different from AI engineer interviews?</summary><p>Yes, meaningfully so. AI engineer interviews focus on the application layer — building features with AI, integrating APIs, system design, and stakeholder communication. Generative AI engineer interviews go deeper into the model layer — transformer architectures, fine-tuning techniques, RLHF and alignment, decoding strategies, and inference optimization. Think of it as depth vs. breadth: AI engineer interviews test whether you can build great products with AI models, while generative AI engineer interviews test whether you understand how those models work well enough to customize, optimize, and deploy them. If you're interviewing for a generative AI engineer role, you need to prepare for more technical depth on model internals, training techniques, and generation optimization than a general AI engineer role would require.</p></details>
+      <details><summary>Should I have fine-tuning experience to interview as a generative AI engineer?</summary><p>Having hands-on fine-tuning experience is a significant advantage, but it's not always required — it depends on the role and company. At AI-native companies or teams building custom models, fine-tuning experience is often expected. At product companies using generative AI as a feature, deep fine-tuning experience may be less critical than strong prompt engineering and RAG skills. What's universally required is understanding when and why to fine-tune: you need to articulate the trade-offs between prompt engineering, RAG, and fine-tuning, explain what LoRA and QLoRA are and when you'd use them, and describe how you'd evaluate whether a fine-tuned model is actually better than the base model with good prompting. If you don't have professional fine-tuning experience, consider running a personal fine-tuning project you can discuss in detail. Even a small project demonstrates hands-on familiarity.</p></details>
     </div>
-  </section>
-  
-  <section class="questions-section">
-    <div class="container">
-      <h2>Example Generative AI Engineer Interview Questions</h2>
-      <ul class="questions-list">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Explain the difference between prompt engineering and fine-tuning. When would you use each approach?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Walk me through how you would optimize a language model for domain-specific tasks with limited data.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you evaluate and reduce hallucinations in a generative AI system?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe your approach to implementing retrieval-augmented generation (RAG) in production.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Tell me about a time you deployed a generative AI model and faced unexpected challenges. How did you solve it?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Explain the trade-offs between using a larger pre-trained model versus fine-tuning a smaller one.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How would you handle bias and safety concerns when deploying a language model?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Walk me through your approach to prompt optimization for a specific use case.</span></li>
-      </ul>
+  </div></section>
+
+  <div class="related-section"><div class="container">
+    <h3>Related Interview Questions</h3>
+    <div class="related-links">
+      <a href="/interview/ai-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>AI Engineer Interview Questions</a>
+      <a href="/interview/machine-learning-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Machine Learning Engineer Interview Questions</a>
+      <a href="/interview/llm-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>LLM Engineer Interview Questions</a>
+      <a href="/interview/prompt-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Prompt Engineer Interview Questions</a>
+      <a href="/interview/deep-learning-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Deep Learning Engineer Interview Questions</a>
+      <a href="/interview/nlp-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>NLP Engineer Interview Questions</a>
     </div>
-  </section>
-  
-  <section>
-    <div class="container">
-      <p class="bridge-text">Generative AI Engineer interviews vary based on the company and specific role requirements. AceMyInterviews generates questions based on your job description.</p>
-    </div>
-  </section>
-  
-  <section class="personalized-section">
-    <div class="container">
-      <h2>Practice Questions Tailored To Your Interview</h2>
-      <p>Your job description and resume are analyzed to create generative ai engineer questions matched to your target role.</p>
-      <ul class="features">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Questions tailored to your job description</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Questions based on your experience level</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic timed interview simulation</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant feedback and pass/fail verdict</li>
-      </ul>
-      <a href="/" class="cta-btn">Start Free Practice Interview →</a>
-    </div>
-  </section>
-  
-  <section>
-    <div class="container">
-      <h2>What Interviewers Evaluate</h2>
-      <ul class="criteria-list">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Understanding of transformer models and attention mechanisms</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Prompt engineering and optimization skills</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Experience with model fine-tuning and evaluation</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>RAG implementation and vector databases</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Production deployment and scaling considerations</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Safety, bias, and ethical AI considerations</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Problem-solving with limited resources</li>
-      </ul>
-    </div>
-  </section>
-  
-  <section class="faq-section">
-    <div class="container">
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-list">
-        <details><summary>Do I need to know the math behind transformers?</summary><p>Understanding the core concepts is important, but deep mathematical expertise isn't always required. Interviewers value practitioners who understand how transformers work at a high level and can explain key concepts like attention mechanisms clearly. Focus on being able to explain trade-offs and when to use different approaches.</p></details><details><summary>What's the difference between prompt engineering and fine-tuning?</summary><p>Prompt engineering involves crafting the right prompts and few-shot examples to get desired outputs from existing models. Fine-tuning involves training a pre-trained model on your specific data. Prompt engineering is faster and cheaper; fine-tuning provides better performance for specialized tasks. Be ready to discuss when to use each.</p></details><details><summary>Which LLMs should I be familiar with?</summary><p>Familiarity with GPT-4, Claude, and open-source models like Llama is valuable. Understand their strengths, limitations, and use cases. Knowledge of the ecosystem (LangChain, LlamaIndex, Hugging Face) is increasingly important.</p></details><details><summary>What production challenges should I be prepared to discuss?</summary><p>Be ready to discuss latency optimization, cost management, handling API rate limits, managing tokens efficiently, monitoring model quality drift, and implementing fallback mechanisms. Real-world experience with these challenges makes you stand out.</p></details><details><summary>How important is RAG in interviews?</summary><p>Very important. RAG (Retrieval-Augmented Generation) is increasingly critical for production systems. Understand vector databases, embedding models, and how to integrate them into applications.</p></details>
-      </div>
-    </div>
-  </section>
-  
-  <div class="related-section">
-    <div class="container">
-      <h3>Related Interview Questions</h3>
-      <div class="related-links">
-        <a href="/interview/ai-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>AI Engineer Interview Questions</a><a href="/interview/machine-learning-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Machine Learning Engineer Interview Questions</a><a href="/interview/data-scientist"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Data Scientist Interview Questions</a><a href="/interview/mlops-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>MLOps Engineer Interview Questions</a><a href="/interview/nlp-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>NLP Engineer Interview Questions</a>
-      </div>
-    </div>
-  </div>
-  <section class="final-cta">
-    <div class="container">
-      <h2>Ready To Practice Generative AI Engineer Interview Questions?</h2>
-      <p>Practice generative ai engineer interview questions tailored to your experience.</p>
-      <a href="/" class="cta-btn">Start Your Interview Simulation →</a>
-      <p class="small-text">Takes less than 15 minutes.</p>
-    </div>
-  </section>
-  
-  <footer class="footer">
-    <a href="/">← Back to AceMyInterviews</a>
-  </footer>
+  </div></div>
+
+  <section class="final-cta"><div class="container">
+    <h2>Ready To Practice Generative AI Engineer Interview Questions?</h2>
+    <p class="content-text">Your resume and job description are analyzed to generate the questions most likely to come up in your specific interview. You practice on camera with a timer, get follow-up questions when your answers need more depth, and receive detailed scoring on both what you say and how you say it.</p>
+    <a href="/" class="cta-btn">Start Your Interview Simulation →</a>
+    <p class="small-text" style="margin-top:16px;color:var(--text-muted);font-size:.875rem">Takes less than 15 minutes. Free to start.</p>
+  </div></section>
+
+  <footer class="footer"><a href="/">← Back to AceMyInterviews</a></footer>
 </body>
 </html>
