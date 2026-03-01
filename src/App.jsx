@@ -1542,6 +1542,42 @@ Return ONLY valid JSON:
         'Anonymous';
       await saveToLeaderboard(leaderboardName, results.overallScore, jobTitle, results.passed);
       
+      // ===== B2B FORK: Save to Supabase if user has org_id =====
+      if (userOrgId && user) {
+        try {
+          const { data: sessionData } = await supabase.auth.getSession();
+          const accessToken = sessionData?.session?.access_token;
+          if (accessToken) {
+            const questionsAndAnswers = allAnswers.map(a => ({
+              question: a.question,
+              answer: a.answer,
+              timeSpent: a.timeSpent,
+              isFollowUp: a.isFollowUp || false,
+              parentQuestionIndex: a.parentQuestionIndex || null
+            }));
+
+            await fetch('/api/save-interview-results', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                accessToken,
+                orgId: userOrgId,
+                interviewData: {
+                  jobTitle,
+                  results,
+                  videoAnalysis: videoResults,
+                  userName: userName || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Anonymous',
+                  questionsAndAnswers
+                }
+              })
+            });
+          }
+        } catch (e) {
+          console.error('B2B save error (non-blocking):', e);
+        }
+      }
+      // ===== END B2B FORK =====
+      
       // Track interview completed
       if (window.mixpanel) {
         window.mixpanel.track('interview_completed', {
