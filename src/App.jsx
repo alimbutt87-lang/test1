@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import AdminDashboard from './AdminDashboard';
 
 // ===== CONFIGURATION =====
 // Set to true for testing (bypasses paywall), false for production
-const TEST_MODE = true;
-const SKIP_AUTH = true; // For staging testing only
+const TEST_MODE = false;
 
 // Stripe URLs
 const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/fZu14n8Ac7Wm3QJ0TN6wE00';
-const STRIPE_SUBSCRIBE_URL = 'https://buy.stripe.com/4gMfZh03G90q86ZcCv6wE01';
+const STRIPE_SUBSCRIBE_URL = 'https://buy.stripe.com/6oUaEXbMo90qcnfaun6wE02';
 
 // Supabase configuration
 const SUPABASE_URL = 'https://msngeennlvzbhohnrhnq.supabase.co';
@@ -31,6 +31,7 @@ export default function InterviewSimulator() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [isTranscribing, setIsTranscribing] = useState(false);
   const [currentTranscript, setCurrentTranscript] = useState('');
   const [finalResults, setFinalResults] = useState(null);
   const [pastInterviews, setPastInterviews] = useState([]);
@@ -40,8 +41,8 @@ export default function InterviewSimulator() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   
   // Authentication states
-  const [user, setUser] = useState(SKIP_AUTH ? { id: 'test-user', email: 'test@test.com' } : null);
-  const [authLoading, setAuthLoading] = useState(SKIP_AUTH ? false : true);
+  const [user, setUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
   
   // Country for leaderboard
   const [userCountry, setUserCountry] = useState('');
@@ -69,28 +70,44 @@ export default function InterviewSimulator() {
   // Mobile audio - need user tap to enable audio on mobile
   const [mobileAudioReady, setMobileAudioReady] = useState(false);
   const [waitingForMobileStart, setWaitingForMobileStart] = useState(false);
+  const [waitingForMobileNext, setWaitingForMobileNext] = useState(false);
+  const [mobileGateEmail, setMobileGateEmail] = useState('');
+  const [mobileGateMessage, setMobileGateMessage] = useState('');
   
-  // V2: Follow-up question states
-  const [isEvaluating, setIsEvaluating] = useState(false);
+  // Follow-up question states
   const [isFollowUp, setIsFollowUp] = useState(false);
   const [currentFollowUpQuestion, setCurrentFollowUpQuestion] = useState(null);
   const [followUpsAskedCount, setFollowUpsAskedCount] = useState(0);
   const [followUpTypesUsed, setFollowUpTypesUsed] = useState([]);
-  // Stores evaluate-followup metadata per question index: { [qIdx]: { reason, followUpType, whatWasMissing, ... } }
   const [followUpMetadata, setFollowUpMetadata] = useState({});
+  const [isEvaluating, setIsEvaluating] = useState(false);
+  
+  // B2B states
+  const [userRole, setUserRole] = useState(null);
+  const [userOrgId, setUserOrgId] = useState(null);
+  const [userOrg, setUserOrg] = useState(null);
+  const [inviteSlug, setInviteSlug] = useState(null);
+  const [inviteOrg, setInviteOrg] = useState(null);
   
   const timerRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
+  const micStreamRef = useRef(null); // Persistent mic stream - grabbed once, reused per question
+  const micMimeTypeRef = useRef(''); // MIME type for MediaRecorder
   const recognitionRef = useRef(null);
   const speechSynthRef = useRef(null);
   const audioRef = useRef(null);
+  
+  // Pre-fetched audio for ALL questions (mobile only) - array of {url, audio} objects
+  const prefetchedAudioRef = useRef(null);
   
   // Video refs
   const videoRef = useRef(null);
   const videoStreamRef = useRef(null);
   const snapshotIntervalRef = useRef(null);
   const transcriptRef = useRef(''); // Store transcript in ref for reliable access
+  const isRecordingRef = useRef(false); // Track recording state for speech recognition onend
+  const accumulatedTranscriptRef = useRef(''); // Accumulate transcript across iOS recognition restarts
 
   // Check if mobile
   const [isMobile, setIsMobile] = useState(false);
@@ -137,6 +154,32 @@ export default function InterviewSimulator() {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Capture /join/:slug from URL for B2B invite links
+  useEffect(() => {
+    const path = window.location.pathname;
+    const joinMatch = path.match(/^\/join\/([a-zA-Z0-9-]+)\/?$/);
+    if (joinMatch) {
+      const slug = joinMatch[1];
+      setInviteSlug(slug);
+      supabase
+        .from('organizations')
+        .select('*')
+        .eq('slug', slug)
+        .eq('is_active', true)
+        .single()
+        .then(({ data, error }) => {
+          if (data && !error) {
+            setInviteOrg(data);
+            window.history.replaceState({}, '', '/');
+          } else {
+            console.error('Invalid invite link:', slug);
+            setInviteSlug(null);
+            window.history.replaceState({}, '', '/');
+          }
+        });
+    }
+  }, []);
+
   // Initialize app on mount
   useEffect(() => {
     if (!authLoading) {
@@ -160,7 +203,7 @@ export default function InterviewSimulator() {
       videoRef.current.srcObject = videoStreamRef.current;
       videoRef.current.play().catch(e => console.log('Video play error:', e));
     }
-  }, [stage, videoEnabled, waitingForMobileStart]);
+  }, [stage, videoEnabled, waitingForMobileStart, waitingForMobileNext]);
 
   // Load user data from Supabase
   const loadUserData = async (userId) => {
@@ -175,13 +218,61 @@ export default function InterviewSimulator() {
         setCompletedInterviews(data.completed_interviews || 0);
         setIsSubscribed(data.is_subscribed || false);
         setSubscriptionDate(data.subscription_date);
+        setUserRole(data.role || 'candidate');
+        setUserOrgId(data.org_id || null);
+
+        // If user has an org_id, fetch the org details
+        if (data.org_id) {
+          const { data: orgData } = await supabase
+            .from('organizations')
+            .select('*')
+            .eq('id', data.org_id)
+            .single();
+          if (orgData) setUserOrg(orgData);
+        }
+
+        // If user just came through an invite link and doesn't have an org yet,
+        // tag them to the invite org
+        if (!data.org_id && inviteOrg) {
+          const { count } = await supabase
+            .from('user_profiles')
+            .select('id', { count: 'exact', head: true })
+            .eq('org_id', inviteOrg.id)
+            .eq('role', 'candidate');
+          
+          if (!inviteOrg.candidate_limit || count < inviteOrg.candidate_limit) {
+            await supabase
+              .from('user_profiles')
+              .update({ org_id: inviteOrg.id, role: 'candidate' })
+              .eq('id', userId);
+            setUserOrgId(inviteOrg.id);
+            setUserOrg(inviteOrg);
+            setUserRole('candidate');
+          }
+          setInviteSlug(null);
+          setInviteOrg(null);
+        }
+
       } else if (error && error.code === 'PGRST116') {
-        // User doesn't exist in our table yet, create them
-        await supabase.from('user_profiles').insert({
+        // User doesn't exist yet — create them
+        const newProfile = {
           id: userId,
           completed_interviews: 0,
-          is_subscribed: false
-        });
+          is_subscribed: false,
+          role: 'candidate',
+          org_id: inviteOrg?.id || null
+        };
+        await supabase.from('user_profiles').insert(newProfile);
+        
+        if (inviteOrg) {
+          setUserOrgId(inviteOrg.id);
+          setUserOrg(inviteOrg);
+          setUserRole('candidate');
+          setInviteSlug(null);
+          setInviteOrg(null);
+        } else {
+          setUserRole('candidate');
+        }
       }
     } catch (e) {
       console.error('Error loading user data:', e);
@@ -214,6 +305,9 @@ export default function InterviewSimulator() {
     setCompletedInterviews(0);
     setIsSubscribed(false);
     setPastInterviews([]);
+    setUserRole(null);
+    setUserOrgId(null);
+    setUserOrg(null);
   };
 
   const initializeApp = async () => {
@@ -247,7 +341,7 @@ export default function InterviewSimulator() {
         if (window.mixpanel) {
           window.mixpanel.track('payment_completed', {
             plan: 'monthly',
-            price: 9.99,
+            price: 19.99,
             currency: 'USD'
           });
           window.mixpanel.people.set({
@@ -489,14 +583,35 @@ export default function InterviewSimulator() {
         for (let i = 0; i < event.results.length; i++) {
           transcript += event.results[i][0].transcript;
         }
-        setCurrentTranscript(transcript);
-        transcriptRef.current = transcript; // Also store in ref for reliable access
+        // On iOS, recognition restarts lose previous results.
+        // Prepend any previously accumulated text.
+        const accumulated = accumulatedTranscriptRef.current + transcript;
+        setCurrentTranscript(accumulated);
+        transcriptRef.current = accumulated;
       };
 
       recognitionRef.current.onerror = (event) => {
         console.error('Speech recognition error:', event.error);
         if (event.error === 'not-allowed') {
           setMicPermission(false);
+        }
+      };
+
+      // iOS/mobile: recognition frequently stops itself after pauses in speech.
+      // Auto-restart it to keep capturing the full answer.
+      recognitionRef.current.onend = () => {
+        // Save what we have so far before restart (results will reset)
+        if (transcriptRef.current) {
+          accumulatedTranscriptRef.current = transcriptRef.current;
+        }
+        // Only restart if we're still in recording mode (not intentionally stopped)
+        if (isRecordingRef.current) {
+          try {
+            recognitionRef.current.start();
+            console.log('Speech recognition auto-restarted');
+          } catch (e) {
+            console.error('Failed to restart recognition:', e);
+          }
         }
       };
     }
@@ -756,14 +871,6 @@ Return ONLY valid JSON:
     setVideoFeedback(null);
     setFinalResults(null);
     
-    // V2: Reset follow-up states
-    setIsFollowUp(false);
-    setCurrentFollowUpQuestion(null);
-    setFollowUpsAskedCount(0);
-    setFollowUpTypesUsed([]);
-    setIsEvaluating(false);
-    setFollowUpMetadata({});
-    
     // Track interview started
     if (window.mixpanel) {
       window.mixpanel.track('interview_started', {
@@ -799,7 +906,51 @@ Return ONLY valid JSON:
       // On mobile, wait for user tap before playing audio
       if (isMobile && !mobileAudioReady) {
         setWaitingForMobileStart(true);
-        // Audio will be triggered by the "Start Interview" button tap
+        // Pre-fetch ALL audio while user sees the "Ready to Begin?" screen
+        try {
+          const introText = `Welcome to your interview for the ${jobTitle} position. I'll be asking you 5 questions. You have 3 minutes to answer each question. Please speak clearly and take your time. Let's begin.`;
+          const allTexts = [introText, ...parsedQuestions.map((q, i) => `Question ${i + 1}: ${q}`)];
+          
+          const allResponses = await Promise.all(
+            allTexts.map(text => 
+              fetch('/api/speak', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) })
+            )
+          );
+          
+          const allBlobs = await Promise.all(allResponses.map(r => r.ok ? r.blob() : null));
+          
+          const allAudio = allBlobs.map(blob => {
+            if (!blob) return null;
+            const url = URL.createObjectURL(blob);
+            const audio = new Audio();
+            audio.preload = 'auto';
+            audio.src = url;
+            audio.load();
+            return { url, audio };
+          });
+          
+          // allAudio[0] = intro, allAudio[1] = Q1, allAudio[2] = Q2, etc.
+          prefetchedAudioRef.current = allAudio;
+          console.log('Pre-fetched all ' + allAudio.length + ' audio clips');
+          
+          // Also grab mic stream now so Q1 recording starts instantly
+          try {
+            const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            micStreamRef.current = micStream;
+            micMimeTypeRef.current = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
+              ? 'audio/webm;codecs=opus'
+              : MediaRecorder.isTypeSupported('audio/webm') 
+                ? 'audio/webm'
+                : MediaRecorder.isTypeSupported('audio/mp4')
+                  ? 'audio/mp4'
+                  : '';
+          } catch (e) {
+            console.error('Mic pre-grab failed:', e);
+          }
+        } catch (e) {
+          console.error('Prefetch all failed:', e);
+          prefetchedAudioRef.current = null;
+        }
       } else {
         // Desktop: play audio immediately
         await speakQuestion(`Welcome to your interview for the ${jobTitle} position. I'll be asking you 5 questions. You have 3 minutes to answer each question. Please speak clearly and take your time. Let's begin.`);
@@ -827,6 +978,46 @@ Return ONLY valid JSON:
       // On mobile, wait for user tap before playing audio
       if (isMobile && !mobileAudioReady) {
         setWaitingForMobileStart(true);
+        try {
+          const introText = `Welcome to your interview. Let's begin.`;
+          const allTexts = [introText, ...fallback.map((q, i) => `Question ${i + 1}: ${q}`)];
+          const allResponses = await Promise.all(
+            allTexts.map(text =>
+              fetch('/api/speak', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) })
+            )
+          );
+          const allBlobs = await Promise.all(allResponses.map(r => r.ok ? r.blob() : null));
+          const allAudio = allBlobs.map(blob => {
+            if (!blob) return null;
+            const url = URL.createObjectURL(blob);
+            const audio = new Audio();
+            audio.preload = 'auto';
+            audio.src = url;
+            audio.load();
+            return { url, audio };
+          });
+          prefetchedAudioRef.current = allAudio;
+        } catch (e) {
+          console.error('Prefetch fallback failed:', e);
+          prefetchedAudioRef.current = null;
+        }
+        
+        // Also grab mic stream now so Q1 recording starts instantly
+        try {
+          if (!micStreamRef.current) {
+            const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            micStreamRef.current = micStream;
+            micMimeTypeRef.current = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
+              ? 'audio/webm;codecs=opus'
+              : MediaRecorder.isTypeSupported('audio/webm') 
+                ? 'audio/webm'
+                : MediaRecorder.isTypeSupported('audio/mp4')
+                  ? 'audio/mp4'
+                  : '';
+          }
+        } catch (e) {
+          console.error('Mic pre-grab failed:', e);
+        }
       } else {
         await speakQuestion(`Welcome to your interview. Let's begin with question 1: ${fallback[0]}`);
         startRecordingPhase();
@@ -835,40 +1026,278 @@ Return ONLY valid JSON:
   };
 
   // Handle mobile start button tap - enables audio playback
-  const handleMobileStart = async () => {
+  const handleMobileStart = () => {
     setMobileAudioReady(true);
     setWaitingForMobileStart(false);
+    setIsSpeaking(true);
+    setIsRecording(false);
     
-    // Now play the intro and first question
-    await speakQuestion(`Welcome to your interview for the ${jobTitle} position. I'll be asking you 5 questions. You have 3 minutes to answer each question. Please speak clearly and take your time. Let's begin.`);
-    await speakQuestion(`Question 1: ${questions[0]}`);
-    startRecordingPhase();
+    // Reattach camera
+    setTimeout(() => {
+      if (videoEnabled && videoStreamRef.current && videoRef.current) {
+        videoRef.current.srcObject = videoStreamRef.current;
+        videoRef.current.play().catch(() => {});
+      }
+    }, 100);
+    
+    const allAudio = prefetchedAudioRef.current;
+    
+    if (allAudio && allAudio.length >= 2 && allAudio[0] && allAudio[1]) {
+      // Play intro (index 0) then Q1 (index 1) sequentially
+      const toPlay = [allAudio[0], allAudio[1]];
+      let idx = 0;
+      
+      const playNext = () => {
+        if (idx >= toPlay.length) {
+          setIsSpeaking(false);
+          startRecordingPhase();
+          return;
+        }
+        
+        const item = toPlay[idx];
+        const audio = item.audio;
+        audioRef.current = audio;
+        idx++;
+        
+        let finished = false;
+        const done = () => {
+          if (finished) return;
+          finished = true;
+          URL.revokeObjectURL(item.url);
+          playNext();
+        };
+        
+        audio.onended = done;
+        audio.onerror = done;
+        audio.ontimeupdate = () => {
+          if (audio.duration && audio.currentTime >= audio.duration - 0.3) {
+            audio.ontimeupdate = null;
+            done();
+          }
+        };
+        setTimeout(done, 20000);
+        
+        audio.play().catch(done);
+      };
+      
+      playNext();
+    } else {
+      // No prefetched audio — skip audio, just start recording
+      setIsSpeaking(false);
+      startRecordingPhase();
+    }
+  };
+
+  // Handle mobile tap to hear next question
+  // Audio is already pre-fetched and preloaded in the array
+  const handleMobileNextQuestion = () => {
+    setWaitingForMobileNext(false);
+    setIsSpeaking(true);
+    setIsRecording(false);
+    
+    // Reattach camera after overlay switch
+    setTimeout(() => {
+      if (videoEnabled && videoStreamRef.current && videoRef.current) {
+        videoRef.current.srcObject = videoStreamRef.current;
+        videoRef.current.play().catch(() => {});
+      }
+    }, 100);
+    
+    // allAudio[0] = intro, allAudio[1] = Q1, allAudio[2] = Q2, etc.
+    // currentQuestionIndex is already updated to the new question (0-based)
+    // So Q2 = index 1 = allAudio[2], Q3 = index 2 = allAudio[3], etc.
+    const allAudio = prefetchedAudioRef.current;
+    const audioIndex = currentQuestionIndex + 1; // +1 because index 0 is intro
+    
+    if (allAudio && allAudio[audioIndex] && allAudio[audioIndex].audio) {
+      const item = allAudio[audioIndex];
+      const audio = item.audio;
+      audioRef.current = audio;
+      
+      let finished = false;
+      const done = () => {
+        if (finished) return;
+        finished = true;
+        setIsSpeaking(false);
+        URL.revokeObjectURL(item.url);
+        startRecordingPhase();
+      };
+      
+      audio.onended = done;
+      audio.onerror = done;
+      
+      // Backup: poll for completion (iOS sometimes doesn't fire onended)
+      audio.ontimeupdate = () => {
+        if (audio.duration && audio.currentTime >= audio.duration - 0.3) {
+          audio.ontimeupdate = null;
+          done();
+        }
+      };
+      
+      // Safety timeout
+      setTimeout(() => {
+        if (!finished) done();
+      }, 20000);
+      
+      audio.play().catch(done);
+    } else {
+      // Prefetch failed or not ready — skip audio, just start recording
+      setIsSpeaking(false);
+      startRecordingPhase();
+    }
   };
 
   const startRecordingPhase = () => {
     setTimeLeft(180); // Always reset to 3 minutes
     setIsTimerRunning(true);
     // Don't clear transcript here - it's already cleared in handleNextQuestion
-    startRecording();
+    startRecording(); // async but we don't need to await it here
   };
 
-  const startRecording = () => {
-    if (recognitionRef.current) {
+  const startRecording = async () => {
+    if (isMobile) {
+      // Mobile: use MediaRecorder to capture audio for Whisper transcription
+      setCurrentTranscript('🎙️ Recording... (transcription on submit)');
+      transcriptRef.current = '';
+      accumulatedTranscriptRef.current = '';
+      audioChunksRef.current = [];
+      
       try {
-        recognitionRef.current.start();
+        // Get mic stream once, reuse for all questions
+        if (!micStreamRef.current || micStreamRef.current.getTracks().every(t => t.readyState === 'ended')) {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          micStreamRef.current = stream;
+          
+          // Determine best MIME type once
+          micMimeTypeRef.current = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
+            ? 'audio/webm;codecs=opus'
+            : MediaRecorder.isTypeSupported('audio/webm') 
+              ? 'audio/webm'
+              : MediaRecorder.isTypeSupported('audio/mp4')
+                ? 'audio/mp4'
+                : '';
+        }
+        
+        // Create new MediaRecorder from existing stream (fast, synchronous)
+        const options = micMimeTypeRef.current 
+          ? { mimeType: micMimeTypeRef.current, audioBitsPerSecond: 16000 } 
+          : { audioBitsPerSecond: 16000 };
+        const recorder = new MediaRecorder(micStreamRef.current, options);
+        mediaRecorderRef.current = recorder;
+        
+        recorder.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            audioChunksRef.current.push(event.data);
+          }
+        };
+        
+        recorder.start(1000);
         setIsRecording(true);
-      } catch (e) {
-        console.error('Failed to start recognition:', e);
+        isRecordingRef.current = true;
+      } catch (err) {
+        console.error('MediaRecorder failed:', err);
+        setCurrentTranscript('⚠️ Mic error - please check permissions');
+        setIsRecording(false);
+      }
+    } else {
+      // Desktop: use Web Speech API (live transcription)
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.start();
+          setIsRecording(true);
+          isRecordingRef.current = true;
+        } catch (e) {
+          console.error('Failed to start recognition:', e);
+        }
       }
     }
   };
 
   const stopRecording = () => {
-    if (recognitionRef.current) {
-      try {
-        recognitionRef.current.stop();
-        setIsRecording(false);
-      } catch (e) {}
+    isRecordingRef.current = false;
+    
+    if (isMobile) {
+      // Mobile: stop MediaRecorder and send to Whisper
+      return new Promise((resolve) => {
+        const recorder = mediaRecorderRef.current;
+        if (recorder && recorder.state !== 'inactive') {
+          recorder.onstop = async () => {
+            // DON'T stop mic tracks - keep stream alive for next question
+            setIsRecording(false);
+            
+            // Send audio to Whisper for transcription
+            if (audioChunksRef.current.length > 0) {
+              try {
+                setCurrentTranscript('⏳ Transcribing your answer...');
+                
+                const storedMimeType = micMimeTypeRef.current || recorder.mimeType || 'audio/webm';
+                const audioBlob = new Blob(audioChunksRef.current, { type: storedMimeType });
+                
+                // Convert to base64
+                const reader = new FileReader();
+                const base64 = await new Promise((res, rej) => {
+                  reader.onloadend = () => res(reader.result.split(',')[1]);
+                  reader.onerror = rej;
+                  reader.readAsDataURL(audioBlob);
+                });
+                
+                const response = await fetch('/api/transcribe', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ audio: base64, mimeType: storedMimeType })
+                });
+                
+                if (response.ok) {
+                  const data = await response.json();
+                  const transcript = data.transcript || '[No speech detected]';
+                  setCurrentTranscript(transcript);
+                  transcriptRef.current = transcript;
+                  console.log('Whisper transcript:', transcript.substring(0, 100));
+                } else {
+                  console.error('Transcription failed:', response.status);
+                  transcriptRef.current = '[Transcription failed]';
+                }
+              } catch (err) {
+                console.error('Whisper error:', err);
+                transcriptRef.current = '[Transcription error]';
+              }
+            }
+            
+            audioChunksRef.current = [];
+            resolve();
+          };
+          recorder.stop();
+        } else {
+          setIsRecording(false);
+          resolve();
+        }
+      });
+    } else {
+      // Desktop: stop Web Speech API
+      return new Promise((resolve) => {
+        if (recognitionRef.current) {
+          try {
+            const onEnd = () => {
+              recognitionRef.current.removeEventListener('end', onEnd);
+              setIsRecording(false);
+              resolve();
+            };
+            recognitionRef.current.addEventListener('end', onEnd);
+            recognitionRef.current.stop();
+            setTimeout(() => {
+              recognitionRef.current?.removeEventListener('end', onEnd);
+              setIsRecording(false);
+              resolve();
+            }, 1500);
+          } catch (e) {
+            setIsRecording(false);
+            resolve();
+          }
+        } else {
+          setIsRecording(false);
+          resolve();
+        }
+      });
     }
   };
 
@@ -878,15 +1307,17 @@ Return ONLY valid JSON:
       timerRef.current = setTimeout(() => {
         setTimeLeft(prev => prev - 1);
       }, 1000);
-    } else if (timeLeft === 0 && isTimerRunning) {
+    } else if (timeLeft === 0 && isTimerRunning && !isTranscribing && !isEvaluating) {
       handleNextQuestion();
     }
     return () => clearTimeout(timerRef.current);
-  }, [isTimerRunning, timeLeft]);
+  }, [isTimerRunning, timeLeft, isTranscribing, isEvaluating]);
 
   const handleNextQuestion = async () => {
+    if (isTranscribing) return; // Prevent double-tap
     setIsTimerRunning(false);
-    stopRecording();
+    if (isMobile) setIsTranscribing(true); // Disable button immediately
+    await stopRecording();
     
     // Stop any currently playing audio (ElevenLabs or browser)
     if (audioRef.current) {
@@ -916,95 +1347,105 @@ Return ONLY valid JSON:
     // Clear transcript state AND ref
     setCurrentTranscript('');
     transcriptRef.current = '';
+    accumulatedTranscriptRef.current = '';
     
-    // Reset timer
+    // Reset timer immediately for next question
     setTimeLeft(180);
+    
+    // Helper: move to next main question or finish
+    const moveToNextOrFinish = async (answersArr) => {
+      if (currentQuestionIndex < questions.length - 1) {
+        const nextIndex = currentQuestionIndex + 1;
+        setCurrentQuestionIndex(nextIndex);
+        
+        if (isMobile) {
+          if (videoEnabled) {
+            const snapshot = captureSnapshot();
+            if (snapshot) {
+              setVideoSnapshots(prev => [...prev.slice(-9), snapshot]);
+            }
+          }
+          setIsTranscribing(false);
+          setWaitingForMobileNext(true);
+        } else {
+          await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
+          startRecordingPhase();
+        }
+      } else {
+        // Interview complete
+        if (micStreamRef.current) {
+          micStreamRef.current.getTracks().forEach(track => track.stop());
+          micStreamRef.current = null;
+        }
+        setIsTranscribing(false);
+        setStage('analyzing');
+        setIsAnalyzing(true);
+        await analyzeAllAnswers(answersArr);
+      }
+    };
     
     // If we just answered a follow-up, move to next main question
     if (isFollowUp) {
       setIsFollowUp(false);
       setCurrentFollowUpQuestion(null);
-      
-      if (currentQuestionIndex < questions.length - 1) {
-        const nextIndex = currentQuestionIndex + 1;
-        setCurrentQuestionIndex(nextIndex);
-        await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
-        startRecordingPhase();
-      } else {
-        setStage('analyzing');
-        setIsAnalyzing(true);
-        await analyzeAllAnswers(newAnswers);
-      }
+      await moveToNextOrFinish(newAnswers);
       return;
     }
     
-    // For main question answers, evaluate if follow-up is needed
-    setIsEvaluating(true);
-    
-    try {
-      const followUpResult = await evaluateForFollowUp(
-        questions[currentQuestionIndex],
-        capturedTranscript,
-        currentQuestionIndex,
-        questions.length,
-        followUpsAskedCount
-      );
+    // For main question answers on desktop, evaluate if follow-up is needed
+    // Mobile users are gated so they won't reach here, but skip follow-ups just in case
+    if (!isMobile) {
+      setIsEvaluating(true);
       
-      setIsEvaluating(false);
-      
-      // Always store the evaluation metadata for this question (whether or not follow-up fires)
-      setFollowUpMetadata(prev => ({
-        ...prev,
-        [currentQuestionIndex]: {
-          reason: followUpResult.reason || null,
-          followUpType: followUpResult.followUpType || null,
-          whatWasMissing: followUpResult.whatWasMissing || null,
-          shouldFollowUp: followUpResult.shouldFollowUp || false
-        }
-      }));
-      
-      if (followUpResult.shouldFollowUp && followUpResult.followUpQuestion) {
-        // Ask the follow-up question
-        setIsFollowUp(true);
-        setCurrentFollowUpQuestion(followUpResult.followUpQuestion);
-        setFollowUpsAskedCount(prev => prev + 1);
-        if (followUpResult.followUpType) {
-          setFollowUpTypesUsed(prev => [...prev, followUpResult.followUpType]);
-        }
+      try {
+        const followUpResult = await evaluateForFollowUp(
+          questions[currentQuestionIndex],
+          capturedTranscript,
+          currentQuestionIndex,
+          questions.length,
+          followUpsAskedCount
+        );
         
-        await speakQuestion(followUpResult.followUpQuestion);
-        startRecordingPhase();
-      } else {
-        // No follow-up needed, move to next question
-        if (currentQuestionIndex < questions.length - 1) {
-          const nextIndex = currentQuestionIndex + 1;
-          setCurrentQuestionIndex(nextIndex);
-          await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
+        setIsEvaluating(false);
+        
+        // Store evaluation metadata for this question
+        setFollowUpMetadata(prev => ({
+          ...prev,
+          [currentQuestionIndex]: {
+            reason: followUpResult.reason || null,
+            followUpType: followUpResult.followUpType || null,
+            whatWasMissing: followUpResult.whatWasMissing || null,
+            shouldFollowUp: followUpResult.shouldFollowUp || false
+          }
+        }));
+        
+        if (followUpResult.shouldFollowUp && followUpResult.followUpQuestion) {
+          // Ask the follow-up question
+          setIsFollowUp(true);
+          setCurrentFollowUpQuestion(followUpResult.followUpQuestion);
+          setFollowUpsAskedCount(prev => prev + 1);
+          if (followUpResult.followUpType) {
+            setFollowUpTypesUsed(prev => [...prev, followUpResult.followUpType]);
+          }
+          
+          await speakQuestion(followUpResult.followUpQuestion);
           startRecordingPhase();
         } else {
-          setStage('analyzing');
-          setIsAnalyzing(true);
-          await analyzeAllAnswers(newAnswers);
+          await moveToNextOrFinish(newAnswers);
         }
+      } catch (error) {
+        console.error('Follow-up evaluation error:', error);
+        setIsEvaluating(false);
+        await moveToNextOrFinish(newAnswers);
       }
-    } catch (error) {
-      console.error('Follow-up evaluation error:', error);
-      setIsEvaluating(false);
-      // On error, just move to next question
-      if (currentQuestionIndex < questions.length - 1) {
-        const nextIndex = currentQuestionIndex + 1;
-        setCurrentQuestionIndex(nextIndex);
-        await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
-        startRecordingPhase();
-      } else {
-        setStage('analyzing');
-        setIsAnalyzing(true);
-        await analyzeAllAnswers(newAnswers);
-      }
+    } else {
+      // Mobile: skip follow-up evaluation
+      await moveToNextOrFinish(newAnswers);
     }
   };
-  
-  // V2: Evaluate if follow-up is needed
+
+  // AI Analysis of all answers using serverless function
+  // Evaluate if follow-up is needed (desktop only - mobile uses gate)
   const evaluateForFollowUp = async (question, answer, questionIndex, totalQuestions, followUpsSoFar) => {
     if (answer === '[No response recorded]' || answer.length < 20) {
       return { shouldFollowUp: false, reason: 'no_content' };
@@ -1033,7 +1474,6 @@ Return ONLY valid JSON:
     }
   };
 
-  // AI Analysis of all answers using serverless function
   const analyzeAllAnswers = async (allAnswers) => {
     try {
       const response = await fetch('/api/analyze-interview', {
@@ -1045,15 +1485,10 @@ Return ONLY valid JSON:
       const data = await response.json();
       
       if (!response.ok || !data.results) {
-        console.error('Analysis API response not ok:', response.status, JSON.stringify(data));
-        throw new Error(`Analysis failed: ${data?.error || data?.detail || 'No results in response'}`);
+        throw new Error('Analysis failed');
       }
 
       const results = data.results;
-      
-      // Diagnostic: log that we got real API results
-      console.log('✅ Got REAL API results. Overall score:', results.overallScore, 
-        'Q1 feedback preview:', results.questionScores?.[0]?.feedback?.substring(0, 80));
       
       // Also analyze video if we have snapshots
       let videoResults = null;
@@ -1134,10 +1569,8 @@ Return ONLY valid JSON:
       
     } catch (error) {
       console.error('Analysis error:', error);
-      console.error('Error detail:', error.message);
       stopCamera();
-      // Fallback results - log that we're using fallback so it's clear during testing
-      console.warn('⚠️ Using FALLBACK results - API analysis failed. Check server logs for details.');
+      // Fallback results
       const fallbackResults = generateFallbackResults(allAnswers);
       setFinalResults(fallbackResults);
       setIsAnalyzing(false);
@@ -1147,7 +1580,8 @@ Return ONLY valid JSON:
 
   // PDF Download function (Pro feature)
   const downloadResultsPDF = async () => {
-    if (!isSubscribed && !TEST_MODE) {
+    const isB2BCandidate = userOrgId != null;
+    if (!isSubscribed && !TEST_MODE && !isB2BCandidate) {
       setPreviousStage('results');
       setStage('paywall');
       return;
@@ -1313,58 +1747,6 @@ Return ONLY valid JSON:
             });
           }
           
-          // Follow-up section in PDF
-          if (q.hasFollowUp && q.followUp) {
-            yPos = checkNewPage(yPos, 30);
-            yPos += 3;
-            
-            // Follow-up header
-            const purpleColor = [167, 139, 250];
-            pdf.setTextColor(...purpleColor);
-            pdf.setFont('helvetica', 'bold');
-            pdf.setFontSize(10);
-            pdf.text(`↪ Follow-up Response`, 24, yPos);
-            
-            const fuScoreColor = q.followUp.score >= 80 ? primaryColor : q.followUp.score >= 70 ? [245, 158, 11] : failColor;
-            pdf.setTextColor(...fuScoreColor);
-            pdf.text(`${q.followUp.score}/100`, 170, yPos);
-            yPos += 6;
-            
-            // Coaching note
-            if (q.followUp.coachingNote) {
-              yPos = checkNewPage(yPos, 10);
-              pdf.setFont('helvetica', 'normal');
-              pdf.setTextColor(...purpleColor);
-              const noteLines = pdf.splitTextToSize(`💡 ${q.followUp.coachingNote}`, 160);
-              noteLines.slice(0, 2).forEach(line => {
-                pdf.text(line, 24, yPos);
-                yPos += 5;
-              });
-            }
-            
-            // Follow-up feedback
-            if (q.followUp.feedback) {
-              pdf.setFont('helvetica', 'normal');
-              pdf.setTextColor(...grayColor);
-              const fuFeedbackLines = pdf.splitTextToSize(q.followUp.feedback, 160);
-              fuFeedbackLines.slice(0, 3).forEach(line => {
-                yPos = checkNewPage(yPos, 8);
-                pdf.text(line, 24, yPos);
-                yPos += 5;
-              });
-            }
-          }
-          
-          // No follow-up positive note in PDF
-          if (!q.hasFollowUp && q.noFollowUpReason === 'thorough_answer') {
-            yPos = checkNewPage(yPos, 10);
-            yPos += 2;
-            pdf.setTextColor(...primaryColor);
-            pdf.setFont('helvetica', 'italic');
-            pdf.setFontSize(9);
-            pdf.text('✓ No follow-up needed — your answer was thorough', 24, yPos);
-          }
-          
           yPos += 5;
         });
       }
@@ -1458,7 +1840,6 @@ Return ONLY valid JSON:
   };
 
   const generateFallbackResults = (allAnswers) => {
-    // Only use main answers for scoring
     const mainOnly = allAnswers.filter(a => !a.isFollowUp);
     const followUps = allAnswers.filter(a => a.isFollowUp);
     
@@ -1466,7 +1847,6 @@ Return ONLY valid JSON:
     const avgTime = mainOnly.reduce((sum, a) => sum + a.timeSpent, 0) / mainOnly.length;
     const baseScore = Math.min(Math.round((avgLength / 500) * 50 + (avgTime / 180) * 30 + 20), 85);
     
-    // Build follow-up lookup
     const fuLookup = {};
     followUps.forEach(fa => {
       fuLookup[fa.parentQuestionIndex] = fa;
@@ -1495,7 +1875,6 @@ Return ONLY valid JSON:
           followUp: hasFU ? {
             question: fuAnswer.question,
             score: fuScore,
-            addressedGap: true,
             feedback: "Follow-up answer recorded and evaluated.",
             strengths: ["Responded to follow-up"],
             improvements: ["Add more detail"],
@@ -1531,7 +1910,9 @@ Return ONLY valid JSON:
   const handleStartInterview = async (source = 'landing') => {
     // In TEST_MODE, always allow access
     // In production, check if user is subscribed or has free trial remaining
-    if (!TEST_MODE && !isSubscribed && completedInterviews >= 1) {
+    // B2B candidates with an org_id skip the paywall entirely
+    const isB2BCandidate = userOrgId != null;
+    if (!TEST_MODE && !isSubscribed && !isB2BCandidate && completedInterviews >= 1) {
       setPreviousStage(source);
       setStage('paywall');
       return;
@@ -1547,6 +1928,17 @@ Return ONLY valid JSON:
     setVideoSnapshots([]);
     setVideoFeedback(null);
     setWaitingForMobileStart(false);
+    setWaitingForMobileNext(false);
+    setMobileAudioReady(false);
+    prefetchedAudioRef.current = null;
+    
+    // Reset follow-up states
+    setIsFollowUp(false);
+    setCurrentFollowUpQuestion(null);
+    setFollowUpsAskedCount(0);
+    setFollowUpTypesUsed([]);
+    setFollowUpMetadata({});
+    setIsEvaluating(false);
     
     // Try to get mic permission, but don't block if it fails
     try {
@@ -1584,6 +1976,25 @@ Return ONLY valid JSON:
           <p style={styles.loadingText}>Initializing...</p>
         </div>
       </div>
+    );
+  }
+
+  // B2B Admin Dashboard — renders instead of the normal app for admin users
+  if (userRole === 'admin' && userOrg && user) {
+    return (
+      <AdminDashboard
+        supabase={supabase}
+        user={user}
+        org={userOrg}
+        onLogout={async () => {
+          await supabase.auth.signOut();
+          setUser(null);
+          setUserRole(null);
+          setUserOrgId(null);
+          setUserOrg(null);
+          setStage('landing');
+        }}
+      />
     );
   }
 
@@ -1684,6 +2095,24 @@ Return ONLY valid JSON:
           </div>
 
           {/* Main CTA - changes based on auth state */}
+          {inviteOrg && !user && (
+            <div style={{
+              padding: '12px 20px',
+              background: 'rgba(16,185,129,0.08)',
+              border: '1px solid rgba(16,185,129,0.15)',
+              borderRadius: 8,
+              marginBottom: 16,
+              textAlign: 'center'
+            }}>
+              <span style={{ color: '#10b981', fontWeight: 600 }}>
+                🎓 You've been invited by {inviteOrg.name}
+              </span>
+              <br />
+              <span style={{ color: '#94a3b8', fontSize: 13 }}>
+                Sign in to get free access to AI interview practice
+              </span>
+            </div>
+          )}
           {!user && !TEST_MODE ? (
             <div style={styles.ctaWrapper}>
               <button style={styles.googleSignInBtnLarge} onClick={signInWithGoogle}>
@@ -1795,7 +2224,7 @@ Return ONLY valid JSON:
           
           <div style={styles.priceCard}>
             <div style={styles.priceTag}>
-              <span style={styles.priceAmount}>$9.99</span>
+              <span style={styles.priceAmount}>$19.99</span>
               <span style={styles.pricePeriod}>/month</span>
             </div>
             <ul style={styles.priceFeatures}>
@@ -1863,7 +2292,7 @@ Return ONLY valid JSON:
               <div>
                 <div style={styles.subscriptionStatus}>
                   <span style={styles.statusBadgeActive}>✓ Active</span>
-                  <span style={styles.subscriptionPrice}>$9.99/month</span>
+                  <span style={styles.subscriptionPrice}>$19.99/month</span>
                 </div>
                 {subscriptionDate && (
                   <p style={styles.subscriptionDate}>
@@ -2184,6 +2613,281 @@ Return ONLY valid JSON:
     );
   }
 
+  // Mobile Gate Screen
+  if (stage === 'mobileGate') {
+    return (
+      <div style={styles.container}>
+        <div style={styles.heroGlow}></div>
+        <div style={{
+          position: 'relative',
+          zIndex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '32px 24px',
+          textAlign: 'center',
+          maxWidth: '420px',
+          width: '100%',
+          minHeight: '100vh',
+        }}>
+          {/* Desktop icon */}
+          <div style={{
+            width: '88px',
+            height: '88px',
+            borderRadius: '22px',
+            background: 'linear-gradient(135deg, rgba(0, 217, 255, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: '28px',
+            border: '1px solid rgba(0, 217, 255, 0.2)',
+          }}>
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#00d9ff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
+            </svg>
+          </div>
+
+          <h1 style={{
+            fontSize: '24px',
+            fontWeight: 700,
+            letterSpacing: '-0.3px',
+            marginBottom: '12px',
+            lineHeight: 1.3,
+            color: '#ffffff',
+          }}>
+            Your full interview<br />experience awaits
+          </h1>
+          <p style={{
+            fontSize: '15px',
+            color: 'rgba(255,255,255,0.6)',
+            lineHeight: 1.6,
+            maxWidth: '340px',
+            marginBottom: '32px',
+          }}>
+            Open on a laptop or desktop to unlock everything — video analysis, voice recognition, real-time feedback, and more.
+          </p>
+
+          {/* Reasons */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+            width: '100%',
+            maxWidth: '340px',
+            marginBottom: '36px',
+          }}>
+            {[
+              { icon: '✨', title: 'Tailored to you', desc: 'Questions based on your role and job description' },
+              { icon: '⏱️', title: 'Timed responses & follow-ups', desc: 'Dynamic follow-up questions with in-depth scoring' },
+              { icon: '🎥', title: 'Video & voice analysis', desc: 'Feedback on delivery, confidence, and body language' },
+            ].map((item, i) => (
+              <div key={i} style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '12px',
+                textAlign: 'left',
+              }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '10px',
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  fontSize: '18px',
+                }}>
+                  {item.icon}
+                </div>
+                <div>
+                  <div style={{ fontSize: '14px', fontWeight: 600, color: '#ffffff', marginBottom: '2px' }}>{item.title}</div>
+                  <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.4 }}>{item.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Actions */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            width: '100%',
+            maxWidth: '340px',
+          }}>
+            {/* Copy link button */}
+            <button
+              style={{
+                ...styles.primaryBtn,
+                width: '100%',
+                padding: '14px 24px',
+                fontSize: '15px',
+                gap: '8px',
+              }}
+              onClick={() => {
+                if (window.mixpanel) {
+                  window.mixpanel.track('mobile_gate_copy_link');
+                }
+                navigator.clipboard.writeText('https://acemyinterviews.io').then(() => {
+                  setMobileGateMessage('Link copied! Open it on your desktop.');
+                }).catch(() => {
+                  setMobileGateMessage('Copy this: acemyinterviews.io');
+                });
+              }}
+            >
+              📋 Copy link
+            </button>
+
+            {/* Email link button */}
+            <button
+              style={{
+                width: '100%',
+                padding: '14px 24px',
+                background: 'rgba(255,255,255,0.07)',
+                color: '#ffffff',
+                border: '1px solid rgba(255,255,255,0.15)',
+                borderRadius: '12px',
+                fontSize: '15px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+              }}
+              onClick={() => {
+                if (window.mixpanel) {
+                  window.mixpanel.track('mobile_gate_email_link');
+                }
+                const subject = encodeURIComponent('Your interview practice link');
+                const body = encodeURIComponent('Open this on your desktop to start your interview practice:\n\nhttps://acemyinterviews.io');
+                window.location.href = `mailto:${user?.email || ''}?subject=${subject}&body=${body}`;
+              }}
+            >
+              ✉️ Email me the link
+            </button>
+
+            {/* Success message */}
+            {mobileGateMessage && (
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '8px',
+                marginTop: '8px',
+              }}>
+                <div style={{
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '50%',
+                  background: 'rgba(16, 185, 129, 0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '22px',
+                }}>
+                  ✓
+                </div>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: '#10b981' }}>{mobileGateMessage}</div>
+              </div>
+            )}
+
+            {/* Divider */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              margin: '4px 0',
+            }}>
+              <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
+              <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)' }}>or</span>
+              <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
+            </div>
+
+            {/* Notify when mobile is ready */}
+            <div>
+              <div style={{
+                display: 'flex',
+                gap: '8px',
+              }}>
+                <input
+                  type="email"
+                  placeholder="your@email.com"
+                  value={mobileGateEmail}
+                  onChange={(e) => setMobileGateEmail(e.target.value)}
+                  style={{
+                    flex: 1,
+                    padding: '12px 16px',
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    borderRadius: '10px',
+                    fontSize: '14px',
+                    color: '#ffffff',
+                    outline: 'none',
+                  }}
+                />
+                <button
+                  onClick={async () => {
+                    if (mobileGateEmail && mobileGateEmail.includes('@')) {
+                      try {
+                        await supabase.from('mobile_waitlist').insert({
+                          email: mobileGateEmail,
+                          user_id: user?.id || null,
+                          created_at: new Date().toISOString(),
+                        });
+                      } catch (e) {
+                        console.error('Failed to save email:', e);
+                      }
+                      if (window.mixpanel) {
+                        window.mixpanel.track('mobile_gate_alert_me', { email: mobileGateEmail });
+                      }
+                      setMobileGateMessage("You're on the list! We'll notify you when mobile is ready.");
+                    }
+                  }}
+                  style={{
+                    padding: '12px 18px',
+                    background: 'rgba(255,255,255,0.1)',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    borderRadius: '10px',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    color: '#ffffff',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  Alert me
+                </button>
+              </div>
+              <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', textAlign: 'left', marginTop: '6px' }}>
+                Get notified when mobile is ready
+              </div>
+            </div>
+
+            {/* Back to dashboard */}
+            <button
+              onClick={() => setStage('landing')}
+              style={{
+                marginTop: '8px',
+                background: 'none',
+                border: 'none',
+                color: 'rgba(255,255,255,0.4)',
+                fontSize: '13px',
+                cursor: 'pointer',
+                textDecoration: 'underline',
+              }}
+            >
+              ← Back to dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Setup Page
   if (stage === 'setup') {
     return (
@@ -2359,7 +3063,11 @@ Return ONLY valid JSON:
                     video_enabled: videoEnabled
                   });
                 }
-                generateQuestions();
+                if (isMobile) {
+                  setStage('mobileGate');
+                } else {
+                  generateQuestions();
+                }
               }
             }}
             disabled={!jobTitle.trim()}
@@ -2421,6 +3129,38 @@ Return ONLY valid JSON:
               </button>
               <p style={styles.mobileStartHint}>
                 Make sure your volume is up to hear the questions
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
+    // Mobile next question overlay
+    if (waitingForMobileNext) {
+      return (
+        <div style={styles.container}>
+          <div style={styles.heroGlow}></div>
+          {videoEnabled && (
+            <video
+              ref={videoRef}
+              autoPlay
+              muted
+              playsInline
+              style={{ position: 'absolute', width: 1, height: 1, opacity: 0 }}
+            />
+          )}
+          <div style={styles.mobileStartOverlay}>
+            <div style={styles.mobileStartCard}>
+              <h2 style={styles.mobileStartTitle}>✅ Answer Recorded!</h2>
+              <p style={styles.mobileStartText}>
+                Ready for question {currentQuestionIndex + 1} of {questions.length}?
+              </p>
+              <button style={styles.mobileStartBtn} onClick={handleMobileNextQuestion}>
+                ▶️ Hear Next Question
+              </button>
+              <p style={styles.mobileStartHint}>
+                Tap to hear the AI ask your next question
               </p>
             </div>
           </div>
@@ -2494,84 +3234,87 @@ Return ONLY valid JSON:
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '12px',
-              padding: '20px',
-              background: 'rgba(0, 217, 255, 0.1)',
-              border: '1px solid rgba(0, 217, 255, 0.3)',
-              borderRadius: '12px',
-              marginBottom: '20px',
-              color: '#00d9ff',
-              fontSize: '15px',
-              fontWeight: '500'
+              gap: '10px',
+              padding: '12px',
+              background: 'rgba(139, 92, 246, 0.1)',
+              border: '1px solid rgba(139, 92, 246, 0.2)',
+              borderRadius: '10px',
+              marginBottom: '12px',
             }}>
-              <span style={{
-                width: '10px',
-                height: '10px',
-                background: '#00d9ff',
-                borderRadius: '50%',
-                animation: 'pulse 1.5s ease-in-out infinite'
-              }}></span>
-              Evaluating your response...
+              <span style={{ fontSize: '14px', color: '#a78bfa' }}>🔍 Evaluating your response...</span>
             </div>
           )}
           
           {/* Recording status */}
-          {!isEvaluating && (
-            <div style={styles.recordingSection}>
-              {isSpeaking ? (
-                <div style={styles.recordingWaiting}>
-                  🔊 Listening to question... Recording will start when AI finishes.
-                </div>
-              ) : isRecording ? (
-                <div style={styles.recordingActive}>
-                  <span style={styles.recordingDot}></span>
-                  Recording your answer...
-                </div>
-              ) : (
-                <div style={styles.recordingWaiting}>
-                  Preparing...
-                </div>
-              )}
-              
-              {/* Manual text input fallback - only show in TEST_MODE for sandbox testing */}
-              {TEST_MODE && !isSpeaking && (
-                <div style={styles.manualInputSection}>
-                  <span style={styles.manualInputLabel}>
-                    💡 Voice not working? Type your answer (TEST MODE only):
-                  </span>
-                  <textarea
-                    style={styles.manualTextarea}
-                    placeholder="Type your answer here if voice recording isn't capturing..."
-                    value={currentTranscript}
-                    onChange={(e) => {
-                      setCurrentTranscript(e.target.value);
-                      transcriptRef.current = e.target.value;
-                    }}
-                    rows={4}
-                  />
-                </div>
-              )}
-            </div>
-          )}
+          <div style={styles.recordingSection}>
+            {isSpeaking ? (
+              <div style={styles.recordingWaiting}>
+                🔊 Listening to question... Recording will start when AI finishes.
+              </div>
+            ) : isRecording ? (
+              <div style={styles.recordingActive}>
+                <span style={styles.recordingDot}></span>
+                Recording your answer...
+              </div>
+            ) : (
+              <div style={styles.recordingWaiting}>
+                Preparing...
+              </div>
+            )}
+            
+            {/* Manual text input fallback - only show in TEST_MODE for sandbox testing */}
+            {TEST_MODE && !isSpeaking && (
+              <div style={styles.manualInputSection}>
+                <span style={styles.manualInputLabel}>
+                  💡 Voice not working? Type your answer (TEST MODE only):
+                </span>
+                <textarea
+                  style={styles.manualTextarea}
+                  placeholder="Type your answer here if voice recording isn't capturing..."
+                  value={currentTranscript}
+                  onChange={(e) => {
+                    setCurrentTranscript(e.target.value);
+                    transcriptRef.current = e.target.value;
+                  }}
+                  rows={4}
+                />
+              </div>
+            )}
+            
+            {/* Live transcript preview - mobile only, for debugging speech recognition */}
+            {isMobile && !isSpeaking && currentTranscript && (
+              <div style={{
+                marginTop: '12px',
+                padding: '10px 14px',
+                background: 'rgba(0, 217, 255, 0.05)',
+                border: '1px solid rgba(0, 217, 255, 0.15)',
+                borderRadius: '8px',
+                maxHeight: '80px',
+                overflowY: 'auto',
+                fontSize: '13px',
+                color: 'rgba(255,255,255,0.7)',
+                lineHeight: '1.4'
+              }}>
+                <span style={{ color: 'rgba(0, 217, 255, 0.6)', fontSize: '11px', fontWeight: 600 }}>📝 Transcript: </span>
+                {currentTranscript.length > 150 ? '...' + currentTranscript.slice(-150) : currentTranscript}
+              </div>
+            )}
+          </div>
           
           <button 
             style={{
               ...styles.primaryBtn,
-              opacity: (isSpeaking || isEvaluating) ? 0.5 : 1,
-              cursor: (isSpeaking || isEvaluating) ? 'not-allowed' : 'pointer'
+              opacity: (isSpeaking || isTranscribing || isEvaluating) ? 0.5 : 1,
+              cursor: (isSpeaking || isTranscribing || isEvaluating) ? 'not-allowed' : 'pointer'
             }} 
             onClick={handleNextQuestion}
-            disabled={isSpeaking || isEvaluating}
+            disabled={isSpeaking || isTranscribing || isEvaluating}
           >
-            {isSpeaking ? 'Please wait...' : isEvaluating ? 'Evaluating...' : 'Submit Answer'}
+            {isSpeaking ? 'Please wait...' : isTranscribing ? '⏳ Transcribing...' : isEvaluating ? '🔍 Evaluating...' : (currentQuestionIndex < questions.length - 1 ? 'Submit Answer' : 'Finish Interview')}
             <span style={styles.btnArrow}>→</span>
           </button>
           
-          <p style={styles.skipNote}>
-            {isSpeaking ? 'Wait for AI to finish speaking' : 
-             isEvaluating ? 'AI is reviewing your response...' :
-             'Click above when you\'re done answering, or wait for the timer'}
-          </p>
+          <p style={styles.skipNote}>{isSpeaking ? 'Wait for AI to finish speaking' : isTranscribing ? 'Processing your answer...' : isEvaluating ? 'AI is reviewing your response...' : 'Click above when you\'re done answering, or wait for the timer'}</p>
         </div>
       </div>
     );
@@ -2731,7 +3474,6 @@ Return ONLY valid JSON:
                 <div style={styles.questionFeedbackHeader}>
                   <span style={styles.questionNum}>Q{q.questionNum}</span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    {/* Show combined score if there was a follow-up, otherwise main score */}
                     {q.hasFollowUp && q.combinedScore !== undefined && (
                       <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>
                         combined
@@ -2743,7 +3485,6 @@ Return ONLY valid JSON:
                   </div>
                 </div>
                 
-                {/* Main answer feedback - always shown with full V1 depth */}
                 {q.hasFollowUp && (
                   <div style={{
                     display: 'inline-block',
@@ -2769,7 +3510,7 @@ Return ONLY valid JSON:
                   </div>
                 </div>
                 
-                {/* V2: Follow-up section — shown when this question had a follow-up */}
+                {/* Follow-up section */}
                 {q.hasFollowUp && q.followUp && (
                   <div style={{
                     marginTop: '16px',
@@ -2793,7 +3534,6 @@ Return ONLY valid JSON:
                       </span>
                     </div>
                     
-                    {/* What was being tested */}
                     {q.followUp.coachingNote && (
                       <div style={{
                         padding: '10px 12px',
@@ -2830,7 +3570,7 @@ Return ONLY valid JSON:
                   </div>
                 )}
                 
-                {/* V2: No follow-up — positive reinforcement when answer was thorough */}
+                {/* No follow-up — positive reinforcement */}
                 {!q.hasFollowUp && q.noFollowUpReason === 'thorough_answer' && (
                   <div style={{
                     marginTop: '12px',
