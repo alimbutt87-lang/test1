@@ -161,6 +161,8 @@ export default function InterviewSimulator() {
     if (joinMatch) {
       const slug = joinMatch[1];
       setInviteSlug(slug);
+      // Persist slug so it survives the OAuth redirect page reload
+      sessionStorage.setItem('invite_slug', slug);
       supabase
         .from('organizations')
         .select('*')
@@ -174,6 +176,7 @@ export default function InterviewSimulator() {
           } else {
             console.error('Invalid invite link:', slug);
             setInviteSlug(null);
+            sessionStorage.removeItem('invite_slug');
             window.history.replaceState({}, '', '/');
           }
         });
@@ -208,6 +211,22 @@ export default function InterviewSimulator() {
   // Load user data from Supabase
   const loadUserData = async (userId) => {
     try {
+      // Recover invite org from sessionStorage if React state was lost during OAuth redirect
+      let effectiveInviteOrg = inviteOrg;
+      const savedSlug = sessionStorage.getItem('invite_slug');
+      if (!effectiveInviteOrg && savedSlug) {
+        const { data: slugOrg } = await supabase
+          .from('organizations')
+          .select('*')
+          .eq('slug', savedSlug)
+          .eq('is_active', true)
+          .single();
+        if (slugOrg) {
+          effectiveInviteOrg = slugOrg;
+        }
+        sessionStorage.removeItem('invite_slug');
+      }
+
       const { data, error } = await supabase
         .from('user_profiles')
         .select('*')
@@ -224,7 +243,7 @@ export default function InterviewSimulator() {
         setUserOrgId(data.org_id || null);
 
         // If user has an org_id, fetch the org details
-console.log('B2B check:', { role: data.role, org_id: data.org_id });
+        console.log('B2B check:', { role: data.role, org_id: data.org_id });
         if (data.org_id) {
           const { data: orgData, error: orgError } = await supabase
             .from('organizations')
@@ -237,20 +256,20 @@ console.log('B2B check:', { role: data.role, org_id: data.org_id });
 
         // If user just came through an invite link and doesn't have an org yet,
         // tag them to the invite org
-        if (!data.org_id && inviteOrg) {
+        if (!data.org_id && effectiveInviteOrg) {
           const { count } = await supabase
             .from('user_profiles')
             .select('id', { count: 'exact', head: true })
-            .eq('org_id', inviteOrg.id)
+            .eq('org_id', effectiveInviteOrg.id)
             .eq('role', 'candidate');
           
-          if (!inviteOrg.candidate_limit || count < inviteOrg.candidate_limit) {
+          if (!effectiveInviteOrg.candidate_limit || count < effectiveInviteOrg.candidate_limit) {
             await supabase
               .from('user_profiles')
-              .update({ org_id: inviteOrg.id, role: 'candidate' })
+              .update({ org_id: effectiveInviteOrg.id, role: 'candidate' })
               .eq('id', userId);
-            setUserOrgId(inviteOrg.id);
-            setUserOrg(inviteOrg);
+            setUserOrgId(effectiveInviteOrg.id);
+            setUserOrg(effectiveInviteOrg);
             setUserRole('candidate');
           }
           setInviteSlug(null);
@@ -264,13 +283,13 @@ console.log('B2B check:', { role: data.role, org_id: data.org_id });
           completed_interviews: 0,
           is_subscribed: false,
           role: 'candidate',
-          org_id: inviteOrg?.id || null
+          org_id: effectiveInviteOrg?.id || null
         };
         await supabase.from('user_profiles').insert(newProfile);
         
-        if (inviteOrg) {
-          setUserOrgId(inviteOrg.id);
-          setUserOrg(inviteOrg);
+        if (effectiveInviteOrg) {
+          setUserOrgId(effectiveInviteOrg.id);
+          setUserOrg(effectiveInviteOrg);
           setUserRole('candidate');
           setInviteSlug(null);
           setInviteOrg(null);
