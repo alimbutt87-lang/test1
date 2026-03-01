@@ -232,10 +232,6 @@ console.log('B2B check:', { role: data.role, org_id: data.org_id });
             .eq('id', data.org_id)
             .single();
           console.log('Org lookup:', { orgData, orgError });
-            .from('organizations')
-            .select('*')
-            .eq('id', data.org_id)
-            .single();
           if (orgData) setUserOrg(orgData);
         }
 
