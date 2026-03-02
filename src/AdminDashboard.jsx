@@ -186,6 +186,12 @@ export default function AdminDashboard({ supabase, user, org, onLogout }) {
     framing: 'Framing', background: 'Background', overallPresence: 'Presence'
   };
 
+  const ordinal = (n) => {
+    const s = ['th', 'st', 'nd', 'rd'];
+    const v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  };
+
   // Filter candidates
   const filteredCandidates = candidates
     .filter(c => {
@@ -373,16 +379,6 @@ export default function AdminDashboard({ supabase, user, org, onLogout }) {
     const s = stats;
     if (!s) return <div style={{ color: C.textMuted, padding: 40 }}>Loading stats...</div>;
 
-    const trendChartData = (s.trendData || []).map(t => ({
-      value: t.avgScore,
-      label: formatShortDate(t.week)
-    }));
-
-    const impactChartData = (s.impactSeries || []).map(t => ({
-      value: t.avgScore,
-      label: `Interview ${t.interview}`
-    }));
-
     const sortedCategories = Object.entries(s.categoryAverages || {})
       .map(([key, score]) => ({ key, name: categoryLabels[key] || key, score }))
       .sort((a, b) => a.score - b.score);
@@ -422,14 +418,24 @@ export default function AdminDashboard({ supabase, user, org, onLogout }) {
             )}
           </div>
 
-          {/* Trend Chart */}
+          {/* Practice Impact Chart */}
           <div style={{ ...S.card, display: 'flex', flexDirection: 'column' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-              <div style={{ ...S.cardTitle, marginBottom: 0 }}>Score Trend Over Time</div>
+              <div style={{ ...S.cardTitle, marginBottom: 0 }}>Practice Impact — Score by Attempt</div>
             </div>
             <div style={{ flex: 1, minHeight: 180 }}>
-              <MiniLineChart data={trendChartData} color={C.green} />
+              <MiniLineChart data={(s.impactSeries || []).map(t => ({ value: t.avgScore, label: `#${t.interview} (${t.count})` }))} color={C.green} />
             </div>
+            {(s.impactSeries || []).length >= 2 && (() => {
+              const first = s.impactSeries[0].avgScore;
+              const last = s.impactSeries[s.impactSeries.length - 1].avgScore;
+              const diff = last - first;
+              return diff > 0 ? (
+                <div style={{ ...S.scoreDelta, background: C.greenBg, color: C.greenLight, marginTop: 8 }}>
+                  +{diff} avg improvement by {ordinal(s.impactSeries.length)} interview — Candidates score {Math.round((diff/first)*100)}% higher after {s.impactSeries.length - 1 === 1 ? 'just one additional practice session' : `just ${s.impactSeries.length - 1} additional practice sessions`}
+                </div>
+              ) : null;
+            })()}
           </div>
 
           {/* Quick Stats */}
@@ -465,9 +471,9 @@ export default function AdminDashboard({ supabase, user, org, onLogout }) {
               {r.strong > 0 && <div style={{ ...S.readinessSegment, background: '#059669', width: `${(r.strong/rTotal)*100}%` }}>{Math.round((r.strong/rTotal)*100)}%</div>}
             </div>
             <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
-              <LegendItem color={C.red} label="Not Ready (0-40)" count={r.notReady} />
-              <LegendItem color={C.amber} label="Needs Practice (41-60)" count={r.needsPractice} />
-              <LegendItem color={C.green} label="Interview Ready (61-79)" count={r.interviewReady} />
+              <LegendItem color={C.red} label="Not Ready (0-49)" count={r.notReady} />
+              <LegendItem color={C.amber} label="Needs Practice (50-69)" count={r.needsPractice} />
+              <LegendItem color={C.green} label="Interview Ready (70-79)" count={r.interviewReady} />
               <LegendItem color="#059669" label="Strong (80+)" count={r.strong} />
             </div>
           </div>
@@ -759,6 +765,39 @@ export default function AdminDashboard({ supabase, user, org, onLogout }) {
           </div>
         </div>
 
+        {/* Video Analysis (Latest Interview) */}
+        {(() => {
+          const latestInterview = (c.interviewHistory || [])[0];
+          const va = latestInterview?.videoAnalysis;
+          if (!va) return null;
+          const videoEntries = Object.entries(va)
+            .filter(([key]) => ['eyeContact', 'posture', 'facialExpression', 'framing', 'background', 'overallPresence'].includes(key))
+            .map(([key, val]) => ({ key, name: videoLabels[key] || key, score: val?.score, feedback: val?.feedback }))
+            .filter(v => v.score != null);
+          if (videoEntries.length === 0) return null;
+          return (
+            <div style={{ ...S.card, marginBottom: 20 }}>
+              <div style={S.cardTitle}>Video Presence (Latest Interview)</div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+                {videoEntries.map(v => (
+                  <div key={v.key} style={S.videoItem}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                      <span style={{ fontSize: 13, color: C.textSecondary }}>{v.name}</span>
+                      <span style={{ fontSize: 15, fontWeight: 700, color: getScoreColor(v.score) }}>{v.score}</span>
+                    </div>
+                    <div style={{ height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.06)' }}>
+                      <div style={{ height: '100%', borderRadius: 2, width: `${v.score}%`, background: getScoreColor(v.score) }} />
+                    </div>
+                    {v.feedback && (
+                      <div style={{ fontSize: 11, color: C.textMuted, marginTop: 6, lineHeight: 1.4 }}>{v.feedback}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
+
         {/* Interview History */}
         <div style={{ ...S.card, marginBottom: 20 }}>
           <div style={S.cardTitle}>Interview History</div>
@@ -825,6 +864,56 @@ export default function AdminDashboard({ supabase, user, org, onLogout }) {
                             )}
                           </>
                         )}
+
+                        {/* Follow-Up Question */}
+                        {q.followUp && q.followUp.score != null && (() => {
+                          const fu = q.followUp;
+                          const fuQA = (interview.questionsAndAnswers || []).find(
+                            qa => qa.isFollowUp && qa.parentQuestionIndex === qi
+                          );
+                          return (
+                            <div style={{ marginTop: 12, marginLeft: 20, padding: 14, borderRadius: 8, borderLeft: `3px solid ${C.amber}`, background: 'rgba(245,158,11,0.04)' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                                <span style={{ fontSize: 12, color: C.amber, fontWeight: 600 }}>↳ Follow-Up</span>
+                                <span style={{ fontSize: 14, fontWeight: 700, color: getScoreColor(fu.score) }}>{fu.score}/100</span>
+                              </div>
+                              {fuQA?.question && (
+                                <div style={{ fontSize: 14, fontWeight: 500, color: C.textPrimary, marginBottom: 6 }}>
+                                  {fuQA.question}
+                                </div>
+                              )}
+                              <div style={{ fontSize: 13, color: C.textSecondary, lineHeight: 1.6, marginBottom: 8 }}>{fu.feedback}</div>
+                              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                                {(fu.strengths || []).map((s, si) => (
+                                  <span key={si} style={{ padding: '4px 10px', borderRadius: 6, fontSize: 12, background: C.greenBg, color: C.greenLight }}>{s}</span>
+                                ))}
+                                {(fu.improvements || []).map((s, si) => (
+                                  <span key={si} style={{ padding: '4px 10px', borderRadius: 6, fontSize: 12, background: C.amberBg, color: C.amber }}>{s}</span>
+                                ))}
+                              </div>
+                              {fuQA?.answer && (
+                                <>
+                                  <button
+                                    onClick={(e) => { e.stopPropagation(); setExpandedAnswer(expandedAnswer === `${idx}-fu-${qi}` ? null : `${idx}-fu-${qi}`); }}
+                                    style={S.answerToggle}
+                                  >
+                                    👁 View Full Response
+                                  </button>
+                                  {expandedAnswer === `${idx}-fu-${qi}` && (
+                                    <div style={S.answerBox}>
+                                      "{fuQA.answer}"
+                                    </div>
+                                  )}
+                                </>
+                              )}
+                              {q.combinedScore != null && (
+                                <div style={{ marginTop: 8, fontSize: 12, color: C.textMuted }}>
+                                  Combined score: <span style={{ fontWeight: 600, color: getScoreColor(Math.round(q.combinedScore)) }}>{Math.round(q.combinedScore)}</span>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })()}
                       </div>
                     ))}
                   </div>
