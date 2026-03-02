@@ -17,6 +17,7 @@ export default function AdminDashboard({ supabase, user, org, onLogout }) {
   const [expandedInterview, setExpandedInterview] = useState(null);
   const [expandedAnswer, setExpandedAnswer] = useState(null);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [chartMode, setChartMode] = useState('impact');
 
   // Settings state
   const [settingsForm, setSettingsForm] = useState({
@@ -258,6 +259,43 @@ export default function AdminDashboard({ supabase, user, org, onLogout }) {
     );
   };
 
+  // ===== BAR CHART SVG (Practice Impact) =====
+  const MiniBarChart = ({ data, width = 500, height = 240 }) => {
+    if (!data || data.length === 0) return <div style={{ color: C.textMuted, fontSize: 13, padding: 20 }}>Not enough data for chart</div>;
+    const pad = { top: 50, bottom: 40, left: 45, right: 20 };
+    const w = width - pad.left - pad.right;
+    const h = height - pad.top - pad.bottom;
+    const maxVal = Math.max(...data.map(d => d.value), 100);
+    const barWidth = Math.min(80, (w / data.length) * 0.5);
+    const gap = (w - barWidth * data.length) / (data.length + 1);
+    const barColors = ['#ef4444', '#f59e0b', '#10b981', '#059669', '#3b82f6', '#8b5cf6'];
+
+    return (
+      <svg viewBox={`0 0 ${width} ${height}`} style={{ width: '100%', height: '100%' }}>
+        {[0, 25, 50, 75, 100].map(v => {
+          const y = pad.top + h - (v / maxVal) * h;
+          return <g key={v}><line x1={pad.left} y1={y} x2={width - pad.right} y2={y} stroke="rgba(255,255,255,0.04)" strokeWidth="1" /><text x={pad.left - 8} y={y + 4} fill={C.textMuted} fontSize="10" textAnchor="end">{v}</text></g>;
+        })}
+        {/* Pass threshold at 70 */}
+        {(() => { const y70 = pad.top + h - (70 / maxVal) * h; return <line x1={pad.left} y1={y70} x2={width - pad.right} y2={y70} stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" strokeDasharray="6,4" />; })()}
+        {data.map((d, i) => {
+          const x = pad.left + gap * (i + 1) + barWidth * i;
+          const barH = (d.value / maxVal) * h;
+          const y = pad.top + h - barH;
+          const color = barColors[Math.min(i, barColors.length - 1)];
+          return (
+            <g key={i}>
+              <rect x={x} y={y} width={barWidth} height={barH} rx={6} fill={color} opacity={0.85} />
+              <text x={x + barWidth / 2} y={y - 10} fill={color} fontSize="18" fontWeight="800" textAnchor="middle">{d.value}</text>
+              <text x={x + barWidth / 2} y={pad.top + h + 16} fill={C.textSecondary} fontSize="11" fontWeight="600" textAnchor="middle">{d.label}</text>
+              <text x={x + barWidth / 2} y={pad.top + h + 30} fill={C.textMuted} fontSize="10" textAnchor="middle">{d.count} candidates</text>
+            </g>
+          );
+        })}
+      </svg>
+    );
+  };
+
   // ===== SCORE RING SVG =====
   const ScoreRing = ({ score, size = 160, strokeWidth = 12 }) => {
     const radius = (size - strokeWidth) / 2;
@@ -418,15 +456,25 @@ export default function AdminDashboard({ supabase, user, org, onLogout }) {
             )}
           </div>
 
-          {/* Practice Impact Chart */}
+          {/* Chart with Performance / Practice Impact toggle */}
           <div style={{ ...S.card, display: 'flex', flexDirection: 'column' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-              <div style={{ ...S.cardTitle, marginBottom: 0 }}>Practice Impact — Score by Attempt</div>
+              <div style={{ ...S.cardTitle, marginBottom: 0 }}>
+                {chartMode === 'performance' ? 'Score Trend Over Time' : 'Practice Impact — Score by Attempt'}
+              </div>
+              <div style={{ display: 'flex', gap: 4, background: C.bgPrimary, padding: 3, borderRadius: 8 }}>
+                <button onClick={() => setChartMode('performance')} style={{ ...S.chartToggle, ...(chartMode === 'performance' ? S.chartToggleActive : {}) }}>Performance</button>
+                <button onClick={() => setChartMode('impact')} style={{ ...S.chartToggle, ...(chartMode === 'impact' ? S.chartToggleActive : {}) }}>Practice Impact</button>
+              </div>
             </div>
-            <div style={{ flex: 1, minHeight: 180 }}>
-              <MiniLineChart data={(s.impactSeries || []).map(t => ({ value: t.avgScore, label: `#${t.interview} (${t.count})` }))} color={C.green} />
+            <div style={{ flex: 1, minHeight: 200 }}>
+              {chartMode === 'performance' ? (
+                <MiniLineChart data={(s.trendData || []).map(t => ({ value: t.avgScore, label: formatShortDate(t.week) }))} color={C.green} />
+              ) : (
+                <MiniBarChart data={(s.impactSeries || []).map(t => ({ value: t.avgScore, label: t.interview === 1 ? '1st Interview' : t.interview === 2 ? '2nd Interview' : `${ordinal(t.interview)} Interview`, count: t.count }))} />
+              )}
             </div>
-            {(s.impactSeries || []).length >= 2 && (() => {
+            {chartMode === 'impact' && (s.impactSeries || []).length >= 2 && (() => {
               const first = s.impactSeries[0].avgScore;
               const last = s.impactSeries[s.impactSeries.length - 1].avgScore;
               const diff = last - first;
@@ -1247,6 +1295,8 @@ const S = {
   bottomGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 },
   dateBtn: { padding: '6px 14px', borderRadius: 6, fontSize: 13, border: `1px solid ${C.border}`, background: 'transparent', color: C.textSecondary, cursor: 'pointer' },
   dateBtnActive: { background: C.green, borderColor: C.green, color: '#fff', fontWeight: 500 },
+  chartToggle: { padding: '5px 14px', borderRadius: 6, fontSize: 12, fontWeight: 500, border: 'none', background: 'transparent', color: C.textMuted, cursor: 'pointer' },
+  chartToggleActive: { background: C.green, color: '#fff', fontWeight: 600 },
   dataTable: { width: '100%', borderCollapse: 'separate', borderSpacing: 0 },
   th: { textAlign: 'left', padding: '10px 16px', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', color: C.textMuted, borderBottom: `1px solid ${C.border}` },
   td: { padding: '14px 16px', fontSize: 14, borderBottom: '1px solid rgba(255,255,255,0.04)' },
