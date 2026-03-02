@@ -233,7 +233,6 @@ export default function InterviewSimulator() {
         .eq('id', userId)
         .single();
       
-      console.log('loadUserData:', { data, error, userId });
       
       if (data) {
         setCompletedInterviews(data.completed_interviews || 0);
@@ -243,14 +242,12 @@ export default function InterviewSimulator() {
         setUserOrgId(data.org_id || null);
 
         // If user has an org_id, fetch the org details
-        console.log('B2B check:', { role: data.role, org_id: data.org_id });
         if (data.org_id) {
           const { data: orgData, error: orgError } = await supabase
             .from('organizations')
             .select('*')
             .eq('id', data.org_id)
             .single();
-          console.log('Org lookup:', { orgData, orgError });
           if (orgData) setUserOrg(orgData);
         }
 
