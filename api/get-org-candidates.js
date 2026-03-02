@@ -124,15 +124,15 @@ export default async function handler(req, res) {
           c.trend = 'flat';
         }
 
-        // Assign readiness tier
+        // Assign readiness tier (based on latest score)
         const score = latest.overall_score;
         if (score >= 80) {
           c.tier = 'strong';
           c.tierLabel = 'Strong';
-        } else if (score >= 61) {
+        } else if (score >= 70) {
           c.tier = 'ready';
           c.tierLabel = 'Interview Ready';
-        } else if (score >= 41) {
+        } else if (score >= 50) {
           c.tier = 'practice';
           c.tierLabel = 'Needs Practice';
         } else {

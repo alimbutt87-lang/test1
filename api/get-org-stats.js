@@ -118,8 +118,8 @@ export default async function handler(req, res) {
       const latestScore = sorted[0].overall_score;
 
       if (latestScore >= 80) readiness.strong++;
-      else if (latestScore >= 61) readiness.interviewReady++;
-      else if (latestScore >= 41) readiness.needsPractice++;
+      else if (latestScore >= 70) readiness.interviewReady++;
+      else if (latestScore >= 50) readiness.needsPractice++;
       else readiness.notReady++;
 
       // Improvement: latest vs first
