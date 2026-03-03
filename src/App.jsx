@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import AdminDashboard from './AdminDashboard';
 
 // ===== CONFIGURATION =====
 // Set to true for testing (bypasses paywall), false for production
@@ -80,6 +81,13 @@ export default function InterviewSimulator() {
   const [followUpTypesUsed, setFollowUpTypesUsed] = useState([]);
   const [followUpMetadata, setFollowUpMetadata] = useState({});
   const [isEvaluating, setIsEvaluating] = useState(false);
+  
+  // B2B states
+  const [userRole, setUserRole] = useState(null);
+  const [userOrgId, setUserOrgId] = useState(null);
+  const [userOrg, setUserOrg] = useState(null);
+  const [inviteSlug, setInviteSlug] = useState(null);
+  const [inviteOrg, setInviteOrg] = useState(null);
   
   const timerRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -171,9 +179,54 @@ export default function InterviewSimulator() {
     }
   }, [stage, videoEnabled, waitingForMobileStart, waitingForMobileNext]);
 
+  // Capture /join/:slug from URL for B2B invite links
+  useEffect(() => {
+    const path = window.location.pathname;
+    const joinMatch = path.match(/^\/join\/([a-zA-Z0-9-]+)\/?$/);
+    if (joinMatch) {
+      const slug = joinMatch[1];
+      setInviteSlug(slug);
+      // Persist slug so it survives the OAuth redirect page reload
+      sessionStorage.setItem('invite_slug', slug);
+      supabase
+        .from('organizations')
+        .select('*')
+        .eq('slug', slug)
+        .eq('is_active', true)
+        .single()
+        .then(({ data, error }) => {
+          if (data && !error) {
+            setInviteOrg(data);
+            window.history.replaceState({}, '', '/');
+          } else {
+            console.error('Invalid invite link:', slug);
+            setInviteSlug(null);
+            sessionStorage.removeItem('invite_slug');
+            window.history.replaceState({}, '', '/');
+          }
+        });
+    }
+  }, []);
+
   // Load user data from Supabase
   const loadUserData = async (userId) => {
     try {
+      // Recover invite org from sessionStorage if React state was lost during OAuth redirect
+      let effectiveInviteOrg = inviteOrg;
+      const savedSlug = sessionStorage.getItem('invite_slug');
+      if (!effectiveInviteOrg && savedSlug) {
+        const { data: slugOrg } = await supabase
+          .from('organizations')
+          .select('*')
+          .eq('slug', savedSlug)
+          .eq('is_active', true)
+          .single();
+        if (slugOrg) {
+          effectiveInviteOrg = slugOrg;
+        }
+        sessionStorage.removeItem('invite_slug');
+      }
+
       const { data, error } = await supabase
         .from('user_profiles')
         .select('*')
@@ -184,13 +237,59 @@ export default function InterviewSimulator() {
         setCompletedInterviews(data.completed_interviews || 0);
         setIsSubscribed(data.is_subscribed || false);
         setSubscriptionDate(data.subscription_date);
+        setUserRole(data.role || 'candidate');
+        setUserOrgId(data.org_id || null);
+
+        // If user has an org_id, fetch the org details
+        if (data.org_id) {
+          const { data: orgData, error: orgError } = await supabase
+            .from('organizations')
+            .select('*')
+            .eq('id', data.org_id)
+            .single();
+          if (orgData) setUserOrg(orgData);
+        }
+
+        // If user just came through an invite link and doesn't have an org yet,
+        // tag them to the invite org
+        if (!data.org_id && effectiveInviteOrg) {
+          const { count } = await supabase
+            .from('user_profiles')
+            .select('id', { count: 'exact', head: true })
+            .eq('org_id', effectiveInviteOrg.id)
+            .eq('role', 'candidate');
+          
+          if (!effectiveInviteOrg.candidate_limit || count < effectiveInviteOrg.candidate_limit) {
+            await supabase
+              .from('user_profiles')
+              .update({ org_id: effectiveInviteOrg.id, role: 'candidate' })
+              .eq('id', userId);
+            setUserOrgId(effectiveInviteOrg.id);
+            setUserOrg(effectiveInviteOrg);
+            setUserRole('candidate');
+          }
+          setInviteSlug(null);
+          setInviteOrg(null);
+        }
+
       } else if (error && error.code === 'PGRST116') {
         // User doesn't exist in our table yet, create them
-        await supabase.from('user_profiles').insert({
+        const newProfile = {
           id: userId,
           completed_interviews: 0,
-          is_subscribed: false
-        });
+          is_subscribed: false,
+          role: 'candidate',
+          org_id: effectiveInviteOrg?.id || null
+        };
+        await supabase.from('user_profiles').insert(newProfile);
+        
+        if (effectiveInviteOrg) {
+          setUserOrgId(effectiveInviteOrg.id);
+          setUserOrg(effectiveInviteOrg);
+          setUserRole('candidate');
+          setInviteSlug(null);
+          setInviteOrg(null);
+        }
       }
     } catch (e) {
       console.error('Error loading user data:', e);
@@ -223,6 +322,9 @@ export default function InterviewSimulator() {
     setCompletedInterviews(0);
     setIsSubscribed(false);
     setPastInterviews([]);
+    setUserRole(null);
+    setUserOrgId(null);
+    setUserOrg(null);
   };
 
   const initializeApp = async () => {
@@ -1470,6 +1572,42 @@ Return ONLY valid JSON:
           'last_interview_score': results.overallScore
         });
       }
+      // ===== B2B FORK: Save to Supabase if user has org_id =====
+      if (userOrgId && user) {
+        try {
+          const { data: sessionData } = await supabase.auth.getSession();
+          const accessToken = sessionData?.session?.access_token;
+          if (accessToken) {
+            const questionsAndAnswers = allAnswers.map(a => ({
+              question: a.question,
+              answer: a.answer,
+              timeSpent: a.timeSpent,
+              isFollowUp: a.isFollowUp || false,
+              parentQuestionIndex: a.parentQuestionIndex != null ? a.parentQuestionIndex : null
+            }));
+
+            await fetch('/api/save-interview-results', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                accessToken,
+                orgId: userOrgId,
+                interviewData: {
+                  jobTitle,
+                  results,
+                  videoAnalysis: videoResults,
+                  userName: userName || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Anonymous',
+                  questionsAndAnswers
+                }
+              })
+            });
+          }
+        } catch (e) {
+          console.error('B2B save error (non-blocking):', e);
+        }
+      }
+      // ===== END B2B FORK =====
+
       
       setIsAnalyzing(false);
       setStage('results');
@@ -1495,7 +1633,8 @@ Return ONLY valid JSON:
 
   // PDF Download function (Pro feature)
   const downloadResultsPDF = async () => {
-    if (!isSubscribed && !TEST_MODE) {
+    const isB2BCandidate = userOrgId != null;
+    if (!isSubscribed && !TEST_MODE && !isB2BCandidate) {
       setPreviousStage('results');
       setStage('paywall');
       return;
@@ -1824,7 +1963,9 @@ Return ONLY valid JSON:
   const handleStartInterview = async (source = 'landing') => {
     // In TEST_MODE, always allow access
     // In production, check if user is subscribed or has free trial remaining
-    if (!TEST_MODE && !isSubscribed && completedInterviews >= 1) {
+    // B2B candidates with an org_id skip the paywall entirely
+    const isB2BCandidate = userOrgId != null;
+    if (!TEST_MODE && !isSubscribed && !isB2BCandidate && completedInterviews >= 1) {
       setPreviousStage(source);
       setStage('paywall');
       return;
@@ -1987,6 +2128,23 @@ Return ONLY valid JSON:
             </div>
           </div>
 
+          {/* B2B Invite Badge */}
+          {inviteOrg && !user && (
+            <div style={{
+              background: 'rgba(16,185,129,0.1)',
+              border: '1px solid rgba(16,185,129,0.3)',
+              borderRadius: 12,
+              padding: '12px 20px',
+              marginBottom: 16,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              fontSize: 14,
+              color: '#34d399'
+            }}>
+              🎓 You've been invited by {inviteOrg.name}
+            </div>
+          )}
           {/* Main CTA - changes based on auth state */}
           {!user && !TEST_MODE ? (
             <div style={styles.ctaWrapper}>
