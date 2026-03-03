@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import AdminDashboard from './AdminDashboard';
-console.log('B2B_BUILD_CHECK_V1');
+console.log('B2B_BUILD_CHECK_V2');
+
 // ===== CONFIGURATION =====
 // Set to true for testing (bypasses paywall), false for production
 const TEST_MODE = false;
@@ -238,6 +239,7 @@ export default function InterviewSimulator() {
         setIsSubscribed(data.is_subscribed || false);
         setSubscriptionDate(data.subscription_date);
         setUserRole(data.role || 'candidate');
+        console.log('B2B_LOAD:', { role: data.role, org_id: data.org_id, userId });
         setUserOrgId(data.org_id || null);
 
         // If user has an org_id, fetch the org details
@@ -247,7 +249,7 @@ export default function InterviewSimulator() {
             .select('*')
             .eq('id', data.org_id)
             .single();
-          if (orgData) setUserOrg(orgData);
+          if (orgData) { setUserOrg(orgData); console.log('B2B_ORG_LOADED:', orgData); } else { console.log('B2B_ORG_FAILED'); }
         }
 
         // If user just came through an invite link and doesn't have an org yet,
@@ -2019,6 +2021,18 @@ Return ONLY valid JSON:
     if (diff > 0) return { trend: 'up', icon: '↑', color: '#10b981' };
     return { trend: 'down', icon: '↓', color: '#ef4444' };
   };
+
+  // B2B Admin Dashboard
+  if (userRole === 'admin' && userOrg && user) {
+    return (
+      <AdminDashboard
+        user={user}
+        supabase={supabase}
+        org={userOrg}
+        onSignOut={signOut}
+      />
+    );
+  }
 
   // Loading state
   if (isLoading) {
