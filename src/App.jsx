@@ -1963,6 +1963,19 @@ Return ONLY valid JSON:
   };
 
   const handleStartInterview = async (source = 'landing') => {
+    // Unlock audio playback for Safari (must happen in user gesture context)
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const buf = ctx.createBuffer(1, 1, 22050);
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(ctx.destination);
+      src.start(0);
+      // Also create and play a silent HTML5 audio to unlock Audio() constructor
+      const silentAudio = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
+      silentAudio.play().catch(() => {});
+    } catch (e) {}
+    
     // In TEST_MODE, always allow access
     // In production, check if user is subscribed or has free trial remaining
     // B2B candidates with an org_id skip the paywall entirely
