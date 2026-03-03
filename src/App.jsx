@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import AdminDashboard from './AdminDashboard';
-
+console.log('B2B_BUILD_CHECK_V1');
 // ===== CONFIGURATION =====
 // Set to true for testing (bypasses paywall), false for production
 const TEST_MODE = false;
