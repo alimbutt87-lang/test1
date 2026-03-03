@@ -2029,7 +2029,7 @@ Return ONLY valid JSON:
         user={user}
         supabase={supabase}
         org={userOrg}
-        onSignOut={signOut}
+       onLogout={signOut}
       />
     );
   }
