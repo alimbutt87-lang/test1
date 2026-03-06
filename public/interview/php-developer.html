@@ -3,556 +3,674 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PHP Developer Interview Questions – Practice with AI Simulator</title>
-  <meta name="description" content="Practice PHP Developer interview questions with our AI-powered simulator. Get questions tailored to your resume and job description with instant feedback.">
-  <meta name="keywords" content="php developer interview questions, PHP interview, PHP programmer interview, Laravel developer interview, PHP backend interview">
-  
-  <meta property="og:title" content="PHP Developer Interview Questions – Practice with AI Simulator">
-  <meta property="og:description" content="Practice PHP Developer interview questions with our AI-powered simulator. Get questions tailored to your resume and job description with instant feedback.">
+  <title>30+ PHP Developer Interview Questions &amp; Answers (2026 Guide)</title>
+  <meta name="description" content="PHP developer interview questions covering modern PHP, Laravel, Symfony, OOP, security, and database integration. Includes answer frameworks, sample answers, and a free practice simulator.">
+  <meta property="og:title" content="30+ PHP Developer Interview Questions &amp; Answers (2026 Guide)">
+  <meta property="og:description" content="PHP developer interview questions covering modern PHP, Laravel, Symfony, OOP, security, and database integration. Includes answer frameworks, sample answers, and a free practice simulator.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.acemyinterviews.io/interview/php-developer">
   <meta property="og:image" content="https://www.acemyinterviews.io/og-image.png">
-  
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="PHP Developer Interview Questions – Practice with AI Simulator">
-  <meta name="twitter:description" content="Practice PHP Developer interview questions with our AI-powered simulator. Get questions tailored to your resume and job description with instant feedback.">
-  
+  <meta name="twitter:title" content="30+ PHP Developer Interview Questions &amp; Answers (2026 Guide)">
+  <meta name="twitter:description" content="PHP developer interview questions covering modern PHP, Laravel, Symfony, OOP, security, and database integration.">
   <link rel="canonical" href="https://www.acemyinterviews.io/interview/php-developer">
-  
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Which PHP framework should I know?","acceptedAnswer":{"@type":"Answer","text":"Laravel is most popular. Know the framework in the job description well. For PHP Developer positions, interviewers typically expect you to demonstrate hands-on experience with the specific technologies mentioned in the job description. Beyond technical proficiency, they want to see that you understand best practices, can discuss tradeoffs between different approaches, and stay current with industry developments. Practice explaining your technical choices clearly, as communication skills matter as much as coding ability in interviews."}},{"@type":"Question","name":"Is PHP 8 knowledge expected?","acceptedAnswer":{"@type":"Answer","text":"Increasingly yes. Know PHP 7+ features at minimum. For PHP Developer interviews specifically, employers value candidates who demonstrate self-awareness about their strengths and areas for growth. Be honest about your experience level while showing enthusiasm for learning and contributing. Prepare thoughtful questions that show you've researched the company and role. In PHP Developer interviews, demonstrating both technical depth and clear communication is essential. Employers evaluate not just what you know, but how you approach problems and explain your thinking."}},{"@type":"Question","name":"How do I show I know modern PHP?","acceptedAnswer":{"@type":"Answer","text":"Discuss Composer, PSR standards, modern OOP patterns, and security practices. When preparing for PHP Developer interviews, focus on building a compelling narrative around your experience. Connect your background to the role requirements, emphasizing transferable skills where direct experience is limited. Practice explaining your career journey and motivations clearly and concisely. In PHP Developer interviews, demonstrating both technical depth and clear communication is essential. Employers evaluate not just what you know, but how you approach problems and explain your thinking."}},{"@type":"Question","name":"Will WordPress come up?","acceptedAnswer":{"@type":"Answer","text":"This is an important consideration for PHP Developer candidates. Only if the job involves WordPress. Many PHP roles focus on custom applications. Take time to research the specific company and role requirements, as expectations can vary significantly across organizations. During your interview preparation, practice articulating your relevant experience and how it applies to the position. In PHP Developer interviews, demonstrating both technical depth and clear communication is essential. Employers evaluate not just what you know, but how you approach problems and explain your thinking."}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Which PHP framework should I focus on for interviews?","acceptedAnswer":{"@type":"Answer","text":"Focus on the framework aligning with your target roles. Laravel dominates the ecosystem and is a strong default. Symfony is excellent for enterprise and complex systems. Master one deeply; general concepts transfer to others."}},{"@type":"Question","name":"Is PHP 8 knowledge expected in interviews?","acceptedAnswer":{"@type":"Answer","text":"Yes. PHP 8.x is standard by 2026. Interviewers expect familiarity with typed properties, union types, match expressions, named arguments, and attributes."}},{"@type":"Question","name":"How do I demonstrate modern PHP skills in an interview?","acceptedAnswer":{"@type":"Answer","text":"Speak using modern PHP terminology: type hints, immutability, strict comparisons, and architectural patterns. Show code examples using PHP 8 features and design patterns."}},{"@type":"Question","name":"Will WordPress come up in PHP developer interviews?","acceptedAnswer":{"@type":"Answer","text":"Rarely in technical developer interviews for software engineering roles. WordPress knowledge is a bonus but not expected for general PHP developer positions."}},{"@type":"Question","name":"How hard are PHP developer interviews?","acceptedAnswer":{"@type":"Answer","text":"Difficulty varies by company and seniority. Startup roles emphasize practical problem-solving; enterprise roles dig deeper into system design and advanced patterns."}},{"@type":"Question","name":"Is PHP development a good career in 2026?","acceptedAnswer":{"@type":"Answer","text":"Yes, PHP remains a strong career path. Demand continues across enterprise applications, SaaS platforms, and e-commerce. The Laravel ecosystem has driven renewed interest."}}]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.acemyinterviews.io"},{"@type":"ListItem","position":2,"name":"Interview Questions","item":"https://www.acemyinterviews.io/interview"},{"@type":"ListItem","position":3,"name":"PHP Developer Interview Questions","item":"https://www.acemyinterviews.io/interview/php-developer"}]}</script>
-  
   <link rel="icon" href="/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
   <style>
-    :root {
-      --bg-primary: #0f1419;
-      --bg-secondary: #1a1f2e;
-      --bg-card: #1e2330;
-      --bg-card-hover: #252b3b;
-      --accent-primary: #14b8a6;
-      --accent-primary-hover: #0d9488;
-      --accent-secondary: #2dd4bf;
-      --text-primary: #ffffff;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      --border-color: #2d3748;
-      --success: #10b981;
-      --max-width: 800px;
-      --max-width-wide: 1000px;
-    }
-    
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-    
-    .header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: var(--max-width-wide);
-      margin: 0 auto;
-    }
-    
-    .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .logo-icon {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .header-cta {
-      background: var(--accent-primary);
-      color: var(--bg-primary);
-      padding: 10px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: background 0.2s;
-    }
-    
-    .header-cta:hover { background: var(--accent-primary-hover); }
-    
-    /* Breadcrumbs */
-    .breadcrumbs {
-      max-width: var(--max-width-wide);
-      margin: 0 auto;
-      padding: 16px 24px;
-      font-size: 0.875rem;
-    }
-    
-    .breadcrumbs a {
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    
-    .breadcrumbs a:hover { color: var(--accent-primary); }
-    
-    .breadcrumbs span { color: var(--text-muted); margin: 0 8px; }
-    
-    .breadcrumbs .current { color: var(--text-secondary); }
-    
-    .hero {
-      padding: 60px 24px 80px;
-      text-align: center;
-      background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-    }
-    
-    .hero-container { max-width: var(--max-width); margin: 0 auto; }
-    
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 2.75rem);
-      font-weight: 800;
-      margin-bottom: 20px;
-      line-height: 1.2;
-      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .hero p {
-      color: var(--text-secondary);
-      font-size: 1.125rem;
-      margin-bottom: 32px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .cta-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--accent-primary);
-      color: var(--bg-primary);
-      padding: 16px 32px;
-      font-size: 1rem;
-      font-weight: 600;
-      text-decoration: none;
-      border-radius: 10px;
-      transition: all 0.2s;
-    }
-    
-    .cta-btn:hover {
-      background: var(--accent-primary-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 40px rgba(20, 184, 166, 0.3);
-    }
-    
-    .cta-btn svg { width: 20px; height: 20px; }
-    
-    .trust-badges {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 40px;
-    }
-    
-    .trust-badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-    }
-    
-    .trust-badge svg { color: var(--success); width: 16px; height: 16px; }
-    
-    section { padding: 64px 24px; }
-    .container { max-width: var(--max-width); margin: 0 auto; }
-    
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 24px;
-      text-align: center;
-      color: var(--text-primary);
-    }
-    
-    .social-proof {
-      padding: 20px 24px;
-      text-align: center;
-      border-bottom: 1px solid var(--border-color);
-    }
-    
-    .social-proof p { color: var(--text-muted); font-size: 0.9rem; }
-    
-    /* Last Updated */
-    .last-updated {
-      text-align: center;
-      padding: 12px 24px;
-      font-size: 0.8125rem;
-      color: var(--text-muted);
-    }
-    
-    .last-updated svg {
-      width: 14px;
-      height: 14px;
-      vertical-align: -2px;
-      margin-right: 4px;
-    }
-    
-    .intro-text {
-      font-size: 1.0625rem;
-      line-height: 1.8;
-      color: var(--text-secondary);
-    }
-    
-    .questions-section { background: var(--bg-secondary); }
-    .questions-list { list-style: none; display: grid; gap: 12px; }
-    
-    .questions-list li {
-      background: var(--bg-card);
-      padding: 18px 24px;
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-      font-size: 0.9375rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      transition: all 0.2s;
-    }
-    
-    .questions-list li:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--accent-primary);
-    }
-    
-    .questions-list li svg {
-      flex-shrink: 0;
-      color: var(--accent-primary);
-      width: 20px;
-      height: 20px;
-      margin-top: 2px;
-    }
-    
-    .bridge-text {
-      font-size: 1rem;
-      line-height: 1.8;
-      color: var(--text-muted);
-      text-align: center;
-    }
-    
-    .personalized-section { background: var(--bg-secondary); text-align: center; }
-    
-    .personalized-section p {
-      color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto 32px;
-    }
-    
-    .features {
-      list-style: none;
-      display: inline-flex;
-      flex-direction: column;
-      gap: 12px;
-      text-align: left;
-      margin-bottom: 32px;
-    }
-    
-    .features li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-    }
-    
-    .features li svg { color: var(--success); width: 20px; height: 20px; flex-shrink: 0; }
-    
-    .criteria-list { list-style: none; display: grid; gap: 12px; }
-    
-    .criteria-list li {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 20px;
-      background: var(--bg-card);
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-    }
-    
-    .criteria-list li svg { color: var(--accent-primary); width: 20px; height: 20px; flex-shrink: 0; }
-    
-    .faq-section { background: var(--bg-secondary); }
-    .faq-list { display: grid; gap: 12px; }
-    
-    details {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    
-    details[open] { border-color: var(--accent-primary); }
-    
-    summary {
-      padding: 18px 24px;
-      font-weight: 600;
-      cursor: pointer;
-      list-style: none;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var(--text-primary);
-      font-size: 0.9375rem;
-    }
-    
-    summary::-webkit-details-marker { display: none; }
-    
-    summary::after {
-      content: '+';
-      font-size: 1.25rem;
-      font-weight: 400;
-      color: var(--text-muted);
-      transition: transform 0.2s;
-    }
-    
-    details[open] summary::after { transform: rotate(45deg); }
-    
-    details p {
-      padding: 0 24px 18px;
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-      line-height: 1.7;
-    }
-    
-    /* Related Links */
-    .related-section {
-      padding: 48px 24px;
-      border-top: 1px solid var(--border-color);
-    }
-    
-    .related-section h3 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      margin-bottom: 20px;
-      color: var(--text-primary);
-    }
-    
-    .related-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    
-    .related-links a {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      padding: 10px 16px;
-      border-radius: 8px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.875rem;
-      transition: all 0.2s;
-    }
-    
-    .related-links a:hover {
-      border-color: var(--accent-primary);
-      color: var(--accent-primary);
-      background: var(--bg-card-hover);
-    }
-    
-    .related-links a svg {
-      width: 16px;
-      height: 16px;
-    }
-    
-    .final-cta {
-      text-align: center;
-      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-      padding: 80px 24px;
-    }
-    
-    .final-cta h2 { font-size: 1.75rem; margin-bottom: 16px; }
-    
-    .final-cta p {
-      color: var(--text-secondary);
-      margin-bottom: 32px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .small-text { font-size: 0.875rem; color: var(--text-muted); margin-top: 16px; }
-    
-    .footer {
-      padding: 32px 24px;
-      text-align: center;
-      border-top: 1px solid var(--border-color);
-    }
-    
-    .footer a { color: var(--accent-primary); text-decoration: none; font-size: 0.9rem; }
-    .footer a:hover { text-decoration: underline; }
-    
-    @media (max-width: 640px) {
-      .hero { padding: 40px 20px 60px; }
-      section { padding: 48px 20px; }
-      .header { padding: 16px 20px; }
-      .trust-badges { flex-direction: column; align-items: center; }
-      .cta-btn { width: 100%; justify-content: center; }
-      .related-links { flex-direction: column; }
-      .related-links a { width: 100%; }
-    }
+    :root{--bg-primary:#0f1419;--bg-secondary:#1a1f2e;--bg-card:#1e2330;--bg-card-hover:#252b3b;--accent-primary:#14b8a6;--accent-primary-hover:#0d9488;--accent-secondary:#2dd4bf;--text-primary:#ffffff;--text-secondary:#94a3b8;--text-muted:#64748b;--border-color:#2d3748;--success:#10b981;--max-width:800px;--max-width-wide:1000px;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased;}
+    .header{padding:20px 24px;border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;max-width:var(--max-width-wide);margin:0 auto;}
+    .logo{font-size:1.25rem;font-weight:700;color:var(--text-primary);text-decoration:none;display:flex;align-items:center;gap:8px;}
+    .logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent-primary),var(--accent-secondary));border-radius:8px;display:flex;align-items:center;justify-content:center;}
+    .header-cta{background:var(--accent-primary);color:var(--bg-primary);padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;font-size:.9rem;transition:background .2s;}
+    .header-cta:hover{background:var(--accent-primary-hover);}
+    .breadcrumbs{max-width:var(--max-width-wide);margin:0 auto;padding:16px 24px;font-size:.875rem;}
+    .breadcrumbs a{color:var(--text-muted);text-decoration:none;}
+    .breadcrumbs a:hover{color:var(--accent-primary);}
+    .breadcrumbs span{color:var(--text-muted);margin:0 8px;}
+    .breadcrumbs .current{color:var(--text-secondary);}
+    .hero{padding:60px 24px 80px;text-align:center;background:linear-gradient(180deg,var(--bg-secondary) 0%,var(--bg-primary) 100%);}
+    .hero-container{max-width:var(--max-width);margin:0 auto;}
+    .hero h1{font-size:clamp(2rem,5vw,2.75rem);font-weight:800;margin-bottom:16px;line-height:1.2;background:linear-gradient(135deg,var(--text-primary) 0%,var(--text-secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .hero-subtitle{color:var(--accent-secondary);font-size:1rem;font-weight:500;margin-bottom:32px;}
+    .cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent-primary);color:var(--bg-primary);padding:16px 32px;font-size:1rem;font-weight:600;text-decoration:none;border-radius:10px;transition:all .2s;}
+    .cta-btn:hover{background:var(--accent-primary-hover);transform:translateY(-2px);box-shadow:0 10px 40px rgba(20,184,166,.3);}
+    .cta-btn svg{width:20px;height:20px;}
+    .trust-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:40px;}
+    .trust-badge{display:flex;align-items:center;gap:6px;background:var(--bg-card);border:1px solid var(--border-color);padding:10px 16px;border-radius:8px;font-size:.875rem;color:var(--text-secondary);}
+    .trust-badge svg{color:var(--success);width:16px;height:16px;}
+    section{padding:64px 24px;}
+    .container{max-width:var(--max-width);margin:0 auto;}
+    .section-dark{background:var(--bg-secondary);}
+    .social-proof{background:var(--bg-card);border-top:1px solid var(--border-color);border-bottom:1px solid var(--border-color);padding:14px 24px;text-align:center;font-size:.9rem;color:var(--text-muted);}
+    .last-updated{display:flex;align-items:center;justify-content:center;gap:6px;font-size:.8125rem;color:var(--text-muted);padding:10px 24px;}
+    .last-updated svg{width:14px;height:14px;color:var(--accent-primary);}
+    .intro-text{font-size:1.0625rem;color:var(--text-secondary);line-height:1.75;}
+    h2{font-size:1.625rem;font-weight:700;margin-bottom:12px;color:var(--text-primary);}
+    .section-intro{color:var(--text-secondary);font-size:.9375rem;margin-bottom:32px;line-height:1.7;}
+    .question-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:28px;margin-bottom:20px;transition:border-color .2s;}
+    .question-card:hover{border-color:var(--accent-primary);}
+    .question-card h3{font-size:1.0625rem;font-weight:700;color:var(--text-primary);margin-bottom:20px;line-height:1.4;display:flex;gap:12px;}
+    .question-card h3 .q-icon{flex-shrink:0;width:22px;height:22px;color:var(--accent-primary);margin-top:1px;}
+    .answer-label{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:8px;margin-top:16px;}
+    .why-text,.framework-text,.sample-text{font-size:.9375rem;color:var(--text-secondary);line-height:1.7;}
+    .evaluate-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
+    .evaluate-list li{display:flex;align-items:flex-start;gap:8px;font-size:.9rem;color:var(--text-secondary);}
+    .evaluate-list li svg{flex-shrink:0;width:16px;height:16px;color:var(--success);margin-top:2px;}
+    .framework-box{background:var(--bg-primary);border-left:3px solid var(--accent-primary);border-radius:0 8px 8px 0;padding:16px 18px;margin-top:8px;}
+    .framework-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin:0;}
+    .framework-list li{display:flex;align-items:flex-start;gap:8px;font-size:.9rem;color:var(--text-secondary);line-height:1.55;}
+    .framework-list li::before{content:'→';color:var(--accent-primary);flex-shrink:0;font-weight:600;}
+    .sample-box{background:rgba(20,184,166,.05);border:1px solid rgba(20,184,166,.15);border-radius:8px;padding:16px 18px;margin-top:8px;}
+    .sample-label-tag{display:inline-block;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-primary);background:rgba(20,184,166,.1);padding:3px 8px;border-radius:4px;margin-bottom:10px;}
+    .dimensions-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-top:32px;}
+    .dimension-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:24px;}
+    .dimension-card h3{font-size:1rem;font-weight:700;color:var(--accent-primary);margin-bottom:10px;}
+    .dimension-card p{font-size:.9rem;color:var(--text-secondary);line-height:1.65;}
+    .prepare-grid{display:grid;gap:20px;margin-top:8px;}
+    .prepare-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:24px;}
+    .prepare-card p{font-size:.9375rem;color:var(--text-secondary);line-height:1.7;}
+    .mid-cta{background:linear-gradient(135deg,#1a2a28 0%,#1a1f2e 100%);border:1px solid rgba(20,184,166,.25);border-radius:16px;padding:48px 40px;text-align:center;max-width:var(--max-width);margin:0 auto;}
+    .mid-cta h2{margin-bottom:12px;}
+    .mid-cta p{color:var(--text-secondary);margin-bottom:28px;}
+    .mid-cta-features{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:28px;}
+    .mid-cta-feature{display:flex;align-items:center;gap:6px;font-size:.875rem;color:var(--text-secondary);background:rgba(20,184,166,.07);border:1px solid rgba(20,184,166,.15);padding:7px 14px;border-radius:20px;}
+    .mid-cta-feature svg{width:14px;height:14px;color:var(--accent-primary);}
+    .faq-list{display:grid;gap:12px;}
+    details{background:var(--bg-card);border:1px solid var(--border-color);border-radius:10px;overflow:hidden;}
+    details[open]{border-color:var(--accent-primary);}
+    summary{padding:18px 24px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;color:var(--text-primary);font-size:.9375rem;}
+    summary::-webkit-details-marker{display:none;}
+    summary::after{content:'+';font-size:1.25rem;font-weight:400;color:var(--text-muted);flex-shrink:0;margin-left:16px;}
+    details[open] summary::after{transform:rotate(45deg);}
+    details p{padding:0 24px 18px;color:var(--text-secondary);font-size:.9375rem;line-height:1.7;}
+    .related-section{padding:48px 24px;border-top:1px solid var(--border-color);}
+    .related-section h3{font-size:1.125rem;font-weight:600;margin-bottom:20px;color:var(--text-primary);}
+    .related-links{display:flex;flex-wrap:wrap;gap:12px;}
+    .related-links a{display:inline-flex;align-items:center;gap:6px;background:var(--bg-card);border:1px solid var(--border-color);padding:10px 16px;border-radius:8px;color:var(--text-secondary);text-decoration:none;font-size:.875rem;transition:all .2s;}
+    .related-links a:hover{border-color:var(--accent-primary);color:var(--accent-primary);background:var(--bg-card-hover);}
+    .related-links a svg{width:16px;height:16px;}
+    .final-cta{text-align:center;background:linear-gradient(180deg,var(--bg-primary) 0%,var(--bg-secondary) 100%);padding:80px 24px;}
+    .final-cta h2{font-size:1.75rem;margin-bottom:16px;}
+    .final-cta p{color:var(--text-secondary);margin-bottom:32px;max-width:560px;margin-left:auto;margin-right:auto;}
+    .small-text{font-size:.875rem;color:var(--text-muted);margin-top:16px;}
+    .footer{padding:32px 24px;text-align:center;border-top:1px solid var(--border-color);}
+    .footer a{color:var(--accent-primary);text-decoration:none;font-size:.9rem;}
+    code{background:rgba(20,184,166,.1);padding:2px 6px;border-radius:4px;font-size:.9em;color:var(--accent-secondary);font-family:'Courier New',monospace;}
+    @media(max-width:640px){.hero{padding:40px 20px 60px;}section{padding:48px 20px;}.header{padding:16px 20px;}.trust-badges{flex-direction:column;align-items:center;}.cta-btn{width:100%;justify-content:center;}.related-links{flex-direction:column;}.related-links a{width:100%;}.dimensions-grid{grid-template-columns:1fr;}.mid-cta{padding:32px 24px;}.question-card{padding:20px;}}
   </style>
 </head>
 <body>
-  <header class="header">
-    <a href="/" class="logo">
-      <div class="logo-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
-      </div>
-      AceMyInterviews
-    </a>
-    <a href="/" class="header-cta">Start Practicing</a>
-  </header>
-
-  <!-- Breadcrumbs -->
-  <nav class="breadcrumbs">
-    <a href="/">Home</a>
-    <span>›</span>
-    <a href="/interview">Interview Questions</a>
-    <span>›</span>
-    <span class="current">PHP Developer</span>
-  </nav>
-
-  <section class="hero">
-    <div class="hero-container">
-      <h1>PHP Developer Interview Questions & Practice Simulator</h1>
-      <p>Rehearse PHP developer interview scenarios with camera recording and performance analysis.</p>
-      <a href="/" class="cta-btn">
-        Begin Your Practice Session →
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </a>
-      <div class="trust-badges">
-        <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic interview questions</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>3 minutes per answer</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant pass/fail verdict</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Feedback on confidence, clarity, and delivery</span>
-      </div>
-    </div>
-  </section>
-  
-  <div class="social-proof"><p>Simulate real interview conditions before your actual interview</p></div>
-  
-  <!-- Last Updated -->
-  <div class="last-updated">
-    <svg viewBox="0 0 20 20" fill="currentColor">
-      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-    </svg>
-    Last updated: February 2026
-  </div>
-  
-  <section>
-    <div class="container">
-      <p class="intro-text">PHP powers a significant portion of the web, from WordPress to Laravel applications. Interviews assess your understanding of modern PHP, framework expertise, and ability to build secure, scalable web applications. Companies want developers who can write clean, modern PHP code using current best practices—not the PHP of years past.</p>
-    </div>
-  </section>
-  
-  <section class="questions-section">
-    <div class="container">
-      <h2>Example PHP Developer Interview Questions</h2>
-      <ul class="questions-list">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Explain the difference between abstract classes and interfaces in PHP.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do namespaces work in PHP and why are they important?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe the MVC pattern and how Laravel/Symfony implements it.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you prevent SQL injection in PHP applications?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>What are traits in PHP and when would you use them?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Explain how Composer works for dependency management.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you handle sessions and authentication in PHP?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe your approach to testing PHP applications.</span></li>
-      </ul>
-    </div>
-  </section>
-  
-  <section>
-    <div class="container">
-      <p class="bridge-text">PHP interviews vary based on framework (Laravel, Symfony) and whether the role involves WordPress, custom applications, or API development. AceMyInterviews generates questions tailored to your job description.</p>
-    </div>
-  </section>
-  
-  <section class="personalized-section">
-    <div class="container">
-      <h2>Practice Questions Tailored To Your Interview</h2>
-      <p>Your resume and job description are analyzed to create PHP questions matched to your target role. Practice on camera and receive feedback.</p>
-      <ul class="features">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Questions on modern PHP and frameworks</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Security and performance topics</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic timed interview simulation</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant feedback and pass/fail verdict</li>
-      </ul>
-      <a href="/" class="cta-btn">Begin Your Practice Session →</a>
-    </div>
-  </section>
-  
-  <section>
-    <div class="container">
-      <h2>What Interviewers Evaluate</h2>
-      <ul class="criteria-list">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Modern PHP language features</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Framework proficiency (Laravel, Symfony)</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Security best practices</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Database integration and ORM usage</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Testing and code organization</li>
-      </ul>
-    </div>
-  </section>
-  
-  <section class="faq-section">
-    <div class="container">
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-list">
-        <details><summary>Which PHP framework should I know?</summary><p>Laravel is most popular. Know the framework in the job description well. For PHP Developer positions, interviewers typically expect you to demonstrate hands-on experience with the specific technologies mentioned in the job description. Beyond technical proficiency, they want to see that you understand best practices, can discuss tradeoffs between different approaches, and stay current with industry developments. Practice explaining your technical choices clearly, as communication skills matter as much as coding ability in interviews.</p></details><details><summary>Is PHP 8 knowledge expected?</summary><p>Increasingly yes. Know PHP 7+ features at minimum. For PHP Developer interviews specifically, employers value candidates who demonstrate self-awareness about their strengths and areas for growth. Be honest about your experience level while showing enthusiasm for learning and contributing. Prepare thoughtful questions that show you've researched the company and role. In PHP Developer interviews, demonstrating both technical depth and clear communication is essential. Employers evaluate not just what you know, but how you approach problems and explain your thinking.</p></details><details><summary>How do I show I know modern PHP?</summary><p>Discuss Composer, PSR standards, modern OOP patterns, and security practices. When preparing for PHP Developer interviews, focus on building a compelling narrative around your experience. Connect your background to the role requirements, emphasizing transferable skills where direct experience is limited. Practice explaining your career journey and motivations clearly and concisely. In PHP Developer interviews, demonstrating both technical depth and clear communication is essential. Employers evaluate not just what you know, but how you approach problems and explain your thinking.</p></details><details><summary>Will WordPress come up?</summary><p>This is an important consideration for PHP Developer candidates. Only if the job involves WordPress. Many PHP roles focus on custom applications. Take time to research the specific company and role requirements, as expectations can vary significantly across organizations. During your interview preparation, practice articulating your relevant experience and how it applies to the position. In PHP Developer interviews, demonstrating both technical depth and clear communication is essential. Employers evaluate not just what you know, but how you approach problems and explain your thinking.</p></details>
-      </div>
-    </div>
-  </section>
-  
-  <!-- Related Interview Questions (Internal Links) -->
-  <div class="related-section">
-    <div class="container">
-      <h3>Related Interview Questions</h3>
-      <div class="related-links">
-        <a href="/interview/sales-representative"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Sales Representative Interview Questions</a><a href="/interview/hr-manager"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>HR Manager Interview Questions</a><a href="/interview/customer-service-representative"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Customer Service Representative Interview Questions</a><a href="/interview/accountant"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Accountant Interview Questions</a><a href="/interview/react-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>React Developer Interview Questions</a>
-      </div>
+<header class="header">
+  <a href="/" class="logo">
+    <div class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+    AceMyInterviews
+  </a>
+  <a href="/" class="header-cta">Start Practicing</a>
+</header>
+<nav class="breadcrumbs">
+  <a href="/">Home</a><span>›</span>
+  <a href="/interview">Interview Questions</a><span>›</span>
+  <span class="current">PHP Developer</span>
+</nav>
+<section class="hero">
+  <div class="hero-container">
+    <h1>PHP Developer Interview Questions &amp; Answers (2026 Guide)</h1>
+    <p class="hero-subtitle">Prepare for PHP developer interviews covering modern PHP, OOP, Laravel, Symfony, security, database integration, and testing best practices.</p>
+    <a href="/" class="cta-btn">Start Free Practice Interview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    <div class="trust-badges">
+      <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>30+ realistic PHP developer interview questions</span>
+      <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Answer frameworks with sample responses</span>
+      <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Timed practice with instant feedback</span>
+      <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Technical and behavioral scenarios</span>
     </div>
   </div>
-  
-  <section class="final-cta">
-    <div class="container">
-      <h2>Ready To Practice PHP Developer Interview Questions?</h2>
-      <p>Practice PHP developer interview questions tailored to your experience and receive instant feedback.</p>
-      <a href="/" class="cta-btn">Start Your Interview Simulation →</a>
-      <p class="small-text">Takes less than 15 minutes.</p>
-    </div>
-  </section>
-  
-  <footer class="footer">
-    <a href="/">← Back to AceMyInterviews</a>
-  </footer>
+</section>
+<div class="social-proof"><p>Simulate real PHP interview conditions with timed questions, follow-ups, and detailed scoring.</p></div>
+<div class="last-updated">
+  <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+  Last updated: March 2026
+</div>
+<section><div class="container"><p class="intro-text">Modern PHP development has evolved dramatically—interviews in 2026 assess your ability to write clean, typed, object-oriented PHP using current best practices. Expect questions on PHP 8.x features (typed properties, attributes, enums, fibers, readonly classes), framework expertise with Laravel or Symfony, OOP and design patterns, Composer dependency management, PSR standards, security best practices, and database integration with Eloquent or Doctrine. Roles range from building REST APIs and microservices to maintaining large-scale web applications and content management systems. Interviewers want to see that you write modern PHP—not the procedural, untyped PHP of the past.</p></div></section>
+<!-- SECTION 1: Core PHP Language -->
+<section class="section-dark" id="core-php-language">
+<div class="container">
+<h2>Core PHP Language Questions</h2>
+<p class="section-intro">These questions test your command of modern PHP 8.x—typed properties, match expressions, named arguments, attributes, generators, and fibers. Interviewers expect you to write typed, expressive PHP, not legacy procedural code.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What are typed properties and how do they improve code reliability?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Typed properties enforce type hints at the class property level—<code>public string $name</code> ensures only strings are assigned</li>
+<li>They catch type errors at assignment time, not later in execution when the bug is harder to trace</li>
+<li>Support union types (<code>string|int</code>), nullable types (<code>?string</code>), and <code>mixed</code> for flexibility</li>
+<li>Enable better IDE autocompletion and allow the PHP engine to optimize memory layout</li>
+<li>Essential for modern, maintainable PHP at scale—untyped properties hide implicit assumptions</li>
+</ul></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">Typed properties, introduced in PHP 7.4 and refined in PHP 8, allow you to declare the expected type of class properties directly. For example, <code>public string $name</code> ensures <code>$name</code> can only be a string. This catches type errors at assignment time rather than later in execution. You can use union types like <code>string|int</code>, nullable types like <code>?string</code>, and <code>mixed</code> for flexibility. Typed properties improve code reliability by making implicit type expectations explicit, enable better IDE autocompletion, and allow the PHP engine to optimize memory usage. They're essential for writing modern, maintainable PHP that scales across large teams.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How does the match expression differ from switch statements in PHP 8?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li><code>match</code> is an expression, not a statement—it returns a value you can assign directly</li>
+<li>Uses strict comparison (<code>===</code>) by default, eliminating loose-comparison bugs common with <code>switch</code></li>
+<li>No fall-through behavior—each arm is isolated, no <code>break</code> needed</li>
+<li>Throws <code>UnhandledMatchError</code> if no arm matches and there's no default, preventing silent failures</li>
+<li>Cleaner for value mapping; <code>switch</code> still suits complex multi-statement blocks</li>
+</ul></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">The <code>match</code> expression, introduced in PHP 8.0, improves on <code>switch</code> in several important ways. First, <code>match</code> returns a value—you can assign the result directly to a variable. Second, it uses strict comparison (<code>===</code>) instead of loose comparison, eliminating a common source of bugs. Third, there's no fall-through behavior—each arm is isolated, so you don't need <code>break</code> statements. Fourth, if no arm matches and there's no default, <code>match</code> throws an <code>UnhandledMatchError</code>, which prevents silent failures. In practice, I use <code>match</code> for mapping values, returning from status codes, and anywhere I'd previously written a <code>switch</code> with a return in every case.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Explain named arguments in PHP 8. When would you use them?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Named arguments pass parameters by name rather than position: <code>functionName(param: value, other: value2)</code></li>
+<li>Dramatically improve readability when a function has many parameters—no guessing what the 4th boolean means</li>
+<li>Allow skipping optional parameters without passing <code>null</code> placeholders for every one in between</li>
+<li>Especially valuable with built-in PHP functions that have many optional params (e.g., <code>array_slice</code>, <code>htmlspecialchars</code>)</li>
+<li>Cannot be used with variadic functions; maintain awareness of API stability when using in libraries</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What are attributes in PHP 8, and how do they differ from doc comments?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Attributes are structured, native metadata attached to classes, methods, properties, and parameters using <code>#[AttributeName]</code> syntax</li>
+<li>Doc comments are unstructured strings—frameworks had to parse them with regex, which is fragile and slow</li>
+<li>Attributes are parsed natively by the PHP engine and accessible at runtime via Reflection without string parsing</li>
+<li>Use cases: validation rules, route definitions, access control, serialization instructions, ORM column mapping</li>
+<li>Laravel and Symfony are increasingly leveraging attributes as a first-class alternative to annotation strings</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>When should you use generators versus fibers in PHP?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Generators produce values one at a time with <code>yield</code>—ideal for iterating large datasets (CSV files, database cursors) without loading everything into memory</li>
+<li>Fibers (PHP 8.1) are lightweight cooperative threads—they can pause and resume execution, enabling async-style programming within a single process</li>
+<li>Generators are for iteration and lazy evaluation; fibers are for multi-tasking and concurrency primitives</li>
+<li>Practical split: use a generator for processing a 1M-row CSV export; use fibers for an async HTTP client or event loop integration</li>
+<li>Fibers don't provide true parallelism—they're cooperative, not preemptive; both threads share one OS thread</li>
+</ul></div>
+</div>
+</div></section>
+<!-- SECTION 2: OOP & Design Patterns -->
+<section id="oop-design-patterns">
+<div class="container">
+<h2>OOP &amp; Design Patterns in PHP</h2>
+<p class="section-intro">Architecture questions separate junior from senior candidates. Interviewers assess your understanding of OOP principles, SOLID design, dependency injection, and when to apply design patterns—not just whether you can name them.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>When do you use abstract classes versus interfaces in PHP?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Abstract classes are blueprints with shared implementation—they can have concrete methods, properties, and constructors that subclasses inherit</li>
+<li>Interfaces define contracts: method signatures only, no state, no implementation</li>
+<li>A class can implement multiple interfaces but inherit from only one abstract class</li>
+<li>Use abstract class when sharing code across related classes (e.g., abstract <code>PaymentProcessor</code> with shared validation)</li>
+<li>Use interface when enforcing a contract across unrelated classes (e.g., <code>Auditable</code> interface ensuring logging across different entities)</li>
+</ul></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">Use abstract classes when you have shared implementation logic and state across related classes. An abstract class can have concrete methods, properties, and constructors that subclasses inherit. Use interfaces to define contracts for unrelated classes that must implement specific methods. A class can implement multiple interfaces but inherit from only one abstract class. For example, an abstract <code>PaymentProcessor</code> class might have shared validation logic, while an <code>Auditable</code> interface ensures various classes implement logging. Abstract classes are about shared functionality; interfaces are about defining behavior contracts. Choose based on whether you need to share code or just enforce a method signature.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do traits work in PHP, and when should you avoid using them?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Traits are reusable code blocks included in classes with <code>use TraitName</code>—PHP copies the trait's methods into the using class at compile time</li>
+<li>Useful for sharing behavior across unrelated classes that can't share a common base class</li>
+<li>Conflict resolution: if two traits define the same method, you must explicitly resolve with <code>insteadof</code> or <code>as</code></li>
+<li>Avoid overusing traits—they obscure where a method originates, make debugging harder, and create implicit dependencies</li>
+<li>Prefer composition (injecting collaborator objects) when the shared behavior has its own state or complex logic; traits work best for stateless utility methods</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do the SOLID principles apply to PHP development?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li><strong>Single Responsibility:</strong> Each class has one reason to change—a <code>UserService</code> shouldn't also handle email delivery</li>
+<li><strong>Open/Closed:</strong> Open for extension, closed for modification—add new payment methods via new classes, not by editing existing ones</li>
+<li><strong>Liskov Substitution:</strong> Subtypes must be substitutable for their base types without breaking behavior</li>
+<li><strong>Interface Segregation:</strong> Don't force classes to implement methods they don't need—split fat interfaces into smaller ones</li>
+<li><strong>Dependency Inversion:</strong> Depend on abstractions, not concretions—inject an interface, not a specific class, enabling easy swapping and testing</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What is dependency injection, and how do you implement it without a framework?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>DI means passing dependencies into a class rather than having it create them—the class declares what it needs, doesn't find it</li>
+<li>Constructor injection (most common): dependencies declared in <code>__construct()</code> and passed at instantiation</li>
+<li>Setter injection: dependencies set via methods after construction, useful for optional dependencies</li>
+<li>Without a container: <code>new OrderService(new PaymentGateway(), new EmailService())</code>—explicit wiring at the composition root</li>
+<li>Benefits: testability (swap real dependencies with mocks), loose coupling, explicit dependency graph</li>
+<li>Graduate to a DI container (Laravel, Symfony, PHP-DI) when the wiring becomes complex or repetitive</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Name three design patterns commonly used in PHP and give examples.</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li><strong>Strategy:</strong> Encapsulate interchangeable algorithms—e.g., different shipping calculators implementing a <code>ShippingStrategy</code> interface, swappable at runtime</li>
+<li><strong>Observer:</strong> Notify multiple listeners of state changes—Laravel's event system and Symfony's event dispatcher are built on this pattern</li>
+<li><strong>Factory:</strong> Create objects without specifying exact classes—e.g., a <code>NotificationFactory</code> returning email, SMS, or push notification objects based on config</li>
+<li>Patterns used in Laravel/Symfony internals: Repository (data access abstraction), Decorator (middleware), Facade (static proxy)</li>
+<li>Key interview tip: describe the problem each pattern solves, not just its name</li>
+</ul></div>
+</div>
+</div></section>
+<!-- SECTION 3: Laravel -->
+<section class="section-dark" id="laravel-questions">
+<div class="container">
+<h2>Laravel Interview Questions</h2>
+<p class="section-intro">Laravel dominates the PHP ecosystem. Interviewers expect deep knowledge of the service container, Eloquent ORM, middleware, queues, and the request lifecycle—not just surface-level familiarity.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Explain the Laravel service container and how dependency injection is resolved.</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>The service container is an IoC (Inversion of Control) container that manages class instantiation and dependency resolution</li>
+<li>Type-hint a class in a constructor—Laravel inspects it, resolves the binding, instantiates it, and passes it in automatically</li>
+<li>Register custom bindings with <code>App::bind()</code> (new instance each time) or <code>App::singleton()</code> (shared instance)</li>
+<li>Resolution order: explicit bindings first, then automatic reflection-based wiring</li>
+<li>Use <code>app(MyService::class)</code> or <code>App::make()</code> for manual resolution outside constructors</li>
+</ul></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">Laravel's service container is a powerful IoC container that manages class instantiation and dependency resolution. When you type-hint a class in a constructor, Laravel automatically resolves and injects it. For example, if a controller requires a <code>UserRepository</code>, you simply declare it: <code>public function __construct(UserRepository $repo)</code>. Laravel inspects the type hint, finds the binding in the container, instantiates it, and passes it in. You can register custom bindings using <code>App::bind()</code> or <code>App::singleton()</code> for single instances. The container handles circular dependencies and automatic wiring, making code testable and loosely coupled.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What is Eloquent ORM, and how do eager loading and lazy loading work?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Eloquent is Laravel's ActiveRecord ORM—each model class maps to a database table and instances represent rows</li>
+<li>Lazy loading: relationships load only when accessed on an instance—convenient but causes the N+1 problem at scale</li>
+<li>Eager loading: <code>User::with('posts')-&gt;get()</code> loads all relationships upfront in one or two queries</li>
+<li>Use <code>load()</code> on an already-fetched collection to eager-load after the fact</li>
+<li>Profiling tip: use Laravel Debugbar or Telescope in development to spot query count explosions</li>
+</ul></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">Eloquent is Laravel's elegant ORM that lets you interact with databases using PHP objects. Lazy loading loads relationships only when accessed, which can cause N+1 query problems—fetching 100 users and accessing each user's posts triggers 101 queries total. Eager loading solves this with <code>User::with('posts')-&gt;get()</code>, loading all relationships in one or two queries. You use <code>with()</code> when building queries or <code>load()</code> to eager-load relationships on already-fetched models. Proper eager loading strategy is one hallmark of optimized Laravel applications. I always profile query counts with Debugbar before deploying relationship-heavy features.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How does middleware work in Laravel, and when would you create custom middleware?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Middleware intercepts HTTP requests and responses as they flow through the application pipeline</li>
+<li>Flow: request → global middleware → route middleware → controller → response middleware (reverse order) → response</li>
+<li>Before middleware: logic runs before passing the request to the next layer (e.g., auth check)</li>
+<li>After middleware: logic runs after the controller returns a response (e.g., adding response headers)</li>
+<li>Create custom middleware for cross-cutting concerns: authentication, rate limiting, CORS headers, request logging, locale detection, A/B test flags</li>
+<li>Register globally in <code>$middleware</code>, per-route with <code>middleware()</code>, or in route groups</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What are Laravel queues and jobs, and when should you use them?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Queues defer time-consuming tasks to be processed asynchronously outside the HTTP request cycle—keeping responses fast</li>
+<li>A job is a class encapsulating a discrete unit of work: <code>dispatch(new SendWelcomeEmail($user))</code></li>
+<li>Use cases: sending emails, resizing images, generating reports, calling slow third-party APIs, batch imports</li>
+<li>Queue drivers: <code>database</code> (simple, no extra infra), <code>redis</code> (fast, recommended for production), <code>sqs</code> (AWS-managed)</li>
+<li>Queue workers (<code>php artisan queue:work</code>) poll the queue and process jobs; Horizon provides a dashboard for Redis queues</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Walk through the Laravel request lifecycle from HTTP request to response.</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>1. Request enters via <code>public/index.php</code>—the application bootstraps here</li>
+<li>2. The kernel loads service providers, registers bindings, and boots the application</li>
+<li>3. Request passes through global HTTP middleware (e.g., session, CSRF, authentication)</li>
+<li>4. Router matches the URL to a route definition; route-level middleware runs</li>
+<li>5. Controller or closure executes and returns a response</li>
+<li>6. Response passes back through middleware in reverse order (after-middleware runs here)</li>
+<li>7. HTTP response is sent to the client</li>
+</ul></div>
+</div>
+</div></section>
+<!-- SECTION 4: Symfony -->
+<section id="symfony-questions">
+<div class="container">
+<h2>Symfony Interview Questions</h2>
+<p class="section-intro">Symfony powers complex enterprise applications and is the foundation many other PHP projects are built on. Interviewers expect understanding of the service container, autowiring, Doctrine, and the event-driven architecture.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Explain Symfony's service container and autowiring.</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Symfony's container manages service definitions and dependency injection across the entire application</li>
+<li>Autowiring: Symfony inspects constructor type hints and automatically injects matching services—no manual wiring needed in most cases</li>
+<li>Service definitions can be configured in YAML or PHP; interfaces are bound to concrete implementations with <code>bind</code> directives</li>
+<li>The container is compiled at build time into cached PHP files—production performance is excellent because resolution happens at compile time, not runtime</li>
+<li>Key difference from Laravel: Symfony's container is more explicit and configuration-driven; Laravel's is more convention-driven and dynamic</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Compare Doctrine ORM to Laravel's Eloquent. When would you choose each?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Doctrine uses the DataMapper pattern—entities are plain PHP objects with no knowledge of the database; a separate EntityManager handles persistence</li>
+<li>Eloquent uses ActiveRecord—models know how to save themselves, which is simpler but tightly couples domain objects to the database</li>
+<li>Doctrine excels for complex domain models, DDD architecture, and enterprise systems requiring rich entity graphs</li>
+<li>Eloquent is faster to learn, more readable for typical web apps, and optimal for rapid development</li>
+<li>Choose based on complexity: Doctrine for complex domains; Eloquent for pragmatic, feature-driven development</li>
+</ul></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">Doctrine is Symfony's DataMapper ORM offering sophisticated features like entity listeners, complex relationship handling, and migration tools. Eloquent is Laravel's simpler ActiveRecord ORM optimized for readability and developer velocity. Choose Doctrine for complex domain-driven designs requiring rich entity graphs and intricate business logic. Choose Eloquent for typical web applications prioritizing rapid development and straightforward database interaction. Doctrine is more powerful but has a steeper learning curve; Eloquent favors pragmatism. Enterprise systems often prefer Doctrine; SaaS platforms often choose Eloquent for its elegance.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How does Symfony's event dispatcher work, and how would you use it?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Symfony's event dispatcher implements the publish-subscribe pattern—components communicate by dispatching events rather than calling each other directly</li>
+<li>Dispatch: <code>$dispatcher-&gt;dispatch(new UserRegisteredEvent($user))</code>—the event is a simple value object carrying data</li>
+<li>Listen: register event listeners or subscribers that react to specific event classes</li>
+<li>Practical example: dispatching a <code>UserRegisteredEvent</code> triggers a welcome email listener, an analytics listener, and a Slack notification listener—all decoupled</li>
+<li>Listeners can have priority (lower number = runs first) and can stop propagation to prevent subsequent listeners from running</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What is Symfony Flex, and how does it simplify bundle configuration?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Symfony Flex is a Composer plugin that automates package configuration via "recipes"</li>
+<li>When you <code>composer require</code> a bundle, Flex automatically registers it, creates config files, and sets up the directory structure</li>
+<li>Before Flex: manually adding bundles to <code>AppKernel.php</code>, creating YAML config, copying boilerplate—error-prone and tedious</li>
+<li>After Flex: one command installs, registers, and configures everything; most bundles work immediately</li>
+<li>Recipes live in the official and community recipe repos; teams can create private recipes for internal packages</li>
+</ul></div>
+</div>
+</div></section>
+<!-- SECTION 5: Security -->
+<section class="section-dark" id="php-security">
+<div class="container">
+<h2>PHP Security Questions</h2>
+<p class="section-intro">Security lapses are disqualifying. Interviewers expect confident answers on SQL injection, XSS, CSRF, and password hashing—these are baseline competencies, not advanced topics.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What is SQL injection, and how do you prevent it in PHP?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>SQL injection: user input is concatenated directly into a SQL query, allowing attackers to inject malicious SQL</li>
+<li>Prevention: always use prepared statements with bound parameters—the driver separates SQL structure from data, making injection impossible</li>
+<li>PDO example: <code>$stmt = $pdo-&gt;prepare('SELECT * FROM users WHERE email = ?'); $stmt-&gt;execute([$email]);</code></li>
+<li>ORMs like Eloquent and Doctrine use parameterized queries by default—safe as long as you don't use raw query interpolation</li>
+<li>String escaping is insufficient and should never be relied on—prepared statements are the only gold standard</li>
+</ul></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">SQL injection occurs when user input is directly concatenated into SQL queries, allowing attackers to inject malicious SQL. Prevention is straightforward: use prepared statements with bound parameters. In PDO: <code>$stmt = $pdo-&gt;prepare('SELECT * FROM users WHERE email = ?'); $stmt-&gt;execute([$email]);</code>. The database driver separates SQL structure from data, making injection impossible. ORMs like Eloquent and Doctrine use parameterized queries by default. Never trust user input and always use prepared statements—string escaping is insufficient and should never be relied upon.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What is XSS (Cross-Site Scripting), and how do you prevent it in PHP?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>XSS: malicious scripts are injected into web pages through user input and executed in other users' browsers</li>
+<li>Three types: reflected (in URL), stored (in database), DOM-based (in client-side JS)</li>
+<li>Prevention: escape output based on context—<code>htmlspecialchars($val, ENT_QUOTES, 'UTF-8')</code> for HTML content</li>
+<li>Blade (<code>{{ }}</code> syntax) and Twig auto-escape by default—only bypass escaping with <code>{!! !!}</code> when content is explicitly sanitized</li>
+<li>Add Content Security Policy headers as a second line of defense; never interpolate PHP variables directly into <code>&lt;script&gt;</code> tags—JSON-encode instead</li>
+</ul></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">XSS prevention requires escaping output based on context. In HTML content, use <code>htmlspecialchars()</code> with <code>ENT_QUOTES</code> and UTF-8 encoding. Laravel's Blade templates escape by default with <code>{{ }}</code> syntax—only use <code>{!! !!}</code> when you've explicitly sanitized the content. For JavaScript context, JSON-encode data rather than interpolating PHP variables into script tags. Content Security Policy headers add a defense layer. In Symfony, Twig auto-escapes by default. The key principle is never trust user input—even data from your own database could contain injected content from a previous vulnerability.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How does CSRF protection work, and how do frameworks implement it?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>CSRF (Cross-Site Request Forgery): an attacker tricks a logged-in user's browser into submitting a request to your app without their knowledge</li>
+<li>Token-based defense: generate a unique, unpredictable token per session, embed it in every form, validate it on every state-changing request</li>
+<li>Because the attacker's site can't read your app's cookies (same-origin policy), they can't forge the token</li>
+<li>Laravel: <code>VerifyCsrfToken</code> middleware validates automatically; include <code>@csrf</code> in Blade forms</li>
+<li>GET requests must never modify state—only POST/PUT/DELETE need CSRF protection</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What are the best practices for hashing passwords in PHP?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Always use <code>password_hash($password, PASSWORD_ARGON2ID)</code>—PHP handles salting and work factor automatically</li>
+<li>Bcrypt (<code>PASSWORD_BCRYPT</code>) is solid and battle-tested; Argon2id is newer and more resistant to GPU-based brute force attacks</li>
+<li>Verify with <code>password_verify($inputPassword, $storedHash)</code>—never compare hashes manually</li>
+<li>Rehash on login if the hash needs upgrading: <code>password_needs_rehash($hash, PASSWORD_ARGON2ID)</code> returns true, then update the stored hash</li>
+<li>Never use MD5, SHA1, or any unsalted function for passwords—these are not password hashing algorithms</li>
+</ul></div>
+</div>
+</div></section>
+<!-- SECTION 6: Database & API -->
+<section id="database-api">
+<div class="container">
+<h2>Database &amp; API Questions</h2>
+<p class="section-intro">Database performance and API design are everyday PHP concerns. Interviewers test your ability to spot and fix N+1 problems, use indexing strategically, design clean REST APIs, and implement effective caching.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What is the N+1 query problem, and how do you identify and fix it?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>N+1: one query fetches a parent collection, then N separate queries fetch each item's related data—e.g., 100 posts + 100 author queries = 101 total</li>
+<li>Identify: enable query logging—in Laravel use <code>DB::enableQueryLog()</code>, Telescope, or Debugbar; in Symfony use the profiler's Doctrine panel</li>
+<li>The signal: query count scales linearly with result set size</li>
+<li>Fix in Eloquent: <code>Post::with('author')-&gt;get()</code> collapses N+1 into 2 queries; in Doctrine use JOIN fetches or DQL joins</li>
+<li>This is the most common ORM performance issue in PHP—a well-rehearsed answer signals real production experience</li>
+</ul></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">The N+1 problem occurs when you load a collection of parent records with one query, then trigger a separate query for each parent's related data—so 1 query for 100 posts plus 100 queries for each post's author equals 101 total. This is the most common ORM performance issue I've encountered in PHP applications. To spot it, enable query logging in development—in Laravel use <code>DB::enableQueryLog()</code> or Telescope; in Symfony the profiler's Doctrine panel shows query counts. When query counts scale linearly with result size, that's the signal. The fix is eager loading: in Laravel, <code>with('author')</code> on the query; in Doctrine, use JOIN fetches or DQL joins.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Explain database indexing and when you should add indexes.</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Indexes are sorted data structures (typically B-trees) that allow the database to locate rows without scanning the entire table</li>
+<li>Trade-off: faster reads, slower writes (index must be updated on INSERT/UPDATE/DELETE), extra storage overhead</li>
+<li>Index columns used in <code>WHERE</code>, <code>JOIN ON</code>, and <code>ORDER BY</code> clauses—these are query bottlenecks</li>
+<li>Composite indexes: (<code>user_id</code>, <code>created_at</code>) can cover multi-column queries; column order matters</li>
+<li>Don't index every column—benchmark with <code>EXPLAIN</code> before adding; over-indexing slows writes significantly on high-write tables</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What are REST API design best practices in PHP?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Use correct HTTP methods: <code>GET</code> (read), <code>POST</code> (create), <code>PUT</code>/<code>PATCH</code> (update), <code>DELETE</code> (delete)</li>
+<li>Return appropriate status codes: 200, 201, 204, 400, 401, 403, 404, 422, 500—each carries semantic meaning</li>
+<li>Version your API: <code>/api/v1/users</code> or via <code>Accept</code> header; prevents breaking changes for existing clients</li>
+<li>Paginate collections: <code>?page=1&amp;per_page=20</code>; include metadata (total, next/prev links) in responses</li>
+<li>Return consistent error responses with a <code>message</code> field and machine-readable error codes; authenticate with JWT or OAuth2</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What caching strategies improve PHP application performance?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Query result caching: cache expensive database queries in Redis or Memcached with an appropriate TTL</li>
+<li>Full-page caching: cache entire rendered responses for anonymous users on content-heavy pages</li>
+<li>HTTP caching: set <code>Cache-Control</code>, <code>ETag</code>, and <code>Last-Modified</code> headers to leverage browser and CDN caches</li>
+<li>Cache invalidation strategy: tag-based invalidation (Laravel's cache tags) or event-driven invalidation on data change</li>
+<li>Laravel's cache facade and Symfony's cache component both support multiple drivers with a consistent API; Redis is the recommended production store</li>
+</ul></div>
+</div>
+</div></section>
+<!-- SECTION 7: Behavioral -->
+<section class="section-dark" id="behavioral-php-developer">
+<div class="container">
+<h2>Behavioral PHP Developer Interview Questions</h2>
+<p class="section-intro">Behavioral questions reveal how you handle real PHP challenges—legacy code, production crises, framework decisions, and cross-team collaboration. Use the STAR method and anchor answers in concrete outcomes.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How would you approach modernizing a legacy PHP codebase?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Start with understanding: document existing behavior and dependencies before touching anything</li>
+<li>Establish a test suite first—you can't safely refactor without coverage to catch regressions</li>
+<li>Incrementally introduce type hints, moving toward PHP 8.x standards; avoid big-bang rewrites</li>
+<li>Use the strangler fig pattern: gradually replace old modules with new implementations while keeping the app running</li>
+<li>Introduce dependency injection, reduce global state, enforce PSR standards with PHP CS Fixer</li>
+<li>Involve the team—modernization is cultural as much as technical; legacy code reflects past constraints, not negligence</li>
+</ul></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">Modernizing legacy PHP requires strategy and patience. First, establish a test suite to understand existing behavior—you can't safely refactor without coverage. Incrementally introduce type hints, moving toward modern PHP 8.x standards. Introduce dependency injection to reduce tight coupling. Instead of rewriting everything, use the strangler fig pattern: gradually replace old code with new implementations. Set clear coding standards and enforce them with linters like PHP CS Fixer. Migrate to a modern framework or structure only when team capacity allows. Most importantly, involve the team—legacy code wasn't written poorly intentionally; it reflects past constraints and knowledge.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Walk through your approach to debugging a critical production issue.</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Gather information first: error logs, user reports, when the issue started, whether it's intermittent or consistent</li>
+<li>Check recent deployments, database migrations, config changes, or traffic spikes that correlate with the issue</li>
+<li>Reproduce locally if possible; isolate whether it's code, data, or infrastructure</li>
+<li>Use profiling tools: Xdebug for step-through debugging, APM tools (Datadog, New Relic) for performance, log aggregation for patterns</li>
+<li>Apply fix to staging first; verify thoroughly; deploy to production with monitoring active and a rollback plan ready</li>
+<li>Post-mortem: document root cause, timeline, fix, and prevention measures—no-blame culture</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How would you decide between Laravel and Symfony for a new project?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Laravel: rapid development, outstanding documentation, rich ecosystem (Livewire, Horizon, Telescope), ideal for startups, SaaS, and typical web apps</li>
+<li>Symfony: enterprise features, maximum flexibility, powerful reusable components, ideal for complex domain logic and large teams</li>
+<li>Team familiarity often outweighs technical differences—the best framework is the one your team uses well</li>
+<li>Note: Symfony components power Laravel's core (Console, HttpFoundation, Routing)—they're complementary, not opposed</li>
+<li>Check long-term maintenance, community support, and available talent in your hiring market</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you work effectively with frontend developers when building APIs?</h3>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Define API contracts early: agree on response shapes, status codes, and error formats before any code is written</li>
+<li>Use OpenAPI/Swagger docs as a shared contract—frontend can generate typed clients and mock servers from it</li>
+<li>Provide mock API responses early so frontend development isn't blocked waiting for backend completion</li>
+<li>Establish versioning strategy upfront to avoid breaking changes for deployed clients</li>
+<li>Be responsive to feedback—API design is iterative; what seemed obvious on the backend may be awkward to consume</li>
+<li>Document edge cases, error scenarios, and rate limits thoroughly; surprises in production erode trust</li>
+</ul></div>
+</div>
+</div></section>
+<!-- MID CTA -->
+<section>
+<div class="mid-cta">
+<h2>Practice With Questions Tailored to Your Interview</h2>
+<p>Every interview is different. AceMyInterviews uses your job description and resume to generate PHP-specific interview questions that match the exact role you're interviewing for. Practice under real conditions—timed, with realistic follow-ups and detailed scoring feedback.</p>
+<div class="mid-cta-features">
+<span class="mid-cta-feature"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Questions generated from your job description</span>
+<span class="mid-cta-feature"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Timed mock interviews simulating real pressure</span>
+<span class="mid-cta-feature"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant feedback on accuracy and communication</span>
+<span class="mid-cta-feature"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Video recording to review your answers</span>
+</div>
+<a href="/" class="cta-btn">Start Free Practice Interview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+</div>
+</section>
+
+<!-- WHAT INTERVIEWERS EVALUATE -->
+<section class="section-dark">
+<div class="container">
+<h2>What Interviewers Evaluate</h2>
+<p class="section-intro">Beyond questions, interviewers assess your architectural maturity, security awareness, and how confidently you navigate the PHP ecosystem's tooling and trade-offs.</p>
+<div class="dimensions-grid">
+<div class="dimension-card"><h3>Modern PHP Fluency</h3><p>Interviewers assess your command of current PHP versions (8.4/8.5). They expect typed code, familiarity with attributes, union types, and named arguments. Procedural or untyped PHP signals outdated practices. Show you understand PSR standards, Composer, and modern language features.</p></div>
+<div class="dimension-card"><h3>Framework Proficiency</h3><p>If the role is Laravel-focused, you should understand the service container, Eloquent, middleware, and queues deeply. If Symfony, demonstrate container mastery, event dispatcher, and Doctrine expertise. Interviewers test your ability to leverage framework features rather than reinventing the wheel.</p></div>
+<div class="dimension-card"><h3>OOP and Architecture</h3><p>You're evaluated on clean code, SOLID principles, and design pattern knowledge. Show you understand abstract classes vs. interfaces, dependency injection, and when to use traits. Architecture decisions reflect your experience level—senior candidates explain trade-offs, not just choices.</p></div>
+<div class="dimension-card"><h3>Security Awareness</h3><p>Security is non-negotiable. You must demonstrate SQL injection prevention with prepared statements, XSS mitigation through output escaping, CSRF token usage, and password hashing best practices. Security lapses are disqualifying in any serious engineering role.</p></div>
+<div class="dimension-card"><h3>Database Expertise</h3><p>Interviewers evaluate your understanding of ORM usage, query optimization, and N+1 problem prevention. Show you can profile queries, use eager loading strategically, and understand indexing. Database performance directly impacts application quality.</p></div>
+<div class="dimension-card"><h3>Testing and Code Quality</h3><p>You're expected to understand PHPUnit and feature testing. Discuss test coverage, CI/CD pipelines, and debugging approaches. Code quality tools, linters, and static analysis (PHPStan, Psalm) demonstrate professionalism and attention to maintainability.</p></div>
+</div>
+</div>
+</section>
+
+<!-- HOW TO PREPARE -->
+<section>
+<div class="container">
+<h2>How To Prepare for PHP Developer Interviews</h2>
+<div class="prepare-grid">
+<div class="prepare-card"><p>Practice explaining your architectural decisions out loud. Interviewers aren't just testing code knowledge—they're evaluating your thought process. When discussing design patterns, explain why you chose one approach over alternatives. Walk through your reasoning for using dependency injection, service locators, or trait composition. Practice articulating trade-offs: Doctrine's power vs. Eloquent's simplicity, Laravel's conventions vs. Symfony's flexibility. Record yourself answering questions and listen critically—clarity and confidence matter as much as correctness.</p></div>
+<div class="prepare-card"><p>Build deep expertise in your primary framework. If you're interviewing for a Laravel role, master the service container, Eloquent relationships (including eager loading optimization), middleware pipeline, and queues. If Symfony, understand autowiring, Doctrine entity mapping, event dispatcher, and form handling. Shallower knowledge of both frameworks is less impressive than deep knowledge of one. Build a small project in your chosen framework—your hands-on experience will shine in technical discussions.</p></div>
+<div class="prepare-card"><p>Prepare behavioral stories about PHP-specific challenges you've faced. Have concrete examples ready: How did you tackle legacy code migration? What's your approach to production debugging? How have you optimized a slow query? Structure answers using the STAR method (Situation, Task, Action, Result). Behavioral questions reveal your judgment, communication, and real-world experience. Interviewers want developers who solve problems thoughtfully, not just code by rote.</p></div>
+<div class="prepare-card"><p>Use realistic practice conditions. Timed mock interviews under pressure reveal gaps better than casual studying. Practice in front of a webcam—many companies conduct video interviews. Use tools like AceMyInterviews to simulate the actual interview experience, get feedback on pacing and clarity, and identify weak areas. Reviewing recorded answers is often humbling but invaluable—you'll notice verbal tics, pauses, or unclear explanations that you can improve before the real thing.</p></div>
+</div>
+</div>
+</section>
+<!-- FAQ -->
+<section class="section-dark">
+<div class="container">
+<h2>FAQ: PHP Developer Interviews</h2>
+<div class="faq-list">
+<details><summary>Which PHP framework should I focus on for interviews?</summary><p>Focus on whichever framework aligns with roles you're targeting. Laravel dominates the ecosystem—if you're uncertain, invest in Laravel mastery. It has excellent documentation, a vibrant community, and employers value it highly. Symfony is excellent for enterprise and complex systems; if that's your target, prioritize it. You don't need both at interview time, but understanding both shows architectural thinking. Many questions about service containers, ORMs, and testing apply across frameworks. Master one deeply; general concepts transfer to others.</p></details>
+<details><summary>Is PHP 8 knowledge expected in interviews?</summary><p>Yes, absolutely. PHP 8.x is standard by 2026. Interviewers expect you to understand typed properties, union types, match expressions, named arguments, and attributes. Knowing these features shows you're current with the language evolution. Legacy PHP knowledge (magic quotes, deprecated functions) is irrelevant. You should be comfortable explaining why modern PHP features matter: typed properties improve reliability, match expressions reduce boilerplate, attributes enable framework magic. Most modern frameworks have moved to PHP 8 minimum versions, so familiarity is essential.</p></details>
+<details><summary>How do I demonstrate modern PHP skills in an interview?</summary><p>Speak the language of modern PHP: type hints, immutability, strict comparisons, and architectural patterns. When discussing code, use PHP 8 terminology. Show code examples using typed properties, readonly classes, attributes, and named arguments. Discuss design patterns and SOLID principles—these transcend syntax but show mature thinking. Build a portfolio project in modern PHP with proper testing, CI/CD, and clean architecture. Modern PHP means not just syntax—it's about clean code, security consciousness, and maintainability.</p></details>
+<details><summary>Will WordPress come up in PHP developer interviews?</summary><p>Rarely in technical developer interviews for software engineering roles. WordPress is PHP-based but distinct from general PHP development. SaaS, startup, or enterprise backend roles almost never ask about WordPress. If you're interviewing for a WordPress-specific role, focus on theme development, plugin architecture, hooks, and filters. For general PHP developer positions, WordPress knowledge is a bonus but not expected. Interviewers typically test framework expertise (Laravel/Symfony) and core PHP skills instead.</p></details>
+<details><summary>How hard are PHP developer interviews?</summary><p>Difficulty varies significantly by company and seniority. Startup and mid-market companies often emphasize practical problem-solving and cultural fit. Enterprise companies dig deeper into system design, scalability, and advanced patterns. Expect coding exercises testing OOP knowledge and refactoring skills. Junior roles test fundamentals; senior roles test architectural thinking. PHP interview difficulty is generally moderate but rigorous compared to scripting-only roles. Consistent preparation, a strong portfolio, and clear communication significantly improve outcomes.</p></details>
+<details><summary>Is PHP development a good career in 2026?</summary><p>PHP remains a strong career path in 2026. The language powers a massive portion of the web, and demand for PHP developers continues across enterprise applications, SaaS platforms, e-commerce, and content management. The Laravel ecosystem has driven renewed interest, with a thriving community and modern tooling. PHP developers with modern framework expertise and strong architecture skills are well-positioned. The key differentiator is demonstrating modern PHP proficiency—developers who write typed, tested, well-architected PHP using current frameworks command significantly more opportunities than those stuck in legacy patterns.</p></details>
+</div>
+</div>
+</section>
+
+<!-- RELATED LINKS -->
+<div class="related-section">
+<div class="container">
+<h3>Related Interview Questions</h3>
+<div class="related-links">
+<a href="/interview/backend-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Backend Developer Interview Questions</a>
+<a href="/interview/laravel-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Laravel Developer Interview Questions</a>
+<a href="/interview/full-stack-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Full Stack Developer Interview Questions</a>
+<a href="/interview/javascript-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>JavaScript Developer Interview Questions</a>
+<a href="/interview/web-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Web Developer Interview Questions</a>
+<a href="/interview/react-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>React Developer Interview Questions</a>
+</div>
+</div>
+</div>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+<div class="container">
+<h2>Ready To Practice PHP Developer Interview Questions?</h2>
+<p>The best interview prep combines knowledge, practice, and feedback. AceMyInterviews analyzes your resume and job description to generate targeted questions, simulates real interview pressure, and provides detailed scoring on technical accuracy, communication clarity, and interview technique.</p>
+<a href="/" class="cta-btn">Start Your Interview Simulation →</a>
+<p class="small-text">Takes less than 15 minutes. Free to start.</p>
+</div>
+</section>
+
+<footer class="footer"><a href="/">← Back to AceMyInterviews</a></footer>
 </body>
 </html>

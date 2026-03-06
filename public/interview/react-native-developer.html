@@ -3,545 +3,868 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>React Native Developer Interview Questions – Practice with AI Simulator</title>
-  <meta name="description" content="Practice React Native Developer interview questions with our AI-powered simulator. Get questions tailored to your resume and job description with instant feedback.">
-  <meta name="keywords" content="React Native developer interview questions, React Native interview, cross-platform mobile interview, native module interview, mobile performance interview">
-  
-  <meta property="og:title" content="React Native Developer Interview Questions – Practice with AI Simulator">
-  <meta property="og:description" content="Practice React Native Developer interview questions with our AI-powered simulator. Get questions tailored to your resume and job description with instant feedback.">
+  <title>30+ React Native Interview Questions &amp; Answers (2026 Guide)</title>
+  <meta name="description" content="React Native interview questions covering architecture, performance, native modules, navigation, state management, and the New Architecture. Includes answer frameworks, sample answers, and a free practice simulator.">
+  <meta property="og:title" content="30+ React Native Interview Questions &amp; Answers (2026 Guide)">
+  <meta property="og:description" content="React Native interview questions covering architecture, performance, native modules, navigation, state management, and the New Architecture. Includes answer frameworks, sample answers, and a free practice simulator.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.acemyinterviews.io/interview/react-native-developer">
   <meta property="og:image" content="https://www.acemyinterviews.io/og-image.png">
-  
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="React Native Developer Interview Questions – Practice with AI Simulator">
-  <meta name="twitter:description" content="Practice React Native Developer interview questions with our AI-powered simulator. Get questions tailored to your resume and job description with instant feedback.">
-  
+  <meta name="twitter:title" content="30+ React Native Interview Questions &amp; Answers (2026 Guide)">
+  <meta name="twitter:description" content="React Native interview questions covering architecture, performance, native modules, navigation, state management, and the New Architecture.">
   <link rel="canonical" href="https://www.acemyinterviews.io/interview/react-native-developer">
-  
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I need to know native iOS and Android development?", "acceptedAnswer": {"@type": "Answer", "text": "Basic understanding of native platforms is important. You should know how to create native modules, understand platform-specific behaviors, and debug issues in Xcode and Android Studio. Deep native expertise is not always required."}}, {"@type": "Question", "name": "Should I learn the new architecture?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Fabric renderer and TurboModules represent the future of React Native. Understanding JSI, the new bridge-less architecture, and how it improves performance will differentiate you in interviews."}}, {"@type": "Question", "name": "How much React web knowledge transfers?", "acceptedAnswer": {"@type": "Answer", "text": "Core React concepts like hooks, context, and component lifecycle transfer directly. However, mobile-specific patterns like navigation, gesture handling, native threading, and platform-specific UI conventions require dedicated study."}}, {"@type": "Question", "name": "Is Expo experience relevant?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, especially for companies using managed workflows. Understanding both Expo and bare React Native workflows is valuable. Know when to eject from Expo and how to work with native code directly."}}]}</script>
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.acemyinterviews.io"}, {"@type": "ListItem", "position": 2, "name": "Interview Questions", "item": "https://www.acemyinterviews.io/interview"}, {"@type": "ListItem", "position": 3, "name": "React Native Developer Interview Questions", "item": "https://www.acemyinterviews.io/interview/react-native-developer"}]}</script>
-  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I need to know native iOS and Android development for React Native interviews?","acceptedAnswer":{"@type":"Answer","text":"Foundational native knowledge is valuable. Know when to use native APIs and when to use JavaScript libraries. Companies expect you to bridge JS and native, not master both."}},{"@type":"Question","name":"Should I learn the React Native New Architecture for interviews?","acceptedAnswer":{"@type":"Answer","text":"Yes. The New Architecture (Fabric, TurboModules, JSI) is the current direction and default in 0.76+. Understand how Fabric differs from the legacy bridge and why JSI enables synchronous communication."}},{"@type":"Question","name":"How much React web knowledge transfers to React Native interviews?","acceptedAnswer":{"@type":"Answer","text":"Hooks, state management, and component composition transfer substantially. However, React Native interviews focus on mobile-specific concerns: navigation, platform differences, native APIs, and performance constraints."}},{"@type":"Question","name":"Is Expo experience relevant for React Native interviews?","acceptedAnswer":{"@type":"Answer","text":"Yes. Expo is a production-grade framework. Expect questions about EAS Build, EAS Submit, Expo modules, and when to choose Expo vs. bare React Native."}},{"@type":"Question","name":"How hard are React Native developer interviews?","acceptedAnswer":{"@type":"Answer","text":"Difficulty ranges by level and company. The differentiator is performance expertise—demonstrate profiling skills and systematic thinking."}},{"@type":"Question","name":"What's the difference between React Native and Flutter developer interviews?","acceptedAnswer":{"@type":"Answer","text":"React Native emphasizes JavaScript/TypeScript and React patterns; Flutter emphasizes Dart and widget trees. Both assess cross-platform thinking and mobile UX understanding."}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.acemyinterviews.io"},{"@type":"ListItem","position":2,"name":"Interview Questions","item":"https://www.acemyinterviews.io/interview"},{"@type":"ListItem","position":3,"name":"React Native Developer Interview Questions","item":"https://www.acemyinterviews.io/interview/react-native-developer"}]}</script>
   <link rel="icon" href="/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
   <style>
-    :root {
-      --bg-primary: #0f1419;
-      --bg-secondary: #1a1f2e;
-      --bg-card: #1e2330;
-      --bg-card-hover: #252b3b;
-      --accent-primary: #14b8a6;
-      --accent-primary-hover: #0d9488;
-      --accent-secondary: #2dd4bf;
-      --text-primary: #ffffff;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      --border-color: #2d3748;
-      --success: #10b981;
-      --max-width: 800px;
-      --max-width-wide: 1000px;
-    }
-    
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-    
-    .header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: var(--max-width-wide);
-      margin: 0 auto;
-    }
-    
-    .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .logo-icon {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .header-cta {
-      background: var(--accent-primary);
-      color: var(--bg-primary);
-      padding: 10px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: background 0.2s;
-    }
-    
-    .header-cta:hover { background: var(--accent-primary-hover); }
-    
-    .breadcrumbs {
-      max-width: var(--max-width-wide);
-      margin: 0 auto;
-      padding: 16px 24px;
-      font-size: 0.875rem;
-    }
-    
-    .breadcrumbs a {
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    
-    .breadcrumbs a:hover { color: var(--accent-primary); }
-    .breadcrumbs span { color: var(--text-muted); margin: 0 8px; }
-    .breadcrumbs .current { color: var(--text-secondary); }
-    
-    .hero {
-      padding: 60px 24px 80px;
-      text-align: center;
-      background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-    }
-    
-    .hero-container { max-width: var(--max-width); margin: 0 auto; }
-    
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 2.75rem);
-      font-weight: 800;
-      margin-bottom: 20px;
-      line-height: 1.2;
-      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .hero p {
-      color: var(--text-secondary);
-      font-size: 1.125rem;
-      margin-bottom: 32px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .cta-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--accent-primary);
-      color: var(--bg-primary);
-      padding: 16px 32px;
-      font-size: 1rem;
-      font-weight: 600;
-      text-decoration: none;
-      border-radius: 10px;
-      transition: all 0.2s;
-    }
-    
-    .cta-btn:hover {
-      background: var(--accent-primary-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 40px rgba(20, 184, 166, 0.3);
-    }
-    
-    .cta-btn svg { width: 20px; height: 20px; }
-    
-    .trust-badges {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 40px;
-    }
-    
-    .trust-badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-    }
-    
-    .trust-badge svg { color: var(--success); width: 16px; height: 16px; }
-    
-    section { padding: 64px 24px; }
-    .container { max-width: var(--max-width); margin: 0 auto; }
-    
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 24px;
-      text-align: center;
-      color: var(--text-primary);
-    }
-    
-    .social-proof {
-      padding: 20px 24px;
-      text-align: center;
-      border-bottom: 1px solid var(--border-color);
-    }
-    
-    .social-proof p { color: var(--text-muted); font-size: 0.9rem; }
-    
-    .last-updated {
-      text-align: center;
-      padding: 12px 24px;
-      font-size: 0.8125rem;
-      color: var(--text-muted);
-    }
-    
-    .last-updated svg {
-      width: 14px;
-      height: 14px;
-      vertical-align: -2px;
-      margin-right: 4px;
-    }
-    
-    .intro-text {
-      font-size: 1.0625rem;
-      line-height: 1.8;
-      color: var(--text-secondary);
-    }
-    
-    .questions-section { background: var(--bg-secondary); }
-    .questions-list { list-style: none; display: grid; gap: 12px; }
-    
-    .questions-list li {
-      background: var(--bg-card);
-      padding: 18px 24px;
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-      font-size: 0.9375rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      transition: all 0.2s;
-    }
-    
-    .questions-list li:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--accent-primary);
-    }
-    
-    .questions-list li svg {
-      flex-shrink: 0;
-      color: var(--accent-primary);
-      width: 20px;
-      height: 20px;
-      margin-top: 2px;
-    }
-    
-    .bridge-text {
-      font-size: 1rem;
-      line-height: 1.8;
-      color: var(--text-muted);
-      text-align: center;
-    }
-    
-    .personalized-section { background: var(--bg-secondary); text-align: center; }
-    
-    .personalized-section p {
-      color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto 32px;
-    }
-    
-    .features {
-      list-style: none;
-      display: inline-flex;
-      flex-direction: column;
-      gap: 12px;
-      text-align: left;
-      margin-bottom: 32px;
-    }
-    
-    .features li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-    }
-    
-    .features li svg { color: var(--success); width: 20px; height: 20px; flex-shrink: 0; }
-    
-    .criteria-list { list-style: none; display: grid; gap: 12px; }
-    
-    .criteria-list li {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 20px;
-      background: var(--bg-card);
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-    }
-    
-    .criteria-list li svg { color: var(--accent-primary); width: 20px; height: 20px; flex-shrink: 0; }
-    
-    .faq-section { background: var(--bg-secondary); }
-    .faq-list { display: grid; gap: 12px; }
-    
-    details {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    
-    details[open] { border-color: var(--accent-primary); }
-    
-    summary {
-      padding: 18px 24px;
-      font-weight: 600;
-      cursor: pointer;
-      list-style: none;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var(--text-primary);
-      font-size: 0.9375rem;
-    }
-    
-    summary::-webkit-details-marker { display: none; }
-    
-    summary::after {
-      content: '+';
-      font-size: 1.25rem;
-      font-weight: 400;
-      color: var(--text-muted);
-      transition: transform 0.2s;
-    }
-    
-    details[open] summary::after { transform: rotate(45deg); }
-    
-    details p {
-      padding: 0 24px 18px;
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-      line-height: 1.7;
-    }
-    
-    .related-section {
-      padding: 48px 24px;
-      border-top: 1px solid var(--border-color);
-    }
-    
-    .related-section h3 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      margin-bottom: 20px;
-      color: var(--text-primary);
-    }
-    
-    .related-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    
-    .related-links a {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      padding: 10px 16px;
-      border-radius: 8px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.875rem;
-      transition: all 0.2s;
-    }
-    
-    .related-links a:hover {
-      border-color: var(--accent-primary);
-      color: var(--accent-primary);
-      background: var(--bg-card-hover);
-    }
-    
-    .related-links a svg { width: 16px; height: 16px; }
-    
-    .final-cta {
-      text-align: center;
-      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-      padding: 80px 24px;
-    }
-    
-    .final-cta h2 { font-size: 1.75rem; margin-bottom: 16px; }
-    
-    .final-cta p {
-      color: var(--text-secondary);
-      margin-bottom: 32px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .small-text { font-size: 0.875rem; color: var(--text-muted); margin-top: 16px; }
-    
-    .footer {
-      padding: 32px 24px;
-      text-align: center;
-      border-top: 1px solid var(--border-color);
-    }
-    
-    .footer a { color: var(--accent-primary); text-decoration: none; font-size: 0.9rem; }
-    .footer a:hover { text-decoration: underline; }
-    
-    @media (max-width: 640px) {
-      .hero { padding: 40px 20px 60px; }
-      section { padding: 48px 20px; }
-      .header { padding: 16px 20px; }
-      .trust-badges { flex-direction: column; align-items: center; }
-      .cta-btn { width: 100%; justify-content: center; }
-      .related-links { flex-direction: column; }
-      .related-links a { width: 100%; }
-    }
+    :root{--bg-primary:#0f1419;--bg-secondary:#1a1f2e;--bg-card:#1e2330;--bg-card-hover:#252b3b;--accent-primary:#14b8a6;--accent-primary-hover:#0d9488;--accent-secondary:#2dd4bf;--text-primary:#ffffff;--text-secondary:#94a3b8;--text-muted:#64748b;--border-color:#2d3748;--success:#10b981;--max-width:800px;--max-width-wide:1000px;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased;}
+    .header{padding:20px 24px;border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;max-width:var(--max-width-wide);margin:0 auto;}
+    .logo{font-size:1.25rem;font-weight:700;color:var(--text-primary);text-decoration:none;display:flex;align-items:center;gap:8px;}
+    .logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent-primary),var(--accent-secondary));border-radius:8px;display:flex;align-items:center;justify-content:center;}
+    .header-cta{background:var(--accent-primary);color:var(--bg-primary);padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;font-size:.9rem;transition:background .2s;}
+    .header-cta:hover{background:var(--accent-primary-hover);}
+    .breadcrumbs{max-width:var(--max-width-wide);margin:0 auto;padding:16px 24px;font-size:.875rem;}
+    .breadcrumbs a{color:var(--text-muted);text-decoration:none;}
+    .breadcrumbs a:hover{color:var(--accent-primary);}
+    .breadcrumbs span{color:var(--text-muted);margin:0 8px;}
+    .breadcrumbs .current{color:var(--text-secondary);}
+    .hero{padding:60px 24px 80px;text-align:center;background:linear-gradient(180deg,var(--bg-secondary) 0%,var(--bg-primary) 100%);}
+    .hero-container{max-width:var(--max-width);margin:0 auto;}
+    .hero h1{font-size:clamp(2rem,5vw,2.75rem);font-weight:800;margin-bottom:16px;line-height:1.2;background:linear-gradient(135deg,var(--text-primary) 0%,var(--text-secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .hero-subtitle{color:var(--accent-secondary);font-size:1rem;font-weight:500;margin-bottom:32px;}
+    .cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent-primary);color:var(--bg-primary);padding:16px 32px;font-size:1rem;font-weight:600;text-decoration:none;border-radius:10px;transition:all .2s;}
+    .cta-btn:hover{background:var(--accent-primary-hover);transform:translateY(-2px);box-shadow:0 10px 40px rgba(20,184,166,.3);}
+    .cta-btn svg{width:20px;height:20px;}
+    .trust-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:40px;}
+    .trust-badge{display:flex;align-items:center;gap:6px;background:var(--bg-card);border:1px solid var(--border-color);padding:10px 16px;border-radius:8px;font-size:.875rem;color:var(--text-secondary);}
+    .trust-badge svg{color:var(--success);width:16px;height:16px;}
+    section{padding:64px 24px;}
+    .container{max-width:var(--max-width);margin:0 auto;}
+    .section-dark{background:var(--bg-secondary);}
+    .social-proof{background:var(--bg-card);border-top:1px solid var(--border-color);border-bottom:1px solid var(--border-color);padding:14px 24px;text-align:center;font-size:.9rem;color:var(--text-muted);}
+    .last-updated{display:flex;align-items:center;justify-content:center;gap:6px;font-size:.8125rem;color:var(--text-muted);padding:10px 24px;}
+    .last-updated svg{width:14px;height:14px;color:var(--accent-primary);}
+    .intro-text{font-size:1.0625rem;color:var(--text-secondary);line-height:1.75;}
+    h2{font-size:1.625rem;font-weight:700;margin-bottom:12px;color:var(--text-primary);}
+    .section-intro{color:var(--text-secondary);font-size:.9375rem;margin-bottom:32px;line-height:1.7;}
+    .question-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:28px;margin-bottom:20px;transition:border-color .2s;}
+    .question-card:hover{border-color:var(--accent-primary);}
+    .question-card h3{font-size:1.0625rem;font-weight:700;color:var(--text-primary);margin-bottom:20px;line-height:1.4;display:flex;gap:12px;}
+    .question-card h3 .q-icon{flex-shrink:0;width:22px;height:22px;color:var(--accent-primary);margin-top:1px;}
+    .answer-label{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:8px;margin-top:16px;}
+    .why-text,.framework-text,.sample-text{font-size:.9375rem;color:var(--text-secondary);line-height:1.7;}
+    .evaluate-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
+    .evaluate-list li{display:flex;align-items:flex-start;gap:8px;font-size:.9rem;color:var(--text-secondary);}
+    .evaluate-list li svg{flex-shrink:0;width:16px;height:16px;color:var(--success);margin-top:2px;}
+    .framework-box{background:var(--bg-primary);border-left:3px solid var(--accent-primary);border-radius:0 8px 8px 0;padding:16px 18px;margin-top:8px;}
+    .framework-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin:0;}
+    .framework-list li{display:flex;align-items:flex-start;gap:8px;font-size:.9rem;color:var(--text-secondary);line-height:1.55;}
+    .framework-list li::before{content:'→';color:var(--accent-primary);flex-shrink:0;font-weight:600;}
+    .sample-box{background:rgba(20,184,166,.05);border:1px solid rgba(20,184,166,.15);border-radius:8px;padding:16px 18px;margin-top:8px;}
+    .sample-label-tag{display:inline-block;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-primary);background:rgba(20,184,166,.1);padding:3px 8px;border-radius:4px;margin-bottom:10px;}
+    .dimensions-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-top:32px;}
+    .dimension-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:24px;}
+    .dimension-card h3{font-size:1rem;font-weight:700;color:var(--accent-primary);margin-bottom:10px;}
+    .dimension-card p{font-size:.9rem;color:var(--text-secondary);line-height:1.65;}
+    .prepare-grid{display:grid;gap:20px;margin-top:8px;}
+    .prepare-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:24px;}
+    .prepare-card p{font-size:.9375rem;color:var(--text-secondary);line-height:1.7;}
+    .mid-cta{background:linear-gradient(135deg,#1a2a28 0%,#1a1f2e 100%);border:1px solid rgba(20,184,166,.25);border-radius:16px;padding:48px 40px;text-align:center;max-width:var(--max-width);margin:0 auto;}
+    .mid-cta h2{margin-bottom:12px;}
+    .mid-cta p{color:var(--text-secondary);margin-bottom:28px;}
+    .mid-cta-features{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:28px;}
+    .mid-cta-feature{display:flex;align-items:center;gap:6px;font-size:.875rem;color:var(--text-secondary);background:rgba(20,184,166,.07);border:1px solid rgba(20,184,166,.15);padding:7px 14px;border-radius:20px;}
+    .mid-cta-feature svg{width:14px;height:14px;color:var(--accent-primary);}
+    .faq-list{display:grid;gap:12px;}
+    details{background:var(--bg-card);border:1px solid var(--border-color);border-radius:10px;overflow:hidden;}
+    details[open]{border-color:var(--accent-primary);}
+    summary{padding:18px 24px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;color:var(--text-primary);font-size:.9375rem;}
+    summary::-webkit-details-marker{display:none;}
+    summary::after{content:'+';font-size:1.25rem;font-weight:400;color:var(--text-muted);flex-shrink:0;margin-left:16px;}
+    details[open] summary::after{transform:rotate(45deg);}
+    details p{padding:0 24px 18px;color:var(--text-secondary);font-size:.9375rem;line-height:1.7;}
+    .related-section{padding:48px 24px;border-top:1px solid var(--border-color);}
+    .related-section h3{font-size:1.125rem;font-weight:600;margin-bottom:20px;color:var(--text-primary);}
+    .related-links{display:flex;flex-wrap:wrap;gap:12px;}
+    .related-links a{display:inline-flex;align-items:center;gap:6px;background:var(--bg-card);border:1px solid var(--border-color);padding:10px 16px;border-radius:8px;color:var(--text-secondary);text-decoration:none;font-size:.875rem;transition:all .2s;}
+    .related-links a:hover{border-color:var(--accent-primary);color:var(--accent-primary);background:var(--bg-card-hover);}
+    .related-links a svg{width:16px;height:16px;}
+    .final-cta{text-align:center;background:linear-gradient(180deg,var(--bg-primary) 0%,var(--bg-secondary) 100%);padding:80px 24px;}
+    .final-cta h2{font-size:1.75rem;margin-bottom:16px;}
+    .final-cta p{color:var(--text-secondary);margin-bottom:32px;max-width:560px;margin-left:auto;margin-right:auto;}
+    .small-text{font-size:.875rem;color:var(--text-muted);margin-top:16px;}
+    .footer{padding:32px 24px;text-align:center;border-top:1px solid var(--border-color);}
+    .footer a{color:var(--accent-primary);text-decoration:none;font-size:.9rem;}
+    code{background:rgba(20,184,166,.1);padding:2px 6px;border-radius:4px;font-size:.9em;color:var(--accent-secondary);font-family:'Courier New',monospace;}
+    @media(max-width:640px){.hero{padding:40px 20px 60px;}section{padding:48px 20px;}.header{padding:16px 20px;}.trust-badges{flex-direction:column;align-items:center;}.cta-btn{width:100%;justify-content:center;}.related-links{flex-direction:column;}.related-links a{width:100%;}.dimensions-grid{grid-template-columns:1fr;}.mid-cta{padding:32px 24px;}.question-card{padding:20px;}}
   </style>
 </head>
 <body>
-  <header class="header">
-    <a href="/" class="logo">
-      <div class="logo-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
-      </div>
-      AceMyInterviews
-    </a>
-    <a href="/" class="header-cta">Start Practicing</a>
-  </header>
-
-  <nav class="breadcrumbs">
-    <a href="/">Home</a>
-    <span>›</span>
-    <a href="/interview">Interview Questions</a>
-    <span>›</span>
-    <span class="current">React Native Developer</span>
-  </nav>
-
-  <section class="hero">
-    <div class="hero-container">
-      <h1>React Native Developer Interview Questions & Practice Simulator</h1>
-      <p>Rehearse React Native developer interview scenarios with camera recording and performance analysis.</p>
-      <a href="/" class="cta-btn">
-        Begin Your Practice Session →
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </a>
-      <div class="trust-badges">
-        <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic interview questions</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>3 minutes per answer</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant pass/fail verdict</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Feedback on confidence, clarity, and delivery</span>
-      </div>
-    </div>
-  </section>
-  
-  <div class="social-proof"><p>Simulate real interview conditions before your actual interview</p></div>
-  
-  <div class="last-updated">
-    <svg viewBox="0 0 20 20" fill="currentColor">
-      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-    </svg>
-    Last updated: February 2026
-  </div>
-  
-  <section>
-    <div class="container">
-      <p class="intro-text">React Native developer interviews assess your ability to build performant cross-platform mobile applications using React Native. Interviewers evaluate your expertise in React Native architecture, native module integration, state management, navigation patterns, platform-specific optimizations, and your ability to deliver native-quality user experiences from a shared JavaScript codebase.</p>
-    </div>
-  </section>
-  
-  <section class="questions-section">
-    <div class="container">
-      <h2>Example React Native Developer Interview Questions</h2>
-      <ul class="questions-list">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How does the React Native bridge work and what are its performance implications?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe your approach to optimizing FlatList performance for large datasets.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you handle platform-specific code for iOS and Android in a shared codebase?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Walk me through implementing a custom native module for a feature not available in React Native.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you manage navigation in a complex React Native application?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe your strategy for handling offline capabilities and data synchronization.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you debug performance issues in a React Native application?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>What is your approach to state management in React Native and why?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you handle push notifications across both iOS and Android platforms?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe your experience with React Native's new architecture including Fabric and TurboModules.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you implement smooth animations that run on the native thread?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Walk me through your approach to testing a React Native application.</span></li>
-      </ul>
-    </div>
-  </section>
-  
-  <section>
-    <div class="container">
-      <p class="bridge-text">React Native developer interviews test cross-platform mobile expertise. AceMyInterviews generates challenges tailored to your React Native experience.</p>
-    </div>
-  </section>
-  
-  <section class="personalized-section">
-    <div class="container">
-      <h2>Practice Questions Tailored To Your Interview</h2>
-      <p>Your resume and job description are analyzed to create React Native developer questions.</p>
-      <ul class="features">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Cross-platform architecture and native integration scenarios</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Performance optimization and debugging challenges</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic timed simulation</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant feedback and pass/fail verdict</li>
-      </ul>
-      <a href="/" class="cta-btn">Begin Your Practice Session →</a>
-    </div>
-  </section>
-  
-  <section>
-    <div class="container">
-      <h2>What Interviewers Evaluate</h2>
-      <ul class="criteria-list">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>React Native architecture understanding</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Cross-platform development strategy</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Native module integration skills</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Performance optimization techniques</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Mobile UX implementation quality</li>
-      </ul>
-    </div>
-  </section>
-  
-  <section class="faq-section">
-    <div class="container">
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-list">
-        <details><summary>Do I need to know native iOS and Android development?</summary><p>Basic understanding of native platforms is important. You should know how to create native modules, understand platform-specific behaviors, and debug issues in Xcode and Android Studio. Deep native expertise is not always required.</p></details><details><summary>Should I learn the new architecture?</summary><p>Yes. Fabric renderer and TurboModules represent the future of React Native. Understanding JSI, the new bridge-less architecture, and how it improves performance will differentiate you in interviews.</p></details><details><summary>How much React web knowledge transfers?</summary><p>Core React concepts like hooks, context, and component lifecycle transfer directly. However, mobile-specific patterns like navigation, gesture handling, native threading, and platform-specific UI conventions require dedicated study.</p></details><details><summary>Is Expo experience relevant?</summary><p>Yes, especially for companies using managed workflows. Understanding both Expo and bare React Native workflows is valuable. Know when to eject from Expo and how to work with native code directly.</p></details>
-      </div>
-    </div>
-  </section>
-  
-  <div class="related-section">
-    <div class="container">
-      <h3>Related Interview Questions</h3>
-      <div class="related-links">
-        <a href="/interview/mobile-software-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Mobile Software Engineer Interview Questions</a><a href="/interview/cross-platform-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Cross Platform Developer Interview Questions</a><a href="/interview/flutter-software-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Flutter Software Engineer Interview Questions</a><a href="/interview/react-frontend-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>React Frontend Engineer Interview Questions</a><a href="/interview/mobile-application-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Mobile Application Engineer Interview Questions</a>
-      </div>
+<header class="header">
+  <a href="/" class="logo">
+    <div class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+    AceMyInterviews
+  </a>
+  <a href="/" class="header-cta">Start Practicing</a>
+</header>
+<nav class="breadcrumbs">
+  <a href="/">Home</a><span>›</span>
+  <a href="/interview">Interview Questions</a><span>›</span>
+  <span class="current">React Native Developer</span>
+</nav>
+<section class="hero">
+  <div class="hero-container">
+    <h1>React Native Developer Interview Questions &amp; Answers (2026 Guide)</h1>
+    <p class="hero-subtitle">Prepare for React Native interviews covering cross-platform architecture, performance optimization, native module integration, navigation, state management, and the New Architecture.</p>
+    <a href="/" class="cta-btn">Start Free Practice Interview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    <div class="trust-badges">
+      <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>30+ realistic React Native interview questions</span>
+      <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Answer frameworks with sample responses</span>
+      <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Timed practice with instant feedback</span>
+      <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Technical and behavioral scenarios</span>
     </div>
   </div>
-  
-  <section class="final-cta">
-    <div class="container">
-      <h2>Ready To Practice React Native Developer Interview Questions?</h2>
-      <p>Practice React Native developer interview questions tailored to your experience.</p>
-      <a href="/" class="cta-btn">Start Your Interview Simulation →</a>
-      <p class="small-text">Takes less than 15 minutes.</p>
-    </div>
-  </section>
-  
-  <footer class="footer">
-    <a href="/">← Back to AceMyInterviews</a>
-  </footer>
+</section>
+<div class="social-proof"><p>Simulate real React Native interview conditions with timed questions, follow-ups, and detailed scoring.</p></div>
+<div class="last-updated">
+  <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+  Last updated: March 2026
+</div>
+<section><div class="container"><p class="intro-text">React Native interview questions assess your ability to build performant cross-platform mobile applications from a shared JavaScript/TypeScript codebase. Interviewers evaluate your understanding of React Native's architecture—both the legacy bridge and the New Architecture (Fabric, TurboModules, Codegen). Expect questions on performance optimization, native module integration, navigation patterns, state management, platform-specific code, and delivering native-quality experiences on both iOS and Android. Companies want developers who understand when to use React Native's built-in components versus dropping down to native code, and who can diagnose and fix performance bottlenecks. Roles range from greenfield mobile apps to migrating existing native apps to React Native, with Expo increasingly used as a production-grade framework.</p></div></section>
+<!-- SECTION 1: Core Architecture -->
+<section class="section-dark" id="core-architecture">
+<div class="container">
+<h2>Core React Native Architecture Questions</h2>
+<p class="section-intro">Architecture questions separate strong candidates from weak ones. Interviewers expect you to articulate the legacy bridge, the New Architecture (Fabric + TurboModules + JSI), and the performance implications of each.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Explain how React Native renders UI. What is the difference between the legacy bridge and the New Architecture?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">This is fundamental to understanding React Native's design and performance characteristics. It reveals whether you grasp both the historical bridge pattern and the modern Fabric renderer.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of JS thread, UI thread, and asynchronous bridge communication</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of Fabric's synchronous JSI-based rendering and TurboModules</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of New Architecture benefits: faster execution, better interoperability</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Legacy bridge: React's virtual DOM lives in the JS thread; updates are serialized to JSON, sent asynchronously across the bridge to the native thread, deserialized, and applied to native views</li>
+<li>The bottleneck: JSON serialization and async communication cause latency that makes smooth 60 FPS animations difficult</li>
+<li>New Architecture (Fabric + JSI): replaces async JSON with synchronous direct JS-native communication via the JavaScript Interface—no serialization overhead</li>
+<li>TurboModules replace the old native module system with Codegen-generated type-safe interfaces, eliminating loose string-based contracts</li>
+<li>Fabric is also written in C++ for better performance on complex view hierarchies</li>
+</ul></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">The legacy bridge uses async JSON serialization: React renders to a virtual DOM in the JS thread, changes are batched into JSON, sent across the bridge, deserialized in the native thread, and applied to native views. This latency makes smooth 60 FPS animations difficult. The New Architecture replaces this with Fabric + JSI: React's virtual DOM updates native views synchronously via the JavaScript Interface, eliminating serialization delays. TurboModules generate type-safe native module interfaces from TypeScript, replacing the bridge's loose contract. Fabric also enables better C++ optimization for rendering, making animations and complex layouts faster. Most production apps are transitioning to New Architecture for these performance wins.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What is Fabric and how does it improve performance compared to the legacy renderer?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Fabric is the current rendering engine in React Native 0.76+. Understanding it shows you're current with React Native's direction and performance optimizations.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of synchronous rendering and JSI-based communication</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of improved layout performance and C++ optimization</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of Fabric's benefits for animations and complex UIs</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Fabric is React Native's new rendering engine using JSI for synchronous communication between JS and native code</li>
+<li>Legacy renderer batches UI updates asynchronously; Fabric executes layout and rendering synchronously, reducing visible latency</li>
+<li>Fabric is written in C++ for better cross-platform performance on complex view hierarchies and animations</li>
+<li>Enables features like concurrent rendering (React 18) and better interoperability with native views</li>
+<li>Default since React Native 0.76—if you're starting a new project today, you're using Fabric</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What are TurboModules and why are they important?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">TurboModules are the new native module system in the New Architecture. This tests whether you understand modern patterns for JS-native integration.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of type-safe native module generation via Codegen</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of performance benefits (no bridge serialization)</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of how TurboModules enable synchronous native calls</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>TurboModules are type-safe native modules generated from TypeScript/Flow specs using Codegen</li>
+<li>The legacy module system used loose string-based contracts—TurboModules use JSI for direct, synchronous JS-native calls with full type safety</li>
+<li>Codegen automatically generates both native-side and JS-side code, reducing boilerplate and catching contract mismatches at build time</li>
+<li>Better IDE support: you get autocompletion and type errors when calling native module methods from TypeScript</li>
+<li>Lazy initialization: TurboModules load only when first used, improving startup time</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How does React Native differ from React for the web?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">This tests whether your React web knowledge translates appropriately, and whether you understand React Native's unique mobile constraints.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of native component rendering vs. DOM</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of styling differences (no CSS, StyleSheet with Flexbox model)</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of mobile-specific constraints: navigation, gestures, screen dimensions</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>React renders to DOM elements (HTML/CSS); React Native renders directly to native iOS UIViews and Android Views—no HTML</li>
+<li>No CSS in React Native: styling uses <code>StyleSheet</code> JavaScript objects with a Flexbox-inspired layout model, no cascade</li>
+<li>Navigation: web uses browser history and URLs; React Native uses native view stacks and gesture-based navigation</li>
+<li>List rendering: use <code>FlatList</code> (virtualized) instead of mapping arrays; web can render everything, mobile cannot</li>
+<li>What transfers: hooks, state management, component composition, Context, Redux—all port directly</li>
+</ul></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">React renders to DOM elements using HTML and CSS; React Native renders directly to native iOS UIViews and Android Views. Web uses browser navigation (URLs, back button); mobile uses view stacks and gesture-based navigation. Web styling uses CSS cascades; React Native uses JavaScript <code>StyleSheet</code> objects with Flexbox-inspired layout—no cascading. Component patterns, hooks, and state management all transfer. The key shift: think in terms of native components and mobile UX constraints, not DOM and browser APIs.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What is the JavaScript Interface (JSI) and how does it enable the New Architecture?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">JSI is the core technology powering the New Architecture. Understanding it shows deep knowledge of React Native's modernization path.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of synchronous JS-native communication without serialization</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of C++ integration and how JSI enables Reanimated worklets</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of JSI's role underpinning both Fabric and TurboModules</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>JSI is a lightweight C++ interface that allows JavaScript and native code to call each other synchronously without JSON serialization</li>
+<li>The legacy bridge was asynchronous and JSON-based; JSI is synchronous and direct—calls feel like native function invocations</li>
+<li>This unlocks features like Reanimated worklets: JS functions that run directly on the UI thread, enabling 60+ FPS animations even while the JS thread is busy</li>
+<li>Both Fabric (rendering) and TurboModules (native modules) depend on JSI as their communication layer</li>
+<li>JSI also enables C++ libraries to be shared between iOS and Android, reducing platform-specific implementation</li>
+</ul></div>
+</div>
+</div></section>
+<!-- SECTION 2: Performance -->
+<section id="performance-optimization">
+<div class="container">
+<h2>Performance Optimization Questions</h2>
+<p class="section-intro">Performance is the #1 interview differentiator for React Native roles. Interviewers expect you to understand the JS thread vs. UI thread, FlatList virtualization, memoization, and animation strategies—and to profile before optimizing.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you optimize FlatList for rendering large datasets?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">FlatList is the go-to component for scrollable lists. Optimizing it is a practical, high-impact skill that interviewers expect from any candidate who's worked on real apps.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of virtualization/windowing and <code>removeClippedSubviews</code></li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of memoization with <code>React.memo</code> and <code>useCallback</code></li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of stable keys and <code>getItemLayout</code> for scroll performance</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>FlatList virtualizes by default—only visible items are rendered; this is the core optimization, not something you add</li>
+<li>Set <code>removeClippedSubviews={true}</code> to unload offscreen views and free memory on large lists</li>
+<li>Reduce <code>maxToRenderPerBatch</code> (default 10) for slower devices; increase <code>updateCellsBatchingPeriod</code> to batch updates</li>
+<li>Memoize <code>renderItem</code> with <code>useCallback</code> and wrap list item components with <code>React.memo</code> to prevent unnecessary re-renders</li>
+<li>Use stable, unique <code>key</code> props (never index); provide <code>getItemLayout</code> if all items are the same height—dramatically speeds up scroll-to-index</li>
+</ul></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">FlatList virtualizes—only renders visible items. Optimize by: (1) using <code>removeClippedSubviews={true}</code> to unload offscreen views; (2) reducing <code>maxToRenderPerBatch</code> if rendering is slow; (3) memoizing <code>renderItem</code> with <code>useCallback</code> and wrapping item components with <code>React.memo</code>; (4) using stable key props—never index; (5) providing <code>getItemLayout</code> if items are fixed height, for faster scroll calculations. Profile in React DevTools before over-optimizing—find what's actually slow first.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Explain the difference between the JS thread and UI thread. Why does it matter?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">This is crucial for understanding React Native performance bottlenecks and writing smooth animations that don't stutter when JS is under load.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of React execution on the JS thread and native updates on the UI thread</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of JS thread blocking and its impact on responsiveness</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of Reanimated worklets for running animations on the UI thread</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>JS thread: all React code runs here—state updates, renders, user logic, and event handlers</li>
+<li>UI thread: native view layout and rendering happen here; if blocked, frames drop</li>
+<li>If the JS thread is blocked (expensive computation, large renders), the UI thread can still animate—but JS callbacks and state updates stall, causing unresponsive touch handling</li>
+<li>Solution: use Animated API's <code>useNativeDriver: true</code> to move animations to the UI thread, or use Reanimated 3 worklets which run JS directly on the UI thread</li>
+<li>Use Hermes for faster JS execution; offload heavy computation to native modules or background tasks</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you avoid unnecessary re-renders in React Native?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Preventing re-renders is the #1 performance lever in React Native. This tests practical optimization knowledge every production developer needs.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of <code>React.memo</code>, <code>useMemo</code>, and <code>useCallback</code></li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of stable references and identity equality</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of state colocation and how lifting state too high cascades re-renders</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Wrap components with <code>React.memo</code>—skips re-render if props are unchanged (shallow comparison)</li>
+<li>Use <code>useCallback</code> to memoize callbacks passed as props so child components don't re-render on every parent render</li>
+<li>Use <code>useMemo</code> for expensive computations whose results are passed as props</li>
+<li>Keep state as close as possible to where it's used—lifting state too high causes cascading re-renders across the tree</li>
+<li>Never create new object/array literals inline as props (<code>style={{ margin: 8 }}</code> creates a new object on every render)—extract to <code>StyleSheet.create</code> or <code>useMemo</code></li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you optimize animations in React Native? What role does the native driver play?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Smooth animations are critical for native-quality mobile UX. This tests your understanding of performance-critical rendering.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of <code>useNativeDriver: true</code> in the Animated API</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of Reanimated 3 worklets for complex UI-thread animations</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of 60 FPS targets and profiling on real devices</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Native driver (<code>useNativeDriver: true</code>): offloads animation execution to the native thread—animations run even if the JS thread is blocked</li>
+<li>Limitation: native driver only supports transform and opacity properties, not layout properties like width or height</li>
+<li>For complex animations: use React Native Reanimated 3—write worklets (JS functions that run on the UI thread) to update animated values at 60+ FPS</li>
+<li><code>useAnimatedStyle</code> lets you respond to gestures and state changes with UI-thread precision</li>
+<li>Always profile on real devices—simulator performance is misleading; target 60 FPS on older devices, 120 FPS on ProMotion displays</li>
+</ul></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">Use Animated API with <code>useNativeDriver: true</code> to run animations on the native thread without JS thread involvement—even if JS is blocked, animations stay smooth. For complex, state-driven animations, use Reanimated 3: write worklets that run on the UI thread and use <code>useAnimatedStyle</code> to respond to gestures and state changes with 60 FPS precision. Always profile on actual devices—simulator performance is misleading. Monitor frame time with React DevTools Profiler and native tools (Instruments on iOS, Android Profiler on Android).</p></div>
+</div>
+</div></section>
+<!-- SECTION 3: Native Modules -->
+<section class="section-dark" id="native-module-integration">
+<div class="container">
+<h2>Native Module Integration Questions</h2>
+<p class="section-intro">Knowing when and how to write native code is what separates experienced React Native developers. Interviewers test your judgment about when to reach for native, and your practical ability to build and link native modules.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you build a custom native module in React Native?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Building native modules is essential when you need platform-specific functionality. This tests practical integration skills beyond the JavaScript layer.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of TypeScript spec definition and Codegen</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of iOS (Objective-C/Swift) and Android (Kotlin) implementation patterns</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of differences between TurboModule (New Architecture) and legacy NativeModule</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Define a TypeScript spec (NativeModule interface) describing your module's API—this is the single source of truth</li>
+<li>Run Codegen to auto-generate native and JS boilerplate from the spec, eliminating manual type alignment</li>
+<li>iOS: implement an Objective-C (or Swift with ObjC bridge) class conforming to the generated spec protocol</li>
+<li>Android: implement a Kotlin class extending <code>TurboReactPackage</code> or the legacy <code>ReactContextBaseJavaModule</code></li>
+<li>Handle async operations with Promises or callbacks; test on both platforms—threading and API availability often differ</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you handle platform-specific code in React Native?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">iOS and Android require different implementations in real apps. This tests your ability to manage platform divergence cleanly.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of <code>Platform.OS</code> conditionals and platform-specific extensions</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of <code>.ios.js</code> / <code>.android.js</code> file extensions for larger divergences</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of when to diverge vs. keeping platform parity</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Inline: <code>Platform.OS === 'ios'</code> or <code>Platform.select({ ios: ..., android: ... })</code> for small conditional values</li>
+<li>File extensions: <code>MyComponent.ios.tsx</code> and <code>MyComponent.android.tsx</code>—Metro bundler imports the correct file automatically</li>
+<li>Use platform-specific native modules when underlying APIs differ (e.g., <code>StatusBar</code>, haptic feedback, push notifications)</li>
+<li>Document all divergence with comments explaining why—future maintainers need context</li>
+<li>Prefer shared code first; only diverge when there's a meaningful platform difference in behavior or design</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>When should you write native code versus using a JavaScript library?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">This is a high-level architectural judgment question. The ability to make this call separates experienced developers from those who over-engineer or under-utilize native capabilities.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of performance trade-offs (native is faster but higher maintenance cost)</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of platform API availability and JS alternatives</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Judgment about when native is genuinely necessary vs. premature optimization</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Default to JavaScript libraries: cross-platform, easier to test, faster to develop, lower maintenance burden</li>
+<li>Use native modules when: (1) you need APIs unavailable in JS (Bluetooth, NFC, ARKit/ARCore, background processing); (2) performance is non-negotiable after profiling (real-time audio/video, image processing); (3) integrating legacy native SDKs</li>
+<li>Profile JS first—many perceived JS performance issues are actually re-render issues, fixable without native code</li>
+<li>Document why each native module exists; over time, JS libraries often catch up and the native module becomes dead weight</li>
+</ul></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">Choose JavaScript libraries first—they're cross-platform, easier to test, and faster to develop. Use native modules when: (1) you need platform-specific APIs (Bluetooth, camera hardware, NFC, background processing); (2) performance is non-negotiable after profiling (real-time image filters, audio processing); (3) integrating with existing native SDKs. Profile JS first—most perceived performance problems are actually re-render issues that memoization fixes. Avoid the maintenance cost of unnecessary native code. Start with JS; add native only when profiling shows it's genuinely needed.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you link and configure native dependencies in React Native?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Linking native libraries is a practical skill that surfaces constantly in setup and troubleshooting—interviewers want to know you can handle it independently.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of autolinking (default since 0.60) vs. manual linking</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of iOS CocoaPods (<code>pod install</code>) and Android Gradle</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of common linking failures and how to debug them</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Most libraries use autolinking since React Native 0.60—<code>npm install</code> then <code>cd ios && pod install</code> is sufficient for the vast majority</li>
+<li>iOS: CocoaPods manages native dependencies; always run <code>pod install</code> after adding native packages; Podfile.lock should be committed</li>
+<li>Android: dependencies are declared in <code>build.gradle</code>; Gradle sync happens automatically in Android Studio</li>
+<li>Debugging failures: check build logs for missing symbols (iOS) or compilation errors (Android); verify the library supports your React Native version</li>
+<li>For Expo: most native dependencies need a dev client or Config Plugin; OTA updates don't include native code changes</li>
+</ul></div>
+</div>
+</div></section>
+<!-- SECTION 4: Navigation & State Management -->
+<section id="navigation-state-management">
+<div class="container">
+<h2>Navigation &amp; State Management Questions</h2>
+<p class="section-intro">Navigation and state management architecture decisions have long-term consequences. Interviewers assess your command of React Navigation patterns, deep linking, and your ability to choose the right state management approach for different concerns.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Describe how React Navigation works. When would you use Stack, Tab, or Drawer navigators?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">React Navigation is the standard navigation library. Interviewers want to see you understand navigator types and how to compose them for complex routing structures.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of Stack (screen history), Tab (bottom tabs), and Drawer (side menu) navigators</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of nesting navigators and complex routing hierarchies</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of deep linking and navigation state serialization</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Stack Navigator: maintains a history stack, screens push/pop like native navigation—use for flows with forward/back (login → home → detail)</li>
+<li>Tab Navigator: renders bottom (iOS) or top (Android) tabs, each tab preserves its own screen history—use for primary sections of an app</li>
+<li>Drawer Navigator: provides a side-menu slide-in panel—use for secondary navigation or settings on larger tablets</li>
+<li>Compose them: a Tab Navigator at the root with Stack Navigators inside each tab is the most common production pattern</li>
+<li>React Navigation manages a JS-side navigation state tree and serializes it to URLs for deep linking; use <code>navigate()</code> imperatively or <code>&lt;Link&gt;</code> declaratively</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you implement deep linking in React Native?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Deep linking enables URLs to open specific app screens—critical for web integration, push notification taps, and marketing campaigns. It tests practical platform-configuration knowledge.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of URL schemes vs. universal links (iOS) and app links (Android)</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of React Navigation's linking configuration</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of dynamic routes, parameters, and testing on both platforms</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Define a <code>linking</code> config in <code>NavigationContainer</code> mapping URL patterns to screens and params: <code>myapp://profile/123</code> maps to the Profile screen with <code>id: '123'</code></li>
+<li>iOS: register custom URL schemes in <code>Info.plist</code> or use universal links (HTTPS) which require an <code>apple-app-site-association</code> file on your server</li>
+<li>Android: register intent filters in <code>AndroidManifest.xml</code> for URL schemes; use App Links (HTTPS) for verified, phishing-resistant links</li>
+<li>Test on iOS simulator: <code>xcrun simctl openurl booted 'myapp://profile/123'</code>; on Android: <code>adb shell am start -a android.intent.action.VIEW -d 'myapp://...'</code></li>
+<li>Handle cold-start links (app not running) differently from warm-start (app in background)—React Navigation handles both via <code>getInitialURL</code></li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What state management approach would you use for a large React Native app and why?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Choosing the right state management is an architectural decision with long-term consequences. Interviewers assess whether you can reason about trade-offs rather than just naming libraries.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of Redux, Zustand, Context, and TanStack Query trade-offs</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of global state vs. local state vs. server state separation</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of performance implications (subscription overhead, re-render cascades)</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Separate concerns: global app state (auth, theme), screen-local state (<code>useState</code>), server/async state (TanStack Query)</li>
+<li>Global state options: Zustand (minimal boilerplate, fast subscriptions, great DX); Redux (mature, DevTools, middleware ecosystem, steeper learning curve)</li>
+<li>TanStack Query eliminates entire categories of state complexity: loading, error, caching, invalidation, stale-while-revalidate—don't reinvent this with thunks or sagas</li>
+<li>Context is fine for low-frequency updates (theme, locale); avoid it for high-frequency state (form input, scroll position) as it re-renders all consumers</li>
+<li>Keep state as local as possible—every level you lift state, you add re-render surface area</li>
+</ul></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">For a large app I'd use a hybrid approach: Zustand or Redux for global app state (auth, theme, settings), local <code>useState</code> for screen and component state, and TanStack Query for all server data and caching. Zustand has minimal boilerplate and excellent performance; Redux is better when you need rich DevTools and middleware. TanStack Query eliminates the need for complex async state—loading, error, caching, invalidation are handled automatically. Keep state close to where it's used to minimize re-renders. Avoid Context for frequently-changing data as it re-renders all consumers. This separation keeps code maintainable, testable, and performant.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you handle offline data and local storage in React Native?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Offline-first architecture is expected in modern mobile apps. This tests practical data persistence knowledge and your understanding of sync strategies.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of MMKV (fast key-value) vs. SQLite/Realm for structured data</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of sync strategies and conflict resolution for offline-first apps</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of TanStack Query's role in cache management and stale-while-revalidate</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Key-value data (session tokens, preferences): use MMKV—significantly faster than legacy AsyncStorage due to native implementation</li>
+<li>Structured/relational data: use WatermelonDB or SQLite (via <code>react-native-sqlite-storage</code>) for complex queries; Realm for real-time sync and reactive data</li>
+<li>Offline-first pattern: write to local DB first, queue changes, sync when the network returns; handle conflict resolution server-side or with timestamps</li>
+<li>TanStack Query's <code>persistQueryClient</code> plugin can persist the query cache to AsyncStorage/MMKV, enabling stale-while-revalidate even across app restarts</li>
+<li>Test offline mode by toggling Airplane Mode or using the iOS Simulator's Network Link Conditioner</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you implement push notifications cross-platform in React Native?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Push notifications are a near-universal production requirement. Interviewers want to see you understand the APNs/FCM infrastructure and permission model, not just the library API.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of APNs (iOS) and FCM (Android) infrastructure</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of foreground, background, and notification-tap handling</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of permission handling and real-device testing requirements</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Use <code>react-native-firebase</code> Messaging module for a unified FCM/APNs API; or Expo Notifications if using Expo managed workflow</li>
+<li>iOS: configure APNs in Apple Developer Portal, upload an APNs key to Firebase, and handle the permission prompt (iOS 13+ requires explicit request)</li>
+<li>Android: configure Firebase project, add <code>google-services.json</code>; notifications work without explicit permission on Android 12 and below, require it on 13+</li>
+<li>Handle three states: foreground (app open—show in-app alert), background (system tray), and notification tap (navigate to relevant screen using deep linking)</li>
+<li>Always test on physical devices—simulators have very limited push notification support</li>
+</ul></div>
+</div>
+</div></section>
+<!-- SECTION 5: Testing & Debugging -->
+<section class="section-dark" id="testing-debugging">
+<div class="container">
+<h2>Testing &amp; Debugging Questions</h2>
+<p class="section-intro">Interviewers evaluate your testing strategy across unit, component, and E2E layers, and your ability to systematically debug crashes and performance issues on both platforms.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you write unit tests for React Native components with Jest?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Jest is the standard testing framework for React Native. This tests foundational testing habits and understanding of how to isolate components from native dependencies.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of mocking native modules and async operations</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of <code>act()</code> wrappers and testing state updates</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of when to use snapshots vs. behavior assertions</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Use Jest with <code>@testing-library/react-native</code>—test behavior not implementation details</li>
+<li>Mock native modules with <code>jest.mock()</code> or the built-in <code>__mocks__</code> directory; React Native auto-mocks most of its own APIs</li>
+<li>Wrap state updates with <code>act()</code> to ensure React processes all pending updates before assertions</li>
+<li>Mock API calls with <code>jest.fn()</code> or Mock Service Worker (msw) for more realistic network simulation</li>
+<li>Prefer assertions on user-visible output over snapshots for large components—snapshots break easily and obscure intent</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you do component testing with React Native Testing Library?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Testing Library encourages testing from the user's perspective rather than implementation details. This tests whether your tests are resilient to refactoring.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of accessibility-based queries (<code>getByRole</code>, <code>getByLabelText</code>) vs. <code>testID</code></li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of <code>fireEvent</code> and <code>waitFor</code> for async interactions</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of mocking navigation and native dependencies in tests</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Query by accessibility role first (<code>getByRole('button', { name: 'Submit' })</code>)—it tests the a11y tree and is resilient to UI refactors</li>
+<li>Fall back to <code>getByText</code> for text content; use <code>getByTestId</code> sparingly as a last resort for dynamic content</li>
+<li>Simulate interactions with <code>fireEvent.press(element)</code>, <code>fireEvent.changeText(input, 'value')</code></li>
+<li>Use <code>waitFor</code> and <code>findBy*</code> for elements that appear asynchronously after API calls or state updates</li>
+<li>Mock React Navigation with a stub navigator wrapper—don't test navigation in unit tests; test it in E2E</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What are the best tools for end-to-end (E2E) testing in React Native?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">E2E testing validates entire user flows on real/simulated devices—critical for catching native integration issues that unit tests miss.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of Detox and Maestro frameworks and their trade-offs</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of real device vs. simulator trade-offs for CI</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of flakiness mitigation strategies</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Detox: mature, JS-based, synchronizes with app idle state to eliminate most timing flakiness—write tests with a clean async API</li>
+<li>Maestro: simpler YAML-based flows, cloud-friendly execution, easier to onboard non-engineers—better for basic user workflow smoke tests</li>
+<li>CI strategy: run on simulators for speed; run on real devices (Firebase Test Lab, AWS Device Farm) for release gates</li>
+<li>Reduce flakiness: use explicit waits (<code>waitFor</code>), isolate test state, mock API calls for deterministic results</li>
+<li>Scope E2E tests to critical user flows (login, checkout, onboarding)—don't test business logic in E2E; keep that in unit tests</li>
+</ul></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">Use Detox for comprehensive E2E testing—it automatically synchronizes with the app's idle state, eliminating most timing flakiness. Tests are clean and readable. Maestro is simpler—YAML-based flows that run in the cloud—great for basic user workflows and non-developer-authored tests. Run on simulators in CI for speed; run on real devices before releases for accuracy. Focus E2E on critical flows: login, onboarding, checkout. Mock API responses to ensure determinism. Mitigate flakiness by avoiding hard timeouts and using explicit synchronization. Don't test business logic in E2E—that belongs in unit tests.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you debug performance issues and crashes in React Native?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Systematic debugging is a core skill. This tests whether you have a structured approach rather than guessing and whether you use the right tools for each problem type.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of React Native DevTools, and native profilers (Instruments, Android Profiler)</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of crash reporting with Sentry or Firebase Crashlytics</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of distinguishing JS crashes from native crashes</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Crashes: set up Sentry or Firebase Crashlytics first—stack traces in production are non-negotiable; they distinguish JS crashes from native crashes and track affected user counts</li>
+<li>Performance: React Native DevTools Profiler identifies slow component renders and re-render counts; native profilers (Instruments on iOS, Android Profiler on Android) reveal CPU, memory, and GPU usage</li>
+<li>JS performance: profile first, then optimize; profile on release builds on low-end devices—debug builds are misleadingly slow</li>
+<li>Memory leaks: look for component trees that grow over time in native memory profilers; common causes are event listeners not removed in cleanup</li>
+<li>Always reproduce issues on real devices, not simulators—performance and crash behavior can differ significantly</li>
+</ul></div>
+</div>
+</div></section>
+<!-- SECTION 6: Expo & Tooling -->
+<section id="expo-tooling">
+<div class="container">
+<h2>Expo &amp; Tooling Questions</h2>
+<p class="section-intro">Expo has matured into a production-grade framework. Interviewers expect you to reason clearly about Expo vs. bare React Native trade-offs, EAS Build/Submit, and OTA update strategies.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What are the key differences between Expo and bare React Native workflow? When would you choose each?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">This is a foundational architectural question. Interviewers want to see nuanced judgment—not just "Expo is easier."</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of Expo's managed environment and EAS infrastructure</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of Config Plugins and dev clients as alternatives to ejecting</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of Expo SDK module ecosystem and OTA update support</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Expo managed: pre-configured native layer, Expo SDK modules (Camera, Maps, Notifications) work out of the box, EAS Build for cloud builds—no Xcode/Android Studio required</li>
+<li>Bare React Native: full control over native code, direct Xcode/Android Studio access, can integrate any native SDK—but you own build complexity</li>
+<li>The gap has narrowed: Expo Config Plugins let you modify native code programmatically without ejecting; dev clients allow custom native modules in Expo</li>
+<li>Choose Expo unless: you need legacy native SDK integration, very specialized performance optimization, or deeply custom native behavior</li>
+<li>Recommendation: start with Expo; add dev clients or Config Plugins before ejecting—ejecting is irreversible</li>
+</ul></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">Expo is production-grade: EAS Build handles iOS/Android builds without managing Xcode or Android Studio. Expo SDK provides pre-built native modules that work immediately. EAS Update enables OTA updates for JS-only changes. Great for teams without native expertise and for rapid iteration. Bare React Native offers full flexibility for custom native code and legacy SDK integration but requires owning the build toolchain. My recommendation: start with Expo—Config Plugins and dev clients now cover most custom native needs without ejecting. Eject only as a last resort since it's a one-way door.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Explain EAS Build and EAS Submit. How do they improve the development workflow?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">EAS is Expo's CI/CD solution for mobile. Understanding it shows awareness of production build automation and its impact on team productivity.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of cloud-based builds and elimination of local toolchain dependencies</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of EAS Submit automating app store submission and signing</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of build caching and CI/CD integration via git</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>EAS Build: builds <code>.ipa</code> and <code>.apk</code>/<code>.aab</code> in the cloud—no Mac required for iOS builds; team members on Windows or Linux can ship iOS apps</li>
+<li>Configure build profiles in <code>eas.json</code> (development, preview, production); CI triggers builds on push</li>
+<li>EAS Submit: automates submission to App Store Connect and Google Play, handling code signing and metadata—eliminates manual upload steps</li>
+<li>Build caching: Expo caches intermediate build artifacts, dramatically reducing rebuild times for unchanged native code</li>
+<li>Development builds: EAS can produce shareable development builds for testing that include custom native code—no TestFlight waiting required for internal testers</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you implement over-the-air (OTA) updates in React Native?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">OTA updates allow shipping JS bug fixes and feature tweaks without waiting for app store review. This tests practical production ops knowledge.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of EAS Update (Expo) and CodePush (Microsoft) options</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of staged rollouts, rollback, and channel management</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of what OTA can and cannot update (JS/assets only, not native code)</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>OTA updates only ship JS bundle and asset changes—native code changes still require a full app store build and review</li>
+<li>EAS Update (Expo): push updates with <code>eas update --branch production</code>; apps check for updates on launch and apply them on next restart</li>
+<li>CodePush (Microsoft AppCenter): similar concept for bare React Native; supports staged rollouts (gradual % deployment) and rollback on high error rates</li>
+<li>Channel management: maintain separate production, staging, and development channels; test updates in staging before promoting to production</li>
+<li>App store policy: OTA updates must not change core functionality in ways that bypass review; use for bug fixes and content updates, not feature additions that bypass review</li>
+</ul></div>
+</div>
+</div></section>
+<!-- SECTION 7: Behavioral -->
+<section class="section-dark" id="behavioral-react-native">
+<div class="container">
+<h2>Behavioral React Native Developer Interview Questions</h2>
+<p class="section-intro">Behavioral questions reveal how you navigate real-world challenges—migrations, production crises, performance regressions, and team buy-in. Anchor answers in concrete outcomes using the STAR method.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Describe a time you migrated a native iOS or Android app to React Native. What challenges did you face?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Native-to-RN migrations are complex, high-stakes projects. This tests project judgment, stakeholder communication, and ability to bridge native and React Native code during a transition.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Evidence of incremental migration strategy and risk mitigation</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Technical depth in bridging native and RN code during transition</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Communication with stakeholders about timelines and quality trade-offs</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Context: app type, team size, what drove the migration decision (shared codebase, team expertise, velocity)</li>
+<li>Challenge: specific friction points—feature parity, native module bridging, performance expectations, developer experience</li>
+<li>Solution: incremental migration using React Native Navigation or native container approach; parallel development to avoid blocking features</li>
+<li>Risk mitigation: gradual user rollout, feature flags, rollback plan; A/B testing new RN screens vs. native screens</li>
+<li>Result: timeline, velocity improvement, code reduction, platform parity—quantify wherever possible</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Tell me about a critical production crash you debugged. How did you diagnose and fix it?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Production debugging under pressure tests composure, systematic thinking, and technical depth. Interviewers want a structured story, not a vague "I fixed it."</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Methodical debugging approach: logs, error reporting, reproduction steps</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Ability to communicate impact and prioritize response</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Root-cause analysis and prevention measures taken after the fix</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Symptom: what crashed, which platform, how many users affected, when it started</li>
+<li>Investigation: Sentry/Crashlytics stack traces, reproduction steps, correlation with recent deployments or data changes</li>
+<li>Root cause: memory leak, race condition, unhandled native exception, platform-specific API behavior, third-party library update</li>
+<li>Fix: implementation, testing on affected platform, staged rollout via OTA or hotfix build</li>
+<li>Prevention: monitoring alert threshold, added test coverage, code review process change, post-mortem with team</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Describe a situation where you improved app performance due to slowness or high memory usage.</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Performance optimization is high-impact and highly valued. Interviewers want evidence of profiling discipline—not premature optimization—and measurable results.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Evidence of profiling before optimizing, not guessing</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of trade-offs between developer time and user experience</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Measurable improvements with before/after metrics</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Problem: specific symptoms—slow list scrolling, high memory usage causing crashes on older devices, janky animations</li>
+<li>Measurement: profiling tools and before/after metrics—frame time, component render count, memory baseline</li>
+<li>Root cause: unnecessary re-renders (missing memoization), unoptimized FlatList, large uncompressed images, event listeners leaking</li>
+<li>Solution: targeted optimizations—memoization with <code>React.memo</code>/<code>useCallback</code>, image compression pipeline, <code>removeClippedSubviews</code>, listener cleanup in <code>useEffect</code> return</li>
+<li>Impact: quantified improvement (FPS increase, memory reduction %, crash rate drop); user feedback or app store rating improvement</li>
+</ul></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How would you convince a team to adopt React Native for a new project instead of native development?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">This tests communication skills, balanced judgment, and your ability to think beyond technical details to team dynamics and business outcomes.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of React Native's real strengths and honest limitations</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Ability to match technology choice to team skills and project goals</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Balanced perspective—not overselling React Native</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><ul class="framework-list">
+<li>Lead with team strengths: if the team is JS/React-fluent, React Native removes the barrier of learning Swift/Kotlin</li>
+<li>Business case: shared codebase means faster feature parity across iOS and Android; fewer engineers needed for equivalent output</li>
+<li>Honest trade-offs: certain features (complex custom UI, deep OS integration) require native modules; React Native isn't zero-native</li>
+<li>Evidence: Meta (Facebook, Instagram), Shopify, and many top-tier apps are built on React Native—it's proven at scale</li>
+<li>De-risk with a pilot: propose building one non-critical feature in React Native, measuring developer experience and performance before committing</li>
+</ul></div>
+</div>
+</div></section>
+<!-- MID CTA -->
+<section>
+<div class="mid-cta">
+<h2>Practice With Questions Tailored to Your Interview</h2>
+<p>AceMyInterviews generates React Native-specific interview questions based on your job description and resume. Get personalized questions on your weak areas, instant feedback, and detailed answer comparisons to refine your performance.</p>
+<div class="mid-cta-features">
+<span class="mid-cta-feature"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Resume-based question generation targeting your experience level</span>
+<span class="mid-cta-feature"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Follow-up questions simulating real interviewer behavior</span>
+<span class="mid-cta-feature"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Industry-specific scenarios (migrations, performance debugging, native integration)</span>
+<span class="mid-cta-feature"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant feedback on answer completeness and clarity</span>
+</div>
+<a href="/" class="cta-btn">Start Free Practice Interview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+</div>
+</section>
+
+<!-- WHAT INTERVIEWERS EVALUATE -->
+<section class="section-dark">
+<div class="container">
+<h2>What React Native Interviewers Evaluate</h2>
+<p class="section-intro">Beyond individual questions, interviewers assess your architectural maturity, platform instincts, and ability to diagnose problems systematically.</p>
+<div class="dimensions-grid">
+<div class="dimension-card"><h3>Architecture Understanding</h3><p>Deep knowledge of React Native's rendering pipeline—both the legacy bridge and New Architecture (Fabric, TurboModules, Codegen). You should articulate performance implications and when to choose one approach over another.</p></div>
+<div class="dimension-card"><h3>Cross-Platform Thinking</h3><p>Ability to balance code sharing with platform-specific quality. Knowing when to use <code>Platform.OS</code>, native modules, or platform-specific libraries while maintaining a cohesive user experience on iOS and Android.</p></div>
+<div class="dimension-card"><h3>Performance Expertise</h3><p>Systematic approach to profiling and optimizing—understanding JS thread vs. UI thread, FlatList virtualization, memoization, native driver, Reanimated worklets, and Hermes. Interviewers expect you to profile before optimizing.</p></div>
+<div class="dimension-card"><h3>Native Integration</h3><p>Judgment about when and how to integrate native code. Building custom modules, linking dependencies, managing platform-specific APIs, and handling the sync/async boundary between JS and native correctly.</p></div>
+<div class="dimension-card"><h3>Mobile UX Quality</h3><p>Understanding of mobile-specific patterns: navigation stacks, gesture handling, screen orientation changes, accessibility, and platform conventions. Your app should feel native, not web-like.</p></div>
+<div class="dimension-card"><h3>Testing and Debugging</h3><p>Systematic approach to testing (unit, component, E2E), debugging crashes and performance issues, and using tools effectively—React DevTools, native profilers, error reporting systems like Sentry or Crashlytics.</p></div>
+</div>
+</div>
+</section>
+
+<!-- HOW TO PREPARE -->
+<section>
+<div class="container">
+<h2>How To Prepare for React Native Developer Interviews</h2>
+<div class="prepare-grid">
+<div class="prepare-card"><p>Practice explaining React Native architecture decisions out loud—communication matters as much as technical knowledge. Record yourself or do mock interviews with friends. You should be able to articulate trade-offs between approaches (bridge vs. JSI, Redux vs. Zustand, Expo vs. bare React Native) clearly and concisely. Interviewers notice candidates who not only know the right answer but can teach it.</p></div>
+<div class="prepare-card"><p>Build depth in performance optimization—it's the #1 interview differentiator. Spend time profiling actual apps with React DevTools Profiler, Android Profiler, and Instruments. Implement FlatList optimizations, memoization, and Reanimated animations on real projects. Understand the JS thread vs. UI thread deeply—this knowledge gap separates senior candidates from mid-level ones.</p></div>
+<div class="prepare-card"><p>Prepare 3–4 behavioral stories about React Native-specific challenges: a migration project, a performance regression you debugged, a native module you built, or a platform-specific bug. Use the STAR format (Situation, Task, Action, Result). Emphasize your systematic approach, communication with stakeholders, and measurable impact. Specific numbers and outcomes make stories memorable.</p></div>
+<div class="prepare-card"><p>Use realistic timed practice conditions—set a timer, answer questions as if in a real interview, and record yourself. Review for clarity, pacing, and completeness. Familiarity with the format reduces anxiety and improves performance. Use tools like AceMyInterviews to simulate real conditions and get objective feedback on answer quality before your actual interview.</p></div>
+</div>
+</div>
+</section>
+<!-- FAQ -->
+<section class="section-dark">
+<div class="container">
+<h2>Frequently Asked Questions About React Native Developer Interviews</h2>
+<div class="faq-list">
+<details><summary>Do I need to know native iOS and Android development for React Native interviews?</summary><p>You don't need to be a native expert, but foundational knowledge is valuable. Understand iOS UIView hierarchy and Android View layout basics, and know how React Native maps JavaScript components to native views. More importantly, know when to use native APIs (Bluetooth, NFC, ARKit/ARCore) and when JavaScript libraries suffice. Companies expect you to bridge JS and native—not master both. Strong native experience is a genuine advantage; if you lack it, demonstrate deep React Native knowledge and willingness to learn native quickly.</p></details>
+<details><summary>Should I learn the React Native New Architecture for interviews?</summary><p>Yes, absolutely. The New Architecture (Fabric, TurboModules, JSI) is the current direction and the default in React Native 0.76+. Expect questions about how Fabric differs from the legacy bridge, why JSI enables synchronous communication, and how TurboModules improve type safety. You don't need to implement New Architecture features from scratch, but you must understand the concepts, benefits, and migration path. Even companies on legacy architecture are planning migrations. Demonstrating this knowledge shows you're current and invested in React Native's future.</p></details>
+<details><summary>How much React web knowledge transfers to React Native interviews?</summary><p>Substantial amounts transfer: hooks, state management, component composition, and testing patterns are nearly identical. However, don't assume web knowledge covers mobile. React Native interviews focus heavily on mobile-specific concerns: navigation stacks, gesture handling, platform differences, native API integration, performance constraints, and offline-first architecture. Candidates with React web expertise should explicitly address mobile topics. Interviewers expect you to think in terms of native components and mobile UX, not DOM and browser APIs.</p></details>
+<details><summary>Is Expo experience relevant for React Native interviews?</summary><p>Yes—highly relevant and increasingly expected. Expo is now positioned as a production-grade framework, not just for prototyping. Companies using Expo expect you to know EAS Build, EAS Submit, Expo modules, Config Plugins, and EAS Update. If you've worked exclusively with bare React Native, understand Expo's managed experience and why it appeals to teams without native infrastructure. The ability to reason about when to choose Expo vs. bare React Native demonstrates architectural maturity.</p></details>
+<details><summary>How hard are React Native developer interviews?</summary><p>Difficulty ranges by company and level. Mid-level roles expect solid performance optimization knowledge, navigation patterns, and state management. Senior roles dig deeper into architecture decisions, large-scale optimization, and team impact. The key differentiator is performance expertise—companies invest heavily in optimization, so demonstrating profiling skills and systematic thinking distinguishes strong candidates. Prepare with realistic practice and you'll be well-positioned.</p></details>
+<details><summary>What's the difference between React Native and Flutter developer interviews?</summary><p>React Native interviews emphasize JavaScript/TypeScript, React patterns, the bridge/JSI architecture, and the mature ecosystem (Redux, React Navigation, Reanimated). Flutter interviews focus on Dart, widget trees, state management (Riverpod, Bloc, Provider), and Flutter-specific concepts. React Native is more approachable for JavaScript developers; Flutter attracts those coming from Dart or native backgrounds. Both assess cross-platform thinking and mobile UX understanding. Company framework choice typically follows team skill sets.</p></details>
+</div>
+</div>
+</section>
+
+<!-- RELATED LINKS -->
+<div class="related-section">
+<div class="container">
+<h3>Related Interview Questions</h3>
+<div class="related-links">
+<a href="/interview/mobile-software-engineer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Mobile Software Engineer Interview Questions</a>
+<a href="/interview/flutter-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Flutter Developer Interview Questions</a>
+<a href="/interview/react-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>React Developer Interview Questions</a>
+<a href="/interview/frontend-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Frontend Developer Interview Questions</a>
+<a href="/interview/javascript-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>JavaScript Developer Interview Questions</a>
+<a href="/interview/cross-platform-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Cross Platform Developer Interview Questions</a>
+</div>
+</div>
+</div>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+<div class="container">
+<h2>Ready To Practice React Native Interview Questions?</h2>
+<p>AceMyInterviews analyzes your resume and job description, generates personalized React Native questions, simulates real interview conditions with timed responses, and scores your answers against expert benchmarks. Get follow-up questions, instant feedback, and detailed scoring rubrics to pinpoint weak areas and build confidence.</p>
+<a href="/" class="cta-btn">Start Your Interview Simulation →</a>
+<p class="small-text">Takes less than 15 minutes. Free to start.</p>
+</div>
+</section>
+
+<footer class="footer"><a href="/">← Back to AceMyInterviews</a></footer>
 </body>
 </html>

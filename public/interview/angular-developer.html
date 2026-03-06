@@ -3,556 +3,645 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Angular Developer Interview Questions – Practice with AI Simulator</title>
-  <meta name="description" content="Practice Angular Developer interview questions with our AI simulator. Get questions tailored to your resume and job description with instant performance feedback.">
-  <meta name="keywords" content="angular developer interview questions, angular interview questions, angular developer interview, angular frontend interview, angular technical interview">
-  
-  <meta property="og:title" content="Angular Developer Interview Questions – Practice with AI Simulator">
-  <meta property="og:description" content="Practice Angular Developer interview questions with our AI simulator. Get questions tailored to your resume and job description with instant performance feedback.">
+  <title>30+ Angular Developer Interview Questions &amp; Answers (2026 Guide)</title>
+  <meta name="description" content="Angular developer interview questions covering components, TypeScript, RxJS, state management, and enterprise architecture. Includes answer frameworks, sample answers, and a free practice simulator.">
+  <meta property="og:title" content="30+ Angular Developer Interview Questions &amp; Answers (2026 Guide)">
+  <meta property="og:description" content="Master Angular developer interviews with 30+ questions, answer frameworks, sample responses, and realistic practice conditions.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.acemyinterviews.io/interview/angular-developer">
   <meta property="og:image" content="https://www.acemyinterviews.io/og-image.png">
-  
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Angular Developer Interview Questions – Practice with AI Simulator">
-  <meta name="twitter:description" content="Practice Angular Developer interview questions with our AI simulator. Get questions tailored to your resume and job description with instant performance feedback.">
-  
+  <meta name="twitter:title" content="30+ Angular Developer Interview Questions &amp; Answers (2026 Guide)">
+  <meta name="twitter:description" content="Prepare for Angular developer interviews with comprehensive questions, answer frameworks, and timed practice.">
   <link rel="canonical" href="https://www.acemyinterviews.io/interview/angular-developer">
-  
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Which Angular version should I focus on?","acceptedAnswer":{"@type":"Answer","text":"Focus on the latest Angular version (Angular 15+) as it represents current best practices. However, understand the evolution of Angular and major changes between versions. Interviewers appreciate candidates who can discuss standalone components, improved performance features, and the framework's direction while maintaining compatibility knowledge for legacy applications."}},{"@type":"Question","name":"How important is RxJS knowledge?","acceptedAnswer":{"@type":"Answer","text":"RxJS is fundamental to Angular development and heavily tested in interviews. Master core operators like map, filter, switchMap, and mergeMap. Understand how to manage subscriptions, prevent memory leaks, and compose complex async operations. Practice explaining when to use different operators and how observables differ from promises in handling data streams."}},{"@type":"Question","name":"Do I need NgRx experience?","acceptedAnswer":{"@type":"Answer","text":"NgRx knowledge is valuable for enterprise Angular roles but not always required. Understand the Redux pattern, actions, reducers, selectors, and effects. Even if the role doesn't use NgRx specifically, demonstrating state management knowledge shows architectural thinking. Be prepared to discuss when centralized state management is appropriate versus simpler service-based approaches."}},{"@type":"Question","name":"Will interviews include system design?","acceptedAnswer":{"@type":"Answer","text":"Senior Angular roles often include system design discussions focused on frontend architecture. Be prepared to design module structures, lazy loading strategies, and micro-frontend approaches. Discuss how you'd organize shared components, handle authentication flows, and structure services. Interviewers want to see you can build maintainable, scalable applications beyond just coding."}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Which Angular version should I focus on for interviews?","acceptedAnswer":{"@type":"Answer","text":"Focus on modern Angular (v20-21). Interviewers expect familiarity with standalone architecture, signals, modern control flow syntax, and current performance patterns."}},{"@type":"Question","name":"How important is RxJS for Angular interviews?","acceptedAnswer":{"@type":"Answer","text":"RxJS is extremely important and often the differentiator between mid-level and senior candidates. Expect questions on operators, Subject types, memory leaks, and real-world async scenarios."}},{"@type":"Question","name":"Do I need NgRx experience for Angular developer interviews?","acceptedAnswer":{"@type":"Answer","text":"NgRx experience strengthens candidacy but is not always required. If the job mentions NgRx, prioritize learning it. Otherwise, knowledge of signals and BehaviorSubject suffices."}},{"@type":"Question","name":"Do Angular interviews include TypeScript questions?","acceptedAnswer":{"@type":"Answer","text":"Yes. Expect questions on interfaces vs types, generics, decorators, strict mode, and utility types."}},{"@type":"Question","name":"How hard are Angular developer interviews?","acceptedAnswer":{"@type":"Answer","text":"Difficulty ranges from moderate to hard. Junior roles test fundamentals; senior roles evaluate system design and performance optimization."}},{"@type":"Question","name":"What is the difference between Angular and React developer interviews?","acceptedAnswer":{"@type":"Answer","text":"Angular interviews test framework knowledge extensively: modules, routing, DI, lifecycle hooks, change detection. RxJS is central. React interviews focus on JavaScript and component design with hooks."}}]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.acemyinterviews.io"},{"@type":"ListItem","position":2,"name":"Interview Questions","item":"https://www.acemyinterviews.io/interview"},{"@type":"ListItem","position":3,"name":"Angular Developer Interview Questions","item":"https://www.acemyinterviews.io/interview/angular-developer"}]}</script>
-  
   <link rel="icon" href="/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
   <style>
-    :root {
-      --bg-primary: #0f1419;
-      --bg-secondary: #1a1f2e;
-      --bg-card: #1e2330;
-      --bg-card-hover: #252b3b;
-      --accent-primary: #14b8a6;
-      --accent-primary-hover: #0d9488;
-      --accent-secondary: #2dd4bf;
-      --text-primary: #ffffff;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      --border-color: #2d3748;
-      --success: #10b981;
-      --max-width: 800px;
-      --max-width-wide: 1000px;
-    }
-    
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-    
-    .header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: var(--max-width-wide);
-      margin: 0 auto;
-    }
-    
-    .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .logo-icon {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .header-cta {
-      background: var(--accent-primary);
-      color: var(--bg-primary);
-      padding: 10px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: background 0.2s;
-    }
-    
-    .header-cta:hover { background: var(--accent-primary-hover); }
-    
-    /* Breadcrumbs */
-    .breadcrumbs {
-      max-width: var(--max-width-wide);
-      margin: 0 auto;
-      padding: 16px 24px;
-      font-size: 0.875rem;
-    }
-    
-    .breadcrumbs a {
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    
-    .breadcrumbs a:hover { color: var(--accent-primary); }
-    
-    .breadcrumbs span { color: var(--text-muted); margin: 0 8px; }
-    
-    .breadcrumbs .current { color: var(--text-secondary); }
-    
-    .hero {
-      padding: 60px 24px 80px;
-      text-align: center;
-      background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-    }
-    
-    .hero-container { max-width: var(--max-width); margin: 0 auto; }
-    
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 2.75rem);
-      font-weight: 800;
-      margin-bottom: 20px;
-      line-height: 1.2;
-      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .hero p {
-      color: var(--text-secondary);
-      font-size: 1.125rem;
-      margin-bottom: 32px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .cta-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--accent-primary);
-      color: var(--bg-primary);
-      padding: 16px 32px;
-      font-size: 1rem;
-      font-weight: 600;
-      text-decoration: none;
-      border-radius: 10px;
-      transition: all 0.2s;
-    }
-    
-    .cta-btn:hover {
-      background: var(--accent-primary-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 40px rgba(20, 184, 166, 0.3);
-    }
-    
-    .cta-btn svg { width: 20px; height: 20px; }
-    
-    .trust-badges {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 40px;
-    }
-    
-    .trust-badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-    }
-    
-    .trust-badge svg { color: var(--success); width: 16px; height: 16px; }
-    
-    section { padding: 64px 24px; }
-    .container { max-width: var(--max-width); margin: 0 auto; }
-    
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 24px;
-      text-align: center;
-      color: var(--text-primary);
-    }
-    
-    .social-proof {
-      padding: 20px 24px;
-      text-align: center;
-      border-bottom: 1px solid var(--border-color);
-    }
-    
-    .social-proof p { color: var(--text-muted); font-size: 0.9rem; }
-    
-    /* Last Updated */
-    .last-updated {
-      text-align: center;
-      padding: 12px 24px;
-      font-size: 0.8125rem;
-      color: var(--text-muted);
-    }
-    
-    .last-updated svg {
-      width: 14px;
-      height: 14px;
-      vertical-align: -2px;
-      margin-right: 4px;
-    }
-    
-    .intro-text {
-      font-size: 1.0625rem;
-      line-height: 1.8;
-      color: var(--text-secondary);
-    }
-    
-    .questions-section { background: var(--bg-secondary); }
-    .questions-list { list-style: none; display: grid; gap: 12px; }
-    
-    .questions-list li {
-      background: var(--bg-card);
-      padding: 18px 24px;
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-      font-size: 0.9375rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      transition: all 0.2s;
-    }
-    
-    .questions-list li:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--accent-primary);
-    }
-    
-    .questions-list li svg {
-      flex-shrink: 0;
-      color: var(--accent-primary);
-      width: 20px;
-      height: 20px;
-      margin-top: 2px;
-    }
-    
-    .bridge-text {
-      font-size: 1rem;
-      line-height: 1.8;
-      color: var(--text-muted);
-      text-align: center;
-    }
-    
-    .personalized-section { background: var(--bg-secondary); text-align: center; }
-    
-    .personalized-section p {
-      color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto 32px;
-    }
-    
-    .features {
-      list-style: none;
-      display: inline-flex;
-      flex-direction: column;
-      gap: 12px;
-      text-align: left;
-      margin-bottom: 32px;
-    }
-    
-    .features li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-    }
-    
-    .features li svg { color: var(--success); width: 20px; height: 20px; flex-shrink: 0; }
-    
-    .criteria-list { list-style: none; display: grid; gap: 12px; }
-    
-    .criteria-list li {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 20px;
-      background: var(--bg-card);
-      border-radius: 10px;
-      border: 1px solid var(--border-color);
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-    }
-    
-    .criteria-list li svg { color: var(--accent-primary); width: 20px; height: 20px; flex-shrink: 0; }
-    
-    .faq-section { background: var(--bg-secondary); }
-    .faq-list { display: grid; gap: 12px; }
-    
-    details {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    
-    details[open] { border-color: var(--accent-primary); }
-    
-    summary {
-      padding: 18px 24px;
-      font-weight: 600;
-      cursor: pointer;
-      list-style: none;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var(--text-primary);
-      font-size: 0.9375rem;
-    }
-    
-    summary::-webkit-details-marker { display: none; }
-    
-    summary::after {
-      content: '+';
-      font-size: 1.25rem;
-      font-weight: 400;
-      color: var(--text-muted);
-      transition: transform 0.2s;
-    }
-    
-    details[open] summary::after { transform: rotate(45deg); }
-    
-    details p {
-      padding: 0 24px 18px;
-      color: var(--text-secondary);
-      font-size: 0.9375rem;
-      line-height: 1.7;
-    }
-    
-    /* Related Links */
-    .related-section {
-      padding: 48px 24px;
-      border-top: 1px solid var(--border-color);
-    }
-    
-    .related-section h3 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      margin-bottom: 20px;
-      color: var(--text-primary);
-    }
-    
-    .related-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    
-    .related-links a {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      padding: 10px 16px;
-      border-radius: 8px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.875rem;
-      transition: all 0.2s;
-    }
-    
-    .related-links a:hover {
-      border-color: var(--accent-primary);
-      color: var(--accent-primary);
-      background: var(--bg-card-hover);
-    }
-    
-    .related-links a svg {
-      width: 16px;
-      height: 16px;
-    }
-    
-    .final-cta {
-      text-align: center;
-      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-      padding: 80px 24px;
-    }
-    
-    .final-cta h2 { font-size: 1.75rem; margin-bottom: 16px; }
-    
-    .final-cta p {
-      color: var(--text-secondary);
-      margin-bottom: 32px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .small-text { font-size: 0.875rem; color: var(--text-muted); margin-top: 16px; }
-    
-    .footer {
-      padding: 32px 24px;
-      text-align: center;
-      border-top: 1px solid var(--border-color);
-    }
-    
-    .footer a { color: var(--accent-primary); text-decoration: none; font-size: 0.9rem; }
-    .footer a:hover { text-decoration: underline; }
-    
-    @media (max-width: 640px) {
-      .hero { padding: 40px 20px 60px; }
-      section { padding: 48px 20px; }
-      .header { padding: 16px 20px; }
-      .trust-badges { flex-direction: column; align-items: center; }
-      .cta-btn { width: 100%; justify-content: center; }
-      .related-links { flex-direction: column; }
-      .related-links a { width: 100%; }
-    }
+    :root{--bg-primary:#0f1419;--bg-secondary:#1a1f2e;--bg-card:#1e2330;--bg-card-hover:#252b3b;--accent-primary:#14b8a6;--accent-primary-hover:#0d9488;--accent-secondary:#2dd4bf;--text-primary:#ffffff;--text-secondary:#94a3b8;--text-muted:#64748b;--border-color:#2d3748;--success:#10b981;--max-width:800px;--max-width-wide:1000px;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.6;-webkit-font-smoothing:antialiased;}
+    .header{padding:20px 24px;border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;max-width:var(--max-width-wide);margin:0 auto;}
+    .logo{font-size:1.25rem;font-weight:700;color:var(--text-primary);text-decoration:none;display:flex;align-items:center;gap:8px;}
+    .logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent-primary),var(--accent-secondary));border-radius:8px;display:flex;align-items:center;justify-content:center;}
+    .header-cta{background:var(--accent-primary);color:var(--bg-primary);padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;font-size:.9rem;transition:background .2s;}
+    .header-cta:hover{background:var(--accent-primary-hover);}
+    .breadcrumbs{max-width:var(--max-width-wide);margin:0 auto;padding:16px 24px;font-size:.875rem;}
+    .breadcrumbs a{color:var(--text-muted);text-decoration:none;}
+    .breadcrumbs a:hover{color:var(--accent-primary);}
+    .breadcrumbs span{color:var(--text-muted);margin:0 8px;}
+    .breadcrumbs .current{color:var(--text-secondary);}
+    .hero{padding:60px 24px 80px;text-align:center;background:linear-gradient(180deg,var(--bg-secondary) 0%,var(--bg-primary) 100%);}
+    .hero-container{max-width:var(--max-width);margin:0 auto;}
+    .hero h1{font-size:clamp(2rem,5vw,2.75rem);font-weight:800;margin-bottom:16px;line-height:1.2;background:linear-gradient(135deg,var(--text-primary) 0%,var(--text-secondary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .hero-subtitle{color:var(--accent-secondary);font-size:1rem;font-weight:500;margin-bottom:32px;}
+    .cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent-primary);color:var(--bg-primary);padding:16px 32px;font-size:1rem;font-weight:600;text-decoration:none;border-radius:10px;transition:all .2s;}
+    .cta-btn:hover{background:var(--accent-primary-hover);transform:translateY(-2px);box-shadow:0 10px 40px rgba(20,184,166,.3);}
+    .cta-btn svg{width:20px;height:20px;}
+    .trust-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:40px;}
+    .trust-badge{display:flex;align-items:center;gap:6px;background:var(--bg-card);border:1px solid var(--border-color);padding:10px 16px;border-radius:8px;font-size:.875rem;color:var(--text-secondary);}
+    .trust-badge svg{color:var(--success);width:16px;height:16px;}
+    section{padding:64px 24px;}
+    .container{max-width:var(--max-width);margin:0 auto;}
+    .section-dark{background:var(--bg-secondary);}
+    .social-proof{background:var(--bg-card);border-top:1px solid var(--border-color);border-bottom:1px solid var(--border-color);padding:14px 24px;text-align:center;font-size:.9rem;color:var(--text-muted);}
+    .last-updated{display:flex;align-items:center;justify-content:center;gap:6px;font-size:.8125rem;color:var(--text-muted);padding:10px 24px;}
+    .last-updated svg{width:14px;height:14px;color:var(--accent-primary);}
+    .intro-text{font-size:1.0625rem;color:var(--text-secondary);line-height:1.75;}
+    h2{font-size:1.625rem;font-weight:700;margin-bottom:12px;color:var(--text-primary);}
+    .section-intro{color:var(--text-secondary);font-size:.9375rem;margin-bottom:32px;line-height:1.7;}
+    .question-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:28px;margin-bottom:20px;transition:border-color .2s;}
+    .question-card:hover{border-color:var(--accent-primary);}
+    .question-card h3{font-size:1.0625rem;font-weight:700;color:var(--text-primary);margin-bottom:20px;line-height:1.4;display:flex;gap:12px;}
+    .question-card h3 .q-icon{flex-shrink:0;width:22px;height:22px;color:var(--accent-primary);margin-top:1px;}
+    .answer-label{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:8px;margin-top:16px;}
+    .why-text,.framework-text,.sample-text{font-size:.9375rem;color:var(--text-secondary);line-height:1.7;}
+    .evaluate-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
+    .evaluate-list li{display:flex;align-items:flex-start;gap:8px;font-size:.9rem;color:var(--text-secondary);}
+    .evaluate-list li svg{flex-shrink:0;width:16px;height:16px;color:var(--success);margin-top:2px;}
+    .framework-box{background:var(--bg-primary);border-left:3px solid var(--accent-primary);border-radius:0 8px 8px 0;padding:16px 18px;margin-top:8px;}
+    .sample-box{background:rgba(20,184,166,.05);border:1px solid rgba(20,184,166,.15);border-radius:8px;padding:16px 18px;margin-top:8px;}
+    .sample-label-tag{display:inline-block;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-primary);background:rgba(20,184,166,.1);padding:3px 8px;border-radius:4px;margin-bottom:10px;}
+    .dimensions-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-top:32px;}
+    .dimension-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:24px;}
+    .dimension-card h3{font-size:1rem;font-weight:700;color:var(--accent-primary);margin-bottom:10px;}
+    .dimension-card p{font-size:.9rem;color:var(--text-secondary);line-height:1.65;}
+    .prepare-grid{display:grid;gap:20px;margin-top:8px;}
+    .prepare-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:24px;}
+    .prepare-card h3{font-size:1rem;font-weight:700;color:var(--text-primary);margin-bottom:10px;}
+    .prepare-card p{font-size:.9375rem;color:var(--text-secondary);line-height:1.7;}
+    .mid-cta{background:linear-gradient(135deg,#1a2a28 0%,#1a1f2e 100%);border:1px solid rgba(20,184,166,.25);border-radius:16px;padding:48px 40px;text-align:center;max-width:var(--max-width);margin:0 auto;}
+    .mid-cta h2{margin-bottom:12px;}
+    .mid-cta p{color:var(--text-secondary);margin-bottom:28px;}
+    .mid-cta-features{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:28px;}
+    .mid-cta-feature{display:flex;align-items:center;gap:6px;font-size:.875rem;color:var(--text-secondary);background:rgba(20,184,166,.07);border:1px solid rgba(20,184,166,.15);padding:7px 14px;border-radius:20px;}
+    .mid-cta-feature svg{width:14px;height:14px;color:var(--accent-primary);}
+    .faq-list{display:grid;gap:12px;}
+    details{background:var(--bg-card);border:1px solid var(--border-color);border-radius:10px;overflow:hidden;}
+    details[open]{border-color:var(--accent-primary);}
+    summary{padding:18px 24px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;color:var(--text-primary);font-size:.9375rem;}
+    summary::-webkit-details-marker{display:none;}
+    summary::after{content:'+';font-size:1.25rem;font-weight:400;color:var(--text-muted);flex-shrink:0;margin-left:16px;}
+    details[open] summary::after{transform:rotate(45deg);}
+    details p{padding:0 24px 18px;color:var(--text-secondary);font-size:.9375rem;line-height:1.7;}
+    .related-section{padding:48px 24px;border-top:1px solid var(--border-color);}
+    .related-section h3{font-size:1.125rem;font-weight:600;margin-bottom:20px;color:var(--text-primary);}
+    .related-links{display:flex;flex-wrap:wrap;gap:12px;}
+    .related-links a{display:inline-flex;align-items:center;gap:6px;background:var(--bg-card);border:1px solid var(--border-color);padding:10px 16px;border-radius:8px;color:var(--text-secondary);text-decoration:none;font-size:.875rem;transition:all .2s;}
+    .related-links a:hover{border-color:var(--accent-primary);color:var(--accent-primary);background:var(--bg-card-hover);}
+    .related-links a svg{width:16px;height:16px;}
+    .final-cta{text-align:center;background:linear-gradient(180deg,var(--bg-primary) 0%,var(--bg-secondary) 100%);padding:80px 24px;}
+    .final-cta h2{font-size:1.75rem;margin-bottom:16px;}
+    .final-cta p{color:var(--text-secondary);margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto;}
+    .small-text{font-size:.875rem;color:var(--text-muted);margin-top:16px;}
+    .footer{padding:32px 24px;text-align:center;border-top:1px solid var(--border-color);}
+    .footer a{color:var(--accent-primary);text-decoration:none;font-size:.9rem;}
+    code{background:rgba(20,184,166,.1);padding:2px 6px;border-radius:4px;font-size:.9em;color:var(--accent-secondary);font-family:'Courier New',monospace;}
+    @media(max-width:640px){.hero{padding:40px 20px 60px;}section{padding:48px 20px;}.header{padding:16px 20px;}.trust-badges{flex-direction:column;align-items:center;}.cta-btn{width:100%;justify-content:center;}.related-links{flex-direction:column;}.related-links a{width:100%;}.dimensions-grid{grid-template-columns:1fr;}.mid-cta{padding:32px 24px;}.question-card{padding:20px;}}
   </style>
 </head>
 <body>
-  <header class="header">
-    <a href="/" class="logo">
-      <div class="logo-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
-      </div>
-      AceMyInterviews
-    </a>
-    <a href="/" class="header-cta">Start Practicing</a>
-  </header>
-
-  <!-- Breadcrumbs -->
-  <nav class="breadcrumbs">
-    <a href="/">Home</a>
-    <span>›</span>
-    <a href="/interview">Interview Questions</a>
-    <span>›</span>
-    <span class="current">Angular Developer</span>
-  </nav>
-
-  <section class="hero">
-    <div class="hero-container">
-      <h1>Angular Developer Interview Questions & Practice Simulator</h1>
-      <p>Experience a simulated Angular developer interview with personalized AI questions.</p>
-      <a href="/" class="cta-btn">
-        Begin Your Practice Session →
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </a>
-      <div class="trust-badges">
-        <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic interview questions</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>3 minutes per answer</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant pass/fail verdict</span><span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Feedback on confidence, clarity, and delivery</span>
-      </div>
-    </div>
-  </section>
-  
-  <div class="social-proof"><p>Simulate real interview conditions before your actual interview</p></div>
-  
-  <!-- Last Updated -->
-  <div class="last-updated">
-    <svg viewBox="0 0 20 20" fill="currentColor">
-      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-    </svg>
-    Last updated: February 2026
-  </div>
-  
-  <section>
-    <div class="container">
-      <p class="intro-text">Angular developer interviews evaluate your expertise with the Angular framework, TypeScript, RxJS, and enterprise-scale frontend development. Companies assess your understanding of modules, dependency injection, and Angular's opinionated architecture.</p>
-    </div>
-  </section>
-  
-  <section class="questions-section">
-    <div class="container">
-      <h2>Example Angular Developer Interview Questions</h2>
-      <ul class="questions-list">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Explain Angular's dependency injection system.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you handle state management in Angular applications?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe the difference between template-driven and reactive forms.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you optimize Angular application performance?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Explain the Angular component lifecycle hooks.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you handle HTTP requests and error handling in Angular?</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>Describe your experience with RxJS and observables.</span></li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg><span>How do you structure a large-scale Angular application?</span></li>
-      </ul>
-    </div>
-  </section>
-  
-  <section>
-    <div class="container">
-      <p class="bridge-text">Angular interviews emphasize TypeScript and enterprise architecture patterns. AceMyInterviews generates questions tailored to your job description.</p>
-    </div>
-  </section>
-  
-  <section class="personalized-section">
-    <div class="container">
-      <h2>Practice Questions Tailored To Your Interview</h2>
-      <p>Your resume and job description are analyzed to create Angular developer questions.</p>
-      <ul class="features">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Angular framework questions</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>RxJS and reactive programming</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Realistic timed simulation</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Instant feedback and pass/fail verdict</li>
-      </ul>
-      <a href="/" class="cta-btn">Begin Your Practice Session →</a>
-    </div>
-  </section>
-  
-  <section>
-    <div class="container">
-      <h2>What Interviewers Evaluate</h2>
-      <ul class="criteria-list">
-        <li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Angular framework expertise</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>TypeScript proficiency</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>RxJS understanding</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Architecture design</li><li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Testing knowledge</li>
-      </ul>
-    </div>
-  </section>
-  
-  <section class="faq-section">
-    <div class="container">
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-list">
-        <details><summary>Which Angular version should I focus on?</summary><p>Focus on the latest Angular version (Angular 15+) as it represents current best practices. However, understand the evolution of Angular and major changes between versions. Interviewers appreciate candidates who can discuss standalone components, improved performance features, and the framework's direction while maintaining compatibility knowledge for legacy applications.</p></details><details><summary>How important is RxJS knowledge?</summary><p>RxJS is fundamental to Angular development and heavily tested in interviews. Master core operators like map, filter, switchMap, and mergeMap. Understand how to manage subscriptions, prevent memory leaks, and compose complex async operations. Practice explaining when to use different operators and how observables differ from promises in handling data streams.</p></details><details><summary>Do I need NgRx experience?</summary><p>NgRx knowledge is valuable for enterprise Angular roles but not always required. Understand the Redux pattern, actions, reducers, selectors, and effects. Even if the role doesn't use NgRx specifically, demonstrating state management knowledge shows architectural thinking. Be prepared to discuss when centralized state management is appropriate versus simpler service-based approaches.</p></details><details><summary>Will interviews include system design?</summary><p>Senior Angular roles often include system design discussions focused on frontend architecture. Be prepared to design module structures, lazy loading strategies, and micro-frontend approaches. Discuss how you'd organize shared components, handle authentication flows, and structure services. Interviewers want to see you can build maintainable, scalable applications beyond just coding.</p></details>
-      </div>
-    </div>
-  </section>
-  
-  <!-- Related Interview Questions (Internal Links) -->
-  <div class="related-section">
-    <div class="container">
-      <h3>Related Interview Questions</h3>
-      <div class="related-links">
-        <a href="/interview/frontend-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Frontend Developer Interview Questions</a><a href="/interview/python-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Python Developer Interview Questions</a><a href="/interview/product-manager"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Product Manager Interview Questions</a><a href="/interview/product-owner"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Product Owner Interview Questions</a><a href="/interview/product-analyst"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Product Analyst Interview Questions</a>
-      </div>
+<header class="header">
+  <a href="/" class="logo">
+    <div class="logo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+    AceMyInterviews
+  </a>
+  <a href="/" class="header-cta">Start Practicing</a>
+</header>
+<nav class="breadcrumbs">
+  <a href="/">Home</a><span>›</span>
+  <a href="/interview">Interview Questions</a><span>›</span>
+  <span class="current">Angular Developer</span>
+</nav>
+<section class="hero">
+  <div class="hero-container">
+    <h1>Angular Developer Interview Questions &amp; Answers (2026 Guide)</h1>
+    <p class="hero-subtitle">Prepare for Angular developer interviews covering components, TypeScript, RxJS, state management, routing, and enterprise-scale frontend architecture.</p>
+    <a href="/" class="cta-btn">Start Free Practice Interview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    <div class="trust-badges">
+      <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>30+ realistic Angular interview questions</span>
+      <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Answer frameworks with sample responses</span>
+      <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Timed practice with instant feedback</span>
+      <span class="trust-badge"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Technical and behavioral scenarios</span>
     </div>
   </div>
-  
-  <section class="final-cta">
-    <div class="container">
-      <h2>See How You Perform In A Real Interview Simulation</h2>
-      <p>Practice Angular developer interview questions.</p>
-      <a href="/" class="cta-btn">Start Practicing Now →</a>
-      <p class="small-text">Takes less than 15 minutes.</p>
-    </div>
-  </section>
-  
-  <footer class="footer">
-    <a href="/">← Back to AceMyInterviews</a>
-  </footer>
+</section>
+<div class="social-proof"><p>Simulate real Angular interview conditions with timed questions, follow-ups, and detailed scoring.</p></div>
+<div class="last-updated">
+  <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+  Last updated: March 2026
+</div>
+<section><div class="container"><p class="intro-text">Angular developer interviews test your expertise with Angular's component-based architecture, TypeScript, RxJS reactive programming, and building enterprise-scale single-page applications. Interviewers evaluate your understanding of modules, dependency injection, change detection, routing, forms, and state management. Expect questions on Angular CLI, lazy loading, and performance optimization. Companies want developers who understand Angular's opinionated approach and can leverage it for maintainable, testable applications. Roles range from building internal enterprise dashboards to customer-facing web applications, and interviews vary based on whether the team uses NgRx, Angular Material, or server-side rendering with Angular Universal.</p></div></section>
+<!-- SECTION 1: Angular Core Concepts -->
+<section class="section-dark" id="angular-core-concepts">
+<div class="container">
+<h2>Angular Core Concepts Questions</h2>
+<p class="section-intro">These questions test your understanding of the foundational patterns that make Angular work—lifecycle hooks, change detection, modules, dependency injection, and the modern signals API.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Explain Angular component lifecycle hooks and when you would use each one.</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Lifecycle hooks are fundamental to Angular development. Understanding when components are created, rendered, updated, and destroyed is critical for managing state, fetching data, and cleaning up resources.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of component initialization order and timing</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of practical use cases for different hooks (<code>ngOnInit</code> vs <code>ngOnChanges</code> vs <code>ngAfterViewInit</code>)</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of memory leaks and proper cleanup in <code>ngOnDestroy</code></li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text"><code>ngOnInit</code> runs after component creation—use it for data fetching. <code>ngOnChanges</code> detects <code>@Input</code> property changes and can run multiple times. <code>ngAfterViewInit</code> runs after the view renders—use it for DOM manipulation with <code>ViewChild</code>. <code>ngOnDestroy</code> is critical for cleanup—always unsubscribe from observables and cancel timers here to prevent memory leaks. The order: <code>ngOnChanges</code> → <code>ngOnInit</code> → <code>ngAfterViewInit</code>, with <code>ngOnChanges</code> re-firing on subsequent input changes.</p></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">Angular lifecycle hooks let you tap into key moments of a component's existence. <code>ngOnInit</code>, running after initialization, is where I fetch data from services. <code>ngOnChanges</code> detects when <code>@Input</code> properties change, useful for reacting to parent updates. <code>ngAfterViewInit</code> executes after the view renders, perfect for DOM access with <code>ViewChild</code> queries. <code>ngOnDestroy</code> is critical for cleanup—I always unsubscribe from observables here to prevent memory leaks. The execution order is important: <code>ngOnChanges</code> can fire multiple times, while <code>ngOnInit</code> fires once. I rarely need all hooks, but understanding the sequence prevents bugs and performance issues.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What's the difference between OnPush and Default change detection strategies?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Change detection significantly impacts Angular app performance. Teams need developers who can optimize rendering by choosing the right strategy and understanding when components actually need re-evaluation.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding when Angular runs change detection and why it matters for performance</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of how OnPush reduces cycles by relying on input object references</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Ability to identify when OnPush is appropriate and potential pitfalls with mutable objects</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text">Default change detection checks all components whenever any event fires—inefficient at scale. OnPush only runs when <code>@Input</code> references change (immutably), or when events originate from the component itself. OnPush requires immutable patterns: spread objects, create new arrays. The pitfall is mutating objects within OnPush components without changing the reference, causing stale data. For performance-critical dashboards or large lists, OnPush is essential.</p></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">Default change detection runs after every event globally, checking all components—inefficient at scale. OnPush only triggers when <code>@Input</code> reference changes or events fire from the component, dramatically reducing cycles. I use OnPush with immutable data patterns: if data updates, I pass a new object reference, not mutations. This requires discipline—spreading objects, creating new arrays—but the performance gains justify it. The pitfall is mutating objects within OnPush components without triggering detection. For performance-critical dashboards or lists with hundreds of items, OnPush is essential. Default suffices for small apps or highly dynamic UIs.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do Angular modules work and what are the benefits of lazy loading feature modules?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Modules organize Angular applications and control dependency injection scope. Lazy loading is crucial for bundle size optimization and initial load time in enterprise applications.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding NgModule structure and how shared, core, and feature modules are organized</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of lazy loading syntax and how it reduces initial bundle size</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of when lazy loading helps and the tradeoffs involved</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text">Modules group related components, services, and pipes. <code>SharedModule</code> is used across features; <code>CoreModule</code> provides app-wide singletons. Lazy loading defers module loading until a route is accessed. Configure lazy routes with dynamic imports: <code>loadChildren: () =&gt; import('./admin/admin.module').then(m =&gt; m.AdminModule)</code>. This splits the app into chunks, dramatically improving first paint time. Trade-off: lazy modules are slightly slower when first accessed as the browser downloads the chunk.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Explain Angular's dependency injection system and how it works.</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Dependency injection is core to Angular's architecture. It enables testability, loose coupling, and service reuse. Interviewers assess whether you can design injectable services and understand the injector hierarchy.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of how Angular's injector creates and caches service instances</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of provider configuration (<code>useClass</code>, <code>useValue</code>, <code>useFactory</code>, <code>useExisting</code>)</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of injector hierarchies and scope (root, component, module-level)</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text">Angular's injector manages service creation and injection. Services decorated with <code>@Injectable({ providedIn: 'root' })</code> create a single app-wide singleton. Override per component to create isolated instances. Provider types: <code>useClass</code> for type substitution, <code>useValue</code> for constants, <code>useFactory</code> for custom creation logic. The injector hierarchy means child injectors can override parent providers—a component-level provider creates an instance isolated to that component's subtree.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What are Angular signals and how do they differ from traditional observables?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Signals (introduced in Angular 16) represent a modern, synchronous reactive primitive. Leading-edge Angular teams are adopting signals; understanding the shift is important for modern Angular development.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of signals as synchronous reactive values versus asynchronous observables</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of signal API (<code>signal()</code>, <code>computed()</code>, <code>effect()</code>)</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of when signals complement or replace observables in modern Angular</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text">Signals are synchronous reactive containers introduced in Angular 16. Use <code>signal()</code> for writable state, <code>computed()</code> for derived values, and <code>effect()</code> for side effects. Signals integrate directly with Angular's change detection—no subscriptions needed. Key difference from observables: signals are always synchronous, always have a current value, and have no subscription lifecycle to manage. Observables remain essential for async operations (HTTP, WebSockets). Modern approach: signals for local component state, observables for async data streams.</p></div>
+</div>
+</div></section>
+<!-- SECTION 2: TypeScript for Angular -->
+<section id="typescript-angular">
+<div class="container">
+<h2>TypeScript for Angular Questions</h2>
+<p class="section-intro">Angular is built on TypeScript, so strong type system knowledge is expected. Interviewers test interfaces, generics, decorators, strict mode, and utility types—assessing whether your TypeScript prevents bugs and enables maintainable code at scale.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What's the difference between interfaces and types in TypeScript?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">TypeScript is central to modern Angular development. Understanding interfaces vs types shows nuanced knowledge of the type system and how to structure code for maintainability.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Practical knowledge of when to use interfaces (object shapes, contracts) versus types (unions, tuples, primitives)</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of declaration merging for interfaces</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of semantic and extensibility differences</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text">Interfaces define object shapes and are best for structural contracts. Types are more flexible: they support unions, primitives, and tuples. Interfaces support declaration merging—multiple declarations combine, useful for extending global types. Types don't merge but support complex compositions like discriminated unions. Both compile to nothing in JavaScript. Use interfaces for API response models and class contracts; types for union-based state shapes and complex compositions.</p></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">Interfaces define structural contracts, perfect for object shapes and class implementations. Types offer more flexibility—they handle unions, tuples, and primitives. Interfaces support declaration merging, allowing multiple declarations to combine, useful for extending global types. Types don't merge but support complex compositions like discriminated unions. I use interfaces for API response models and service method contracts. Types excel for utility types and union-based variations. In Angular, most models are interfaces, but I reach for types when handling complex state or API response variations.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you use generics in TypeScript and why are they important?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Generics are essential for writing reusable, type-safe code. In Angular, understanding generics is critical for working with services, HTTP responses, and component APIs.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Ability to write generic functions and classes with type parameters</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of constraints and bounded generics</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of practical Angular scenarios: <code>HttpClient&lt;T&gt;</code>, services with generic types</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text">Generics let you write reusable code while maintaining type safety. Type parameters are specified at use time. Constraints limit what types are accepted (e.g., <code>&lt;T extends object&gt;</code>). In Angular, <code>HttpClient.get&lt;T&gt;()</code> uses generics to type API responses, ensuring you get the correct shape back. Services use generics for repository patterns—type-checked data access for any entity type without duplicating code.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What are decorators in TypeScript and how are they used in Angular?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text"><code>@Component</code>, <code>@Injectable</code>, <code>@Input</code>, <code>@Output</code> are daily Angular tools. Understanding how they work shows you grasp Angular's metaprogramming approach.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of what decorators are (functions that modify classes or properties)</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Practical use of Angular decorators (<code>@Component</code>, <code>@Injectable</code>, <code>@Input</code>, <code>@Output</code>, <code>@HostListener</code>)</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of custom decorators for cross-cutting concerns</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text">Decorators are functions prefixed with <code>@</code> that modify classes, methods, or properties. Angular uses them extensively: <code>@Component</code> marks a class as a component with template metadata, <code>@Injectable</code> registers a service in the DI system, <code>@Input</code> and <code>@Output</code> handle parent-child communication. <code>@HostListener</code> binds to host element events. Custom decorators encapsulate repeated logic like logging or auth checks. They require <code>experimentalDecorators: true</code> in <code>tsconfig.json</code>.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Give examples of useful TypeScript utility types and how you'd use them in Angular.</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Utility types like <code>Partial</code>, <code>Pick</code>, <code>Omit</code>, and <code>Record</code> enable concise, type-safe code. Angular developers use them frequently for form state, API transformations, and flexible component APIs.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Familiarity with common utility types (<code>Partial</code>, <code>Pick</code>, <code>Omit</code>, <code>Record</code>, <code>Readonly</code>, <code>Required</code>)</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Practical Angular scenarios: form state, API contracts, component inputs</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Ability to compose and extend types elegantly</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text">Utility types transform existing types without duplication. <code>Partial&lt;T&gt;</code> makes all properties optional—useful for form updates where only some fields change. <code>Pick&lt;T, 'field'&gt;</code> selects specific properties for filtered views. <code>Omit&lt;T, 'id'&gt;</code> excludes properties—creating DTOs for POST requests. <code>Record&lt;K, V&gt;</code> creates objects with specific key/value types for lookup tables. <code>Readonly&lt;T&gt;</code> prevents mutation on component inputs. Combined with generics, these remove significant boilerplate from Angular services and components.</p></div>
+</div>
+</div></section>
+<!-- SECTION 3: RxJS -->
+<section class="section-dark" id="rxjs-reactive-programming">
+<div class="container">
+<h2>RxJS &amp; Reactive Programming Questions</h2>
+<p class="section-intro">RxJS is where Angular interviews get hard. Most candidates know basic observables but struggle with operators, memory leaks, and complex async flows. Deep RxJS knowledge is often the differentiator between mid-level and senior candidates.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What's the difference between observables and promises? When would you use each?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">RxJS is central to Angular. Observables handle async data streams; promises handle single values. Understanding the distinction is critical for async programming in Angular.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of observables as lazy, cancellable, multi-value streams versus promises as eager, uncancellable single values</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of when to choose observables (streams, cancellation) vs promises (one-time async)</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of why Angular HttpClient returns observables</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text">Promises resolve once and execute immediately (eager). Observables are lazy multi-value streams that only execute on subscription and can be cancelled by unsubscribing. Angular's <code>HttpClient</code> returns observables specifically for request cancellation—if a user navigates away, unsubscribing stops the request. Use observables for streams (form inputs, polling, WebSockets) and promises for single async operations or non-RxJS integrations. Use the <code>async</code> pipe or <code>takeUntilDestroyed()</code> to prevent memory leaks.</p></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">Promises resolve to a single value and are eager—they execute immediately. Observables are lazy multi-value streams that only execute on subscription. Promises can't be cancelled; observables unsubscribe to cancel. This matters: if a user navigates away, unsubscribing stops an HTTP request. In Angular, <code>HttpClient</code> returns observables specifically for this control. I use observables for streams (form inputs, API polling, WebSocket events) and promises for single async operations or legacy APIs. Observables require subscription management—I use the <code>async</code> pipe or <code>takeUntilDestroyed()</code> to avoid memory leaks.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Explain the difference between switchMap, mergeMap, and concatMap operators.</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Choosing the wrong flattening operator causes subtle bugs. <code>switchMap</code> cancels previous requests; <code>mergeMap</code> runs concurrently; <code>concatMap</code> queues. Interviewers use this to gauge real RxJS experience.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of how each operator handles inner observable subscriptions</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of practical scenarios: <code>switchMap</code> for search, <code>concatMap</code> for sequential operations, <code>mergeMap</code> for parallel</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of <code>exhaustMap</code> and performance implications</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text"><strong>switchMap</strong> cancels the previous inner observable when a new outer value arrives—ideal for search. <strong>mergeMap</strong> subscribes to all inner observables concurrently—use for parallel requests, but watch for unbounded volume. <strong>concatMap</strong> queues inner observables sequentially—perfect for operations that must complete in order. <strong>exhaustMap</strong> ignores new values until the current inner observable completes—prevents duplicate form submissions. Wrong choice = race condition bugs.</p></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text"><code>switchMap</code> cancels previous inner observables, so only the latest request matters. I use it for search—if a user types again, cancel the old HTTP request and start fresh. <code>mergeMap</code> runs all inner observables concurrently; great for parallel requests but dangerous if unbounded. <code>concatMap</code> queues operations sequentially; perfect for dependent async steps. <code>exhaustMap</code> ignores new values until the current one completes, useful for preventing duplicate submissions. The wrong choice is a common bug: <code>switchMap</code> prevents race conditions in search, but <code>mergeMap</code> in the same scenario creates redundant requests.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What are Subject, BehaviorSubject, and ReplaySubject, and when would you use each?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Subjects are essential for multi-casting and inter-component communication. Each variant has different semantics around initial values and subscription timing.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of <code>Subject</code> as a hot observable—new subscribers miss past values</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of <code>BehaviorSubject</code> (holds latest value) versus <code>ReplaySubject</code> (buffers N values)</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Practical use: event services, shared state, component communication</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text"><code>Subject</code>: multicast observable, emit with <code>next()</code>. New subscribers miss past values—ideal for events (clicks, notifications). <code>BehaviorSubject</code>: holds the latest value and immediately emits it to new subscribers—ideal for state (current user, selected filter). <code>ReplaySubject(n)</code>: buffers N past values for new subscribers—useful when late subscribers need history. Rule of thumb: <code>Subject</code> for events, <code>BehaviorSubject</code> for state that new subscribers need immediately.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you prevent memory leaks with RxJS observables in Angular?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Unsubscribed observables hold references and prevent garbage collection. Memory leaks degrade performance over time and separate careful developers from careless ones.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of the <code>async</code> pipe for automatic unsubscription</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of <code>takeUntilDestroyed()</code> (Angular 16+) for manual cleanup</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of which observables auto-complete (<code>HttpClient</code>) versus long-lived streams</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text">In templates: use the <code>async</code> pipe—Angular subscribes and unsubscribes automatically. In TypeScript code: use <code>takeUntilDestroyed()</code> (Angular 16+) with an injected <code>DestroyRef</code>—auto-unsubscribes on component destroy. The older pattern used <code>takeUntil(this.destroy$)</code> with a Subject completed in <code>ngOnDestroy</code>. Note: <code>HttpClient</code> observables auto-complete after one emission, so they don't leak. Long-lived streams—intervals, WebSockets, router events—require explicit unsubscription.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you combine multiple observables with combineLatest, forkJoin, and zip?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Combining streams is common: waiting for multiple API calls, syncing form inputs. Each operator has different timing semantics.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of <code>combineLatest</code> (emits when any input changes after all have emitted once)</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of <code>forkJoin</code> (waits for all observables to complete, emits once—for parallel HTTP)</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of <code>zip</code> (pairs emitted values in order)</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text"><code>combineLatest</code> waits for all inputs to emit once, then emits whenever any input changes. Use for dependent form fields or filters. <code>forkJoin</code> waits for all observables to complete, emitting once with all results—perfect for parallel HTTP requests that all need to finish before proceeding. <code>zip</code> pairs emitted values in order—useful for coordinating ordered events. If any observable in <code>forkJoin</code> errors, the whole thing errors, so handle errors on individual streams first.</p></div>
+</div>
+</div></section>
+<!-- SECTION 4: Architecture & State Management -->
+<section id="architecture-state-management">
+<div class="container">
+<h2>Angular Architecture &amp; State Management Questions</h2>
+<p class="section-intro">Application architecture directly impacts scalability and maintainability. Interviewers evaluate your ability to organize large Angular applications, choose appropriate state management, implement routing guards, and leverage modern patterns like standalone components.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Explain the smart (container) and dumb (presentational) component pattern.</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">This pattern separates concerns: containers manage state and side effects; presentational components render UI. It's fundamental to maintainable, testable Angular applications.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of container components handling logic versus presentational components receiving <code>@Input</code>/<code>@Output</code></li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of how this pattern improves testability and reusability</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of modern alternatives (signals, standalone components)</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text">Smart (container) components manage state, fetch data, and handle logic—they know about services and the outside world. Dumb (presentational) components receive data via <code>@Input</code>, emit events via <code>@Output</code>, and focus purely on rendering UI. This separation makes presentational components highly testable (no mocked services) and reusable (works with any parent). Modern Angular with signals blurs this somewhat—local signals can replace container logic for simpler features—but the separation of concerns principle remains valuable.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>When would you use NgRx versus signal-based state management?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Angular has shifted toward signals for local state. NgRx remains powerful for complex, shared state. Understanding the trade-offs shows architectural maturity.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of NgRx (store, actions, reducers, effects, selectors) for predictable shared state</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of signals for simpler, synchronous local state</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Ability to choose based on app complexity and scope of state</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text">NgRx enforces strict unidirectional data flow—actions, reducers, effects, selectors—with time-travel debugging. It excels for complex apps with shared state across features. The downside: significant boilerplate for simple features. Signals are lightweight: <code>signal()</code>, <code>computed()</code>, <code>effect()</code>—minimal boilerplate. Key question: does this state need to be shared across many features? If yes, NgRx. If component-local (UI toggles, form state), signals. Most modern apps use both.</p></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">NgRx enforces a strict unidirectional data flow: actions dispatch to reducers, effects handle side effects, selectors expose state. It's powerful for complex, predictable state management with time-travel debugging. The downside: verbose for simple features. Signals are lightweight: <code>signal()</code> for state, <code>computed()</code> for derived values, <code>effect()</code> for side effects. I use signals for component-local state (form state, UI toggles) and NgRx for shared app state (user auth, global filters). The choice depends on scope: signals for local features; NgRx for enterprise-scale state that multiple features access. Modern Angular apps often use both.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What are Angular route guards and what types can you implement?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Guards control access to routes. Authentication guards, unsaved-changes warnings, and data preloading are standard in enterprise Angular apps.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of guard types: <code>CanActivate</code>, <code>CanDeactivate</code>, <code>Resolve</code>, <code>CanLoad</code>, <code>CanMatch</code></li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Ability to implement guards for authentication, authorization, and data preloading</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of guard execution order and async guard support</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text"><code>CanActivate</code>: checks if a user can access a route—redirects unauthenticated users to login. <code>CanDeactivate</code>: prevents navigation away if unsaved changes exist. <code>Resolve</code>: preloads data before activating a route—component receives data immediately. <code>CanLoad</code>: prevents lazy module loading entirely. <code>CanMatch</code>: conditionally matches routes based on dynamic criteria. Guards can return booleans, <code>UrlTree</code> for redirects, or observables/promises—Angular handles async guards transparently.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What are standalone components and how do they differ from module-based components?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Standalone components (Angular 14+) are now the recommended default. Understanding them is essential for modern Angular development.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of <code>standalone: true</code> and how it removes NgModule dependency</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of importing dependencies directly in standalone components</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of how standalone integrates with routing and app bootstrap</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text">Standalone components set <code>standalone: true</code> and import their own dependencies (other components, directives, pipes) without a declaring NgModule. In <code>app.config.ts</code>, use <code>provideRouter()</code> and other providers instead of importing modules. This makes dependency trees explicit, co-located with the component, and enables better tree-shaking. Standalone is now the Angular-recommended default for new projects—it simplifies setup, reduces boilerplate, and eliminates implicit NgModule sharing.</p></div>
+</div>
+</div></section>
+<!-- SECTION 5: Testing -->
+<section class="section-dark" id="angular-testing">
+<div class="container">
+<h2>Angular Testing Questions</h2>
+<p class="section-intro">Testing is non-negotiable in professional Angular projects. Interviewers evaluate your ability to write testable components, configure TestBed, mock services, test async code, and structure E2E tests.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What's the difference between Jasmine/Karma and Jest for testing Angular?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Knowing the test tooling shows you can verify your code works before production. The ecosystem is shifting and interviewers want to know you're current.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of Jasmine (test framework) versus Karma (browser runner) versus Jest</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of Jest advantages (speed, built-in mocking, no browser needed)</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of where projects are transitioning</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text">Jasmine is a test framework (<code>describe</code>, <code>it</code>, <code>expect</code>). Karma was the default runner, launching real browsers to execute tests. Jest is a faster, all-in-one alternative—runs in Node.js (no browser), includes built-in mocking, and is significantly faster than Karma. Angular's CLI now supports Jest as a first-class option. Both support Jasmine-compatible syntax, so migration isn't too disruptive. For new projects, choose Jest.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you use TestBed to set up and test Angular components?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">TestBed is the core Angular testing utility. Setting up modules, mocking services, and testing component behavior is essential for professional Angular development.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Ability to configure TestBed with components, services, and imports</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of fixture creation and accessing the component instance</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of how to mock services and verify component interactions</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text"><code>TestBed.configureTestingModule()</code> sets up a testing module with components and mocked services. <code>TestBed.createComponent(MyComponent)</code> creates a fixture. <code>fixture.componentInstance</code> accesses the component class; <code>fixture.nativeElement</code> accesses the DOM. Call <code>fixture.detectChanges()</code> to trigger change detection. Mock services with <code>jasmine.createSpyObj()</code>. For async testing: <code>fakeAsync</code> with <code>tick()</code> for timers, <code>waitForAsync</code> for promises and observables.</p></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text"><code>TestBed.configureTestingModule({ declarations: [MyComponent], providers: [{ provide: MyService, useValue: mockService }] })</code> sets up the testing environment. <code>TestBed.createComponent(MyComponent)</code> creates a fixture. <code>fixture.componentInstance</code> gives you the component to call methods and check properties. <code>fixture.nativeElement</code> lets you query the DOM. Always call <code>fixture.detectChanges()</code> after setup and when changing inputs. Mock services using <code>jasmine.createSpyObj()</code> or providing a mock class. For complex scenarios, the <code>ngMocks</code> library simplifies mocking significantly.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>How do you test asynchronous code in Angular?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Much Angular code is async: HTTP requests, observables, timers. Testing async behavior correctly prevents flaky tests.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of <code>waitForAsync</code> for handling promises and observables in tests</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of <code>fakeAsync</code> and <code>tick()</code> for simulating time</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of when to use each approach</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text"><code>waitForAsync</code> handles promises and observables by letting them complete before assertions run. <code>fakeAsync</code> simulates time synchronously: <code>tick(ms)</code> advances the virtual clock, useful for testing timers and debounce. <code>flush()</code> completes all pending timers. Use <code>waitForAsync</code> for HTTP requests; use <code>fakeAsync</code> for time-dependent logic like debounce or <code>setTimeout</code>. <code>fakeAsync</code> is generally preferred for its synchronous-style assertions.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>What tools do you use for E2E testing in Angular?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">E2E tests verify full user workflows. Choosing tools and structuring tests impacts test stability and maintenance.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Knowledge of modern E2E tools: Cypress, Playwright (Protractor is deprecated)</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of page object model for maintainable E2E tests</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of E2E strategy: critical paths, avoiding flakiness</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text">Cypress and Playwright are the modern E2E choices—Protractor is deprecated. Cypress excels at debugging with its interactive test runner; Playwright is faster and supports multiple browsers. Structure tests using the page object model: create page classes with selectors and methods, separating UI structure from test logic. Focus on critical user paths: login, checkout, form submission. Avoid testing implementation details; test user interactions. Keep E2E suites small and fast to encourage regular use.</p></div>
+</div>
+</div></section>
+<!-- SECTION 6: Behavioral -->
+<section id="behavioral-angular-developer">
+<div class="container">
+<h2>Behavioral Angular Developer Interview Questions</h2>
+<p class="section-intro">Behavioral questions reveal how you handle real-world Angular challenges. Use the STAR method (Situation, Task, Action, Result) and anchor answers in specific, quantified outcomes whenever possible.</p>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Tell me about a time you migrated an Angular application to a newer version. What challenges did you face?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Version migrations are common and risky. How you handle them reveals your patience, planning, and technical depth. Enterprise projects rely on smooth, well-communicated migrations.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Pragmatic approach to planning and executing migrations without breaking the app</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Handling of breaking changes, deprecated APIs, and third-party incompatibilities</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Communication and testing strategy throughout migration</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text">Structure your story: identify target version, review breaking changes, plan an incremental approach using <code>ng update</code>, run automated tests frequently. Discuss specific challenges: breaking API changes, third-party library incompatibilities, test coverage gaps. Show how you validated (unit tests, E2E, manual flows), communicated progress (weekly updates, rollback plan), and quantified results: bundle size reduction, faster builds, new features unlocked.</p></div>
+<p class="answer-label">Sample answer</p>
+<div class="sample-box"><span class="sample-label-tag">Example response</span>
+<p class="sample-text">I migrated our app from Angular 12 to 15 to gain performance improvements and modern patterns. I reviewed the migration guide, created a migration branch, and ran <code>ng update</code> with commit flags to track changes. Dependencies had issues—some packages weren't compatible. I evaluated alternatives, upgraded incrementally, and ran tests after each step. The biggest challenge was <code>ViewChild</code> queries requiring explicit static flags; I added a codemod to handle most cases, then manually fixed edge cases. I tested thoroughly: unit tests, E2E tests, manual user flows. I communicated progress weekly and created a rollback plan. The migration took three sprints but provided immediate bundle size improvements and enabled standalone components.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Describe a performance issue you identified and resolved in an Angular application.</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Performance optimization requires systematically identifying bottlenecks, understanding root causes, and validating fixes. This shows maturity and methodical problem-solving.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Ability to use profiling tools (Chrome DevTools, Angular DevTools)</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of common issues: excessive change detection, large bundles, memory leaks</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Methodical diagnosis and before/after metrics validation</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text">Pick a real performance problem: slow initial load, sluggish interactions, memory leaks. Describe how you identified it (user reports, profiling tools), root cause (large bundle, excessive change detection, unsubscribed observables), and solution (code splitting, OnPush strategy, fixing subscriptions). Show metrics: load time from X to Y. Mention validation: testing the fix, monitoring in production, and adding safeguards against regressions. The story should show systematic diagnosis, not guesswork.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Why did you choose Angular for a project over React or Vue?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Angular isn't always the right choice. Explaining your reasoning shows thoughtfulness about framework selection rather than defaulting to what you know.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Honest assessment of Angular's strengths and when it's the right fit</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Understanding of enterprise features Angular provides out of the box</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Awareness of trade-offs and how team context influenced the decision</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text">Acknowledge that framework choice depends on context. Angular excels for large enterprise applications with big teams—TypeScript-first, built-in DI, routing, HTTP client, and forms eliminate decisions about third-party libraries. Its opinionated structure ensures consistency across large codebases. React or Vue suit smaller projects, teams prioritizing flexibility, or when bundle size is critical. Structure your answer around specific project constraints: team size, scope, long-term maintainability, and existing expertise.</p></div>
+</div>
+
+<div class="question-card">
+<h3><svg class="q-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>Describe a complex form requirement you handled in Angular. How did you approach it?</h3>
+<p class="answer-label">Why they ask it</p>
+<p class="why-text">Forms are common and can be complex: dynamic fields, conditional validation, async validation. This shows practical Angular skills and UX thinking.</p>
+<p class="answer-label">What they evaluate</p>
+<ul class="evaluate-list">
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Practical understanding of reactive forms and custom validation</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Handling of dynamic form fields and conditional logic</li>
+<li><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>UX thinking: error messaging, disabled states, unsaved changes</li>
+</ul>
+<p class="answer-label">Answer framework</p>
+<div class="framework-box"><p class="framework-text">Describe a complex form: multi-step wizard, conditional sections, async validation against the server. Explain your approach: reactive forms for programmatic control, <code>FormBuilder</code> for structure, custom validators for business logic, async validators for server-side uniqueness checks. Discuss edge cases: unsaved changes warnings (with <code>CanDeactivate</code>), server error display, disabled states during submission, and loading feedback. Reactive forms shine here—template-driven forms can't handle complex dynamic scenarios cleanly.</p></div>
+</div>
+</div></section>
+<!-- MID CTA -->
+<section>
+<div class="mid-cta">
+<h2>Practice With Questions Tailored to Your Interview</h2>
+<p>AceMyInterviews generates personalized Angular interview questions from your job description and resume. Practice under real interview conditions—timed responses, follow-up questions, and detailed scoring.</p>
+<div class="mid-cta-features">
+<span class="mid-cta-feature"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Angular-specific questions from your JD and resume</span>
+<span class="mid-cta-feature"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Experience-level matched: junior, mid-level, senior</span>
+<span class="mid-cta-feature"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Timed practice with video recording and instant feedback</span>
+<span class="mid-cta-feature"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Performance scoring: accuracy, communication, pacing</span>
+</div>
+<a href="/" class="cta-btn">Start Free Practice Interview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+</div>
+</section>
+
+<!-- WHAT INTERVIEWERS EVALUATE -->
+<section class="section-dark">
+<div class="container">
+<h2>What Interviewers Evaluate in Angular Developer Interviews</h2>
+<p class="section-intro">Beyond questions, interviewers assess your architectural thinking, communication clarity, and how you navigate the real complexities of building enterprise Angular applications.</p>
+<div class="dimensions-grid">
+<div class="dimension-card"><h3>Angular Framework Mastery</h3><p>Deep understanding of Angular's component architecture, not just template syntax. Interviewers test lifecycle hooks, change detection strategies, dependency injection, modules, and routing. They assess whether you can architect scalable applications using Angular's opinionated patterns.</p></div>
+<div class="dimension-card"><h3>TypeScript Proficiency</h3><p>Strong TypeScript skills beyond basic typing. Interviewers expect understanding of interfaces, generics, decorators, utility types, and strict mode. This shows you can write maintainable, type-safe code that catches errors before runtime.</p></div>
+<div class="dimension-card"><h3>Reactive Programming (RxJS)</h3><p>Fluency with observables, operators, and async data flows. RxJS is where many candidates struggle. Interviewers test operator knowledge (switchMap vs mergeMap), memory leak prevention, and real-world async scenarios. Understanding RxJS deeply sets you apart.</p></div>
+<div class="dimension-card"><h3>Architecture &amp; Scalability</h3><p>Ability to structure large Angular applications with feature modules, lazy loading, and state management (NgRx or signals). Interviewers assess whether you can organize code for maintainability, prevent circular dependencies, and scale to enterprise size.</p></div>
+<div class="dimension-card"><h3>Testing Discipline</h3><p>Competence in unit and integration testing with TestBed, mocking services, and testing async code. Interviewers evaluate whether you write testable components and understand the testing toolchain (Jasmine, Karma, Jest, Cypress).</p></div>
+<div class="dimension-card"><h3>Communication &amp; Collaboration</h3><p>Ability to explain Angular-specific decisions to team members and stakeholders. Interviewers assess how you discuss trade-offs (NgRx vs signals), justify architectural choices, and collaborate with backend teams on API contracts.</p></div>
+</div>
+</div>
+</section>
+
+<!-- HOW TO PREPARE -->
+<section>
+<div class="container">
+<h2>How To Prepare for Angular Developer Interviews</h2>
+<div class="prepare-grid">
+<div class="prepare-card"><h3>Practice Explaining Angular Architecture Out Loud</h3><p>Strong Angular developers can articulate why they chose component patterns, lazy loading strategies, and state management approaches. Record yourself explaining Angular concepts: lifecycle hooks, change detection, dependency injection, and routing. Use the STAR method for behavioral questions. Talking through your thinking reveals depth and catches gaps in understanding.</p></div>
+<div class="prepare-card"><h3>Build Deep RxJS Knowledge—It's the Difference Maker</h3><p>RxJS trips up most candidates. Study the difference between <code>switchMap</code>, <code>mergeMap</code>, <code>concatMap</code>, and <code>exhaustMap</code>. Write code practicing each. Understand when to use <code>BehaviorSubject</code> vs <code>ReplaySubject</code>. Build a small project using RxJS heavily: a search feature with debounce, a multi-step form with async validation. Hands-on practice with real scenarios cements understanding in a way reading cannot.</p></div>
+<div class="prepare-card"><h3>Prepare Angular-Specific Behavioral Stories</h3><p>Have 3–4 stories ready about real Angular challenges: version migration, performance debugging, choosing between architectural patterns. Use the STAR method. Interviewers want to see how you handle complexity and collaborate. Stories should highlight problem identification, technical decision-making, and quantified results. Angular-specific examples show you've done real work—not just read documentation.</p></div>
+<div class="prepare-card"><h3>Practice Under Realistic Interview Conditions</h3><p>Simulate interviews with AceMyInterviews. Timed questions, follow-ups, and scoring reveal gaps you wouldn't catch otherwise. Practice both technical questions (explain concepts, whiteboard-style) and behavioral scenarios. Record yourself; watch for clarity, pace, and filler words. Interview performance improves dramatically with deliberate practice reps.</p></div>
+</div>
+</div>
+</section>
+<!-- FAQ -->
+<section class="section-dark">
+<div class="container">
+<h2>Frequently Asked Questions About Angular Developer Interviews</h2>
+<div class="faq-list">
+<details><summary>Which Angular version should I focus on for interviews?</summary><p>Focus on modern Angular, especially Angular 20 and 21. Interviewers increasingly expect familiarity with standalone architecture, signals, modern control flow syntax (<code>@if</code>, <code>@for</code>, <code>@switch</code>), and current performance patterns. Many production applications still run on older Angular versions, so understanding the evolution from NgModules to standalone components is valuable context. For general preparation, make sure you understand signals, standalone components as the recommended default, and current routing and dependency injection patterns. Don't worry about memorizing every version's changelog—focus on architectural shifts and be ready to explain how you'd approach migrating an older app to modern patterns.</p></details>
+<details><summary>How important is RxJS for Angular interviews?</summary><p>RxJS is extremely important—often the differentiator between mid-level and senior candidates. Almost all Angular code involves observables: HTTP requests, form inputs, routing, state management. Expect multiple RxJS questions: operator differences (switchMap vs mergeMap), Subject types, memory leak prevention, and real-world async scenarios. Many candidates falter here, so deep RxJS knowledge significantly improves your chances. Study operators thoroughly, understand when each applies, and practice building async features. Companies hire Angular developers for their RxJS ability because it's hard to learn on the job.</p></details>
+<details><summary>Do I need NgRx experience for Angular developer interviews?</summary><p>NgRx experience strengthens your candidacy but isn't always required. Many teams use simpler state management (services, signals) for small to medium applications. However, larger enterprises and complex applications rely on NgRx, so expect questions about it. Understanding unidirectional data flow, actions, reducers, effects, and selectors is valuable. If the job description mentions NgRx, prioritize learning it. If not, knowledge of alternatives (signals, BehaviorSubject) suffices. Be honest in interviews: if you haven't used NgRx professionally, say so but demonstrate understanding of the concepts. Many companies will teach NgRx during onboarding.</p></details>
+<details><summary>Do Angular interviews include TypeScript questions?</summary><p>Yes, absolutely. Angular is built on TypeScript, so expect TypeScript questions integrated into Angular competency assessment. Expect questions on interfaces vs types, generics, decorators, strict mode, and utility types. You can't write good Angular without strong TypeScript. Study the type system deeply: constraints, conditional types, mapped types, and advanced patterns. Interviewers assess whether your TypeScript knowledge prevents bugs and enables maintainable, type-safe code. If your TypeScript is shaky, your Angular answers will feel incomplete.</p></details>
+<details><summary>How hard are Angular developer interviews?</summary><p>Angular interviews range from moderate to difficult, depending on the role level and company. Junior roles test fundamentals: components, two-way binding, services, basic RxJS. Mid-level interviews go deeper: lifecycle hooks, change detection strategies, advanced RxJS, testing, architecture. Senior interviews evaluate system design: scaling applications, mentoring decisions, performance optimization, and difficult trade-offs. Difficulty also depends on the company: startups may ask fewer technical questions; enterprises stress architecture and RxJS depth. Well-prepared candidates pass; unprepared ones struggle with basic follow-ups. Study the harder topics and practice with realistic scenarios.</p></details>
+<details><summary>What's the difference between Angular and React developer interviews?</summary><p>Angular and React interviews differ significantly. Angular interviews test framework knowledge extensively: modules, routing, DI, lifecycle hooks, change detection. React interviews focus more on JavaScript/JSX and component design. RxJS is central to Angular (many questions); React interviews rarely touch async libraries, relying on hooks and fetch/Promises. Angular values opinionated structure; React emphasizes flexibility and JavaScript fundamentals. TypeScript is more central to Angular interviews. If you know Angular well, React transitions are possible but require learning React's mental model, hooks, and state management libraries. The converse is also true—React developers must learn Angular's framework-specific concepts before Angular interviews.</p></details>
+</div>
+</div>
+</section>
+
+<!-- RELATED LINKS -->
+<div class="related-section">
+<div class="container">
+<h3>Related Interview Questions</h3>
+<div class="related-links">
+<a href="/interview/frontend-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Frontend Developer Interview Questions</a>
+<a href="/interview/react-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>React Developer Interview Questions</a>
+<a href="/interview/javascript-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>JavaScript Developer Interview Questions</a>
+<a href="/interview/typescript-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>TypeScript Developer Interview Questions</a>
+<a href="/interview/web-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Web Developer Interview Questions</a>
+<a href="/interview/full-stack-developer"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>Full Stack Developer Interview Questions</a>
+</div>
+</div>
+</div>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+<div class="container">
+<h2>Ready To Practice Angular Developer Interview Questions?</h2>
+<p>Upload your resume and job description. AceMyInterviews generates Angular-specific questions matched to your experience level. Practice with timed questions, video recording, follow-ups, and detailed performance scoring.</p>
+<a href="/" class="cta-btn">Start Your Interview Simulation →</a>
+<p class="small-text">Takes less than 15 minutes. Free to start.</p>
+</div>
+</section>
+
+<footer class="footer"><a href="/">← Back to AceMyInterviews</a></footer>
 </body>
 </html>
