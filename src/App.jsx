@@ -127,12 +127,6 @@ export default function InterviewSimulator() {
       setUser(session?.user ?? null);
       if (session?.user) {
         setUserName(session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || '');
-        
-        // If user just signed in via OAuth, redirect to setup
-        if (sessionStorage.getItem('pendingAuthRedirect')) {
-          sessionStorage.removeItem('pendingAuthRedirect');
-          setStage('setup');
-        }
       }
       setAuthLoading(false);
     });
@@ -217,6 +211,10 @@ export default function InterviewSimulator() {
 
   // Load user data from Supabase
   const loadUserData = async (userId) => {
+    let loadedInterviews = 0;
+    let loadedSubscribed = false;
+    let loadedOrgId = null;
+    
     try {
       // Recover invite org from sessionStorage if React state was lost during OAuth redirect
       let effectiveInviteOrg = inviteOrg;
@@ -241,8 +239,11 @@ export default function InterviewSimulator() {
         .single();
       
       if (data) {
-        setCompletedInterviews(data.completed_interviews || 0);
-        setIsSubscribed(data.is_subscribed || false);
+        loadedInterviews = data.completed_interviews || 0;
+        loadedSubscribed = data.is_subscribed || false;
+        loadedOrgId = data.org_id || null;
+        setCompletedInterviews(loadedInterviews);
+        setIsSubscribed(loadedSubscribed);
         setSubscriptionDate(data.subscription_date);
         setUserRole(data.role || 'candidate');
         console.log('B2B_LOAD:', { role: data.role, org_id: data.org_id, userId });
@@ -301,6 +302,17 @@ export default function InterviewSimulator() {
       }
     } catch (e) {
       console.error('Error loading user data:', e);
+    }
+    
+    // If user just signed in via OAuth, redirect appropriately
+    if (sessionStorage.getItem('pendingAuthRedirect')) {
+      sessionStorage.removeItem('pendingAuthRedirect');
+      // Use locally loaded data (React state not updated yet)
+      if (!TEST_MODE && !loadedSubscribed && !loadedOrgId && loadedInterviews >= 1) {
+        setStage('paywall');
+      } else {
+        setStage('setup');
+      }
     }
   };
 
