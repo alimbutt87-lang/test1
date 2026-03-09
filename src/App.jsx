@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import AdminDashboard from './AdminDashboard';
-console.log('B2B_BUILD_CHECK_V2');
 
 // ===== CONFIGURATION =====
 // Set to true for testing (bypasses paywall), false for production
 const TEST_MODE = false;
+const SKIP_AUTH = false; // For staging testing only
 
 // Stripe URLs
 const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/fZu14n8Ac7Wm3QJ0TN6wE00';
-const STRIPE_SUBSCRIBE_URL = 'https://buy.stripe.com/6oUaEXbMo90qcnfaun6wE02';
+const STRIPE_SUBSCRIBE_URL = 'https://buy.stripe.com/4gMfZh03G90q86ZcCv6wE01';
 
 // Supabase configuration
 const SUPABASE_URL = 'https://msngeennlvzbhohnrhnq.supabase.co';
@@ -32,7 +31,6 @@ export default function InterviewSimulator() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const [isTranscribing, setIsTranscribing] = useState(false);
   const [currentTranscript, setCurrentTranscript] = useState('');
   const [finalResults, setFinalResults] = useState(null);
   const [pastInterviews, setPastInterviews] = useState([]);
@@ -42,8 +40,8 @@ export default function InterviewSimulator() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   
   // Authentication states
-  const [user, setUser] = useState(null);
-  const [authLoading, setAuthLoading] = useState(true);
+  const [user, setUser] = useState(SKIP_AUTH ? { id: 'test-user', email: 'test@test.com' } : null);
+  const [authLoading, setAuthLoading] = useState(SKIP_AUTH ? false : true);
   
   // Country for leaderboard
   const [userCountry, setUserCountry] = useState('');
@@ -71,44 +69,28 @@ export default function InterviewSimulator() {
   // Mobile audio - need user tap to enable audio on mobile
   const [mobileAudioReady, setMobileAudioReady] = useState(false);
   const [waitingForMobileStart, setWaitingForMobileStart] = useState(false);
-  const [waitingForMobileNext, setWaitingForMobileNext] = useState(false);
-  const [mobileGateEmail, setMobileGateEmail] = useState('');
-  const [mobileGateMessage, setMobileGateMessage] = useState('');
   
-  // Follow-up question states
+  // V2: Follow-up question states
+  const [isEvaluating, setIsEvaluating] = useState(false);
   const [isFollowUp, setIsFollowUp] = useState(false);
   const [currentFollowUpQuestion, setCurrentFollowUpQuestion] = useState(null);
   const [followUpsAskedCount, setFollowUpsAskedCount] = useState(0);
   const [followUpTypesUsed, setFollowUpTypesUsed] = useState([]);
+  // Stores evaluate-followup metadata per question index: { [qIdx]: { reason, followUpType, whatWasMissing, ... } }
   const [followUpMetadata, setFollowUpMetadata] = useState({});
-  const [isEvaluating, setIsEvaluating] = useState(false);
-  
-  // B2B states
-  const [userRole, setUserRole] = useState(null);
-  const [userOrgId, setUserOrgId] = useState(null);
-  const [userOrg, setUserOrg] = useState(null);
-  const [inviteSlug, setInviteSlug] = useState(null);
-  const [inviteOrg, setInviteOrg] = useState(null);
   
   const timerRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
-  const micStreamRef = useRef(null); // Persistent mic stream - grabbed once, reused per question
-  const micMimeTypeRef = useRef(''); // MIME type for MediaRecorder
   const recognitionRef = useRef(null);
   const speechSynthRef = useRef(null);
   const audioRef = useRef(null);
-  
-  // Pre-fetched audio for ALL questions (mobile only) - array of {url, audio} objects
-  const prefetchedAudioRef = useRef(null);
   
   // Video refs
   const videoRef = useRef(null);
   const videoStreamRef = useRef(null);
   const snapshotIntervalRef = useRef(null);
   const transcriptRef = useRef(''); // Store transcript in ref for reliable access
-  const isRecordingRef = useRef(false); // Track recording state for speech recognition onend
-  const accumulatedTranscriptRef = useRef(''); // Accumulate transcript across iOS recognition restarts
 
   // Check if mobile
   const [isMobile, setIsMobile] = useState(false);
@@ -122,11 +104,23 @@ export default function InterviewSimulator() {
 
   // Initialize auth on mount
   useEffect(() => {
+    // In test mode with SKIP_AUTH, keep the fake user
+    if (SKIP_AUTH) {
+      setAuthLoading(false);
+      return;
+    }
+    
     // Check current session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       if (session?.user) {
         setUserName(session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || '');
+        
+        // If user just signed in via OAuth, redirect to setup
+        if (sessionStorage.getItem('pendingAuthRedirect')) {
+          sessionStorage.removeItem('pendingAuthRedirect');
+          setStage('setup');
+        }
       }
       setAuthLoading(false);
     });
@@ -138,6 +132,11 @@ export default function InterviewSimulator() {
         setUserName(session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || '');
         // Load user data when they sign in
         loadUserData(session.user.id);
+        
+        // After sign-in, skip landing and go straight to interview setup
+        if (_event === 'SIGNED_IN') {
+          setStage('setup');
+        }
         
         // Identify user in Mixpanel
         if (window.mixpanel) {
@@ -178,56 +177,11 @@ export default function InterviewSimulator() {
       videoRef.current.srcObject = videoStreamRef.current;
       videoRef.current.play().catch(e => console.log('Video play error:', e));
     }
-  }, [stage, videoEnabled, waitingForMobileStart, waitingForMobileNext]);
-
-  // Capture /join/:slug from URL for B2B invite links
-  useEffect(() => {
-    const path = window.location.pathname;
-    const joinMatch = path.match(/^\/join\/([a-zA-Z0-9-]+)\/?$/);
-    if (joinMatch) {
-      const slug = joinMatch[1];
-      setInviteSlug(slug);
-      // Persist slug so it survives the OAuth redirect page reload
-      sessionStorage.setItem('invite_slug', slug);
-      supabase
-        .from('organizations')
-        .select('*')
-        .eq('slug', slug)
-        .eq('is_active', true)
-        .single()
-        .then(({ data, error }) => {
-          if (data && !error) {
-            setInviteOrg(data);
-            window.history.replaceState({}, '', '/');
-          } else {
-            console.error('Invalid invite link:', slug);
-            setInviteSlug(null);
-            sessionStorage.removeItem('invite_slug');
-            window.history.replaceState({}, '', '/');
-          }
-        });
-    }
-  }, []);
+  }, [stage, videoEnabled, waitingForMobileStart]);
 
   // Load user data from Supabase
   const loadUserData = async (userId) => {
     try {
-      // Recover invite org from sessionStorage if React state was lost during OAuth redirect
-      let effectiveInviteOrg = inviteOrg;
-      const savedSlug = sessionStorage.getItem('invite_slug');
-      if (!effectiveInviteOrg && savedSlug) {
-        const { data: slugOrg } = await supabase
-          .from('organizations')
-          .select('*')
-          .eq('slug', savedSlug)
-          .eq('is_active', true)
-          .single();
-        if (slugOrg) {
-          effectiveInviteOrg = slugOrg;
-        }
-        sessionStorage.removeItem('invite_slug');
-      }
-
       const { data, error } = await supabase
         .from('user_profiles')
         .select('*')
@@ -238,60 +192,13 @@ export default function InterviewSimulator() {
         setCompletedInterviews(data.completed_interviews || 0);
         setIsSubscribed(data.is_subscribed || false);
         setSubscriptionDate(data.subscription_date);
-        setUserRole(data.role || 'candidate');
-        console.log('B2B_LOAD:', { role: data.role, org_id: data.org_id, userId });
-        setUserOrgId(data.org_id || null);
-
-        // If user has an org_id, fetch the org details
-        if (data.org_id) {
-          const { data: orgData, error: orgError } = await supabase
-            .from('organizations')
-            .select('*')
-            .eq('id', data.org_id)
-            .single();
-          if (orgData) { setUserOrg(orgData); console.log('B2B_ORG_LOADED:', orgData); } else { console.log('B2B_ORG_FAILED'); }
-        }
-
-        // If user just came through an invite link and doesn't have an org yet,
-        // tag them to the invite org
-        if (!data.org_id && effectiveInviteOrg) {
-          const { count } = await supabase
-            .from('user_profiles')
-            .select('id', { count: 'exact', head: true })
-            .eq('org_id', effectiveInviteOrg.id)
-            .eq('role', 'candidate');
-          
-          if (!effectiveInviteOrg.candidate_limit || count < effectiveInviteOrg.candidate_limit) {
-            await supabase
-              .from('user_profiles')
-              .update({ org_id: effectiveInviteOrg.id, role: 'candidate' })
-              .eq('id', userId);
-            setUserOrgId(effectiveInviteOrg.id);
-            setUserOrg(effectiveInviteOrg);
-            setUserRole('candidate');
-          }
-          setInviteSlug(null);
-          setInviteOrg(null);
-        }
-
       } else if (error && error.code === 'PGRST116') {
         // User doesn't exist in our table yet, create them
-        const newProfile = {
+        await supabase.from('user_profiles').insert({
           id: userId,
           completed_interviews: 0,
-          is_subscribed: false,
-          role: 'candidate',
-          org_id: effectiveInviteOrg?.id || null
-        };
-        await supabase.from('user_profiles').insert(newProfile);
-        
-        if (effectiveInviteOrg) {
-          setUserOrgId(effectiveInviteOrg.id);
-          setUserOrg(effectiveInviteOrg);
-          setUserRole('candidate');
-          setInviteSlug(null);
-          setInviteOrg(null);
-        }
+          is_subscribed: false
+        });
       }
     } catch (e) {
       console.error('Error loading user data:', e);
@@ -304,6 +211,9 @@ export default function InterviewSimulator() {
     if (window.mixpanel) {
       window.mixpanel.track('google_sign_in_clicked');
     }
+    
+    // Flag so we know to redirect to setup after OAuth returns
+    sessionStorage.setItem('pendingAuthRedirect', 'true');
     
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -324,9 +234,6 @@ export default function InterviewSimulator() {
     setCompletedInterviews(0);
     setIsSubscribed(false);
     setPastInterviews([]);
-    setUserRole(null);
-    setUserOrgId(null);
-    setUserOrg(null);
   };
 
   const initializeApp = async () => {
@@ -360,7 +267,7 @@ export default function InterviewSimulator() {
         if (window.mixpanel) {
           window.mixpanel.track('payment_completed', {
             plan: 'monthly',
-            price: 19.99,
+            price: 9.99,
             currency: 'USD'
           });
           window.mixpanel.people.set({
@@ -602,35 +509,14 @@ export default function InterviewSimulator() {
         for (let i = 0; i < event.results.length; i++) {
           transcript += event.results[i][0].transcript;
         }
-        // On iOS, recognition restarts lose previous results.
-        // Prepend any previously accumulated text.
-        const accumulated = accumulatedTranscriptRef.current + transcript;
-        setCurrentTranscript(accumulated);
-        transcriptRef.current = accumulated;
+        setCurrentTranscript(transcript);
+        transcriptRef.current = transcript; // Also store in ref for reliable access
       };
 
       recognitionRef.current.onerror = (event) => {
         console.error('Speech recognition error:', event.error);
         if (event.error === 'not-allowed') {
           setMicPermission(false);
-        }
-      };
-
-      // iOS/mobile: recognition frequently stops itself after pauses in speech.
-      // Auto-restart it to keep capturing the full answer.
-      recognitionRef.current.onend = () => {
-        // Save what we have so far before restart (results will reset)
-        if (transcriptRef.current) {
-          accumulatedTranscriptRef.current = transcriptRef.current;
-        }
-        // Only restart if we're still in recording mode (not intentionally stopped)
-        if (isRecordingRef.current) {
-          try {
-            recognitionRef.current.start();
-            console.log('Speech recognition auto-restarted');
-          } catch (e) {
-            console.error('Failed to restart recognition:', e);
-          }
         }
       };
     }
@@ -890,6 +776,14 @@ Return ONLY valid JSON:
     setVideoFeedback(null);
     setFinalResults(null);
     
+    // V2: Reset follow-up states
+    setIsFollowUp(false);
+    setCurrentFollowUpQuestion(null);
+    setFollowUpsAskedCount(0);
+    setFollowUpTypesUsed([]);
+    setIsEvaluating(false);
+    setFollowUpMetadata({});
+    
     // Track interview started
     if (window.mixpanel) {
       window.mixpanel.track('interview_started', {
@@ -925,51 +819,7 @@ Return ONLY valid JSON:
       // On mobile, wait for user tap before playing audio
       if (isMobile && !mobileAudioReady) {
         setWaitingForMobileStart(true);
-        // Pre-fetch ALL audio while user sees the "Ready to Begin?" screen
-        try {
-          const introText = `Welcome to your interview for the ${jobTitle} position. I'll be asking you 5 questions. You have 3 minutes to answer each question. Please speak clearly and take your time. Let's begin.`;
-          const allTexts = [introText, ...parsedQuestions.map((q, i) => `Question ${i + 1}: ${q}`)];
-          
-          const allResponses = await Promise.all(
-            allTexts.map(text => 
-              fetch('/api/speak', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) })
-            )
-          );
-          
-          const allBlobs = await Promise.all(allResponses.map(r => r.ok ? r.blob() : null));
-          
-          const allAudio = allBlobs.map(blob => {
-            if (!blob) return null;
-            const url = URL.createObjectURL(blob);
-            const audio = new Audio();
-            audio.preload = 'auto';
-            audio.src = url;
-            audio.load();
-            return { url, audio };
-          });
-          
-          // allAudio[0] = intro, allAudio[1] = Q1, allAudio[2] = Q2, etc.
-          prefetchedAudioRef.current = allAudio;
-          console.log('Pre-fetched all ' + allAudio.length + ' audio clips');
-          
-          // Also grab mic stream now so Q1 recording starts instantly
-          try {
-            const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            micStreamRef.current = micStream;
-            micMimeTypeRef.current = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
-              ? 'audio/webm;codecs=opus'
-              : MediaRecorder.isTypeSupported('audio/webm') 
-                ? 'audio/webm'
-                : MediaRecorder.isTypeSupported('audio/mp4')
-                  ? 'audio/mp4'
-                  : '';
-          } catch (e) {
-            console.error('Mic pre-grab failed:', e);
-          }
-        } catch (e) {
-          console.error('Prefetch all failed:', e);
-          prefetchedAudioRef.current = null;
-        }
+        // Audio will be triggered by the "Start Interview" button tap
       } else {
         // Desktop: play audio immediately
         await speakQuestion(`Welcome to your interview for the ${jobTitle} position. I'll be asking you 5 questions. You have 3 minutes to answer each question. Please speak clearly and take your time. Let's begin.`);
@@ -997,46 +847,6 @@ Return ONLY valid JSON:
       // On mobile, wait for user tap before playing audio
       if (isMobile && !mobileAudioReady) {
         setWaitingForMobileStart(true);
-        try {
-          const introText = `Welcome to your interview. Let's begin.`;
-          const allTexts = [introText, ...fallback.map((q, i) => `Question ${i + 1}: ${q}`)];
-          const allResponses = await Promise.all(
-            allTexts.map(text =>
-              fetch('/api/speak', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) })
-            )
-          );
-          const allBlobs = await Promise.all(allResponses.map(r => r.ok ? r.blob() : null));
-          const allAudio = allBlobs.map(blob => {
-            if (!blob) return null;
-            const url = URL.createObjectURL(blob);
-            const audio = new Audio();
-            audio.preload = 'auto';
-            audio.src = url;
-            audio.load();
-            return { url, audio };
-          });
-          prefetchedAudioRef.current = allAudio;
-        } catch (e) {
-          console.error('Prefetch fallback failed:', e);
-          prefetchedAudioRef.current = null;
-        }
-        
-        // Also grab mic stream now so Q1 recording starts instantly
-        try {
-          if (!micStreamRef.current) {
-            const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            micStreamRef.current = micStream;
-            micMimeTypeRef.current = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
-              ? 'audio/webm;codecs=opus'
-              : MediaRecorder.isTypeSupported('audio/webm') 
-                ? 'audio/webm'
-                : MediaRecorder.isTypeSupported('audio/mp4')
-                  ? 'audio/mp4'
-                  : '';
-          }
-        } catch (e) {
-          console.error('Mic pre-grab failed:', e);
-        }
       } else {
         await speakQuestion(`Welcome to your interview. Let's begin with question 1: ${fallback[0]}`);
         startRecordingPhase();
@@ -1045,278 +855,40 @@ Return ONLY valid JSON:
   };
 
   // Handle mobile start button tap - enables audio playback
-  const handleMobileStart = () => {
+  const handleMobileStart = async () => {
     setMobileAudioReady(true);
     setWaitingForMobileStart(false);
-    setIsSpeaking(true);
-    setIsRecording(false);
     
-    // Reattach camera
-    setTimeout(() => {
-      if (videoEnabled && videoStreamRef.current && videoRef.current) {
-        videoRef.current.srcObject = videoStreamRef.current;
-        videoRef.current.play().catch(() => {});
-      }
-    }, 100);
-    
-    const allAudio = prefetchedAudioRef.current;
-    
-    if (allAudio && allAudio.length >= 2 && allAudio[0] && allAudio[1]) {
-      // Play intro (index 0) then Q1 (index 1) sequentially
-      const toPlay = [allAudio[0], allAudio[1]];
-      let idx = 0;
-      
-      const playNext = () => {
-        if (idx >= toPlay.length) {
-          setIsSpeaking(false);
-          startRecordingPhase();
-          return;
-        }
-        
-        const item = toPlay[idx];
-        const audio = item.audio;
-        audioRef.current = audio;
-        idx++;
-        
-        let finished = false;
-        const done = () => {
-          if (finished) return;
-          finished = true;
-          URL.revokeObjectURL(item.url);
-          playNext();
-        };
-        
-        audio.onended = done;
-        audio.onerror = done;
-        audio.ontimeupdate = () => {
-          if (audio.duration && audio.currentTime >= audio.duration - 0.3) {
-            audio.ontimeupdate = null;
-            done();
-          }
-        };
-        setTimeout(done, 20000);
-        
-        audio.play().catch(done);
-      };
-      
-      playNext();
-    } else {
-      // No prefetched audio — skip audio, just start recording
-      setIsSpeaking(false);
-      startRecordingPhase();
-    }
-  };
-
-  // Handle mobile tap to hear next question
-  // Audio is already pre-fetched and preloaded in the array
-  const handleMobileNextQuestion = () => {
-    setWaitingForMobileNext(false);
-    setIsSpeaking(true);
-    setIsRecording(false);
-    
-    // Reattach camera after overlay switch
-    setTimeout(() => {
-      if (videoEnabled && videoStreamRef.current && videoRef.current) {
-        videoRef.current.srcObject = videoStreamRef.current;
-        videoRef.current.play().catch(() => {});
-      }
-    }, 100);
-    
-    // allAudio[0] = intro, allAudio[1] = Q1, allAudio[2] = Q2, etc.
-    // currentQuestionIndex is already updated to the new question (0-based)
-    // So Q2 = index 1 = allAudio[2], Q3 = index 2 = allAudio[3], etc.
-    const allAudio = prefetchedAudioRef.current;
-    const audioIndex = currentQuestionIndex + 1; // +1 because index 0 is intro
-    
-    if (allAudio && allAudio[audioIndex] && allAudio[audioIndex].audio) {
-      const item = allAudio[audioIndex];
-      const audio = item.audio;
-      audioRef.current = audio;
-      
-      let finished = false;
-      const done = () => {
-        if (finished) return;
-        finished = true;
-        setIsSpeaking(false);
-        URL.revokeObjectURL(item.url);
-        startRecordingPhase();
-      };
-      
-      audio.onended = done;
-      audio.onerror = done;
-      
-      // Backup: poll for completion (iOS sometimes doesn't fire onended)
-      audio.ontimeupdate = () => {
-        if (audio.duration && audio.currentTime >= audio.duration - 0.3) {
-          audio.ontimeupdate = null;
-          done();
-        }
-      };
-      
-      // Safety timeout
-      setTimeout(() => {
-        if (!finished) done();
-      }, 20000);
-      
-      audio.play().catch(done);
-    } else {
-      // Prefetch failed or not ready — skip audio, just start recording
-      setIsSpeaking(false);
-      startRecordingPhase();
-    }
+    // Now play the intro and first question
+    await speakQuestion(`Welcome to your interview for the ${jobTitle} position. I'll be asking you 5 questions. You have 3 minutes to answer each question. Please speak clearly and take your time. Let's begin.`);
+    await speakQuestion(`Question 1: ${questions[0]}`);
+    startRecordingPhase();
   };
 
   const startRecordingPhase = () => {
     setTimeLeft(180); // Always reset to 3 minutes
     setIsTimerRunning(true);
     // Don't clear transcript here - it's already cleared in handleNextQuestion
-    startRecording(); // async but we don't need to await it here
+    startRecording();
   };
 
-  const startRecording = async () => {
-    if (isMobile) {
-      // Mobile: use MediaRecorder to capture audio for Whisper transcription
-      setCurrentTranscript('🎙️ Recording... (transcription on submit)');
-      transcriptRef.current = '';
-      accumulatedTranscriptRef.current = '';
-      audioChunksRef.current = [];
-      
+  const startRecording = () => {
+    if (recognitionRef.current) {
       try {
-        // Get mic stream once, reuse for all questions
-        if (!micStreamRef.current || micStreamRef.current.getTracks().every(t => t.readyState === 'ended')) {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          micStreamRef.current = stream;
-          
-          // Determine best MIME type once
-          micMimeTypeRef.current = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
-            ? 'audio/webm;codecs=opus'
-            : MediaRecorder.isTypeSupported('audio/webm') 
-              ? 'audio/webm'
-              : MediaRecorder.isTypeSupported('audio/mp4')
-                ? 'audio/mp4'
-                : '';
-        }
-        
-        // Create new MediaRecorder from existing stream (fast, synchronous)
-        const options = micMimeTypeRef.current 
-          ? { mimeType: micMimeTypeRef.current, audioBitsPerSecond: 16000 } 
-          : { audioBitsPerSecond: 16000 };
-        const recorder = new MediaRecorder(micStreamRef.current, options);
-        mediaRecorderRef.current = recorder;
-        
-        recorder.ondataavailable = (event) => {
-          if (event.data.size > 0) {
-            audioChunksRef.current.push(event.data);
-          }
-        };
-        
-        recorder.start(1000);
+        recognitionRef.current.start();
         setIsRecording(true);
-        isRecordingRef.current = true;
-      } catch (err) {
-        console.error('MediaRecorder failed:', err);
-        setCurrentTranscript('⚠️ Mic error - please check permissions');
-        setIsRecording(false);
-      }
-    } else {
-      // Desktop: use Web Speech API (live transcription)
-      if (recognitionRef.current) {
-        try {
-          recognitionRef.current.start();
-          setIsRecording(true);
-          isRecordingRef.current = true;
-        } catch (e) {
-          console.error('Failed to start recognition:', e);
-        }
+      } catch (e) {
+        console.error('Failed to start recognition:', e);
       }
     }
   };
 
   const stopRecording = () => {
-    isRecordingRef.current = false;
-    
-    if (isMobile) {
-      // Mobile: stop MediaRecorder and send to Whisper
-      return new Promise((resolve) => {
-        const recorder = mediaRecorderRef.current;
-        if (recorder && recorder.state !== 'inactive') {
-          recorder.onstop = async () => {
-            // DON'T stop mic tracks - keep stream alive for next question
-            setIsRecording(false);
-            
-            // Send audio to Whisper for transcription
-            if (audioChunksRef.current.length > 0) {
-              try {
-                setCurrentTranscript('⏳ Transcribing your answer...');
-                
-                const storedMimeType = micMimeTypeRef.current || recorder.mimeType || 'audio/webm';
-                const audioBlob = new Blob(audioChunksRef.current, { type: storedMimeType });
-                
-                // Convert to base64
-                const reader = new FileReader();
-                const base64 = await new Promise((res, rej) => {
-                  reader.onloadend = () => res(reader.result.split(',')[1]);
-                  reader.onerror = rej;
-                  reader.readAsDataURL(audioBlob);
-                });
-                
-                const response = await fetch('/api/transcribe', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ audio: base64, mimeType: storedMimeType })
-                });
-                
-                if (response.ok) {
-                  const data = await response.json();
-                  const transcript = data.transcript || '[No speech detected]';
-                  setCurrentTranscript(transcript);
-                  transcriptRef.current = transcript;
-                  console.log('Whisper transcript:', transcript.substring(0, 100));
-                } else {
-                  console.error('Transcription failed:', response.status);
-                  transcriptRef.current = '[Transcription failed]';
-                }
-              } catch (err) {
-                console.error('Whisper error:', err);
-                transcriptRef.current = '[Transcription error]';
-              }
-            }
-            
-            audioChunksRef.current = [];
-            resolve();
-          };
-          recorder.stop();
-        } else {
-          setIsRecording(false);
-          resolve();
-        }
-      });
-    } else {
-      // Desktop: stop Web Speech API
-      return new Promise((resolve) => {
-        if (recognitionRef.current) {
-          try {
-            const onEnd = () => {
-              recognitionRef.current.removeEventListener('end', onEnd);
-              setIsRecording(false);
-              resolve();
-            };
-            recognitionRef.current.addEventListener('end', onEnd);
-            recognitionRef.current.stop();
-            setTimeout(() => {
-              recognitionRef.current?.removeEventListener('end', onEnd);
-              setIsRecording(false);
-              resolve();
-            }, 1500);
-          } catch (e) {
-            setIsRecording(false);
-            resolve();
-          }
-        } else {
-          setIsRecording(false);
-          resolve();
-        }
-      });
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.stop();
+        setIsRecording(false);
+      } catch (e) {}
     }
   };
 
@@ -1326,17 +898,15 @@ Return ONLY valid JSON:
       timerRef.current = setTimeout(() => {
         setTimeLeft(prev => prev - 1);
       }, 1000);
-    } else if (timeLeft === 0 && isTimerRunning && !isTranscribing && !isEvaluating) {
+    } else if (timeLeft === 0 && isTimerRunning) {
       handleNextQuestion();
     }
     return () => clearTimeout(timerRef.current);
-  }, [isTimerRunning, timeLeft, isTranscribing, isEvaluating]);
+  }, [isTimerRunning, timeLeft]);
 
   const handleNextQuestion = async () => {
-    if (isTranscribing) return; // Prevent double-tap
     setIsTimerRunning(false);
-    if (isMobile) setIsTranscribing(true); // Disable button immediately
-    await stopRecording();
+    stopRecording();
     
     // Stop any currently playing audio (ElevenLabs or browser)
     if (audioRef.current) {
@@ -1366,105 +936,95 @@ Return ONLY valid JSON:
     // Clear transcript state AND ref
     setCurrentTranscript('');
     transcriptRef.current = '';
-    accumulatedTranscriptRef.current = '';
     
-    // Reset timer immediately for next question
+    // Reset timer
     setTimeLeft(180);
-    
-    // Helper: move to next main question or finish
-    const moveToNextOrFinish = async (answersArr) => {
-      if (currentQuestionIndex < questions.length - 1) {
-        const nextIndex = currentQuestionIndex + 1;
-        setCurrentQuestionIndex(nextIndex);
-        
-        if (isMobile) {
-          if (videoEnabled) {
-            const snapshot = captureSnapshot();
-            if (snapshot) {
-              setVideoSnapshots(prev => [...prev.slice(-9), snapshot]);
-            }
-          }
-          setIsTranscribing(false);
-          setWaitingForMobileNext(true);
-        } else {
-          await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
-          startRecordingPhase();
-        }
-      } else {
-        // Interview complete
-        if (micStreamRef.current) {
-          micStreamRef.current.getTracks().forEach(track => track.stop());
-          micStreamRef.current = null;
-        }
-        setIsTranscribing(false);
-        setStage('analyzing');
-        setIsAnalyzing(true);
-        await analyzeAllAnswers(answersArr);
-      }
-    };
     
     // If we just answered a follow-up, move to next main question
     if (isFollowUp) {
       setIsFollowUp(false);
       setCurrentFollowUpQuestion(null);
-      await moveToNextOrFinish(newAnswers);
+      
+      if (currentQuestionIndex < questions.length - 1) {
+        const nextIndex = currentQuestionIndex + 1;
+        setCurrentQuestionIndex(nextIndex);
+        await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
+        startRecordingPhase();
+      } else {
+        setStage('analyzing');
+        setIsAnalyzing(true);
+        await analyzeAllAnswers(newAnswers);
+      }
       return;
     }
     
-    // For main question answers on desktop, evaluate if follow-up is needed
-    // Mobile users are gated so they won't reach here, but skip follow-ups just in case
-    if (!isMobile) {
-      setIsEvaluating(true);
+    // For main question answers, evaluate if follow-up is needed
+    setIsEvaluating(true);
+    
+    try {
+      const followUpResult = await evaluateForFollowUp(
+        questions[currentQuestionIndex],
+        capturedTranscript,
+        currentQuestionIndex,
+        questions.length,
+        followUpsAskedCount
+      );
       
-      try {
-        const followUpResult = await evaluateForFollowUp(
-          questions[currentQuestionIndex],
-          capturedTranscript,
-          currentQuestionIndex,
-          questions.length,
-          followUpsAskedCount
-        );
+      setIsEvaluating(false);
+      
+      // Always store the evaluation metadata for this question (whether or not follow-up fires)
+      setFollowUpMetadata(prev => ({
+        ...prev,
+        [currentQuestionIndex]: {
+          reason: followUpResult.reason || null,
+          followUpType: followUpResult.followUpType || null,
+          whatWasMissing: followUpResult.whatWasMissing || null,
+          shouldFollowUp: followUpResult.shouldFollowUp || false
+        }
+      }));
+      
+      if (followUpResult.shouldFollowUp && followUpResult.followUpQuestion) {
+        // Ask the follow-up question
+        setIsFollowUp(true);
+        setCurrentFollowUpQuestion(followUpResult.followUpQuestion);
+        setFollowUpsAskedCount(prev => prev + 1);
+        if (followUpResult.followUpType) {
+          setFollowUpTypesUsed(prev => [...prev, followUpResult.followUpType]);
+        }
         
-        setIsEvaluating(false);
-        
-        // Store evaluation metadata for this question
-        setFollowUpMetadata(prev => ({
-          ...prev,
-          [currentQuestionIndex]: {
-            reason: followUpResult.reason || null,
-            followUpType: followUpResult.followUpType || null,
-            whatWasMissing: followUpResult.whatWasMissing || null,
-            shouldFollowUp: followUpResult.shouldFollowUp || false
-          }
-        }));
-        
-        if (followUpResult.shouldFollowUp && followUpResult.followUpQuestion) {
-          // Ask the follow-up question
-          setIsFollowUp(true);
-          setCurrentFollowUpQuestion(followUpResult.followUpQuestion);
-          setFollowUpsAskedCount(prev => prev + 1);
-          if (followUpResult.followUpType) {
-            setFollowUpTypesUsed(prev => [...prev, followUpResult.followUpType]);
-          }
-          
-          await speakQuestion(followUpResult.followUpQuestion);
+        await speakQuestion(followUpResult.followUpQuestion);
+        startRecordingPhase();
+      } else {
+        // No follow-up needed, move to next question
+        if (currentQuestionIndex < questions.length - 1) {
+          const nextIndex = currentQuestionIndex + 1;
+          setCurrentQuestionIndex(nextIndex);
+          await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
           startRecordingPhase();
         } else {
-          await moveToNextOrFinish(newAnswers);
+          setStage('analyzing');
+          setIsAnalyzing(true);
+          await analyzeAllAnswers(newAnswers);
         }
-      } catch (error) {
-        console.error('Follow-up evaluation error:', error);
-        setIsEvaluating(false);
-        await moveToNextOrFinish(newAnswers);
       }
-    } else {
-      // Mobile: skip follow-up evaluation
-      await moveToNextOrFinish(newAnswers);
+    } catch (error) {
+      console.error('Follow-up evaluation error:', error);
+      setIsEvaluating(false);
+      // On error, just move to next question
+      if (currentQuestionIndex < questions.length - 1) {
+        const nextIndex = currentQuestionIndex + 1;
+        setCurrentQuestionIndex(nextIndex);
+        await speakQuestion(`Question ${nextIndex + 1}: ${questions[nextIndex]}`);
+        startRecordingPhase();
+      } else {
+        setStage('analyzing');
+        setIsAnalyzing(true);
+        await analyzeAllAnswers(newAnswers);
+      }
     }
   };
-
-  // AI Analysis of all answers using serverless function
-  // Evaluate if follow-up is needed (desktop only - mobile uses gate)
+  
+  // V2: Evaluate if follow-up is needed
   const evaluateForFollowUp = async (question, answer, questionIndex, totalQuestions, followUpsSoFar) => {
     if (answer === '[No response recorded]' || answer.length < 20) {
       return { shouldFollowUp: false, reason: 'no_content' };
@@ -1493,6 +1053,7 @@ Return ONLY valid JSON:
     }
   };
 
+  // AI Analysis of all answers using serverless function
   const analyzeAllAnswers = async (allAnswers) => {
     try {
       const response = await fetch('/api/analyze-interview', {
@@ -1504,10 +1065,15 @@ Return ONLY valid JSON:
       const data = await response.json();
       
       if (!response.ok || !data.results) {
-        throw new Error('Analysis failed');
+        console.error('Analysis API response not ok:', response.status, JSON.stringify(data));
+        throw new Error(`Analysis failed: ${data?.error || data?.detail || 'No results in response'}`);
       }
 
       const results = data.results;
+      
+      // Diagnostic: log that we got real API results
+      console.log('✅ Got REAL API results. Overall score:', results.overallScore, 
+        'Q1 feedback preview:', results.questionScores?.[0]?.feedback?.substring(0, 80));
       
       // Also analyze video if we have snapshots
       let videoResults = null;
@@ -1574,42 +1140,6 @@ Return ONLY valid JSON:
           'last_interview_score': results.overallScore
         });
       }
-      // ===== B2B FORK: Save to Supabase if user has org_id =====
-      if (userOrgId && user) {
-        try {
-          const { data: sessionData } = await supabase.auth.getSession();
-          const accessToken = sessionData?.session?.access_token;
-          if (accessToken) {
-            const questionsAndAnswers = allAnswers.map(a => ({
-              question: a.question,
-              answer: a.answer,
-              timeSpent: a.timeSpent,
-              isFollowUp: a.isFollowUp || false,
-              parentQuestionIndex: a.parentQuestionIndex != null ? a.parentQuestionIndex : null
-            }));
-
-            await fetch('/api/save-interview-results', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                accessToken,
-                orgId: userOrgId,
-                interviewData: {
-                  jobTitle,
-                  results,
-                  videoAnalysis: videoResults,
-                  userName: userName || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Anonymous',
-                  questionsAndAnswers
-                }
-              })
-            });
-          }
-        } catch (e) {
-          console.error('B2B save error (non-blocking):', e);
-        }
-      }
-      // ===== END B2B FORK =====
-
       
       setIsAnalyzing(false);
       setStage('results');
@@ -1624,8 +1154,10 @@ Return ONLY valid JSON:
       
     } catch (error) {
       console.error('Analysis error:', error);
+      console.error('Error detail:', error.message);
       stopCamera();
-      // Fallback results
+      // Fallback results - log that we're using fallback so it's clear during testing
+      console.warn('⚠️ Using FALLBACK results - API analysis failed. Check server logs for details.');
       const fallbackResults = generateFallbackResults(allAnswers);
       setFinalResults(fallbackResults);
       setIsAnalyzing(false);
@@ -1635,8 +1167,7 @@ Return ONLY valid JSON:
 
   // PDF Download function (Pro feature)
   const downloadResultsPDF = async () => {
-    const isB2BCandidate = userOrgId != null;
-    if (!isSubscribed && !TEST_MODE && !isB2BCandidate) {
+    if (!isSubscribed && !TEST_MODE) {
       setPreviousStage('results');
       setStage('paywall');
       return;
@@ -1802,6 +1333,58 @@ Return ONLY valid JSON:
             });
           }
           
+          // Follow-up section in PDF
+          if (q.hasFollowUp && q.followUp) {
+            yPos = checkNewPage(yPos, 30);
+            yPos += 3;
+            
+            // Follow-up header
+            const purpleColor = [167, 139, 250];
+            pdf.setTextColor(...purpleColor);
+            pdf.setFont('helvetica', 'bold');
+            pdf.setFontSize(10);
+            pdf.text(`↪ Follow-up Response`, 24, yPos);
+            
+            const fuScoreColor = q.followUp.score >= 80 ? primaryColor : q.followUp.score >= 70 ? [245, 158, 11] : failColor;
+            pdf.setTextColor(...fuScoreColor);
+            pdf.text(`${q.followUp.score}/100`, 170, yPos);
+            yPos += 6;
+            
+            // Coaching note
+            if (q.followUp.coachingNote) {
+              yPos = checkNewPage(yPos, 10);
+              pdf.setFont('helvetica', 'normal');
+              pdf.setTextColor(...purpleColor);
+              const noteLines = pdf.splitTextToSize(`💡 ${q.followUp.coachingNote}`, 160);
+              noteLines.slice(0, 2).forEach(line => {
+                pdf.text(line, 24, yPos);
+                yPos += 5;
+              });
+            }
+            
+            // Follow-up feedback
+            if (q.followUp.feedback) {
+              pdf.setFont('helvetica', 'normal');
+              pdf.setTextColor(...grayColor);
+              const fuFeedbackLines = pdf.splitTextToSize(q.followUp.feedback, 160);
+              fuFeedbackLines.slice(0, 3).forEach(line => {
+                yPos = checkNewPage(yPos, 8);
+                pdf.text(line, 24, yPos);
+                yPos += 5;
+              });
+            }
+          }
+          
+          // No follow-up positive note in PDF
+          if (!q.hasFollowUp && q.noFollowUpReason === 'thorough_answer') {
+            yPos = checkNewPage(yPos, 10);
+            yPos += 2;
+            pdf.setTextColor(...primaryColor);
+            pdf.setFont('helvetica', 'italic');
+            pdf.setFontSize(9);
+            pdf.text('✓ No follow-up needed — your answer was thorough', 24, yPos);
+          }
+          
           yPos += 5;
         });
       }
@@ -1895,6 +1478,7 @@ Return ONLY valid JSON:
   };
 
   const generateFallbackResults = (allAnswers) => {
+    // Only use main answers for scoring
     const mainOnly = allAnswers.filter(a => !a.isFollowUp);
     const followUps = allAnswers.filter(a => a.isFollowUp);
     
@@ -1902,6 +1486,7 @@ Return ONLY valid JSON:
     const avgTime = mainOnly.reduce((sum, a) => sum + a.timeSpent, 0) / mainOnly.length;
     const baseScore = Math.min(Math.round((avgLength / 500) * 50 + (avgTime / 180) * 30 + 20), 85);
     
+    // Build follow-up lookup
     const fuLookup = {};
     followUps.forEach(fa => {
       fuLookup[fa.parentQuestionIndex] = fa;
@@ -1930,6 +1515,7 @@ Return ONLY valid JSON:
           followUp: hasFU ? {
             question: fuAnswer.question,
             score: fuScore,
+            addressedGap: true,
             feedback: "Follow-up answer recorded and evaluated.",
             strengths: ["Responded to follow-up"],
             improvements: ["Add more detail"],
@@ -1963,24 +1549,9 @@ Return ONLY valid JSON:
   };
 
   const handleStartInterview = async (source = 'landing') => {
-    // Unlock audio playback for Safari (must happen in user gesture context)
-    try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const buf = ctx.createBuffer(1, 1, 22050);
-      const src = ctx.createBufferSource();
-      src.buffer = buf;
-      src.connect(ctx.destination);
-      src.start(0);
-      // Also create and play a silent HTML5 audio to unlock Audio() constructor
-      const silentAudio = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
-      silentAudio.play().catch(() => {});
-    } catch (e) {}
-    
     // In TEST_MODE, always allow access
     // In production, check if user is subscribed or has free trial remaining
-    // B2B candidates with an org_id skip the paywall entirely
-    const isB2BCandidate = userOrgId != null;
-    if (!TEST_MODE && !isSubscribed && !isB2BCandidate && completedInterviews >= 1) {
+    if (!TEST_MODE && !isSubscribed && completedInterviews >= 1) {
       setPreviousStage(source);
       setStage('paywall');
       return;
@@ -1996,17 +1567,6 @@ Return ONLY valid JSON:
     setVideoSnapshots([]);
     setVideoFeedback(null);
     setWaitingForMobileStart(false);
-    setWaitingForMobileNext(false);
-    setMobileAudioReady(false);
-    prefetchedAudioRef.current = null;
-    
-    // Reset follow-up states
-    setIsFollowUp(false);
-    setCurrentFollowUpQuestion(null);
-    setFollowUpsAskedCount(0);
-    setFollowUpTypesUsed([]);
-    setFollowUpMetadata({});
-    setIsEvaluating(false);
     
     // Try to get mic permission, but don't block if it fails
     try {
@@ -2035,18 +1595,6 @@ Return ONLY valid JSON:
     return { trend: 'down', icon: '↓', color: '#ef4444' };
   };
 
-  // B2B Admin Dashboard
-  if (userRole === 'admin' && userOrg && user) {
-    return (
-      <AdminDashboard
-        user={user}
-        supabase={supabase}
-        org={userOrg}
-       onLogout={signOut}
-      />
-    );
-  }
-
   // Loading state
   if (isLoading) {
     return (
@@ -2059,203 +1607,1067 @@ Return ONLY valid JSON:
     );
   }
 
+
   // Landing Page
   if (stage === 'landing') {
+    const handleCTA = () => {
+      if (user) {
+        handleStartInterview();
+      } else {
+        signInWithGoogle();
+      }
+    };
+
     return (
-      <div style={styles.container}>
-        <div style={styles.heroGlow}></div>
-        <div style={styles.landing}>
-          {/* User auth section - top right (only show when logged in) */}
-          {user && (
-            <div style={styles.authSection}>
-              {/* Desktop view */}
-              {!isMobile && (
-                <div style={styles.userInfo}>
-                  <span style={styles.userEmail}>👤 {user.email.length > 25 ? user.email.substring(0, 22) + '...' : user.email}</span>
-                  <button style={styles.signOutBtn} onClick={signOut}>Sign Out</button>
-                </div>
-              )}
-              {/* Mobile menu button */}
-              {isMobile && (
-                <>
-                  <button 
-                    style={styles.mobileMenuBtn} 
-                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  >
-                    {mobileMenuOpen ? '✕' : '☰'}
-                  </button>
-                  {/* Mobile dropdown */}
-                  {mobileMenuOpen && (
-                    <div style={styles.mobileMenuDropdown}>
-                      <span style={styles.mobileMenuEmail}>{user.email}</span>
-                      <button style={styles.mobileMenuItem} onClick={() => {
-                        setMobileMenuOpen(false);
-                        if (window.mixpanel) window.mixpanel.track('dashboard_viewed');
-                        setStage('dashboard');
-                      }}>
-                        ⚙️ Dashboard
-                      </button>
-                      {pastInterviews.length > 0 && (
-                        <button style={styles.mobileMenuItem} onClick={() => {
-                          setMobileMenuOpen(false);
-                          if (window.mixpanel) window.mixpanel.track('history_viewed');
-                          setPreviousStage('landing');
-                          setStage('history');
-                        }}>
-                          📋 History
-                        </button>
-                      )}
-                      <button style={styles.mobileMenuItemDanger} onClick={() => {
-                        setMobileMenuOpen(false);
-                        signOut();
-                      }}>
-                        Sign Out
-                      </button>
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-          )}
-          
-          {TEST_MODE && (
-            <div style={styles.testModeBanner}>
-              🧪 TEST MODE - Paywall disabled
-              <button style={styles.resetBtn} onClick={resetAllData}>Reset Data</button>
-            </div>
-          )}
-          
-          {/* Logo - centered */}
-          <img src="/Logoapp.png" alt="Ace My Interviews" style={styles.logoCentered} />
-          <h1 style={styles.heroTitle}>
-            No surprises.<br />
-            <span style={styles.heroAccent}>Ace your interview.</span>
-          </h1>
-          <p style={styles.heroSubtitle}>
-            Enter your role and job description. We simulate a real interview with timed, 
-            camera-on answers — then score both what you say and how you say it.
-          </p>
-          
-          <div style={styles.featurePills}>
-            <div style={styles.featurePill}>
-              <span>⏱️</span>
-              <span>3-min timed answers</span>
-            </div>
-            <div style={styles.featurePill}>
-              <span>📹</span>
-              <span>Camera-on pressure</span>
-            </div>
-            <div style={styles.featurePill}>
-              <span>✅</span>
-              <span>Pass/Fail verdict</span>
-            </div>
-            <div style={styles.featurePill}>
-              <span>📊</span>
-              <span>Delivery analysis</span>
-            </div>
-          </div>
+      <>
+        {/* Google Fonts */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
 
-          {/* B2B Invite Badge */}
-          {inviteOrg && !user && (
-            <div style={{
-              background: 'rgba(16,185,129,0.1)',
-              border: '1px solid rgba(16,185,129,0.3)',
-              borderRadius: 12,
-              padding: '12px 20px',
-              marginBottom: 16,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-              fontSize: 14,
-              color: '#34d399'
-            }}>
-              🎓 You've been invited by {inviteOrg.name}
-            </div>
-          )}
-          {/* Main CTA - changes based on auth state */}
-          {!user && !TEST_MODE ? (
-            <div style={styles.ctaWrapper}>
-              <button style={styles.googleSignInBtnLarge} onClick={signInWithGoogle}>
-                <svg style={styles.googleIcon} viewBox="0 0 24 24" width="20" height="20">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
-                Sign in to Start Free Interview
-              </button>
-              <p style={styles.trialNote}>🎁 First interview is completely free • No credit card required</p>
-            </div>
-          ) : (
-            <>
-              <button style={styles.primaryBtn} onClick={handleStartInterview}>
-                {completedInterviews === 0 ? 'Start Free Interview' : 'Start Interview'}
-                <span style={styles.btnArrow}>→</span>
-              </button>
-              
-              {completedInterviews === 0 && !TEST_MODE && (
-                <p style={styles.trialNote}>🎁 First interview is completely free</p>
-              )}
-              
-              {isSubscribed && (
-                <p style={styles.trialNote}>✓ Subscribed • Unlimited interviews</p>
-              )}
-              
-              {!isSubscribed && completedInterviews > 0 && !TEST_MODE && (
-                <p style={styles.trialNote}>Free trial used • Subscribe for unlimited access</p>
-              )}
-            </>
-          )}
+        <style>{`
+          .lp-root {
+            background: #070b14;
+            color: #e8edf5;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+          }
+          .lp-root *, .lp-root *::before, .lp-root *::after { box-sizing: border-box; }
 
-          {/* Secondary actions - only show when logged in */}
-          {user && (
-            <div style={styles.secondaryActions}>
-              <button style={styles.secondaryBtn} onClick={() => {
-                if (window.mixpanel) window.mixpanel.track('dashboard_viewed');
-                setStage('dashboard');
-              }}>
-                ⚙️ Dashboard
-              </button>
-              {pastInterviews.length > 0 && (
-                <button style={styles.secondaryBtn} onClick={() => {
-                  if (window.mixpanel) window.mixpanel.track('history_viewed');
-                  setPreviousStage('landing');
-                  setStage('history');
-                }}>
-                  📋 History ({pastInterviews.length})
-                </button>
-              )}
-            </div>
-          )}
-          
-          {/* Trust Block */}
-          <div style={styles.trustBlock}>
-            <p style={styles.trustTitle}>🔒 Your Practice is Private</p>
-            <p style={styles.trustText}>
-              Video and audio recordings are processed in real-time and never stored. 
-              We only save your scores to track progress. <a href="#" onClick={(e) => { 
-                e.preventDefault(); 
-                if (window.mixpanel) window.mixpanel.track('privacy_policy_viewed');
-                setStage('privacy'); 
-              }} style={styles.trustLink}>Learn more</a>
+          /* Noise overlay */
+          .lp-root::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+          }
+
+          /* NAV */
+          .lp-nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1.2rem 6%;
+            background: rgba(7,11,20,0.8);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+          }
+          .lp-nav-logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #e8edf5;
+            text-decoration: none;
+          }
+          .lp-nav-logo span { color: #00e5ff; }
+          .lp-nav-links { display: flex; gap: 2.5rem; list-style: none; margin: 0; padding: 0; }
+          .lp-nav-links a { color: #7a8ba3; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+          .lp-nav-links a:hover { color: #e8edf5; }
+          .lp-nav-cta {
+            background: #00e5ff;
+            color: #000;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            padding: 0.6rem 1.4rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: box-shadow 0.2s, transform 0.2s;
+          }
+          .lp-nav-cta:hover { box-shadow: 0 0 24px rgba(0,229,255,0.4); transform: translateY(-1px); }
+
+          /* HERO */
+          .lp-hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 7rem 6% 5rem;
+            overflow: hidden;
+          }
+          .lp-hero::after {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 900px;
+            height: 600px;
+            background: radial-gradient(ellipse at center, rgba(0,229,255,0.1) 0%, transparent 70%);
+            pointer-events: none;
+          }
+          .lp-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0,229,255,0.08);
+            border: 1px solid rgba(0,229,255,0.25);
+            border-radius: 100px;
+            padding: 0.35rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #00e5ff;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            animation: lpFadeDown 0.8s ease forwards;
+          }
+          .lp-badge::before {
+            content: '';
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #00e5ff;
+            animation: lpPulse 2s infinite;
+          }
+          @keyframes lpPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+          }
+          @keyframes lpFadeDown {
+            from { opacity: 0; transform: translateY(-16px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .lp-hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: clamp(2.6rem, 5.5vw, 4.5rem);
+            line-height: 1.08;
+            letter-spacing: -0.01em;
+            max-width: 860px;
+            margin: 0;
+            animation: lpFadeDown 0.8s 0.1s ease both;
+          }
+          .lp-hero h1 em {
+            font-style: normal;
+            color: #00e5ff;
+            position: relative;
+          }
+          .lp-hero h1 em::after {
+            content: '';
+            position: absolute;
+            bottom: 4px; left: 0; right: 0;
+            height: 3px;
+            background: #00e5ff;
+            opacity: 0.4;
+            border-radius: 2px;
+          }
+          .lp-hero-sub {
+            max-width: 580px;
+            color: #7a8ba3;
+            font-size: 1.15rem;
+            font-weight: 300;
+            margin: 1.75rem 0 2.5rem;
+            line-height: 1.7;
+            animation: lpFadeDown 0.8s 0.2s ease both;
+          }
+          .lp-hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: lpFadeDown 0.8s 0.3s ease both;
+          }
+          .lp-btn-primary {
+            background: #00e5ff;
+            color: #000;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 0.9rem 2.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: box-shadow 0.25s, transform 0.2s;
+            border: none;
+            cursor: pointer;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+          }
+          .lp-btn-primary:hover { box-shadow: 0 0 40px rgba(0,229,255,0.4); transform: translateY(-2px); }
+          .lp-btn-secondary {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.07);
+            color: #e8edf5;
+            font-family: 'Syne', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 0.9rem 2.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+          }
+          .lp-btn-secondary:hover { border-color: #00e5ff; background: rgba(0,229,255,0.12); }
+
+          .lp-hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            animation: lpFadeDown 0.8s 0.4s ease both;
+          }
+          .lp-hero-stat { text-align: center; }
+          .lp-hero-stat-num {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 2rem;
+            color: #e8edf5;
+            letter-spacing: -0.01em;
+          }
+          .lp-hero-stat-num span { color: #00e5ff; }
+          .lp-hero-stat-label { font-size: 0.8rem; color: #7a8ba3; text-transform: uppercase; letter-spacing: 0.08em; }
+
+          /* TICKER */
+          .lp-ticker {
+            position: relative; z-index: 1;
+            background: rgba(0,229,255,0.06);
+            border-top: 1px solid rgba(0,229,255,0.12);
+            border-bottom: 1px solid rgba(0,229,255,0.12);
+            padding: 0.7rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+          }
+          .lp-ticker-inner {
+            display: inline-block;
+            animation: lpTicker 30s linear infinite;
+            font-size: 0.78rem;
+            color: #00e5ff;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+          }
+          @keyframes lpTicker {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+          }
+          .lp-ticker-sep { margin: 0 2rem; opacity: 0.4; }
+
+          /* MOCKUP */
+          .lp-mockup-section {
+            position: relative; z-index: 1;
+            padding: 2rem 6% 6rem;
+            display: flex;
+            justify-content: center;
+          }
+          .lp-mockup-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+          }
+          .lp-mockup-glow {
+            position: absolute;
+            inset: -40px;
+            background: radial-gradient(ellipse at center, rgba(0,229,255,0.08) 0%, transparent 70%);
+            pointer-events: none;
+          }
+          .lp-mockup-frame {
+            background: #0d1422;
+            border: 1px solid rgba(0,229,255,0.15);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+            position: relative;
+          }
+          .lp-mockup-topbar {
+            background: rgba(0,0,0,0.3);
+            padding: 0.8rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+          }
+          .lp-dot { width: 10px; height: 10px; border-radius: 50%; }
+          .lp-dot-r { background: #ff5f57; }
+          .lp-dot-y { background: #febc2e; }
+          .lp-dot-g { background: #28c840; }
+          .lp-mockup-url {
+            flex: 1; text-align: center;
+            font-size: 0.75rem; color: #7a8ba3;
+            background: rgba(255,255,255,0.04);
+            padding: 0.3rem 1rem;
+            border-radius: 6px;
+            max-width: 300px;
+            margin: 0 auto;
+          }
+          .lp-mockup-body {
+            padding: 3rem 2.5rem;
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+          }
+          .lp-sim-progress { width: 100%; max-width: 500px; }
+          .lp-sim-progress-bar { height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; margin-bottom: 0.4rem; }
+          .lp-sim-progress-fill { width: 20%; height: 100%; background: linear-gradient(90deg, #00e5ff, #0090ff); border-radius: 2px; }
+          .lp-sim-progress-label { font-size: 0.75rem; color: #7a8ba3; }
+          .lp-sim-timer {
+            background: rgba(0,229,255,0.06);
+            border: 1.5px solid rgba(0,229,255,0.3);
+            border-radius: 10px;
+            padding: 0.8rem 2rem;
+            text-align: center;
+          }
+          .lp-sim-timer-label { font-size: 0.65rem; color: #00e5ff; letter-spacing: 0.12em; text-transform: uppercase; }
+          .lp-sim-timer-num { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; color: #00e5ff; letter-spacing: -0.04em; }
+          .lp-sim-question {
+            width: 100%; max-width: 500px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #e8edf5;
+          }
+          .lp-sim-recording {
+            background: rgba(255,77,106,0.1);
+            border: 1px solid rgba(255,77,106,0.3);
+            border-radius: 8px;
+            padding: 0.6rem 1.25rem;
+            font-size: 0.82rem;
+            color: #ff4d6a;
+            display: flex; align-items: center; gap: 0.5rem;
+            width: 100%; max-width: 500px;
+          }
+          .lp-rec-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #ff4d6a;
+            animation: lpPulse 1.2s infinite;
+          }
+          .lp-sim-btn {
+            background: linear-gradient(135deg, #00e5ff, #0090ff);
+            color: #000;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 0.7rem 1.75rem;
+            border-radius: 8px;
+            border: none;
+          }
+
+          /* SECTIONS */
+          .lp-section { position: relative; z-index: 1; }
+          .lp-section-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #00e5ff;
+            margin-bottom: 1rem;
+          }
+          .lp-section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            line-height: 1.15;
+            margin: 0 0 1rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+          }
+          .lp-section-sub {
+            color: #7a8ba3;
+            font-size: 1.05rem;
+            max-width: 500px;
+            margin: 0 auto 4rem;
+          }
+
+          /* HOW IT WORKS */
+          .lp-hiw {
+            padding: 7rem 6%;
+            text-align: center;
+          }
+          .lp-steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.07);
+            border-radius: 16px;
+            overflow: hidden;
+          }
+          .lp-step-card {
+            background: #0d1422;
+            padding: 2.5rem 2rem;
+            text-align: left;
+            transition: background 0.3s;
+          }
+          .lp-step-card:hover { background: #111927; }
+          .lp-step-num {
+            font-family: 'Syne', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: rgba(0,229,255,0.1);
+            line-height: 1;
+            margin-bottom: 1rem;
+          }
+          .lp-step-icon {
+            width: 44px; height: 44px;
+            background: rgba(0,229,255,0.12);
+            border: 1px solid rgba(0,229,255,0.2);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+          }
+          .lp-step-title {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 0.5rem;
+          }
+          .lp-step-desc { font-size: 0.9rem; color: #7a8ba3; line-height: 1.6; }
+
+          /* FEATURES */
+          .lp-features {
+            padding: 7rem 6%;
+            max-width: 1100px;
+            margin: 0 auto;
+          }
+          .lp-features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+          }
+          .lp-feature-card {
+            background: #0d1422;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 14px;
+            padding: 2rem;
+            transition: border-color 0.3s, transform 0.3s;
+            position: relative;
+            overflow: hidden;
+          }
+          .lp-feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00e5ff, transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+          }
+          .lp-feature-card:hover { border-color: rgba(0,229,255,0.2); transform: translateY(-3px); }
+          .lp-feature-card:hover::before { opacity: 1; }
+          .lp-feature-card.lp-large { grid-column: span 3; }
+          .lp-feature-icon { font-size: 1.5rem; margin-bottom: 1rem; display: block; }
+          .lp-feature-title {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+          }
+          .lp-feature-desc { font-size: 0.9rem; color: #7a8ba3; line-height: 1.6; }
+
+          /* Score bars */
+          .lp-score-bars { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; }
+          .lp-score-row { display: flex; align-items: center; gap: 0.75rem; }
+          .lp-score-label { font-size: 0.78rem; color: #7a8ba3; width: 120px; flex-shrink: 0; }
+          .lp-score-track { flex: 1; height: 6px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+          .lp-score-fill { height: 100%; border-radius: 4px; transition: width 1.2s cubic-bezier(0.22,1,0.36,1); }
+          .lp-score-val { font-size: 0.8rem; font-weight: 600; font-family: 'Syne', sans-serif; width: 28px; text-align: right; }
+
+          /* Video metrics */
+          .lp-video-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+          }
+          .lp-video-metric {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 10px;
+            padding: 0.9rem;
+          }
+          .lp-vm-label { font-size: 0.72rem; color: #7a8ba3; margin-bottom: 0.3rem; }
+          .lp-vm-score { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.3rem; }
+          .lp-vm-bar { margin-top: 0.4rem; height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+          .lp-vm-bar-fill { height: 100%; border-radius: 2px; }
+
+          /* TESTIMONIALS */
+          .lp-social-proof {
+            padding: 7rem 6%;
+            text-align: center;
+            position: relative;
+          }
+          .lp-social-proof::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px; height: 400px;
+            background: radial-gradient(ellipse, rgba(0,229,255,0.05) 0%, transparent 70%);
+            pointer-events: none;
+          }
+          .lp-testimonials {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-width: 1000px;
+            margin: 3rem auto 0;
+          }
+          .lp-testimonial-card {
+            background: #0d1422;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 14px;
+            padding: 1.75rem;
+            text-align: left;
+            transition: border-color 0.3s;
+          }
+          .lp-testimonial-card:hover { border-color: rgba(0,229,255,0.15); }
+          .lp-testimonial-stars { color: #ffd700; font-size: 0.85rem; margin-bottom: 0.75rem; letter-spacing: 2px; }
+          .lp-testimonial-quote { font-size: 0.9rem; color: #7a8ba3; line-height: 1.65; margin-bottom: 1.25rem; }
+          .lp-testimonial-author { display: flex; align-items: center; gap: 0.75rem; }
+          .lp-testimonial-avatar {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: linear-gradient(135deg, #00e5ff, #0090ff);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.8rem; color: #000;
+            flex-shrink: 0;
+          }
+          .lp-testimonial-name { font-weight: 600; font-size: 0.88rem; color: #e8edf5; }
+          .lp-testimonial-role { font-size: 0.75rem; color: #7a8ba3; }
+
+          /* COMPARE */
+          .lp-compare {
+            padding: 7rem 6%;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+          }
+          .lp-compare-table {
+            margin-top: 3rem;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 16px;
+            overflow: hidden;
+          }
+          .lp-compare-head, .lp-compare-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+          }
+          .lp-compare-head { background: rgba(255,255,255,0.03); }
+          .lp-compare-row:last-child { border-bottom: none; }
+          .lp-compare-row:hover { background: rgba(255,255,255,0.02); }
+          .lp-compare-cell {
+            padding: 1rem 1.25rem;
+            font-size: 0.88rem;
+            display: flex; align-items: center;
+            border-right: 1px solid rgba(255,255,255,0.07);
+            color: #7a8ba3;
+          }
+          .lp-compare-cell:last-child { border-right: none; }
+          .lp-compare-cell.lp-center { justify-content: center; }
+          .lp-col-head { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+          .lp-col-ace { color: #00e5ff; font-weight: 700; font-family: 'Syne', sans-serif; }
+          .lp-check { color: #00ff9d; font-size: 1rem; }
+          .lp-cross { color: rgba(255,255,255,0.2); font-size: 0.9rem; }
+          .lp-partial { color: #ff7b3a; font-size: 0.85rem; }
+
+          /* CTA SECTION */
+          .lp-cta-section {
+            padding: 8rem 6%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+          }
+          .lp-cta-section::before {
+            content: '';
+            position: absolute;
+            bottom: -200px; left: 50%;
+            transform: translateX(-50%);
+            width: 1200px; height: 700px;
+            background: radial-gradient(ellipse at bottom, rgba(0,229,255,0.1) 0%, transparent 70%);
+            pointer-events: none;
+          }
+          .lp-cta-box {
+            background: #0d1422;
+            border: 1px solid rgba(0,229,255,0.2);
+            border-radius: 24px;
+            padding: 5rem 3rem;
+            max-width: 720px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+          }
+          .lp-cta-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 50%; transform: translateX(-50%);
+            width: 60%; height: 1px;
+            background: linear-gradient(90deg, transparent, #00e5ff, transparent);
+          }
+          .lp-cta-box h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin: 0 0 1rem;
+            line-height: 1.15;
+          }
+          .lp-cta-box p { color: #7a8ba3; font-size: 1.05rem; margin-bottom: 2.5rem; }
+          .lp-cta-note { font-size: 0.78rem !important; color: #7a8ba3; margin-top: 1rem !important; }
+
+          /* FOOTER */
+          .lp-footer {
+            padding: 3rem 6%;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            position: relative;
+            z-index: 1;
+          }
+          .lp-footer-copy { font-size: 0.82rem; color: #7a8ba3; }
+          .lp-footer-links { display: flex; gap: 2rem; }
+          .lp-footer-links a { font-size: 0.82rem; color: #7a8ba3; text-decoration: none; transition: color 0.2s; cursor: pointer; }
+          .lp-footer-links a:hover { color: #e8edf5; }
+
+          /* Fade in animation */
+          .lp-fade-in {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+          }
+          .lp-fade-in.lp-visible {
+            opacity: 1;
+            transform: translateY(0);
+          }
+
+          /* Google icon in button */
+          .lp-google-svg { flex-shrink: 0; }
+
+          /* RESPONSIVE */
+          @media (max-width: 768px) {
+            .lp-nav-links { display: none; }
+            .lp-hero-stats { gap: 2rem; flex-wrap: wrap; justify-content: center; }
+            .lp-steps-grid { grid-template-columns: 1fr; }
+            .lp-features-grid { grid-template-columns: 1fr; }
+            .lp-feature-card.lp-large { grid-column: span 1; }
+            .lp-testimonials { grid-template-columns: 1fr; }
+            .lp-compare-head, .lp-compare-row { grid-template-columns: 2fr 1fr 1fr; }
+            .lp-compare-cell:nth-child(3) { display: none; }
+            .lp-video-grid { grid-template-columns: 1fr 1fr; }
+          }
+        `}</style>
+
+        <div className="lp-root">
+          {/* NAV */}
+          <nav className="lp-nav">
+            <span className="lp-nav-logo">Ace<span>My</span>Interviews</span>
+            <ul className="lp-nav-links">
+              <li><a href="#lp-how">How it works</a></li>
+              <li><a href="#lp-features">Features</a></li>
+              <li><a href="#lp-testimonials">Reviews</a></li>
+              <li><a href="#lp-compare">Compare</a></li>
+            </ul>
+            <button className="lp-nav-cta" onClick={handleCTA}>{user ? (completedInterviews === 0 ? 'Start Free Interview →' : 'Start Interview →') : 'Start Free →'}</button>
+            {user && <button onClick={signOut} style={{background:'none', border:'1px solid rgba(255,255,255,0.1)', color:'#7a8ba3', fontSize:'0.82rem', padding:'0.5rem 1rem', borderRadius:'6px', cursor:'pointer', marginLeft:'0.5rem'}}>Sign Out</button>}
+          </nav>
+
+          {/* HERO */}
+          <section className="lp-hero">
+            <div className="lp-badge">✦ AI-Powered Interview Training</div>
+            <h1>
+              Practice smarter.<br/>
+              <em>Land the job.</em>
+            </h1>
+            <p className="lp-hero-sub">
+              Simulate real interviews with an AI that asks follow-up questions, 
+              grades your answers across 8 dimensions, and tells you exactly what to 
+              fix — before the real thing.
             </p>
-          </div>
-          
-          {/* Footer */}
-          <div style={styles.footer}>
-            <div style={styles.footerLinks}>
-              <a href="#" onClick={(e) => { 
-                e.preventDefault(); 
-                if (window.mixpanel) window.mixpanel.track('privacy_policy_viewed');
-                setStage('privacy'); 
-              }} style={styles.footerLink}>Privacy Policy</a>
-              <span style={styles.footerDivider}>•</span>
-              <a href="mailto:support@interviewsimulator.com" style={styles.footerLink}>Contact</a>
+            <div className="lp-hero-actions">
+              <button className="lp-btn-primary" onClick={handleCTA}>
+                {!user && <svg className="lp-google-svg" width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#000"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#000"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#000"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#000"/></svg>}
+                {user ? (completedInterviews === 0 ? 'Start Free Interview' : 'Start Interview') : 'Try a free interview'}
+              </button>
+              <a className="lp-btn-secondary" href="#lp-how">See how it works</a>
             </div>
-            <p style={styles.footerCopyright}>© 2025 Interview Simulator. All rights reserved.</p>
+            <div className="lp-hero-stats">
+              <div className="lp-hero-stat">
+                <div className="lp-hero-stat-num">8<span>+</span></div>
+                <div className="lp-hero-stat-label">Scoring dimensions</div>
+              </div>
+              <div className="lp-hero-stat">
+                <div className="lp-hero-stat-num">3<span>+</span></div>
+                <div className="lp-hero-stat-label">Follow-up questions</div>
+              </div>
+              <div className="lp-hero-stat">
+                <div className="lp-hero-stat-num">60<span>s</span></div>
+                <div className="lp-hero-stat-label">To start practicing</div>
+              </div>
+              <div className="lp-hero-stat">
+                <div className="lp-hero-stat-num">100<span>%</span></div>
+                <div className="lp-hero-stat-label">Actionable feedback</div>
+              </div>
+            </div>
+          </section>
+
+          {/* TICKER */}
+          <div className="lp-ticker">
+            <div className="lp-ticker-inner">
+              AI Follow-up Questions <span className="lp-ticker-sep">◆</span>
+              Clarity Scoring <span className="lp-ticker-sep">◆</span>
+              STAR Method Coaching <span className="lp-ticker-sep">◆</span>
+              Video Presence Analysis <span className="lp-ticker-sep">◆</span>
+              Real-time Feedback <span className="lp-ticker-sep">◆</span>
+              Percentile Ranking <span className="lp-ticker-sep">◆</span>
+              Technical Accuracy <span className="lp-ticker-sep">◆</span>
+              Confidence Scoring <span className="lp-ticker-sep">◆</span>
+              AI Follow-up Questions <span className="lp-ticker-sep">◆</span>
+              Clarity Scoring <span className="lp-ticker-sep">◆</span>
+              STAR Method Coaching <span className="lp-ticker-sep">◆</span>
+              Video Presence Analysis <span className="lp-ticker-sep">◆</span>
+              Real-time Feedback <span className="lp-ticker-sep">◆</span>
+              Percentile Ranking <span className="lp-ticker-sep">◆</span>
+              Technical Accuracy <span className="lp-ticker-sep">◆</span>
+              Confidence Scoring <span className="lp-ticker-sep">◆</span>
+            </div>
           </div>
+
+          {/* MOCKUP PREVIEW */}
+          <div className="lp-mockup-section">
+            <div className="lp-mockup-wrapper">
+              <div className="lp-mockup-glow"></div>
+              <div className="lp-mockup-frame">
+                <div className="lp-mockup-topbar">
+                  <div className="lp-dot lp-dot-r"></div>
+                  <div className="lp-dot lp-dot-y"></div>
+                  <div className="lp-dot lp-dot-g"></div>
+                  <div className="lp-mockup-url">🔒 acemyinterviews.io/interview</div>
+                </div>
+                <div className="lp-mockup-body">
+                  <div className="lp-sim-progress">
+                    <div className="lp-sim-progress-bar"><div className="lp-sim-progress-fill"></div></div>
+                    <div className="lp-sim-progress-label">Question 1 of 5</div>
+                  </div>
+                  <div className="lp-sim-timer">
+                    <div className="lp-sim-timer-label">Time Remaining</div>
+                    <div className="lp-sim-timer-num">2:19</div>
+                  </div>
+                  <div className="lp-sim-question">
+                    Tell me about a time you had to translate complex technical 
+                    requirements into business language for non-technical stakeholders.
+                  </div>
+                  <div className="lp-sim-recording">
+                    <div className="lp-rec-dot"></div>
+                    Recording your answer...
+                  </div>
+                  <button className="lp-sim-btn">Submit Answer →</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* HOW IT WORKS */}
+          <section className="lp-hiw lp-section lp-fade-in lp-visible" id="lp-how">
+            <div className="lp-section-tag">Simple 3-step process</div>
+            <h2 className="lp-section-title">From nervous to confident in one session</h2>
+            <p className="lp-section-sub">No setup, no coaching calls, no waiting. Just you and the most demanding AI interviewer you've ever faced.</p>
+            <div className="lp-steps-grid">
+              <div className="lp-step-card">
+                <div className="lp-step-num">01</div>
+                <div className="lp-step-icon">📝</div>
+                <div className="lp-step-title">Tell us about the role</div>
+                <div className="lp-step-desc">Enter the job title and paste the job description — the AI uses it to generate questions specific to that role. Paste your resume too and every question gets tailored to your actual experience.</div>
+              </div>
+              <div className="lp-step-card">
+                <div className="lp-step-num">02</div>
+                <div className="lp-step-icon">🎬</div>
+                <div className="lp-step-title">Answer on camera, in real-time</div>
+                <div className="lp-step-desc">The AI records your voice and video, then asks intelligent follow-up questions based on what you actually said — just like a real interviewer probing for depth.</div>
+              </div>
+              <div className="lp-step-card">
+                <div className="lp-step-num">03</div>
+                <div className="lp-step-icon">📊</div>
+                <div className="lp-step-title">Get a full performance breakdown</div>
+                <div className="lp-step-desc">See your score across Clarity, Depth, Confidence, STAR Method, Technical Accuracy, and 3 more. Know exactly what to improve before the real interview.</div>
+              </div>
+            </div>
+          </section>
+
+          {/* FEATURES */}
+          <section className="lp-features lp-section lp-fade-in lp-visible" id="lp-features">
+            <div style={{textAlign:'center'}}>
+              <div className="lp-section-tag">What makes it different</div>
+              <h2 className="lp-section-title">Not just mock questions — a full diagnostic</h2>
+              <p className="lp-section-sub">Most prep tools give you questions. We give you the same level of analysis a career coach would — in seconds.</p>
+            </div>
+            <div className="lp-features-grid">
+              {/* AI Follow-up */}
+              <div className="lp-feature-card">
+                <span className="lp-feature-icon">🤖</span>
+                <div className="lp-feature-title">Dynamic AI follow-up questions</div>
+                <div className="lp-feature-desc">The AI actually listens to what you say and asks pointed follow-ups based on your specific answer. No two interviews are the same.</div>
+                <div style={{marginTop:'1.25rem', background:'rgba(0,229,255,0.05)', border:'1px solid rgba(0,229,255,0.12)', borderRadius:'10px', padding:'1rem', fontSize:'0.82rem', color:'#7a8ba3', lineHeight:'1.65'}}>
+                  <span style={{color:'#00e5ff', fontSize:'0.7rem', textTransform:'uppercase', letterSpacing:'0.1em', fontWeight:'600'}}>AI Follow-up</span><br/><br/>
+                  "You mentioned stakeholders thought they could automate everything — walk me through exactly how you presented that Excel sheet and what their reaction was."
+                </div>
+              </div>
+
+              {/* 8-dimension scoring */}
+              <div className="lp-feature-card">
+                <span className="lp-feature-icon">📈</span>
+                <div className="lp-feature-title">8-dimension performance scoring</div>
+                <div className="lp-feature-desc">Every answer is graded across Clarity, Relevance, Depth, Confidence, Conciseness, STAR Method, Technical Accuracy, and Enthusiasm.</div>
+                <div className="lp-score-bars">
+                  <div className="lp-score-row">
+                    <span className="lp-score-label">Technical Accuracy</span>
+                    <div className="lp-score-track"><div className="lp-score-fill" style={{width:'80%', background:'#00ff9d'}}></div></div>
+                    <span className="lp-score-val" style={{color:'#00ff9d'}}>80</span>
+                  </div>
+                  <div className="lp-score-row">
+                    <span className="lp-score-label">Relevance</span>
+                    <div className="lp-score-track"><div className="lp-score-fill" style={{width:'78%', background:'#00e5ff'}}></div></div>
+                    <span className="lp-score-val" style={{color:'#00e5ff'}}>78</span>
+                  </div>
+                  <div className="lp-score-row">
+                    <span className="lp-score-label">Depth</span>
+                    <div className="lp-score-track"><div className="lp-score-fill" style={{width:'75%', background:'#00e5ff'}}></div></div>
+                    <span className="lp-score-val" style={{color:'#00e5ff'}}>75</span>
+                  </div>
+                  <div className="lp-score-row">
+                    <span className="lp-score-label">Conciseness</span>
+                    <div className="lp-score-track"><div className="lp-score-fill" style={{width:'60%', background:'#ff7b3a'}}></div></div>
+                    <span className="lp-score-val" style={{color:'#ff7b3a'}}>60</span>
+                  </div>
+                  <div className="lp-score-row">
+                    <span className="lp-score-label">STAR Method</span>
+                    <div className="lp-score-track"><div className="lp-score-fill" style={{width:'55%', background:'#ff4d6a'}}></div></div>
+                    <span className="lp-score-val" style={{color:'#ff4d6a'}}>55</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Video presence */}
+              <div className="lp-feature-card">
+                <span className="lp-feature-icon">🎥</span>
+                <div className="lp-feature-title">Video presence analysis</div>
+                <div className="lp-feature-desc">Beyond words — your body language, eye contact, facial expression, and framing are all analysed automatically.</div>
+                <div className="lp-video-grid">
+                  <div className="lp-video-metric">
+                    <div className="lp-vm-label">Eye Contact</div>
+                    <div className="lp-vm-score" style={{color:'#ff4d6a'}}>25</div>
+                    <div className="lp-vm-bar"><div className="lp-vm-bar-fill" style={{width:'25%', background:'#ff4d6a'}}></div></div>
+                  </div>
+                  <div className="lp-video-metric">
+                    <div className="lp-vm-label">Posture</div>
+                    <div className="lp-vm-score" style={{color:'#ff7b3a'}}>70</div>
+                    <div className="lp-vm-bar"><div className="lp-vm-bar-fill" style={{width:'70%', background:'#ff7b3a'}}></div></div>
+                  </div>
+                  <div className="lp-video-metric">
+                    <div className="lp-vm-label">Framing</div>
+                    <div className="lp-vm-score" style={{color:'#00ff9d'}}>85</div>
+                    <div className="lp-vm-bar"><div className="lp-vm-bar-fill" style={{width:'85%', background:'#00ff9d'}}></div></div>
+                  </div>
+                  <div className="lp-video-metric">
+                    <div className="lp-vm-label">Background</div>
+                    <div className="lp-vm-score" style={{color:'#00ff9d'}}>90</div>
+                    <div className="lp-vm-bar"><div className="lp-vm-bar-fill" style={{width:'90%', background:'#00ff9d'}}></div></div>
+                  </div>
+                  <div className="lp-video-metric">
+                    <div className="lp-vm-label">Expression</div>
+                    <div className="lp-vm-score" style={{color:'#ff4d6a'}}>40</div>
+                    <div className="lp-vm-bar"><div className="lp-vm-bar-fill" style={{width:'40%', background:'#ff4d6a'}}></div></div>
+                  </div>
+                  <div className="lp-video-metric">
+                    <div className="lp-vm-label">Overall</div>
+                    <div className="lp-vm-score" style={{color:'#ff7b3a'}}>61</div>
+                    <div className="lp-vm-bar"><div className="lp-vm-bar-fill" style={{width:'61%', background:'#ff7b3a'}}></div></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Q-by-Q breakdown */}
+              <div className="lp-feature-card lp-large">
+                <div style={{display:'flex', alignItems:'flex-start', justifyContent:'space-between', flexWrap:'wrap', gap:'1rem', marginBottom:'1.5rem'}}>
+                  <div>
+                    <span className="lp-feature-icon" style={{marginBottom:'0.5rem'}}>📋</span>
+                    <div className="lp-feature-title">Question-by-question feedback</div>
+                    <div className="lp-feature-desc" style={{maxWidth:'520px'}}>Each answer gets a full breakdown — specific strengths, concrete improvements, and separate scores for your main answer and the AI follow-up.</div>
+                  </div>
+                  <div style={{display:'flex', alignItems:'center', gap:'1rem', flexShrink:0}}>
+                    <div style={{textAlign:'center'}}>
+                      <div style={{fontFamily:"'Syne', sans-serif", fontSize:'2.6rem', fontWeight:700, color:'#00e5ff', letterSpacing:'-0.02em', lineHeight:1}}>72</div>
+                      <div style={{fontSize:'0.72rem', color:'#7a8ba3', textTransform:'uppercase', letterSpacing:'0.08em'}}>Overall</div>
+                    </div>
+                    <span style={{background:'rgba(0,255,157,0.1)', border:'1px solid rgba(0,255,157,0.25)', color:'#00ff9d', fontSize:'0.72rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.1em', padding:'0.2rem 0.6rem', borderRadius:'4px'}}>✓ You passed</span>
+                  </div>
+                </div>
+
+                {/* Q1 Block */}
+                <div style={{background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:'12px', padding:'1.25rem 1.5rem', marginBottom:'1rem'}}>
+                  <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'0.6rem', flexWrap:'wrap', gap:'0.5rem'}}>
+                    <div style={{display:'flex', alignItems:'center', gap:'0.75rem'}}>
+                      <span style={{background:'#00e5ff', color:'#000', fontFamily:"'Syne', sans-serif", fontWeight:700, fontSize:'0.72rem', padding:'0.2rem 0.55rem', borderRadius:'4px', letterSpacing:'0.04em'}}>Q1</span>
+                      <span style={{fontSize:'0.82rem', color:'#7a8ba3'}}>Translating technical requirements for stakeholders</span>
+                    </div>
+                    <span style={{fontFamily:"'Syne', sans-serif", fontWeight:700, fontSize:'0.9rem', color:'#00e5ff'}}>combined <strong style={{fontSize:'1rem'}}>76</strong>/100</span>
+                  </div>
+                  <p style={{fontSize:'0.82rem', color:'#7a8ba3', lineHeight:1.6, marginBottom:'1rem'}}>Strong example with specific actions taken (10 knowledge articles, 2 help articles, demo videos, live sessions). Candidate clearly identified the bottleneck. However the response lacked clear structure and was somewhat rambling in delivery.</p>
+                  <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1rem'}}>
+                    <div>
+                      <div style={{fontSize:'0.72rem', fontWeight:700, color:'#00ff9d', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:'0.6rem'}}>✓ Strengths</div>
+                      <ul style={{listStyle:'none', display:'flex', flexDirection:'column', gap:'0.45rem', margin:0, padding:0}}>
+                        <li style={{fontSize:'0.8rem', color:'#7a8ba3', display:'flex', gap:'0.5rem'}}><span style={{color:'#00ff9d', flexShrink:0}}>•</span>Specific deliverables mentioned</li>
+                        <li style={{fontSize:'0.8rem', color:'#7a8ba3', display:'flex', gap:'0.5rem'}}><span style={{color:'#00ff9d', flexShrink:0}}>•</span>Comprehensive multi-stakeholder approach</li>
+                        <li style={{fontSize:'0.8rem', color:'#7a8ba3', display:'flex', gap:'0.5rem'}}><span style={{color:'#00ff9d', flexShrink:0}}>•</span>Proactive issue identification</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <div style={{fontSize:'0.72rem', fontWeight:700, color:'#ff7b3a', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:'0.6rem'}}>△ Improve</div>
+                      <ul style={{listStyle:'none', display:'flex', flexDirection:'column', gap:'0.45rem', margin:0, padding:0}}>
+                        <li style={{fontSize:'0.8rem', color:'#7a8ba3', display:'flex', gap:'0.5rem'}}><span style={{color:'#ff7b3a', flexShrink:0}}>•</span>Structure with STAR method</li>
+                        <li style={{fontSize:'0.8rem', color:'#7a8ba3', display:'flex', gap:'0.5rem'}}><span style={{color:'#ff7b3a', flexShrink:0}}>•</span>Provide timeline details upfront</li>
+                        <li style={{fontSize:'0.8rem', color:'#7a8ba3', display:'flex', gap:'0.5rem'}}><span style={{color:'#ff7b3a', flexShrink:0}}>•</span>Quantify the scope better</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Follow-up block */}
+                <div style={{background:'rgba(0,229,255,0.03)', border:'1px solid rgba(0,229,255,0.15)', borderRadius:'12px', padding:'1.25rem 1.5rem'}}>
+                  <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'0.5rem', flexWrap:'wrap', gap:'0.5rem'}}>
+                    <div style={{display:'flex', alignItems:'center', gap:'0.75rem'}}>
+                      <span style={{background:'rgba(0,229,255,0.15)', color:'#00e5ff', border:'1px solid rgba(0,229,255,0.3)', fontFamily:"'Syne', sans-serif", fontWeight:700, fontSize:'0.7rem', padding:'0.2rem 0.6rem', borderRadius:'4px', letterSpacing:'0.04em'}}>↩ Follow-up</span>
+                      <span style={{fontSize:'0.78rem', color:'#7a8ba3', fontStyle:'italic'}}>"Walk me through how you presented the Excel sheet and their reaction…"</span>
+                    </div>
+                    <span style={{fontFamily:"'Syne', sans-serif", fontWeight:700, fontSize:'0.9rem', color:'#00e5ff'}}><strong style={{fontSize:'1rem'}}>78</strong>/100</span>
+                  </div>
+                  <p style={{fontSize:'0.78rem', color:'rgba(0,229,255,0.6)', marginBottom:'0.75rem'}}>↳ Follow-up tested ability to provide specifics on timeline and impact — candidate delivered well on timeline but could have been more quantitative on results.</p>
+                  <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1rem'}}>
+                    <div>
+                      <div style={{fontSize:'0.7rem', fontWeight:700, color:'#00ff9d', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:'0.5rem'}}>✓ Strengths</div>
+                      <ul style={{listStyle:'none', display:'flex', flexDirection:'column', gap:'0.4rem', margin:0, padding:0}}>
+                        <li style={{fontSize:'0.78rem', color:'#7a8ba3', display:'flex', gap:'0.5rem'}}><span style={{color:'#00ff9d', flexShrink:0}}>•</span>Clear timeline provided (2 weeks)</li>
+                        <li style={{fontSize:'0.78rem', color:'#7a8ba3', display:'flex', gap:'0.5rem'}}><span style={{color:'#00ff9d', flexShrink:0}}>•</span>Specific deliverable counts mentioned</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <div style={{fontSize:'0.7rem', fontWeight:700, color:'#ff7b3a', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:'0.5rem'}}>△ Improve</div>
+                      <ul style={{listStyle:'none', display:'flex', flexDirection:'column', gap:'0.4rem', margin:0, padding:0}}>
+                        <li style={{fontSize:'0.78rem', color:'#7a8ba3', display:'flex', gap:'0.5rem'}}><span style={{color:'#ff7b3a', flexShrink:0}}>•</span>Could have provided measurable success metrics</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* TESTIMONIALS */}
+          <section className="lp-social-proof lp-section lp-fade-in lp-visible" id="lp-testimonials">
+            <h2 className="lp-section-title">Real people. Real interviews. Real offers.</h2>
+            <p className="lp-section-sub">From first-timers to senior hires — here's what candidates said after practicing with AceMyInterviews.</p>
+            <div className="lp-testimonials">
+              <div className="lp-testimonial-card">
+                <div className="lp-testimonial-stars">★★★★★</div>
+                <p className="lp-testimonial-quote">"The follow-up questions caught me completely off guard the first time — which is exactly what I needed. By the third session I had an answer ready for anything."</p>
+                <div className="lp-testimonial-author">
+                  <div className="lp-testimonial-avatar">JR</div>
+                  <div>
+                    <div className="lp-testimonial-name">James R.</div>
+                    <div className="lp-testimonial-role">Product Manager @ Stripe</div>
+                  </div>
+                </div>
+              </div>
+              <div className="lp-testimonial-card">
+                <div className="lp-testimonial-stars">★★★★★</div>
+                <p className="lp-testimonial-quote">"I had no idea my eye contact was that bad until the video analysis flagged it. Practiced for 2 days, walked into the interview feeling completely different."</p>
+                <div className="lp-testimonial-author">
+                  <div className="lp-testimonial-avatar">SM</div>
+                  <div>
+                    <div className="lp-testimonial-name">Sarah M.</div>
+                    <div className="lp-testimonial-role">Software Engineer @ Meta</div>
+                  </div>
+                </div>
+              </div>
+              <div className="lp-testimonial-card">
+                <div className="lp-testimonial-stars">★★★★★</div>
+                <p className="lp-testimonial-quote">"The STAR method score showed me exactly why my answers were landing flat. Once I structured them properly my score jumped from 55 to 84 in 3 tries."</p>
+                <div className="lp-testimonial-author">
+                  <div className="lp-testimonial-avatar">AL</div>
+                  <div>
+                    <div className="lp-testimonial-name">Alicia L.</div>
+                    <div className="lp-testimonial-role">Senior Analyst @ McKinsey</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* COMPARISON TABLE */}
+          <section className="lp-compare lp-section lp-fade-in lp-visible" id="lp-compare">
+            <div className="lp-section-tag">Why AceMyInterviews</div>
+            <h2 className="lp-section-title">The prep tool that actually mirrors real interviews</h2>
+            <div className="lp-compare-table">
+              <div className="lp-compare-head">
+                <div className="lp-compare-cell lp-col-head">Feature</div>
+                <div className="lp-compare-cell lp-center lp-col-head lp-col-ace">AceMy<br/>Interviews</div>
+                <div className="lp-compare-cell lp-center lp-col-head">Mock<br/>Questions</div>
+                <div className="lp-compare-cell lp-center lp-col-head">Human<br/>Coach</div>
+              </div>
+              {[
+                ['AI follow-up questions', true, false, 'partial'],
+                ['8-dimension scoring', true, false, 'partial'],
+                ['Video presence analysis', true, false, false],
+                ['Available 24/7, instant', true, true, false],
+                ['Percentile ranking vs peers', true, false, false],
+                ['Per-question improvement notes', true, false, 'partial'],
+                ['Free to start', true, true, false],
+              ].map(([feature, ace, mock, human], i) => (
+                <div className="lp-compare-row" key={i}>
+                  <div className="lp-compare-cell">{feature}</div>
+                  <div className="lp-compare-cell lp-center">{ace === true ? <span className="lp-check">✓</span> : ace === 'partial' ? <span className="lp-partial">~</span> : <span className="lp-cross">✗</span>}</div>
+                  <div className="lp-compare-cell lp-center">{mock === true ? <span className="lp-check">✓</span> : mock === 'partial' ? <span className="lp-partial">~</span> : <span className="lp-cross">✗</span>}</div>
+                  <div className="lp-compare-cell lp-center">{human === true ? <span className="lp-check">✓</span> : human === 'partial' ? <span className="lp-partial">~</span> : <span className="lp-cross">✗</span>}</div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* FINAL CTA */}
+          <section className="lp-cta-section lp-section lp-fade-in lp-visible">
+            <div className="lp-cta-box">
+              <h2>Your next interview<br/>starts <em style={{color:'#00e5ff', fontStyle:'normal'}}>right now</em></h2>
+              <p>Set up in under a minute. Get your first score in under 10. No credit card — just sign in with Google and you're in.</p>
+              <button className="lp-btn-primary" onClick={handleCTA} style={{fontSize:'1.05rem', padding:'1rem 2.5rem', margin:'0 auto', display:'flex'}}>
+                {!user && <svg className="lp-google-svg" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#000"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#000"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#000"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#000"/></svg>}
+                {user ? (completedInterviews === 0 ? 'Start Free Interview' : 'Start Interview') : 'Continue with Google'}
+              </button>
+              <p className="lp-cta-note">{user ? (isSubscribed ? '✓ Subscribed · Unlimited interviews' : completedInterviews === 0 ? '🎁 First interview is completely free' : 'Free trial used · Subscribe for unlimited access') : 'Free to start · No card needed · Takes 60 seconds to set up'}</p>
+            </div>
+          </section>
+
+          {/* FOOTER */}
+          <footer className="lp-footer">
+            <div className="lp-footer-copy">© 2026 AceMyInterviews. All rights reserved.</div>
+            <div className="lp-footer-links">
+              <a onClick={(e) => { e.preventDefault(); setStage('privacy'); }}>Privacy</a>
+              <a href="mailto:support@acemyinterviews.io">Contact</a>
+            </div>
+          </footer>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -2284,7 +2696,7 @@ Return ONLY valid JSON:
           
           <div style={styles.priceCard}>
             <div style={styles.priceTag}>
-              <span style={styles.priceAmount}>$19.99</span>
+              <span style={styles.priceAmount}>$9.99</span>
               <span style={styles.pricePeriod}>/month</span>
             </div>
             <ul style={styles.priceFeatures}>
@@ -2352,7 +2764,7 @@ Return ONLY valid JSON:
               <div>
                 <div style={styles.subscriptionStatus}>
                   <span style={styles.statusBadgeActive}>✓ Active</span>
-                  <span style={styles.subscriptionPrice}>$19.99/month</span>
+                  <span style={styles.subscriptionPrice}>$9.99/month</span>
                 </div>
                 {subscriptionDate && (
                   <p style={styles.subscriptionDate}>
@@ -2673,281 +3085,6 @@ Return ONLY valid JSON:
     );
   }
 
-  // Mobile Gate Screen
-  if (stage === 'mobileGate') {
-    return (
-      <div style={styles.container}>
-        <div style={styles.heroGlow}></div>
-        <div style={{
-          position: 'relative',
-          zIndex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '32px 24px',
-          textAlign: 'center',
-          maxWidth: '420px',
-          width: '100%',
-          minHeight: '100vh',
-        }}>
-          {/* Desktop icon */}
-          <div style={{
-            width: '88px',
-            height: '88px',
-            borderRadius: '22px',
-            background: 'linear-gradient(135deg, rgba(0, 217, 255, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: '28px',
-            border: '1px solid rgba(0, 217, 255, 0.2)',
-          }}>
-            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#00d9ff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
-            </svg>
-          </div>
-
-          <h1 style={{
-            fontSize: '24px',
-            fontWeight: 700,
-            letterSpacing: '-0.3px',
-            marginBottom: '12px',
-            lineHeight: 1.3,
-            color: '#ffffff',
-          }}>
-            Your full interview<br />experience awaits
-          </h1>
-          <p style={{
-            fontSize: '15px',
-            color: 'rgba(255,255,255,0.6)',
-            lineHeight: 1.6,
-            maxWidth: '340px',
-            marginBottom: '32px',
-          }}>
-            Open on a laptop or desktop to unlock everything — video analysis, voice recognition, real-time feedback, and more.
-          </p>
-
-          {/* Reasons */}
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-            width: '100%',
-            maxWidth: '340px',
-            marginBottom: '36px',
-          }}>
-            {[
-              { icon: '✨', title: 'Tailored to you', desc: 'Questions based on your role and job description' },
-              { icon: '⏱️', title: 'Timed responses & follow-ups', desc: 'Dynamic follow-up questions with in-depth scoring' },
-              { icon: '🎥', title: 'Video & voice analysis', desc: 'Feedback on delivery, confidence, and body language' },
-            ].map((item, i) => (
-              <div key={i} style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '12px',
-                textAlign: 'left',
-              }}>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '10px',
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                  fontSize: '18px',
-                }}>
-                  {item.icon}
-                </div>
-                <div>
-                  <div style={{ fontSize: '14px', fontWeight: 600, color: '#ffffff', marginBottom: '2px' }}>{item.title}</div>
-                  <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.4 }}>{item.desc}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Actions */}
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '12px',
-            width: '100%',
-            maxWidth: '340px',
-          }}>
-            {/* Copy link button */}
-            <button
-              style={{
-                ...styles.primaryBtn,
-                width: '100%',
-                padding: '14px 24px',
-                fontSize: '15px',
-                gap: '8px',
-              }}
-              onClick={() => {
-                if (window.mixpanel) {
-                  window.mixpanel.track('mobile_gate_copy_link');
-                }
-                navigator.clipboard.writeText('https://acemyinterviews.io').then(() => {
-                  setMobileGateMessage('Link copied! Open it on your desktop.');
-                }).catch(() => {
-                  setMobileGateMessage('Copy this: acemyinterviews.io');
-                });
-              }}
-            >
-              📋 Copy link
-            </button>
-
-            {/* Email link button */}
-            <button
-              style={{
-                width: '100%',
-                padding: '14px 24px',
-                background: 'rgba(255,255,255,0.07)',
-                color: '#ffffff',
-                border: '1px solid rgba(255,255,255,0.15)',
-                borderRadius: '12px',
-                fontSize: '15px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-              }}
-              onClick={() => {
-                if (window.mixpanel) {
-                  window.mixpanel.track('mobile_gate_email_link');
-                }
-                const subject = encodeURIComponent('Your interview practice link');
-                const body = encodeURIComponent('Open this on your desktop to start your interview practice:\n\nhttps://acemyinterviews.io');
-                window.location.href = `mailto:${user?.email || ''}?subject=${subject}&body=${body}`;
-              }}
-            >
-              ✉️ Email me the link
-            </button>
-
-            {/* Success message */}
-            {mobileGateMessage && (
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '8px',
-                marginTop: '8px',
-              }}>
-                <div style={{
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: '50%',
-                  background: 'rgba(16, 185, 129, 0.15)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '22px',
-                }}>
-                  ✓
-                </div>
-                <div style={{ fontSize: '14px', fontWeight: 600, color: '#10b981' }}>{mobileGateMessage}</div>
-              </div>
-            )}
-
-            {/* Divider */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              margin: '4px 0',
-            }}>
-              <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
-              <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)' }}>or</span>
-              <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
-            </div>
-
-            {/* Notify when mobile is ready */}
-            <div>
-              <div style={{
-                display: 'flex',
-                gap: '8px',
-              }}>
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  value={mobileGateEmail}
-                  onChange={(e) => setMobileGateEmail(e.target.value)}
-                  style={{
-                    flex: 1,
-                    padding: '12px 16px',
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(255,255,255,0.15)',
-                    borderRadius: '10px',
-                    fontSize: '14px',
-                    color: '#ffffff',
-                    outline: 'none',
-                  }}
-                />
-                <button
-                  onClick={async () => {
-                    if (mobileGateEmail && mobileGateEmail.includes('@')) {
-                      try {
-                        await supabase.from('mobile_waitlist').insert({
-                          email: mobileGateEmail,
-                          user_id: user?.id || null,
-                          created_at: new Date().toISOString(),
-                        });
-                      } catch (e) {
-                        console.error('Failed to save email:', e);
-                      }
-                      if (window.mixpanel) {
-                        window.mixpanel.track('mobile_gate_alert_me', { email: mobileGateEmail });
-                      }
-                      setMobileGateMessage("You're on the list! We'll notify you when mobile is ready.");
-                    }
-                  }}
-                  style={{
-                    padding: '12px 18px',
-                    background: 'rgba(255,255,255,0.1)',
-                    border: '1px solid rgba(255,255,255,0.15)',
-                    borderRadius: '10px',
-                    fontSize: '13px',
-                    fontWeight: 600,
-                    color: '#ffffff',
-                    cursor: 'pointer',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  Alert me
-                </button>
-              </div>
-              <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', textAlign: 'left', marginTop: '6px' }}>
-                Get notified when mobile is ready
-              </div>
-            </div>
-
-            {/* Back to dashboard */}
-            <button
-              onClick={() => setStage('landing')}
-              style={{
-                marginTop: '8px',
-                background: 'none',
-                border: 'none',
-                color: 'rgba(255,255,255,0.4)',
-                fontSize: '13px',
-                cursor: 'pointer',
-                textDecoration: 'underline',
-              }}
-            >
-              ← Back to dashboard
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   // Setup Page
   if (stage === 'setup') {
     return (
@@ -3123,11 +3260,7 @@ Return ONLY valid JSON:
                     video_enabled: videoEnabled
                   });
                 }
-                if (isMobile) {
-                  setStage('mobileGate');
-                } else {
-                  generateQuestions();
-                }
+                generateQuestions();
               }
             }}
             disabled={!jobTitle.trim()}
@@ -3189,38 +3322,6 @@ Return ONLY valid JSON:
               </button>
               <p style={styles.mobileStartHint}>
                 Make sure your volume is up to hear the questions
-              </p>
-            </div>
-          </div>
-        </div>
-      );
-    }
-    
-    // Mobile next question overlay
-    if (waitingForMobileNext) {
-      return (
-        <div style={styles.container}>
-          <div style={styles.heroGlow}></div>
-          {videoEnabled && (
-            <video
-              ref={videoRef}
-              autoPlay
-              muted
-              playsInline
-              style={{ position: 'absolute', width: 1, height: 1, opacity: 0 }}
-            />
-          )}
-          <div style={styles.mobileStartOverlay}>
-            <div style={styles.mobileStartCard}>
-              <h2 style={styles.mobileStartTitle}>✅ Answer Recorded!</h2>
-              <p style={styles.mobileStartText}>
-                Ready for question {currentQuestionIndex + 1} of {questions.length}?
-              </p>
-              <button style={styles.mobileStartBtn} onClick={handleMobileNextQuestion}>
-                ▶️ Hear Next Question
-              </button>
-              <p style={styles.mobileStartHint}>
-                Tap to hear the AI ask your next question
               </p>
             </div>
           </div>
@@ -3294,87 +3395,84 @@ Return ONLY valid JSON:
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '10px',
-              padding: '12px',
-              background: 'rgba(139, 92, 246, 0.1)',
-              border: '1px solid rgba(139, 92, 246, 0.2)',
-              borderRadius: '10px',
-              marginBottom: '12px',
+              gap: '12px',
+              padding: '20px',
+              background: 'rgba(0, 217, 255, 0.1)',
+              border: '1px solid rgba(0, 217, 255, 0.3)',
+              borderRadius: '12px',
+              marginBottom: '20px',
+              color: '#00d9ff',
+              fontSize: '15px',
+              fontWeight: '500'
             }}>
-              <span style={{ fontSize: '14px', color: '#a78bfa' }}>🔍 Evaluating your response...</span>
+              <span style={{
+                width: '10px',
+                height: '10px',
+                background: '#00d9ff',
+                borderRadius: '50%',
+                animation: 'pulse 1.5s ease-in-out infinite'
+              }}></span>
+              Evaluating your response...
             </div>
           )}
           
           {/* Recording status */}
-          <div style={styles.recordingSection}>
-            {isSpeaking ? (
-              <div style={styles.recordingWaiting}>
-                🔊 Listening to question... Recording will start when AI finishes.
-              </div>
-            ) : isRecording ? (
-              <div style={styles.recordingActive}>
-                <span style={styles.recordingDot}></span>
-                Recording your answer...
-              </div>
-            ) : (
-              <div style={styles.recordingWaiting}>
-                Preparing...
-              </div>
-            )}
-            
-            {/* Manual text input fallback - only show in TEST_MODE for sandbox testing */}
-            {TEST_MODE && !isSpeaking && (
-              <div style={styles.manualInputSection}>
-                <span style={styles.manualInputLabel}>
-                  💡 Voice not working? Type your answer (TEST MODE only):
-                </span>
-                <textarea
-                  style={styles.manualTextarea}
-                  placeholder="Type your answer here if voice recording isn't capturing..."
-                  value={currentTranscript}
-                  onChange={(e) => {
-                    setCurrentTranscript(e.target.value);
-                    transcriptRef.current = e.target.value;
-                  }}
-                  rows={4}
-                />
-              </div>
-            )}
-            
-            {/* Live transcript preview - mobile only, for debugging speech recognition */}
-            {isMobile && !isSpeaking && currentTranscript && (
-              <div style={{
-                marginTop: '12px',
-                padding: '10px 14px',
-                background: 'rgba(0, 217, 255, 0.05)',
-                border: '1px solid rgba(0, 217, 255, 0.15)',
-                borderRadius: '8px',
-                maxHeight: '80px',
-                overflowY: 'auto',
-                fontSize: '13px',
-                color: 'rgba(255,255,255,0.7)',
-                lineHeight: '1.4'
-              }}>
-                <span style={{ color: 'rgba(0, 217, 255, 0.6)', fontSize: '11px', fontWeight: 600 }}>📝 Transcript: </span>
-                {currentTranscript.length > 150 ? '...' + currentTranscript.slice(-150) : currentTranscript}
-              </div>
-            )}
-          </div>
+          {!isEvaluating && (
+            <div style={styles.recordingSection}>
+              {isSpeaking ? (
+                <div style={styles.recordingWaiting}>
+                  🔊 Listening to question... Recording will start when AI finishes.
+                </div>
+              ) : isRecording ? (
+                <div style={styles.recordingActive}>
+                  <span style={styles.recordingDot}></span>
+                  Recording your answer...
+                </div>
+              ) : (
+                <div style={styles.recordingWaiting}>
+                  Preparing...
+                </div>
+              )}
+              
+              {/* Manual text input fallback - only show in TEST_MODE for sandbox testing */}
+              {TEST_MODE && !isSpeaking && (
+                <div style={styles.manualInputSection}>
+                  <span style={styles.manualInputLabel}>
+                    💡 Voice not working? Type your answer (TEST MODE only):
+                  </span>
+                  <textarea
+                    style={styles.manualTextarea}
+                    placeholder="Type your answer here if voice recording isn't capturing..."
+                    value={currentTranscript}
+                    onChange={(e) => {
+                      setCurrentTranscript(e.target.value);
+                      transcriptRef.current = e.target.value;
+                    }}
+                    rows={4}
+                  />
+                </div>
+              )}
+            </div>
+          )}
           
           <button 
             style={{
               ...styles.primaryBtn,
-              opacity: (isSpeaking || isTranscribing || isEvaluating) ? 0.5 : 1,
-              cursor: (isSpeaking || isTranscribing || isEvaluating) ? 'not-allowed' : 'pointer'
+              opacity: (isSpeaking || isEvaluating) ? 0.5 : 1,
+              cursor: (isSpeaking || isEvaluating) ? 'not-allowed' : 'pointer'
             }} 
             onClick={handleNextQuestion}
-            disabled={isSpeaking || isTranscribing || isEvaluating}
+            disabled={isSpeaking || isEvaluating}
           >
-            {isSpeaking ? 'Please wait...' : isTranscribing ? '⏳ Transcribing...' : isEvaluating ? '🔍 Evaluating...' : (currentQuestionIndex < questions.length - 1 ? 'Submit Answer' : 'Finish Interview')}
+            {isSpeaking ? 'Please wait...' : isEvaluating ? 'Evaluating...' : 'Submit Answer'}
             <span style={styles.btnArrow}>→</span>
           </button>
           
-          <p style={styles.skipNote}>{isSpeaking ? 'Wait for AI to finish speaking' : isTranscribing ? 'Processing your answer...' : isEvaluating ? 'AI is reviewing your response...' : 'Click above when you\'re done answering, or wait for the timer'}</p>
+          <p style={styles.skipNote}>
+            {isSpeaking ? 'Wait for AI to finish speaking' : 
+             isEvaluating ? 'AI is reviewing your response...' :
+             'Click above when you\'re done answering, or wait for the timer'}
+          </p>
         </div>
       </div>
     );
@@ -3534,6 +3632,7 @@ Return ONLY valid JSON:
                 <div style={styles.questionFeedbackHeader}>
                   <span style={styles.questionNum}>Q{q.questionNum}</span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    {/* Show combined score if there was a follow-up, otherwise main score */}
                     {q.hasFollowUp && q.combinedScore !== undefined && (
                       <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>
                         combined
@@ -3545,6 +3644,7 @@ Return ONLY valid JSON:
                   </div>
                 </div>
                 
+                {/* Main answer feedback - always shown with full V1 depth */}
                 {q.hasFollowUp && (
                   <div style={{
                     display: 'inline-block',
@@ -3570,7 +3670,7 @@ Return ONLY valid JSON:
                   </div>
                 </div>
                 
-                {/* Follow-up section */}
+                {/* V2: Follow-up section — shown when this question had a follow-up */}
                 {q.hasFollowUp && q.followUp && (
                   <div style={{
                     marginTop: '16px',
@@ -3594,6 +3694,7 @@ Return ONLY valid JSON:
                       </span>
                     </div>
                     
+                    {/* What was being tested */}
                     {q.followUp.coachingNote && (
                       <div style={{
                         padding: '10px 12px',
@@ -3630,7 +3731,7 @@ Return ONLY valid JSON:
                   </div>
                 )}
                 
-                {/* No follow-up — positive reinforcement */}
+                {/* V2: No follow-up — positive reinforcement when answer was thorough */}
                 {!q.hasFollowUp && q.noFollowUpReason === 'thorough_answer' && (
                   <div style={{
                     marginTop: '12px',
