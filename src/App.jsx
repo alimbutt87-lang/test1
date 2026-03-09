@@ -109,6 +109,12 @@ export default function InterviewSimulator() {
       setUser(session?.user ?? null);
       if (session?.user) {
         setUserName(session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || '');
+        
+        // If user just signed in via OAuth, redirect to setup
+        if (sessionStorage.getItem('pendingAuthRedirect')) {
+          sessionStorage.removeItem('pendingAuthRedirect');
+          setStage('setup');
+        }
       }
       setAuthLoading(false);
     });
@@ -199,6 +205,9 @@ export default function InterviewSimulator() {
     if (window.mixpanel) {
       window.mixpanel.track('google_sign_in_clicked');
     }
+    
+    // Flag so we know to redirect to setup after OAuth returns
+    sessionStorage.setItem('pendingAuthRedirect', 'true');
     
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
