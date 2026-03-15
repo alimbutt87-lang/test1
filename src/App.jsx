@@ -74,6 +74,7 @@ export default function InterviewSimulator() {
   const [waitingForMobileNext, setWaitingForMobileNext] = useState(false);
   const [mobileGateEmail, setMobileGateEmail] = useState('');
   const [mobileGateMessage, setMobileGateMessage] = useState('');
+  const [urlRole, setUrlRole] = useState('');
   
   // Follow-up question states
   const [isFollowUp, setIsFollowUp] = useState(false);
@@ -118,6 +119,16 @@ export default function InterviewSimulator() {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+
+  // Read ?role= URL param to personalise landing page headline
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const role = params.get('role');
+    if (role) {
+      setUrlRole(decodeURIComponent(role));
+    }
   }, []);
 
   // Initialize auth on mount
@@ -2081,6 +2092,43 @@ Return ONLY valid JSON:
   }
 
 
+
+    // Dynamic headline based on ?role= param
+    const getHeadline = () => {
+      if (!urlRole) {
+        return (
+          <>
+            Practice smarter.<br/>
+            <em>Land the job.</em>
+          </>
+        );
+      }
+      // 3 variations, assigned statically by first character of role name
+      const code = urlRole.charCodeAt(0) % 3;
+      if (code === 0) {
+        return (
+          <>
+            Simulate a realistic<br/>
+            <em>{urlRole} interview.</em>
+          </>
+        );
+      } else if (code === 1) {
+        return (
+          <>
+            Practise for your<br/>
+            <em>{urlRole} interview.</em>
+          </>
+        );
+      } else {
+        return (
+          <>
+            Ace your<br/>
+            <em>{urlRole} interview.</em>
+          </>
+        );
+      }
+    };
+
   // Landing Page
   if (stage === 'landing') {
     const handleCTA = () => {
@@ -2760,8 +2808,7 @@ Return ONLY valid JSON:
           <section className="lp-hero">
             <div className="lp-badge">✦ AI-Powered Interview Training</div>
             <h1>
-              Practice smarter.<br/>
-              <em>Land the job.</em>
+              {getHeadline()}
             </h1>
             <p className="lp-hero-sub">
               Simulate real interviews with an AI that asks follow-up questions, 
