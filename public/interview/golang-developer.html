@@ -119,7 +119,16 @@
 
   <section id="faq" class="faq-section"><div class="container">
     <h2 class="centered">Frequently Asked Questions</h2>
-    <div class="faq-list">
+    
+<section style="padding:56px 24px;text-align:center;background:linear-gradient(180deg,#1a1f2e 0%,#0f1419 100%);">
+  <div style="max-width:800px;margin:0 auto;">
+    <h2 style="font-size:1.5rem;font-weight:700;margin-bottom:16px;color:#ffffff;">Want to Practise These Questions?</h2>
+    <p style="color:#94a3b8;margin-bottom:28px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.7;">Use our AI interviewer to rehearse realistic scenarios and get instant feedback on your answers.</p>
+    <a href="/" style="display:inline-flex;align-items:center;gap:8px;background:#14b8a6;color:#0f1419;padding:16px 32px;font-size:1rem;font-weight:600;text-decoration:none;border-radius:10px;transition:all 0.2s;">Start Practising &#8594;</a>
+    <p style="font-size:0.875rem;color:#64748b;margin-top:16px;">Takes less than 15 minutes.</p>
+  </div>
+</section>
+<div class="faq-list">
       <details><summary>How important is understanding concurrency for Go interviews?</summary><p>Very important — concurrency is typically 30-40% of a Go interview. You should be comfortable with goroutines, channels (buffered and unbuffered), the select statement, mutexes, WaitGroups, and the context package. Common patterns include worker pools, fan-out/fan-in, pipeline concurrency, and graceful shutdown. Even if the role isn't highly concurrent, interviewers use concurrency questions to assess Go fluency because it's the language's defining feature.</p></details>
       <details><summary>Should I know Kubernetes for Go developer roles?</summary><p>It depends on the role. Many Go positions are in cloud-native infrastructure where Kubernetes knowledge is valuable — understanding pods, services, deployments, and how Go services run in containers. At minimum, understand how Go services are containerized (multi-stage Docker builds) and how graceful shutdown works in orchestrated environments. See our <a href="/interview/devops-engineer">DevOps engineer interview guide</a> for Kubernetes preparation.</p></details>
       <details><summary>How does Go's simplicity affect interview expectations?</summary><p>Interviewers expect clean, readable, idiomatic code — not clever abstractions. Use the standard library where possible, handle errors explicitly, write table-driven tests, and favor composition over inheritance. Knowing why Go made certain design decisions (no exceptions, no inheritance, minimal generics) matters as much as knowing the syntax.</p></details>

@@ -122,7 +122,16 @@
 
   <section id="faq" class="faq-section"><div class="container">
     <h2 class="centered">Frequently Asked Questions</h2>
-    <div class="faq-list">
+    
+<section style="padding:56px 24px;text-align:center;background:linear-gradient(180deg,#1a1f2e 0%,#0f1419 100%);">
+  <div style="max-width:800px;margin:0 auto;">
+    <h2 style="font-size:1.5rem;font-weight:700;margin-bottom:16px;color:#ffffff;">Want to Practise These Questions?</h2>
+    <p style="color:#94a3b8;margin-bottom:28px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.7;">Use our AI interviewer to rehearse realistic scenarios and get instant feedback on your answers.</p>
+    <a href="/" style="display:inline-flex;align-items:center;gap:8px;background:#14b8a6;color:#0f1419;padding:16px 32px;font-size:1rem;font-weight:600;text-decoration:none;border-radius:10px;transition:all 0.2s;">Start Practising &#8594;</a>
+    <p style="font-size:0.875rem;color:#64748b;margin-top:16px;">Takes less than 15 minutes.</p>
+  </div>
+</section>
+<div class="faq-list">
       <details><summary>Do I still need to know classical NLP (TF-IDF, regex, rule-based systems)?</summary><p>Yes, but the emphasis has shifted. You should understand TF-IDF and BM25 (they're still the backbone of many retrieval systems), know when regex-based approaches outperform ML (structured extraction, input validation), and recognize that rule-based systems are often the right choice for well-defined tasks. Many production systems use a hybrid approach: rules for simple high-confidence cases and models for everything else. Showing you can choose the simplest effective approach demonstrates engineering maturity.</p></details>
       <details><summary>How much transformer math should I know for an NLP interview?</summary><p>You should be able to explain self-attention mechanically (Q, K, V matrices, attention weights, multi-head attention) and understand why it works. You don't typically need to derive gradients from scratch — that's more <a href="/interview/deep-learning-engineer">deep learning engineer</a> territory. Understand positional encoding, layer normalization, and feed-forward layers. The practical questions matter more: why attention scales quadratically with sequence length, and how efficient attention variants (FlashAttention, multi-query attention) address the bottleneck.</p></details>
       <details><summary>Is LLM experience required for NLP engineer roles?</summary><p>Increasingly yes. Most roles expect familiarity with LLMs via APIs, prompt engineering basics, and RAG architecture. Many also expect fine-tuning experience. Companies with large-scale NLP products still value traditional NLP skills heavily alongside LLM knowledge. Companies building LLM-powered applications may weight LLM experience more. The safest preparation covers both: strong fundamentals in classification, retrieval, and evaluation, plus practical LLM experience in prompting, fine-tuning, and RAG.</p></details>

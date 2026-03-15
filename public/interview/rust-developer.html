@@ -117,7 +117,16 @@
 
   <section id="faq" class="faq-section"><div class="container">
     <h2 class="centered">Frequently Asked Questions</h2>
-    <div class="faq-list">
+    
+<section style="padding:56px 24px;text-align:center;background:linear-gradient(180deg,#1a1f2e 0%,#0f1419 100%);">
+  <div style="max-width:800px;margin:0 auto;">
+    <h2 style="font-size:1.5rem;font-weight:700;margin-bottom:16px;color:#ffffff;">Want to Practise These Questions?</h2>
+    <p style="color:#94a3b8;margin-bottom:28px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.7;">Use our AI interviewer to rehearse realistic scenarios and get instant feedback on your answers.</p>
+    <a href="/" style="display:inline-flex;align-items:center;gap:8px;background:#14b8a6;color:#0f1419;padding:16px 32px;font-size:1rem;font-weight:600;text-decoration:none;border-radius:10px;transition:all 0.2s;">Start Practising &#8594;</a>
+    <p style="font-size:0.875rem;color:#64748b;margin-top:16px;">Takes less than 15 minutes.</p>
+  </div>
+</section>
+<div class="faq-list">
       <details><summary>How many questions should I expect in a Rust developer interview?</summary><p>Most Rust interviews include 4 to 8 technical questions in a 45-to-60-minute session. Expect at least 2 to 3 on ownership and borrowing, 1 to 2 on traits and generics, and 1 to 2 coding problems where you write Rust in a shared editor. Senior roles often add async Rust, unsafe, and systems architecture questions.</p></details>
       <details><summary>Do I need to know unsafe Rust for interviews?</summary><p>For most positions, you need conceptual understanding — what unsafe unlocks (raw pointer dereferencing, calling unsafe functions, implementing unsafe traits, FFI), what invariants you maintain, and when it's justified. You generally won't write unsafe code unless the role is systems-level (embedded, OS, game engines). Explaining why safe abstractions over unsafe code are Rust's design philosophy matters more than writing unsafe blocks.</p></details>
       <details><summary>Should I learn async Rust before my interview?</summary><p>If the role involves web services, networking, or I/O-heavy workloads, yes. Most production Rust uses tokio for async I/O. Understand that futures are lazy, you need a runtime executor, and the basics of async/await syntax. Deep Pin/Unpin knowledge is only needed for senior or infrastructure roles.</p></details>
