@@ -7,6 +7,10 @@ console.log('B2B_BUILD_CHECK_V2');
 // Set to true for testing (bypasses paywall), false for production
 const TEST_MODE = false;
 
+// ===== FEATURE FLAGS =====
+// Device check screen — only shown to this email. Remove the email check to roll out to everyone.
+const DEVICE_CHECK_EMAIL = 'ali.m.butt87@gmail.com';
+
 // Stripe URLs
 const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/fZu14n8Ac7Wm3QJ0TN6wE00';
 const STRIPE_SUBSCRIBE_URL = 'https://buy.stripe.com/6oUaEXbMo90qcnfaun6wE02';
@@ -15,6 +19,133 @@ const STRIPE_SUBSCRIBE_URL = 'https://buy.stripe.com/6oUaEXbMo90qcnfaun6wE02';
 const SUPABASE_URL = 'https://msngeennlvzbhohnrhnq.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable__01NFWdOHHofya6dz2CLhg_XFBWE8sQ';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ===== DEVICE CHECK SCREEN =====
+function DeviceCheckScreen({ onPass, onBack }) {
+  const [micStatus, setMicStatus] = React.useState('checking');
+  const [camStatus, setCamStatus] = React.useState('checking');
+  const [browserOk, setBrowserOk] = React.useState(true);
+  const [micError, setMicError] = React.useState('');
+  const [volumeLevel, setVolumeLevel] = React.useState([2,3,4,3,2,3,4,5]);
+  const streamRef = React.useRef(null);
+  const animFrameRef = React.useRef(null);
+
+  const bothOk = micStatus === 'ok' && camStatus === 'ok';
+
+  React.useEffect(() => {
+    const speechSupported = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window;
+    setBrowserOk(speechSupported);
+
+    navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+      .then((stream) => {
+        streamRef.current = stream;
+        setMicStatus('ok');
+        setCamStatus('ok');
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+        audioCtx.createMediaStreamSource(stream).connect(analyser);
+        const data = new Uint8Array(analyser.frequencyBinCount);
+        const animate = () => {
+          analyser.getByteFrequencyData(data);
+          setVolumeLevel(Array.from({ length: 8 }, (_, i) => Math.max(4, Math.round((data[Math.floor(i * data.length / 8)] / 255) * 100))));
+          animFrameRef.current = requestAnimationFrame(animate);
+        };
+        animate();
+      })
+      .catch((err) => {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+          .then((audioStream) => { streamRef.current = audioStream; setMicStatus('ok'); setCamStatus('error'); })
+          .catch(() => {
+            setMicStatus('error'); setCamStatus('error');
+            if (err.name === 'NotAllowedError') setMicError('Permission denied — click the mic icon in your address bar and allow access, then try again.');
+            else if (err.name === 'NotFoundError') setMicError('No microphone found — plug one in or check your system settings.');
+            else setMicError('Could not access your mic. Try Chrome or Edge for the best experience.');
+          });
+      });
+
+    return () => {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
+    };
+  }, []);
+
+  const handlePass = () => {
+    if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
+    onPass();
+  };
+
+  const dot = (s) => ({ width:'7px', height:'7px', borderRadius:'50%', background: s==='ok'?'#00d9ff':s==='error'?'#ef4444':'#888', flexShrink:0 });
+  const label = (s, ok, err) => ({ fontSize:'11px', color: s==='ok'?'#00d9ff':s==='error'?'#ef4444':'rgba(255,255,255,0.4)', children: s==='ok'?ok:s==='error'?err:'Checking...' });
+
+  return (
+    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#0a0a0f 0%,#1a1a2e 50%,#0a0a0f 100%)',display:'flex',alignItems:'center',justifyContent:'center',padding:'20px',fontFamily:"'Inter','SF Pro Display',-apple-system,sans-serif",color:'#fff',position:'relative'}}>
+      <div style={{position:'fixed',top:'-50%',left:'-50%',width:'200%',height:'200%',background:'radial-gradient(circle at 30% 30%,rgba(0,217,255,0.06) 0%,transparent 50%),radial-gradient(circle at 70% 70%,rgba(139,92,246,0.06) 0%,transparent 50%)',pointerEvents:'none',zIndex:0}}/>
+      <div style={{maxWidth:'500px',width:'100%',zIndex:1}}>
+
+        <div style={{textAlign:'center',marginBottom:'2rem'}}>
+          <div style={{display:'inline-block',background:'rgba(0,217,255,0.08)',border:'1px solid rgba(0,217,255,0.2)',borderRadius:'20px',padding:'4px 14px',fontSize:'12px',color:'#00d9ff',letterSpacing:'0.08em',marginBottom:'1rem'}}>READY CHECK</div>
+          <h2 style={{fontSize:'26px',fontWeight:'700',margin:'0 0 8px'}}>Before we start</h2>
+          <p style={{color:'rgba(255,255,255,0.4)',fontSize:'14px',margin:0}}>Quick check to make sure your mic and camera are ready — takes under 20 seconds</p>
+        </div>
+
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'12px',marginBottom:'12px'}}>
+          <div style={{background:'rgba(255,255,255,0.05)',border:`1px solid ${micStatus==='error'?'rgba(239,68,68,0.4)':'rgba(0,217,255,0.25)'}`,borderRadius:'10px',padding:'1.25rem'}}>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'12px'}}>
+              <span style={{color:'rgba(255,255,255,0.4)',fontSize:'11px',letterSpacing:'0.08em'}}>MICROPHONE</span>
+              <div style={{display:'flex',alignItems:'center',gap:'5px'}}>
+                <div style={dot(micStatus)}/>
+                <span style={{fontSize:'11px',color:micStatus==='ok'?'#00d9ff':micStatus==='error'?'#ef4444':'rgba(255,255,255,0.4)'}}>{micStatus==='ok'?'Detected':micStatus==='error'?'Not found':'Checking...'}</span>
+              </div>
+            </div>
+            <div style={{display:'flex',alignItems:'flex-end',gap:'3px',height:'36px',marginBottom:'10px'}}>
+              {volumeLevel.map((h,i)=><div key={i} style={{flex:1,borderRadius:'2px',minHeight:'4px',height:`${h}%`,background:micStatus==='error'?'#ef4444':'#00d9ff',opacity:micStatus==='error'?0.3:0.85,transition:'height 0.1s ease'}}/>)}
+            </div>
+            <p style={{color:'rgba(255,255,255,0.25)',fontSize:'11px',margin:0}}>{micStatus==='ok'?'Say something — watch the bars move':micStatus==='error'?'No audio signal':'Requesting access...'}</p>
+          </div>
+
+          <div style={{background:'rgba(255,255,255,0.05)',border:`1px solid ${camStatus==='error'?'rgba(239,68,68,0.4)':'rgba(0,217,255,0.25)'}`,borderRadius:'10px',padding:'1.25rem'}}>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'12px'}}>
+              <span style={{color:'rgba(255,255,255,0.4)',fontSize:'11px',letterSpacing:'0.08em'}}>CAMERA</span>
+              <div style={{display:'flex',alignItems:'center',gap:'5px'}}>
+                <div style={dot(camStatus)}/>
+                <span style={{fontSize:'11px',color:camStatus==='ok'?'#00d9ff':camStatus==='error'?'#ef4444':'rgba(255,255,255,0.4)'}}>{camStatus==='ok'?'Active':camStatus==='error'?'Not found':'Checking...'}</span>
+              </div>
+            </div>
+            <div style={{background:'rgba(255,255,255,0.03)',border:'1px solid rgba(255,255,255,0.08)',borderRadius:'6px',height:'46px',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'10px'}}>
+              <span style={{color:'rgba(255,255,255,0.2)',fontSize:'12px'}}>{camStatus==='ok'?'● Live':camStatus==='error'?'No camera':'...'}</span>
+            </div>
+            <p style={{color:'rgba(255,255,255,0.25)',fontSize:'11px',margin:0}}>{camStatus==='ok'?'Camera working':camStatus==='error'?'Camera optional':'Requesting access...'}</p>
+          </div>
+        </div>
+
+        <div style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.08)',borderRadius:'10px',padding:'0.9rem 1.25rem',marginBottom:'16px',display:'flex',alignItems:'center',gap:'12px'}}>
+          <div style={{width:'20px',height:'20px',borderRadius:'50%',background:browserOk?'rgba(0,217,255,0.1)':'rgba(239,68,68,0.1)',border:`1px solid ${browserOk?'rgba(0,217,255,0.3)':'rgba(239,68,68,0.3)'}`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:'11px',color:browserOk?'#00d9ff':'#ef4444'}}>{browserOk?'✓':'✗'}</div>
+          <div>
+            <p style={{color:'#fff',fontSize:'13px',margin:'0 0 2px',fontWeight:'500'}}>{browserOk?'Browser compatible':'Browser not supported'}</p>
+            <p style={{color:'rgba(255,255,255,0.3)',fontSize:'11px',margin:0}}>{browserOk?'Full audio support detected':'Switch to Chrome or Edge — Firefox does not support audio recording'}</p>
+          </div>
+        </div>
+
+        {(micStatus==='error'||!browserOk)&&(
+          <div style={{background:'rgba(239,68,68,0.06)',border:'1px solid rgba(239,68,68,0.2)',borderRadius:'10px',padding:'1rem 1.25rem',marginBottom:'16px'}}>
+            <p style={{color:'#fca5a5',fontSize:'13px',fontWeight:'500',margin:'0 0 8px'}}>Try one of these fixes:</p>
+            {micError&&<p style={{color:'rgba(255,255,255,0.6)',fontSize:'12px',margin:'0 0 4px'}}>● {micError}</p>}
+            {!browserOk&&<p style={{color:'rgba(255,255,255,0.6)',fontSize:'12px',margin:'0 0 4px'}}>● Firefox doesn't support audio — use <span style={{color:'#00d9ff'}}>Chrome</span> or <span style={{color:'#00d9ff'}}>Edge</span></p>}
+            <p style={{color:'rgba(255,255,255,0.6)',fontSize:'12px',margin:0}}>● Make sure your mic is plugged in and not muted</p>
+          </div>
+        )}
+
+        <button onClick={handlePass} disabled={micStatus==='checking'} style={{width:'100%',background:bothOk?'linear-gradient(135deg,#00d9ff 0%,#8b5cf6 100%)':'rgba(255,255,255,0.08)',border:bothOk?'none':'1px solid rgba(255,255,255,0.1)',borderRadius:'12px',padding:'15px',fontSize:'16px',fontWeight:'600',color:bothOk?'#fff':'rgba(255,255,255,0.4)',cursor:micStatus==='checking'?'not-allowed':'pointer',transition:'all 0.2s',marginBottom:'12px'}}>
+          {micStatus==='checking'?'Checking devices...':bothOk?'Everything looks good — Start Interview →':'Start anyway (mic issues may affect results)'}
+        </button>
+
+        <button onClick={onBack} style={{display:'block',width:'100%',background:'transparent',border:'none',color:'rgba(255,255,255,0.4)',fontSize:'14px',cursor:'pointer',padding:'8px'}}>← Back to setup</button>
+      </div>
+    </div>
+  );
+}
 
 // Main App Component
 export default function InterviewSimulator() {
@@ -4057,6 +4188,8 @@ Return ONLY valid JSON:
                 }
                 if (isMobile) {
                   setStage('mobileGate');
+                } else if (user?.email === DEVICE_CHECK_EMAIL) {
+                  setStage('device-check');
                 } else {
                   generateQuestions();
                 }
@@ -4074,6 +4207,10 @@ Return ONLY valid JSON:
         </div>
       </div>
     );
+  }
+
+  if (stage === 'device-check') {
+    return <DeviceCheckScreen onPass={() => generateQuestions()} onBack={() => setStage('setup')} />;
   }
 
   // Generating Questions
