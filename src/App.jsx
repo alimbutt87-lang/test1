@@ -30,11 +30,15 @@ function DeviceCheckScreen({ onPass, onBack }) {
   const streamRef = React.useRef(null);
   const animFrameRef = React.useRef(null);
 
-  const bothOk = micStatus === 'ok' && camStatus === 'ok';
+  const bothOk = micStatus === 'ok' && camStatus === 'ok' && browserOk;
 
   React.useEffect(() => {
-    const speechSupported = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window;
-    setBrowserOk(speechSupported);
+    // Must be Chrome specifically.
+    // Edge exposes window.SpeechRecognition but events never fire — it silently fails.
+    // Firefox has it behind a flag and also doesn't work in practice.
+    // Only Chrome (and Chromium-based browsers that aren't Edge) work reliably.
+    const isChrome = /Chrome/.test(navigator.userAgent) && !/Edg/.test(navigator.userAgent);
+    setBrowserOk(isChrome);
 
     navigator.mediaDevices.getUserMedia({ audio: true, video: true })
       .then((stream) => {
@@ -60,7 +64,7 @@ function DeviceCheckScreen({ onPass, onBack }) {
             setMicStatus('error'); setCamStatus('error');
             if (err.name === 'NotAllowedError') setMicError('Permission denied — click the mic icon in your address bar and allow access, then try again.');
             else if (err.name === 'NotFoundError') setMicError('No microphone found — plug one in or check your system settings.');
-            else setMicError('Could not access your mic. Try Chrome or Edge for the best experience.');
+            else setMicError('Could not access your mic. Try Chrome for the best experience.');
           });
       });
 
@@ -77,7 +81,6 @@ function DeviceCheckScreen({ onPass, onBack }) {
   };
 
   const dot = (s) => ({ width:'7px', height:'7px', borderRadius:'50%', background: s==='ok'?'#00d9ff':s==='error'?'#ef4444':'#888', flexShrink:0 });
-  const label = (s, ok, err) => ({ fontSize:'11px', color: s==='ok'?'#00d9ff':s==='error'?'#ef4444':'rgba(255,255,255,0.4)', children: s==='ok'?ok:s==='error'?err:'Checking...' });
 
   return (
     <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#0a0a0f 0%,#1a1a2e 50%,#0a0a0f 100%)',display:'flex',alignItems:'center',justifyContent:'center',padding:'20px',fontFamily:"'Inter','SF Pro Display',-apple-system,sans-serif",color:'#fff',position:'relative'}}>
@@ -102,7 +105,7 @@ function DeviceCheckScreen({ onPass, onBack }) {
             <div style={{display:'flex',alignItems:'flex-end',gap:'3px',height:'36px',marginBottom:'10px'}}>
               {volumeLevel.map((h,i)=><div key={i} style={{flex:1,borderRadius:'2px',minHeight:'4px',height:`${h}%`,background:micStatus==='error'?'#ef4444':'#00d9ff',opacity:micStatus==='error'?0.3:0.85,transition:'height 0.1s ease'}}/>)}
             </div>
-            <p style={{color:'rgba(255,255,255,0.25)',fontSize:'11px',margin:0}}>{micStatus==='ok'?'Say something — watch the bars move':micStatus==='error'?'No audio signal':'Requesting access...'}</p>
+            <p style={{color:'rgba(255,255,255,0.25)',fontSize:'11px',margin:0}}>{micStatus==='ok'?'Mic working — bars show your voice level':micStatus==='error'?'No audio signal':'Requesting access...'}</p>
           </div>
 
           <div style={{background:'rgba(255,255,255,0.05)',border:`1px solid ${camStatus==='error'?'rgba(239,68,68,0.4)':'rgba(0,217,255,0.25)'}`,borderRadius:'10px',padding:'1.25rem'}}>
@@ -120,25 +123,27 @@ function DeviceCheckScreen({ onPass, onBack }) {
           </div>
         </div>
 
-        <div style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.08)',borderRadius:'10px',padding:'0.9rem 1.25rem',marginBottom:'16px',display:'flex',alignItems:'center',gap:'12px'}}>
+        <div style={{background:'rgba(255,255,255,0.05)',border:`1px solid ${browserOk?'rgba(255,255,255,0.08)':'rgba(239,68,68,0.3)'}`,borderRadius:'10px',padding:'0.9rem 1.25rem',marginBottom:'16px',display:'flex',alignItems:'center',gap:'12px'}}>
           <div style={{width:'20px',height:'20px',borderRadius:'50%',background:browserOk?'rgba(0,217,255,0.1)':'rgba(239,68,68,0.1)',border:`1px solid ${browserOk?'rgba(0,217,255,0.3)':'rgba(239,68,68,0.3)'}`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:'11px',color:browserOk?'#00d9ff':'#ef4444'}}>{browserOk?'✓':'✗'}</div>
           <div>
-            <p style={{color:'#fff',fontSize:'13px',margin:'0 0 2px',fontWeight:'500'}}>{browserOk?'Browser compatible':'Browser not supported'}</p>
-            <p style={{color:'rgba(255,255,255,0.3)',fontSize:'11px',margin:0}}>{browserOk?'Full audio support detected':'Switch to Chrome or Edge — Firefox does not support audio recording'}</p>
+            <p style={{color:'#fff',fontSize:'13px',margin:'0 0 2px',fontWeight:'500'}}>{browserOk?'Browser supported':'Browser not fully supported'}</p>
+            <p style={{color:'rgba(255,255,255,0.3)',fontSize:'11px',margin:0}}>
+              {browserOk ? 'Chrome detected — speech transcription will work' : 'Speech transcription requires Chrome. Firefox and Edge do not support it reliably.'}
+            </p>
           </div>
         </div>
 
-        {(micStatus==='error'||!browserOk)&&(
+        {(micStatus==='error' || !browserOk) && (
           <div style={{background:'rgba(239,68,68,0.06)',border:'1px solid rgba(239,68,68,0.2)',borderRadius:'10px',padding:'1rem 1.25rem',marginBottom:'16px'}}>
             <p style={{color:'#fca5a5',fontSize:'13px',fontWeight:'500',margin:'0 0 8px'}}>Try one of these fixes:</p>
-            {micError&&<p style={{color:'rgba(255,255,255,0.6)',fontSize:'12px',margin:'0 0 4px'}}>● {micError}</p>}
-            {!browserOk&&<p style={{color:'rgba(255,255,255,0.6)',fontSize:'12px',margin:'0 0 4px'}}>● Firefox doesn't support audio — use <span style={{color:'#00d9ff'}}>Chrome</span> or <span style={{color:'#00d9ff'}}>Edge</span></p>}
-            <p style={{color:'rgba(255,255,255,0.6)',fontSize:'12px',margin:0}}>● Make sure your mic is plugged in and not muted</p>
+            {!browserOk && <p style={{color:'rgba(255,255,255,0.6)',fontSize:'12px',margin:'0 0 4px'}}>● Your mic may be working but speech transcription only works in <span style={{color:'#00d9ff'}}>Chrome</span> — Firefox and Edge both have issues with this API</p>}
+            {micError && <p style={{color:'rgba(255,255,255,0.6)',fontSize:'12px',margin:'0 0 4px'}}>● {micError}</p>}
+            {micStatus==='error' && <p style={{color:'rgba(255,255,255,0.6)',fontSize:'12px',margin:0}}>● Make sure your mic is plugged in and not muted</p>}
           </div>
         )}
 
-        <button onClick={handlePass} disabled={micStatus==='checking'} style={{width:'100%',background:bothOk?'linear-gradient(135deg,#00d9ff 0%,#8b5cf6 100%)':'rgba(255,255,255,0.08)',border:bothOk?'none':'1px solid rgba(255,255,255,0.1)',borderRadius:'12px',padding:'15px',fontSize:'16px',fontWeight:'600',color:bothOk?'#fff':'rgba(255,255,255,0.4)',cursor:micStatus==='checking'?'not-allowed':'pointer',transition:'all 0.2s',marginBottom:'12px'}}>
-          {micStatus==='checking'?'Checking devices...':bothOk?'Everything looks good — Start Interview →':'Start anyway (mic issues may affect results)'}
+        <button onClick={handlePass} disabled={micStatus==='checking'} style={{width:'100%',background:bothOk?'linear-gradient(135deg,#00d9ff 0%,#8b5cf6 100%)':'rgba(255,255,255,0.08)',border:bothOk?'none':'1px solid rgba(255,255,255,0.1)',borderRadius:'12px',padding:'15px',fontSize:'16px',fontWeight:'600',color:bothOk?'#fff':'rgba(255,255,255,0.5)',cursor:micStatus==='checking'?'not-allowed':'pointer',transition:'all 0.2s',marginBottom:'12px'}}>
+          {micStatus==='checking' ? 'Checking devices...' : bothOk ? 'Everything looks good — Start Interview →' : "Start anyway (answers won't be transcribed)"}
         </button>
 
         <button onClick={onBack} style={{display:'block',width:'100%',background:'transparent',border:'none',color:'rgba(255,255,255,0.4)',fontSize:'14px',cursor:'pointer',padding:'8px'}}>← Back to setup</button>
