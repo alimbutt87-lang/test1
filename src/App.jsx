@@ -4555,19 +4555,24 @@ Return ONLY valid JSON:
 
     // Handler for one-time unlock button
     const handleOneTimeUnlock = async () => {
-      if (!currentInterviewId) return;
+      // Use state or fall back to localStorage in case state wasn't set yet
+      const interviewId = currentInterviewId || localStorage.getItem('pendingInterviewId');
+      if (!interviewId) {
+        console.error('No interview ID found — cannot create checkout');
+        alert('Something went wrong. Please try refreshing the page.');
+        return;
+      }
       try {
         const response = await fetch('/api/create-checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            interviewId: currentInterviewId,
+            interviewId,
             userEmail: user?.email
           })
         });
         const data = await response.json();
         if (data.url) {
-          // Save results to localStorage before redirect so we can restore on return
           localStorage.setItem('pendingResults', JSON.stringify(finalResults));
           window.location.href = data.url;
         }
@@ -4690,7 +4695,7 @@ Return ONLY valid JSON:
 
                   <PaywallPricingToggle
                     onOneTimeClick={handleOneTimeUnlock}
-                    onProClick={() => window.location.href = STRIPE_SUBSCRIBE_URL}
+                    onProClick={() => window.open(STRIPE_SUBSCRIBE_URL, '_blank')}
                   />
 
                 </div>
