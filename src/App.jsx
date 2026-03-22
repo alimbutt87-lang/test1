@@ -519,12 +519,7 @@ export default function InterviewSimulator() {
     // If user just signed in via OAuth, redirect appropriately
     if (sessionStorage.getItem('pendingAuthRedirect')) {
       sessionStorage.removeItem('pendingAuthRedirect');
-      // Use locally loaded data (React state not updated yet)
-      if (!TEST_MODE && !loadedSubscribed && !loadedOrgId && loadedInterviews >= 1) {
-        setStage('paywall');
-      } else {
-        setStage('setup');
-      }
+      setStage('setup');
     }
   };
 
@@ -2223,14 +2218,9 @@ Return ONLY valid JSON:
     } catch (e) {}
     
     // In TEST_MODE, always allow access
-    // In production, check if user is subscribed or has free trial remaining
     // B2B candidates with an org_id skip the paywall entirely
+    // Interviews are now unlimited — results are paywalled instead
     const isB2BCandidate = userOrgId != null;
-    if (!TEST_MODE && !isSubscribed && !isB2BCandidate && completedInterviews >= 1) {
-      setPreviousStage(source);
-      setStage('paywall');
-      return;
-    }
     
     // Reset interview state for new interview (but keep form data like job title, description, name, country, resume)
     setQuestions([]);
