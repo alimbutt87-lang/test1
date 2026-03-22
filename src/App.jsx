@@ -4564,7 +4564,6 @@ Return ONLY valid JSON:
       const interviewId = currentInterviewId || localStorage.getItem('pendingInterviewId');
       if (!interviewId) {
         console.error('No interview ID found — cannot create checkout');
-        alert('Something went wrong. Please try refreshing the page.');
         return;
       }
       try {
@@ -4618,11 +4617,19 @@ Return ONLY valid JSON:
 
             {/* Teaser cards */}
             <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'16px', marginBottom:'16px'}}>
-              <div style={{background:'rgba(17,24,39,0.8)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', padding:'20px 24px', borderTop:'3px solid', borderImage:'linear-gradient(90deg,#ef4444,#f59e0b) 1'}}>
-                <div style={{fontSize:'11px', fontWeight:'700', textTransform:'uppercase', letterSpacing:'1px', color:'rgba(255,255,255,0.4)', marginBottom:'8px'}}>⚠️ Red Flag Detected</div>
-                <div style={{fontSize:'16px', fontWeight:'700', color:'#ef4444', marginBottom:'6px', lineHeight:'1.3'}}>Your answers share a pattern common in rejected candidates</div>
-                <div style={{fontSize:'13px', color:'rgba(255,255,255,0.5)', lineHeight:'1.4'}}>Our AI identified a recurring issue across your responses. <strong style={{color:'rgba(255,255,255,0.8)'}}>Unlock results to see what it is.</strong></div>
-              </div>
+              {finalResults.passed ? (
+                <div style={{background:'rgba(17,24,39,0.8)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', padding:'20px 24px', borderTop:'3px solid', borderImage:'linear-gradient(90deg,#10b981,#00d9ff) 1'}}>
+                  <div style={{fontSize:'11px', fontWeight:'700', textTransform:'uppercase', letterSpacing:'1px', color:'rgba(255,255,255,0.4)', marginBottom:'8px'}}>🏆 Strong Performance</div>
+                  <div style={{fontSize:'16px', fontWeight:'700', color:'#10b981', marginBottom:'6px', lineHeight:'1.3'}}>You passed — but there's still room to score even higher</div>
+                  <div style={{fontSize:'13px', color:'rgba(255,255,255,0.5)', lineHeight:'1.4'}}>Our AI found specific areas where top candidates outperform you. <strong style={{color:'rgba(255,255,255,0.8)'}}>Unlock to see what they are.</strong></div>
+                </div>
+              ) : (
+                <div style={{background:'rgba(17,24,39,0.8)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', padding:'20px 24px', borderTop:'3px solid', borderImage:'linear-gradient(90deg,#ef4444,#f59e0b) 1'}}>
+                  <div style={{fontSize:'11px', fontWeight:'700', textTransform:'uppercase', letterSpacing:'1px', color:'rgba(255,255,255,0.4)', marginBottom:'8px'}}>⚠️ Red Flag Detected</div>
+                  <div style={{fontSize:'16px', fontWeight:'700', color:'#ef4444', marginBottom:'6px', lineHeight:'1.3'}}>Your answers share a pattern common in rejected candidates</div>
+                  <div style={{fontSize:'13px', color:'rgba(255,255,255,0.5)', lineHeight:'1.4'}}>Our AI identified a recurring issue across your responses. <strong style={{color:'rgba(255,255,255,0.8)'}}>Unlock results to see what it is.</strong></div>
+                </div>
+              )}
               <div style={{background:'rgba(17,24,39,0.8)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', padding:'20px 24px', borderTop:'3px solid', borderImage:'linear-gradient(90deg,#8b5cf6,#00d9ff) 1'}}>
                 <div style={{fontSize:'11px', fontWeight:'700', textTransform:'uppercase', letterSpacing:'1px', color:'rgba(255,255,255,0.4)', marginBottom:'8px'}}>Your Best Answer</div>
                 <div style={{fontSize:'16px', fontWeight:'700', color:'#a855f7', marginBottom:'6px', lineHeight:'1.3'}}>
