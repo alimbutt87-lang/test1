@@ -8,8 +8,9 @@ console.log('B2B_BUILD_CHECK_V2');
 const TEST_MODE = false;
 
 // ===== FEATURE FLAGS =====
-// Device check screen — only shown to this email. Remove the email check to roll out to everyone.
 const DEVICE_CHECK_EMAIL = 'ali.m.butt87@gmail.com';
+const PAYWALL_V2_EMAIL = 'ali.m.butt87@gmail.com'; // remove email check to roll out to everyone
+const STRIPE_UNLOCK_PRICE_ID = 'price_1TDqfgDqS9966uj0y3CkcL30';
 
 // Stripe URLs
 const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/fZu14n8Ac7Wm3QJ0TN6wE00';
@@ -20,6 +21,52 @@ const SUPABASE_URL = 'https://msngeennlvzbhohnrhnq.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable__01NFWdOHHofya6dz2CLhg_XFBWE8sQ';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// ===== PAYWALL PRICING TOGGLE =====
+function PaywallPricingToggle({ onOneTimeClick, onProClick }) {
+  const [mode, setMode] = React.useState('once');
+  const btnBase = { flex:1, padding:'10px 16px', border:'none', borderRadius:'8px', fontFamily:'inherit', fontSize:'13px', fontWeight:'600', cursor:'pointer', transition:'all 0.25s' };
+  return (
+    <div>
+      <div style={{display:'flex', background:'rgba(255,255,255,0.04)', borderRadius:'10px', padding:'4px', marginBottom:'24px'}}>
+        <button onClick={() => setMode('once')} style={{...btnBase, background: mode==='once'?'#8b5cf6':'transparent', color: mode==='once'?'#fff':'rgba(255,255,255,0.4)', boxShadow: mode==='once'?'0 2px 12px rgba(139,92,246,0.3)':'none'}}>This Result Only</button>
+        <button onClick={() => setMode('pro')} style={{...btnBase, background: mode==='pro'?'#8b5cf6':'transparent', color: mode==='pro'?'#fff':'rgba(255,255,255,0.4)', boxShadow: mode==='pro'?'0 2px 12px rgba(139,92,246,0.3)':'none'}}>Unlimited Pro</button>
+      </div>
+      {mode === 'once' ? (
+        <div>
+          <div style={{marginBottom:'20px'}}>
+            <div style={{fontSize:'40px', fontWeight:'900', color:'#fff'}}><span style={{fontSize:'22px', verticalAlign:'super', fontWeight:'700'}}>$</span>4.99</div>
+            <div style={{fontSize:'14px', color:'rgba(255,255,255,0.4)', fontWeight:'500'}}>one-time payment</div>
+          </div>
+          <ul style={{textAlign:'left', marginBottom:'24px', padding:0}}>
+            {['Full 8-category performance breakdown','Question-by-question detailed feedback','Model answers for each question','Personalized improvement action plan','Video presence analysis'].map((f,i) => (
+              <li key={i} style={{listStyle:'none', display:'flex', alignItems:'center', gap:'10px', padding:'6px 0', fontSize:'13px', color:'rgba(255,255,255,0.6)'}}>
+                <span style={{color:'#22c55e', fontSize:'14px', fontWeight:'700'}}>✓</span>{f}
+              </li>
+            ))}
+          </ul>
+          <button onClick={onOneTimeClick} style={{width:'100%', padding:'16px 24px', border:'none', borderRadius:'12px', fontFamily:'inherit', fontSize:'16px', fontWeight:'700', cursor:'pointer', background:'linear-gradient(135deg,#8b5cf6,#7c3aed)', color:'#fff', boxShadow:'0 4px 20px rgba(139,92,246,0.3)'}}>Unlock My Results</button>
+        </div>
+      ) : (
+        <div>
+          <div style={{marginBottom:'20px'}}>
+            <div style={{fontSize:'40px', fontWeight:'900', color:'#fff'}}><span style={{fontSize:'22px', verticalAlign:'super', fontWeight:'700'}}>$</span>19.99<span style={{fontSize:'16px', color:'rgba(255,255,255,0.4)', fontWeight:'500'}}> /mo</span></div>
+            <div style={{display:'inline-block', background:'rgba(34,197,94,0.15)', color:'#22c55e', fontSize:'11px', fontWeight:'700', padding:'3px 10px', borderRadius:'4px', marginTop:'8px'}}>BEST VALUE — Unlimited interviews</div>
+          </div>
+          <ul style={{textAlign:'left', marginBottom:'24px', padding:0}}>
+            {['Everything in one-time unlock','Unlimited interview practice','Track your progress over time','Full leaderboard access'].map((f,i) => (
+              <li key={i} style={{listStyle:'none', display:'flex', alignItems:'center', gap:'10px', padding:'6px 0', fontSize:'13px', color:'rgba(255,255,255,0.6)'}}>
+                <span style={{color:'#22c55e', fontSize:'14px', fontWeight:'700'}}>✓</span>{f}
+              </li>
+            ))}
+          </ul>
+          <button onClick={onProClick} style={{width:'100%', padding:'16px 24px', border:'none', borderRadius:'12px', fontFamily:'inherit', fontSize:'16px', fontWeight:'700', cursor:'pointer', background:'linear-gradient(135deg,#8b5cf6,#7c3aed)', color:'#fff', boxShadow:'0 4px 20px rgba(139,92,246,0.3)'}}>Start Pro — 3 Day Free Trial</button>
+        </div>
+      )}
+      <div style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'6px', marginTop:'16px', fontSize:'12px', color:'rgba(255,255,255,0.3)'}}>🔒 Secure payment · Instant access · Cancel anytime</div>
+    </div>
+  );
+}
+
 // ===== DEVICE CHECK SCREEN =====
 function DeviceCheckScreen({ onPass, onBack }) {
   const [micStatus, setMicStatus] = React.useState('checking');
@@ -29,22 +76,15 @@ function DeviceCheckScreen({ onPass, onBack }) {
   const [volumeLevel, setVolumeLevel] = React.useState([2,3,4,3,2,3,4,5]);
   const streamRef = React.useRef(null);
   const animFrameRef = React.useRef(null);
-
   const bothOk = micStatus === 'ok' && camStatus === 'ok' && browserOk;
 
   React.useEffect(() => {
-    // Must be Chrome specifically.
-    // Edge exposes window.SpeechRecognition but events never fire — it silently fails.
-    // Firefox has it behind a flag and also doesn't work in practice.
-    // Only Chrome (and Chromium-based browsers that aren't Edge) work reliably.
     const isChrome = /Chrome/.test(navigator.userAgent) && !/Edg/.test(navigator.userAgent);
     setBrowserOk(isChrome);
-
     navigator.mediaDevices.getUserMedia({ audio: true, video: true })
       .then((stream) => {
         streamRef.current = stream;
-        setMicStatus('ok');
-        setCamStatus('ok');
+        setMicStatus('ok'); setCamStatus('ok');
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const analyser = audioCtx.createAnalyser();
         analyser.fftSize = 256;
@@ -59,15 +99,14 @@ function DeviceCheckScreen({ onPass, onBack }) {
       })
       .catch((err) => {
         navigator.mediaDevices.getUserMedia({ audio: true })
-          .then((audioStream) => { streamRef.current = audioStream; setMicStatus('ok'); setCamStatus('error'); })
+          .then((s) => { streamRef.current = s; setMicStatus('ok'); setCamStatus('error'); })
           .catch(() => {
             setMicStatus('error'); setCamStatus('error');
-            if (err.name === 'NotAllowedError') setMicError('Permission denied — click the mic icon in your address bar and allow access, then try again.');
+            if (err.name === 'NotAllowedError') setMicError('Permission denied — click the mic icon in your address bar and allow access.');
             else if (err.name === 'NotFoundError') setMicError('No microphone found — plug one in or check your system settings.');
             else setMicError('Could not access your mic. Try Chrome for the best experience.');
           });
       });
-
     return () => {
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
@@ -79,42 +118,32 @@ function DeviceCheckScreen({ onPass, onBack }) {
     if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
     onPass();
   };
-
   const dot = (s) => ({ width:'7px', height:'7px', borderRadius:'50%', background: s==='ok'?'#00d9ff':s==='error'?'#ef4444':'#888', flexShrink:0 });
 
   return (
     <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#0a0a0f 0%,#1a1a2e 50%,#0a0a0f 100%)',display:'flex',alignItems:'center',justifyContent:'center',padding:'20px',fontFamily:"'Inter','SF Pro Display',-apple-system,sans-serif",color:'#fff',position:'relative'}}>
       <div style={{position:'fixed',top:'-50%',left:'-50%',width:'200%',height:'200%',background:'radial-gradient(circle at 30% 30%,rgba(0,217,255,0.06) 0%,transparent 50%),radial-gradient(circle at 70% 70%,rgba(139,92,246,0.06) 0%,transparent 50%)',pointerEvents:'none',zIndex:0}}/>
       <div style={{maxWidth:'500px',width:'100%',zIndex:1}}>
-
         <div style={{textAlign:'center',marginBottom:'2rem'}}>
           <div style={{display:'inline-block',background:'rgba(0,217,255,0.08)',border:'1px solid rgba(0,217,255,0.2)',borderRadius:'20px',padding:'4px 14px',fontSize:'12px',color:'#00d9ff',letterSpacing:'0.08em',marginBottom:'1rem'}}>READY CHECK</div>
           <h2 style={{fontSize:'26px',fontWeight:'700',margin:'0 0 8px'}}>Before we start</h2>
           <p style={{color:'rgba(255,255,255,0.4)',fontSize:'14px',margin:0}}>Quick check to make sure your mic and camera are ready — takes under 20 seconds</p>
         </div>
-
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'12px',marginBottom:'12px'}}>
           <div style={{background:'rgba(255,255,255,0.05)',border:`1px solid ${micStatus==='error'?'rgba(239,68,68,0.4)':'rgba(0,217,255,0.25)'}`,borderRadius:'10px',padding:'1.25rem'}}>
             <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'12px'}}>
               <span style={{color:'rgba(255,255,255,0.4)',fontSize:'11px',letterSpacing:'0.08em'}}>MICROPHONE</span>
-              <div style={{display:'flex',alignItems:'center',gap:'5px'}}>
-                <div style={dot(micStatus)}/>
-                <span style={{fontSize:'11px',color:micStatus==='ok'?'#00d9ff':micStatus==='error'?'#ef4444':'rgba(255,255,255,0.4)'}}>{micStatus==='ok'?'Detected':micStatus==='error'?'Not found':'Checking...'}</span>
-              </div>
+              <div style={{display:'flex',alignItems:'center',gap:'5px'}}><div style={dot(micStatus)}/><span style={{fontSize:'11px',color:micStatus==='ok'?'#00d9ff':micStatus==='error'?'#ef4444':'rgba(255,255,255,0.4)'}}>{micStatus==='ok'?'Detected':micStatus==='error'?'Not found':'Checking...'}</span></div>
             </div>
             <div style={{display:'flex',alignItems:'flex-end',gap:'3px',height:'36px',marginBottom:'10px'}}>
               {volumeLevel.map((h,i)=><div key={i} style={{flex:1,borderRadius:'2px',minHeight:'4px',height:`${h}%`,background:micStatus==='error'?'#ef4444':'#00d9ff',opacity:micStatus==='error'?0.3:0.85,transition:'height 0.1s ease'}}/>)}
             </div>
             <p style={{color:'rgba(255,255,255,0.25)',fontSize:'11px',margin:0}}>{micStatus==='ok'?'Mic working — bars show your voice level':micStatus==='error'?'No audio signal':'Requesting access...'}</p>
           </div>
-
           <div style={{background:'rgba(255,255,255,0.05)',border:`1px solid ${camStatus==='error'?'rgba(239,68,68,0.4)':'rgba(0,217,255,0.25)'}`,borderRadius:'10px',padding:'1.25rem'}}>
             <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'12px'}}>
               <span style={{color:'rgba(255,255,255,0.4)',fontSize:'11px',letterSpacing:'0.08em'}}>CAMERA</span>
-              <div style={{display:'flex',alignItems:'center',gap:'5px'}}>
-                <div style={dot(camStatus)}/>
-                <span style={{fontSize:'11px',color:camStatus==='ok'?'#00d9ff':camStatus==='error'?'#ef4444':'rgba(255,255,255,0.4)'}}>{camStatus==='ok'?'Active':camStatus==='error'?'Not found':'Checking...'}</span>
-              </div>
+              <div style={{display:'flex',alignItems:'center',gap:'5px'}}><div style={dot(camStatus)}/><span style={{fontSize:'11px',color:camStatus==='ok'?'#00d9ff':camStatus==='error'?'#ef4444':'rgba(255,255,255,0.4)'}}>{camStatus==='ok'?'Active':camStatus==='error'?'Not found':'Checking...'}</span></div>
             </div>
             <div style={{background:'rgba(255,255,255,0.03)',border:'1px solid rgba(255,255,255,0.08)',borderRadius:'6px',height:'46px',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'10px'}}>
               <span style={{color:'rgba(255,255,255,0.2)',fontSize:'12px'}}>{camStatus==='ok'?'● Live':camStatus==='error'?'No camera':'...'}</span>
@@ -122,30 +151,24 @@ function DeviceCheckScreen({ onPass, onBack }) {
             <p style={{color:'rgba(255,255,255,0.25)',fontSize:'11px',margin:0}}>{camStatus==='ok'?'Camera working':camStatus==='error'?'Camera optional':'Requesting access...'}</p>
           </div>
         </div>
-
         <div style={{background:'rgba(255,255,255,0.05)',border:`1px solid ${browserOk?'rgba(255,255,255,0.08)':'rgba(239,68,68,0.3)'}`,borderRadius:'10px',padding:'0.9rem 1.25rem',marginBottom:'16px',display:'flex',alignItems:'center',gap:'12px'}}>
           <div style={{width:'20px',height:'20px',borderRadius:'50%',background:browserOk?'rgba(0,217,255,0.1)':'rgba(239,68,68,0.1)',border:`1px solid ${browserOk?'rgba(0,217,255,0.3)':'rgba(239,68,68,0.3)'}`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:'11px',color:browserOk?'#00d9ff':'#ef4444'}}>{browserOk?'✓':'✗'}</div>
           <div>
             <p style={{color:'#fff',fontSize:'13px',margin:'0 0 2px',fontWeight:'500'}}>{browserOk?'Browser supported':'Browser not fully supported'}</p>
-            <p style={{color:'rgba(255,255,255,0.3)',fontSize:'11px',margin:0}}>
-              {browserOk ? 'Chrome detected — speech transcription will work' : 'Speech transcription requires Chrome. Firefox and Edge do not support it reliably.'}
-            </p>
+            <p style={{color:'rgba(255,255,255,0.3)',fontSize:'11px',margin:0}}>{browserOk?'Chrome detected — speech transcription will work':'Speech transcription requires Chrome. Firefox and Edge do not support it reliably.'}</p>
           </div>
         </div>
-
-        {(micStatus==='error' || !browserOk) && (
+        {(micStatus==='error'||!browserOk)&&(
           <div style={{background:'rgba(239,68,68,0.06)',border:'1px solid rgba(239,68,68,0.2)',borderRadius:'10px',padding:'1rem 1.25rem',marginBottom:'16px'}}>
             <p style={{color:'#fca5a5',fontSize:'13px',fontWeight:'500',margin:'0 0 8px'}}>Try one of these fixes:</p>
-            {!browserOk && <p style={{color:'rgba(255,255,255,0.6)',fontSize:'12px',margin:'0 0 4px'}}>● Your mic may be working but speech transcription only works in <span style={{color:'#00d9ff'}}>Chrome</span> — Firefox and Edge both have issues with this API</p>}
-            {micError && <p style={{color:'rgba(255,255,255,0.6)',fontSize:'12px',margin:'0 0 4px'}}>● {micError}</p>}
-            {micStatus==='error' && <p style={{color:'rgba(255,255,255,0.6)',fontSize:'12px',margin:0}}>● Make sure your mic is plugged in and not muted</p>}
+            {!browserOk&&<p style={{color:'rgba(255,255,255,0.6)',fontSize:'12px',margin:'0 0 4px'}}>● Your mic may be working but speech transcription only works in <span style={{color:'#00d9ff'}}>Chrome</span> — Firefox and Edge both have issues with this API</p>}
+            {micError&&<p style={{color:'rgba(255,255,255,0.6)',fontSize:'12px',margin:'0 0 4px'}}>● {micError}</p>}
+            {micStatus==='error'&&<p style={{color:'rgba(255,255,255,0.6)',fontSize:'12px',margin:0}}>● Make sure your mic is plugged in and not muted</p>}
           </div>
         )}
-
         <button onClick={handlePass} disabled={micStatus==='checking'} style={{width:'100%',background:bothOk?'linear-gradient(135deg,#00d9ff 0%,#8b5cf6 100%)':'rgba(255,255,255,0.08)',border:bothOk?'none':'1px solid rgba(255,255,255,0.1)',borderRadius:'12px',padding:'15px',fontSize:'16px',fontWeight:'600',color:bothOk?'#fff':'rgba(255,255,255,0.5)',cursor:micStatus==='checking'?'not-allowed':'pointer',transition:'all 0.2s',marginBottom:'12px'}}>
-          {micStatus==='checking' ? 'Checking devices...' : bothOk ? 'Everything looks good — Start Interview →' : "Start anyway (answers won't be transcribed)"}
+          {micStatus==='checking'?'Checking devices...':bothOk?'Everything looks good — Start Interview →':"Start anyway (answers won't be transcribed)"}
         </button>
-
         <button onClick={onBack} style={{display:'block',width:'100%',background:'transparent',border:'none',color:'rgba(255,255,255,0.4)',fontSize:'14px',cursor:'pointer',padding:'8px'}}>← Back to setup</button>
       </div>
     </div>
@@ -176,6 +199,11 @@ export default function InterviewSimulator() {
   const [userName, setUserName] = useState('');
   const [micPermission, setMicPermission] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  // Paywall V2 state
+  const [currentInterviewId, setCurrentInterviewId] = useState(null);
+  const [isResultUnlocked, setIsResultUnlocked] = useState(false);
+  const [isVerifyingPayment, setIsVerifyingPayment] = useState(false);
   
   // Authentication states
   const [user, setUser] = useState(null);
@@ -256,6 +284,43 @@ export default function InterviewSimulator() {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Handle Stripe redirect back after one-time payment
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+    const interviewId = params.get('interview_id');
+    const unlocked = params.get('unlocked');
+
+    if (sessionId && interviewId && unlocked === 'true') {
+      setIsVerifyingPayment(true);
+      setCurrentInterviewId(interviewId);
+      // Clean the URL
+      window.history.replaceState({}, '', window.location.pathname);
+      // Verify with backend
+      fetch('/api/verify-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId, interviewId })
+      })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            setIsResultUnlocked(true);
+            // If we have finalResults in localStorage from before redirect, restore stage
+            const savedResults = localStorage.getItem('pendingResults');
+            if (savedResults) {
+              setFinalResults(JSON.parse(savedResults));
+              localStorage.removeItem('pendingResults');
+              setStage('results');
+            }
+          }
+        })
+        .catch(e => console.error('Payment verification error:', e))
+        .finally(() => setIsVerifyingPayment(false));
+    }
+  }, []);
+
 
 
   // Read ?role= URL param to personalise landing page headline
@@ -1742,8 +1807,8 @@ Return ONLY valid JSON:
           'last_interview_score': results.overallScore
         });
       }
-      // ===== B2B FORK: Save to Supabase if user has org_id =====
-      if (userOrgId && user) {
+      // ===== SAVE TO SUPABASE FOR ALL LOGGED-IN USERS =====
+      if (user) {
         try {
           const { data: sessionData } = await supabase.auth.getSession();
           const accessToken = sessionData?.session?.access_token;
@@ -1756,12 +1821,12 @@ Return ONLY valid JSON:
               parentQuestionIndex: a.parentQuestionIndex != null ? a.parentQuestionIndex : null
             }));
 
-            await fetch('/api/save-interview-results', {
+            const saveResponse = await fetch('/api/save-interview-results', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 accessToken,
-                orgId: userOrgId,
+                orgId: userOrgId || null,
                 interviewData: {
                   jobTitle,
                   results,
@@ -1771,12 +1836,20 @@ Return ONLY valid JSON:
                 }
               })
             });
+            const saveData = await saveResponse.json();
+            if (saveData.id) {
+              setCurrentInterviewId(saveData.id);
+              // Store results in localStorage in case user gets redirected to Stripe and comes back
+              localStorage.setItem('pendingResults', JSON.stringify(finalResultsWithVideo));
+              localStorage.setItem('pendingInterviewId', saveData.id);
+            }
           }
         } catch (e) {
-          console.error('B2B save error (non-blocking):', e);
+          console.error('Save to Supabase error (non-blocking):', e);
         }
       }
-      // ===== END B2B FORK =====
+      // ===== END SAVE =====
+
 
       
       setIsAnalyzing(false);
@@ -4193,10 +4266,8 @@ Return ONLY valid JSON:
                 }
                 if (isMobile) {
                   setStage('mobileGate');
-                } else if (user?.email === DEVICE_CHECK_EMAIL) {
-                  setStage('device-check');
                 } else {
-                  generateQuestions();
+                  setStage('device-check');
                 }
               }
             }}
@@ -4478,6 +4549,160 @@ Return ONLY valid JSON:
 
   // Results / Scorecard
   if (stage === 'results' && finalResults) {
+    // ===== PAYWALL V2 LOGIC =====
+    const paywallEnabled = user?.email === PAYWALL_V2_EMAIL;
+    const hasAccess = isSubscribed || TEST_MODE || isResultUnlocked || !paywallEnabled;
+
+    // Handler for one-time unlock button
+    const handleOneTimeUnlock = async () => {
+      if (!currentInterviewId) return;
+      try {
+        const response = await fetch('/api/create-checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            interviewId: currentInterviewId,
+            userEmail: user?.email
+          })
+        });
+        const data = await response.json();
+        if (data.url) {
+          // Save results to localStorage before redirect so we can restore on return
+          localStorage.setItem('pendingResults', JSON.stringify(finalResults));
+          window.location.href = data.url;
+        }
+      } catch (e) {
+        console.error('Checkout error:', e);
+      }
+    };
+
+    // Find best scoring question for the model answer teaser
+    const bestQuestion = finalResults.questionScores
+      ? [...finalResults.questionScores].sort((a, b) => {
+          const aScore = a.combinedScore ?? a.score;
+          const bScore = b.combinedScore ?? b.score;
+          return bScore - aScore;
+        })[0]
+      : null;
+
+    const modelAnswer = finalResults.modelAnswer || null;
+
+    // ===== PAYWALL TEASER VIEW (non-paying users) =====
+    if (!hasAccess) {
+      return (
+        <div style={styles.container}>
+          <div style={styles.heroGlow}></div>
+          <div style={{...styles.results, maxWidth: '800px', width: '100%'}}>
+
+            {/* Score hero */}
+            <div style={{...styles.verdictCard, background: finalResults.passed ? 'linear-gradient(135deg,rgba(16,185,129,0.2) 0%,rgba(16,185,129,0.05) 100%)' : 'linear-gradient(135deg,rgba(239,68,68,0.15) 0%,rgba(239,68,68,0.03) 100%)', borderColor: finalResults.passed ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.2)', textAlign:'center'}}>
+              <div style={styles.verdictIcon}>{finalResults.passed ? '🎉' : '💪'}</div>
+              <h2 style={{...styles.verdictTitle, color: finalResults.passed ? '#10b981' : '#fca5a5'}}>
+                {finalResults.passed ? 'Great job! You passed!' : 'Not quite there yet — but you can fix this'}
+              </h2>
+              <div style={styles.overallScore}>
+                <span style={styles.scoreNumber}>{finalResults.overallScore}</span>
+                <span style={styles.scoreOutOf}>/100</span>
+              </div>
+            </div>
+
+            {/* Teaser cards */}
+            <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'16px', marginBottom:'16px'}}>
+              <div style={{background:'rgba(17,24,39,0.8)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', padding:'20px 24px', borderTop:'3px solid', borderImage:'linear-gradient(90deg,#ef4444,#f59e0b) 1'}}>
+                <div style={{fontSize:'11px', fontWeight:'700', textTransform:'uppercase', letterSpacing:'1px', color:'rgba(255,255,255,0.4)', marginBottom:'8px'}}>⚠️ Red Flag Detected</div>
+                <div style={{fontSize:'16px', fontWeight:'700', color:'#ef4444', marginBottom:'6px', lineHeight:'1.3'}}>Your answers share a pattern common in rejected candidates</div>
+                <div style={{fontSize:'13px', color:'rgba(255,255,255,0.5)', lineHeight:'1.4'}}>Our AI identified a recurring issue across your responses. <strong style={{color:'rgba(255,255,255,0.8)'}}>Unlock results to see what it is.</strong></div>
+              </div>
+              <div style={{background:'rgba(17,24,39,0.8)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', padding:'20px 24px', borderTop:'3px solid', borderImage:'linear-gradient(90deg,#8b5cf6,#00d9ff) 1'}}>
+                <div style={{fontSize:'11px', fontWeight:'700', textTransform:'uppercase', letterSpacing:'1px', color:'rgba(255,255,255,0.4)', marginBottom:'8px'}}>Your Best Answer</div>
+                <div style={{fontSize:'16px', fontWeight:'700', color:'#a855f7', marginBottom:'6px', lineHeight:'1.3'}}>
+                  {bestQuestion ? `Q${bestQuestion.questionNum} was your strongest — but it still had critical gaps` : 'Your strongest answer still had critical gaps'}
+                </div>
+                <div style={{fontSize:'13px', color:'rgba(255,255,255,0.5)', lineHeight:'1.4'}}>Our analysis found specific areas where you lost points. <strong style={{color:'rgba(255,255,255,0.8)'}}>See the full breakdown.</strong></div>
+              </div>
+            </div>
+
+            {/* Model answer comparison teaser */}
+            {modelAnswer && bestQuestion && (
+              <div style={{background:'rgba(17,24,39,0.8)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', padding:'20px 24px', marginBottom:'16px'}}>
+                <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'16px'}}>
+                  <h3 style={{fontSize:'15px', fontWeight:'700', margin:0}}>📈 How Your Best Answer Compares</h3>
+                  <span style={{background:'rgba(34,197,94,0.15)', color:'#22c55e', fontSize:'10px', fontWeight:'700', padding:'2px 8px', borderRadius:'3px', textTransform:'uppercase'}}>Preview</span>
+                </div>
+                <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'16px'}}>
+                  <div style={{background:'rgba(239,68,68,0.08)', border:'1px solid rgba(239,68,68,0.2)', borderRadius:'10px', padding:'14px 16px'}}>
+                    <div style={{fontSize:'11px', fontWeight:'700', color:'#ef4444', textTransform:'uppercase', letterSpacing:'0.5px', marginBottom:'8px'}}>Your Answer</div>
+                    <div style={{fontSize:'13px', color:'rgba(255,255,255,0.6)', lineHeight:'1.5', fontStyle:'italic', marginBottom:'10px'}}>
+                      "{bestQuestion.feedback?.substring(0, 120)}..."
+                    </div>
+                    <div style={{fontSize:'24px', fontWeight:'900', color:'#ef4444'}}>{bestQuestion.combinedScore ?? bestQuestion.score}<span style={{fontSize:'14px', color:'rgba(255,255,255,0.4)'}}>/100</span></div>
+                  </div>
+                  <div style={{background:'rgba(34,197,94,0.08)', border:'1px solid rgba(34,197,94,0.2)', borderRadius:'10px', padding:'14px 16px', position:'relative'}}>
+                    <div style={{fontSize:'11px', fontWeight:'700', color:'#22c55e', textTransform:'uppercase', letterSpacing:'0.5px', marginBottom:'8px'}}>Top-Scoring Answer</div>
+                    <div style={{fontSize:'13px', color:'rgba(255,255,255,0.6)', lineHeight:'1.5', fontStyle:'italic', marginBottom:'10px', filter:'blur(5px)', userSelect:'none'}}>
+                      "{modelAnswer.answer?.substring(0, 120)}..."
+                    </div>
+                    <div style={{position:'absolute', top:'50%', left:'50%', transform:'translate(-50%,-50%)', background:'rgba(17,24,39,0.9)', padding:'8px 16px', borderRadius:'8px', fontSize:'12px', fontWeight:'700', color:'#a855f7', whiteSpace:'nowrap'}}>🔒 Unlock to see model answer</div>
+                    <div style={{fontSize:'24px', fontWeight:'900', color:'#22c55e'}}>92<span style={{fontSize:'14px', color:'rgba(255,255,255,0.4)'}}>/100</span></div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Blurred results preview */}
+            <div style={{position:'relative', marginBottom:'16px'}}>
+              <div style={{filter:'blur(8px)', pointerEvents:'none', userSelect:'none', opacity:0.5}}>
+                <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'12px', marginBottom:'12px'}}>
+                  {Object.entries(finalResults.categories).slice(0,4).map(([key, val]) => (
+                    <div key={key} style={{background:'rgba(17,24,39,0.8)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'10px', padding:'16px 20px'}}>
+                      <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'8px'}}>
+                        <span style={{fontSize:'14px', fontWeight:'600', color:'#fff'}}>{key.replace(/([A-Z])/g,' $1').trim()}</span>
+                        <span style={{fontSize:'18px', fontWeight:'800', color:'#ef4444'}}>{val.score}</span>
+                      </div>
+                      <div style={{height:'4px', background:'rgba(255,255,255,0.06)', borderRadius:'2px', overflow:'hidden', marginBottom:'8px'}}>
+                        <div style={{height:'100%', borderRadius:'2px', background:'#ef4444', width:`${val.score}%`}}/>
+                      </div>
+                      <p style={{fontSize:'12px', color:'rgba(255,255,255,0.5)', margin:0, lineHeight:'1.4'}}>{val.feedback}</p>
+                    </div>
+                  ))}
+                </div>
+                {finalResults.questionScores?.slice(0,3).map((q, i) => (
+                  <div key={i} style={{background:'rgba(17,24,39,0.8)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', padding:'20px 24px', marginBottom:'12px'}}>
+                    <div style={{display:'flex', justifyContent:'space-between', marginBottom:'12px'}}>
+                      <span style={{fontSize:'14px', fontWeight:'700', color:'#00d9ff'}}>Q{q.questionNum}</span>
+                      <span style={{fontSize:'14px', fontWeight:'700', color:'#ef4444'}}>{q.combinedScore ?? q.score}/100</span>
+                    </div>
+                    <p style={{fontSize:'13px', color:'rgba(255,255,255,0.5)', lineHeight:'1.5', margin:0}}>{q.feedback}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Gradient fade */}
+              <div style={{position:'absolute', bottom:0, left:0, right:0, height:'200px', background:'linear-gradient(transparent, #0a0a0f)', pointerEvents:'none'}}/>
+
+              {/* Paywall card */}
+              <div style={{position:'absolute', top:'80px', left:'50%', transform:'translateX(-50%)', width:'100%', maxWidth:'520px', padding:'0 16px', zIndex:10}}>
+                <div style={{background:'linear-gradient(145deg,#1a1f35,#111827)', border:'1px solid rgba(168,85,247,0.3)', borderRadius:'20px', padding:'36px 32px', textAlign:'center', boxShadow:'0 24px 80px rgba(0,0,0,0.6)', position:'relative', overflow:'hidden'}}>
+                  <div style={{position:'absolute', top:0, left:0, right:0, height:'3px', background:'linear-gradient(90deg,#00d9ff,#8b5cf6)'}}/>
+                  <div style={{width:'56px', height:'56px', background:'rgba(168,85,247,0.15)', borderRadius:'16px', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 20px', fontSize:'24px'}}>🔒</div>
+                  <h2 style={{fontSize:'22px', fontWeight:'800', marginBottom:'8px', lineHeight:'1.3'}}>Unlock Your Complete<br/>Interview Breakdown</h2>
+                  <p style={{fontSize:'14px', color:'rgba(255,255,255,0.5)', marginBottom:'24px', lineHeight:'1.5'}}>See all 8 scoring dimensions, question-by-question feedback, model answers, and your video presence analysis.</p>
+
+                  <PaywallPricingToggle
+                    onOneTimeClick={handleOneTimeUnlock}
+                    onProClick={() => window.location.href = STRIPE_SUBSCRIBE_URL}
+                  />
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      );
+    }
+    // ===== END PAYWALL VIEW =====
+
     // Calculate percentile (comparing to all users)
     const calculatePercentile = () => {
       // Use leaderboard scores, or fallback dummy scores if empty
@@ -4749,6 +4974,19 @@ Return ONLY valid JSON:
               <p style={styles.coachingText}>{finalResults.coachingTip}</p>
             </div>
           </div>
+
+          {/* Model Answer — shown to paying users */}
+          {finalResults.modelAnswer && (
+            <div style={styles.scorecardSection}>
+              <h3 style={styles.scorecardTitle}>🏆 Model Answer — Q{finalResults.modelAnswer.questionNum}</h3>
+              <div style={{background:'rgba(34,197,94,0.06)', border:'1px solid rgba(34,197,94,0.2)', borderRadius:'12px', padding:'20px 24px'}}>
+                <p style={{fontSize:'13px', color:'rgba(255,255,255,0.4)', marginBottom:'8px', fontWeight:'600', textTransform:'uppercase', letterSpacing:'0.5px'}}>Question</p>
+                <p style={{fontSize:'14px', color:'rgba(255,255,255,0.8)', marginBottom:'16px', lineHeight:'1.5'}}>{finalResults.modelAnswer.question}</p>
+                <p style={{fontSize:'13px', color:'rgba(255,255,255,0.4)', marginBottom:'8px', fontWeight:'600', textTransform:'uppercase', letterSpacing:'0.5px'}}>What a 90+ answer looks like</p>
+                <p style={{fontSize:'14px', color:'rgba(255,255,255,0.8)', lineHeight:'1.6', fontStyle:'italic'}}>"{finalResults.modelAnswer.answer}"</p>
+              </div>
+            </div>
+          )}
 
           {/* Video Analysis Feedback */}
           {finalResults.videoAnalysis && (
