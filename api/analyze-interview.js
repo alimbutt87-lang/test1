@@ -92,7 +92,12 @@ Return ONLY valid JSON:
   },
   "topStrengths": ["<1>","<2>","<3>"],
   "criticalImprovements": ["<1>","<2>","<3>"],
-  "coachingTip": "<specific actionable tip>"
+  "coachingTip": "<specific actionable tip>",
+  "modelAnswer": {
+    "questionNum": "<number of the highest scoring question>",
+    "question": "<the exact question text>",
+    "answer": "<a concise 3-5 sentence model answer scoring 90+ for this question, written as spoken by a strong candidate with specific examples, metrics and clear structure>"
+  }
 }`
         }]
       })
