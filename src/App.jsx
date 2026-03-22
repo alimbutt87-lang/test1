@@ -1122,6 +1122,11 @@ Return ONLY valid JSON:
     setVideoSnapshots([]);
     setVideoFeedback(null);
     setFinalResults(null);
+    // Reset paywall state for new interview
+    setIsResultUnlocked(false);
+    setCurrentInterviewId(null);
+    localStorage.removeItem('pendingInterviewId');
+    localStorage.removeItem('pendingResults');
     
     // Track interview started
     if (window.mixpanel) {
@@ -4550,8 +4555,8 @@ Return ONLY valid JSON:
   // Results / Scorecard
   if (stage === 'results' && finalResults) {
     // ===== PAYWALL V2 LOGIC =====
-    const paywallEnabled = user?.email === PAYWALL_V2_EMAIL;
-    const hasAccess = isSubscribed || TEST_MODE || isResultUnlocked || !paywallEnabled;
+    const paywallEnabled = !isSubscribed && !TEST_MODE;
+    const hasAccess = !paywallEnabled || isResultUnlocked;
 
     // Handler for one-time unlock button
     const handleOneTimeUnlock = async () => {
