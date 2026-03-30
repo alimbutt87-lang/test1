@@ -10,8 +10,6 @@ const TEST_MODE = false;
 // ===== FEATURE FLAGS =====
 const DEVICE_CHECK_EMAIL = 'ali.m.butt87@gmail.com';
 const PAYWALL_V2_EMAIL = 'ali.m.butt87@gmail.com'; // remove email check to roll out to everyone
-const STRIPE_UNLOCK_PRICE_ID = 'price_1TDqfgDqS9966uj0y3CkcL30';
-
 // Stripe URLs
 const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/fZu14n8Ac7Wm3QJ0TN6wE00';
 const STRIPE_SUBSCRIBE_URL = 'https://buy.stripe.com/6oUaEXbMo90qcnfaun6wE02';
@@ -20,52 +18,6 @@ const STRIPE_SUBSCRIBE_URL = 'https://buy.stripe.com/6oUaEXbMo90qcnfaun6wE02';
 const SUPABASE_URL = 'https://msngeennlvzbhohnrhnq.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable__01NFWdOHHofya6dz2CLhg_XFBWE8sQ';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// ===== PAYWALL PRICING TOGGLE =====
-function PaywallPricingToggle({ onOneTimeClick, onProClick }) {
-  const [mode, setMode] = React.useState('once');
-  const btnBase = { flex:1, padding:'10px 16px', border:'none', borderRadius:'8px', fontFamily:'inherit', fontSize:'13px', fontWeight:'600', cursor:'pointer', transition:'all 0.25s' };
-  return (
-    <div>
-      <div style={{display:'flex', background:'rgba(255,255,255,0.04)', borderRadius:'10px', padding:'4px', marginBottom:'24px'}}>
-        <button onClick={() => setMode('once')} style={{...btnBase, background: mode==='once'?'#8b5cf6':'transparent', color: mode==='once'?'#fff':'rgba(255,255,255,0.4)', boxShadow: mode==='once'?'0 2px 12px rgba(139,92,246,0.3)':'none'}}>This Result Only</button>
-        <button onClick={() => setMode('pro')} style={{...btnBase, background: mode==='pro'?'#8b5cf6':'transparent', color: mode==='pro'?'#fff':'rgba(255,255,255,0.4)', boxShadow: mode==='pro'?'0 2px 12px rgba(139,92,246,0.3)':'none'}}>Unlimited Pro</button>
-      </div>
-      {mode === 'once' ? (
-        <div>
-          <div style={{marginBottom:'20px'}}>
-            <div style={{fontSize:'40px', fontWeight:'900', color:'#fff'}}><span style={{fontSize:'22px', verticalAlign:'super', fontWeight:'700'}}>$</span>4.99</div>
-            <div style={{fontSize:'14px', color:'rgba(255,255,255,0.4)', fontWeight:'500'}}>one-time payment</div>
-          </div>
-          <ul style={{textAlign:'left', marginBottom:'24px', padding:0}}>
-            {['Full 8-category performance breakdown','Question-by-question detailed feedback','Model answers for each question','Personalized improvement action plan','Video presence analysis'].map((f,i) => (
-              <li key={i} style={{listStyle:'none', display:'flex', alignItems:'center', gap:'10px', padding:'6px 0', fontSize:'13px', color:'rgba(255,255,255,0.6)'}}>
-                <span style={{color:'#22c55e', fontSize:'14px', fontWeight:'700'}}>✓</span>{f}
-              </li>
-            ))}
-          </ul>
-          <button onClick={onOneTimeClick} style={{width:'100%', padding:'16px 24px', border:'none', borderRadius:'12px', fontFamily:'inherit', fontSize:'16px', fontWeight:'700', cursor:'pointer', background:'linear-gradient(135deg,#8b5cf6,#7c3aed)', color:'#fff', boxShadow:'0 4px 20px rgba(139,92,246,0.3)'}}>Unlock My Results</button>
-        </div>
-      ) : (
-        <div>
-          <div style={{marginBottom:'20px'}}>
-            <div style={{fontSize:'40px', fontWeight:'900', color:'#fff'}}><span style={{fontSize:'22px', verticalAlign:'super', fontWeight:'700'}}>$</span>19.99<span style={{fontSize:'16px', color:'rgba(255,255,255,0.4)', fontWeight:'500'}}> /mo</span></div>
-            <div style={{display:'inline-block', background:'rgba(34,197,94,0.15)', color:'#22c55e', fontSize:'11px', fontWeight:'700', padding:'3px 10px', borderRadius:'4px', marginTop:'8px'}}>BEST VALUE — Unlimited interviews</div>
-          </div>
-          <ul style={{textAlign:'left', marginBottom:'24px', padding:0}}>
-            {['Everything in one-time unlock','Unlimited interview practice','Track your progress over time','Full leaderboard access'].map((f,i) => (
-              <li key={i} style={{listStyle:'none', display:'flex', alignItems:'center', gap:'10px', padding:'6px 0', fontSize:'13px', color:'rgba(255,255,255,0.6)'}}>
-                <span style={{color:'#22c55e', fontSize:'14px', fontWeight:'700'}}>✓</span>{f}
-              </li>
-            ))}
-          </ul>
-          <button onClick={onProClick} style={{width:'100%', padding:'16px 24px', border:'none', borderRadius:'12px', fontFamily:'inherit', fontSize:'16px', fontWeight:'700', cursor:'pointer', background:'linear-gradient(135deg,#8b5cf6,#7c3aed)', color:'#fff', boxShadow:'0 4px 20px rgba(139,92,246,0.3)'}}>Start Pro — 3 Day Free Trial</button>
-        </div>
-      )}
-      <div style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'6px', marginTop:'16px', fontSize:'12px', color:'rgba(255,255,255,0.3)'}}>🔒 Secure payment · Instant access · Cancel anytime</div>
-    </div>
-  );
-}
 
 // ===== DEVICE CHECK SCREEN =====
 function DeviceCheckScreen({ onPass, onBack }) {
@@ -200,11 +152,6 @@ export default function InterviewSimulator() {
   const [micPermission, setMicPermission] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
-  // Paywall V2 state
-  const [currentInterviewId, setCurrentInterviewId] = useState(null);
-  const [isResultUnlocked, setIsResultUnlocked] = useState(false);
-  const [isVerifyingPayment, setIsVerifyingPayment] = useState(false);
-  
   // Authentication states
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
@@ -284,44 +231,6 @@ export default function InterviewSimulator() {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-  // Handle Stripe redirect back after one-time payment
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const sessionId = params.get('session_id');
-    const interviewId = params.get('interview_id');
-    const unlocked = params.get('unlocked');
-
-    if (sessionId && interviewId && unlocked === 'true') {
-      setIsVerifyingPayment(true);
-      setCurrentInterviewId(interviewId);
-      // Clean the URL
-      window.history.replaceState({}, '', window.location.pathname);
-      // Verify with backend
-      fetch('/api/verify-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId, interviewId })
-      })
-        .then(r => r.json())
-        .then(data => {
-          if (data.success) {
-            setIsResultUnlocked(true);
-            // If we have finalResults in localStorage from before redirect, restore stage
-            const savedResults = localStorage.getItem('pendingResults');
-            if (savedResults) {
-              setFinalResults(JSON.parse(savedResults));
-              localStorage.removeItem('pendingResults');
-              setStage('results');
-            }
-          }
-        })
-        .catch(e => console.error('Payment verification error:', e))
-        .finally(() => setIsVerifyingPayment(false));
-    }
-  }, []);
-
-
 
   // Read ?role= URL param to personalise landing page headline
   useEffect(() => {
@@ -1117,11 +1026,6 @@ Return ONLY valid JSON:
     setVideoSnapshots([]);
     setVideoFeedback(null);
     setFinalResults(null);
-    // Reset paywall state for new interview
-    setIsResultUnlocked(false);
-    setCurrentInterviewId(null);
-    localStorage.removeItem('pendingInterviewId');
-    localStorage.removeItem('pendingResults');
     
     // Track interview started
     if (window.mixpanel) {
@@ -1839,9 +1743,6 @@ Return ONLY valid JSON:
             const saveData = await saveResponse.json();
             if (saveData.id) {
               setCurrentInterviewId(saveData.id);
-              // Store results in localStorage in case user gets redirected to Stripe and comes back
-              localStorage.setItem('pendingResults', JSON.stringify(finalResultsWithVideo));
-              localStorage.setItem('pendingInterviewId', saveData.id);
             }
           }
         } catch (e) {
@@ -3005,10 +2906,7 @@ Return ONLY valid JSON:
               <li><a href="#lp-compare">Compare</a></li>
             </ul>
             <button className="lp-nav-cta" onClick={handleCTA}>{user ? (completedInterviews === 0 ? 'Start Free Interview →' : 'Start Interview →') : 'Start Free →'}</button>
-            {user && <>
-              <button onClick={() => setStage('dashboard')} style={{background:'none', border:'1px solid rgba(255,255,255,0.1)', color:'#7a8ba3', fontSize:'0.82rem', padding:'0.5rem 1rem', borderRadius:'6px', cursor:'pointer', marginLeft:'0.5rem'}}>My Dashboard</button>
-              <button onClick={signOut} style={{background:'none', border:'1px solid rgba(255,255,255,0.1)', color:'#7a8ba3', fontSize:'0.82rem', padding:'0.5rem 1rem', borderRadius:'6px', cursor:'pointer', marginLeft:'0.5rem'}}>Sign Out</button>
-            </>}
+            {user && <button onClick={signOut} style={{background:'none', border:'1px solid rgba(255,255,255,0.1)', color:'#7a8ba3', fontSize:'0.82rem', padding:'0.5rem 1rem', borderRadius:'6px', cursor:'pointer', marginLeft:'0.5rem'}}>Sign Out</button>}
           </nav>
 
           {/* HERO */}
@@ -3630,6 +3528,7 @@ Return ONLY valid JSON:
             </p>
             <button style={styles.secondaryBtn} onClick={() => {
               if (window.mixpanel) window.mixpanel.track('leaderboard_viewed');
+              setPreviousStage('dashboard');
               setStage('leaderboard');
             }}>
               View Leaderboard
@@ -3804,8 +3703,8 @@ Return ONLY valid JSON:
             </div>
           )}
           
-          <button style={styles.secondaryBtn} onClick={() => setStage('results')}>
-            ← Back to results
+          <button style={styles.secondaryBtn} onClick={() => setStage(previousStage === 'dashboard' ? 'dashboard' : 'results')}>
+            ← Back to {previousStage === 'dashboard' ? 'dashboard' : 'results'}
           </button>
         </div>
       </div>
@@ -4547,36 +4446,9 @@ Return ONLY valid JSON:
 
   // Results / Scorecard
   if (stage === 'results' && finalResults) {
-    // ===== PAYWALL V2 LOGIC =====
+    // ===== PAYWALL LOGIC =====
     const paywallEnabled = !isSubscribed && !TEST_MODE;
-    const hasAccess = !paywallEnabled || isResultUnlocked;
-
-    // Handler for one-time unlock button
-    const handleOneTimeUnlock = async () => {
-      // Use state or fall back to localStorage in case state wasn't set yet
-      const interviewId = currentInterviewId || localStorage.getItem('pendingInterviewId');
-      if (!interviewId) {
-        console.error('No interview ID found — cannot create checkout');
-        return;
-      }
-      try {
-        const response = await fetch('/api/create-checkout', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            interviewId,
-            userEmail: user?.email
-          })
-        });
-        const data = await response.json();
-        if (data.url) {
-          localStorage.setItem('pendingResults', JSON.stringify(finalResults));
-          window.location.href = data.url;
-        }
-      } catch (e) {
-        console.error('Checkout error:', e);
-      }
-    };
+    const hasAccess = !paywallEnabled;
 
     // Find best scoring question for the model answer teaser
     const bestQuestion = finalResults.questionScores
@@ -4698,10 +4570,19 @@ Return ONLY valid JSON:
                   <h2 style={{fontSize:'22px', fontWeight:'800', marginBottom:'8px', lineHeight:'1.3'}}>Unlock Your Complete<br/>Interview Breakdown</h2>
                   <p style={{fontSize:'14px', color:'rgba(255,255,255,0.5)', marginBottom:'24px', lineHeight:'1.5'}}>See all 8 scoring dimensions, question-by-question feedback, model answers, and your video presence analysis.</p>
 
-                  <PaywallPricingToggle
-                    onOneTimeClick={handleOneTimeUnlock}
-                    onProClick={() => window.open(STRIPE_SUBSCRIBE_URL, '_blank')}
-                  />
+                  <div style={{marginBottom:'20px'}}>
+                    <div style={{fontSize:'40px', fontWeight:'900', color:'#fff'}}><span style={{fontSize:'22px', verticalAlign:'super', fontWeight:'700'}}>$</span>19.99<span style={{fontSize:'16px', color:'rgba(255,255,255,0.4)', fontWeight:'500'}}> /mo</span></div>
+                    <div style={{display:'inline-block', background:'rgba(34,197,94,0.15)', color:'#22c55e', fontSize:'11px', fontWeight:'700', padding:'3px 10px', borderRadius:'4px', marginTop:'8px'}}>3 DAY FREE TRIAL — Cancel anytime</div>
+                  </div>
+                  <ul style={{textAlign:'left', marginBottom:'24px', padding:0}}>
+                    {['Full 8-category performance breakdown','Question-by-question detailed feedback','Model answers for each question','Personalized improvement action plan','Video presence analysis','Unlimited interview practice','Track your progress over time','Full leaderboard access'].map((f,i) => (
+                      <li key={i} style={{listStyle:'none', display:'flex', alignItems:'center', gap:'10px', padding:'6px 0', fontSize:'13px', color:'rgba(255,255,255,0.6)'}}>
+                        <span style={{color:'#22c55e', fontSize:'14px', fontWeight:'700'}}>✓</span>{f}
+                      </li>
+                    ))}
+                  </ul>
+                  <button onClick={() => window.open(STRIPE_SUBSCRIBE_URL, '_blank')} style={{width:'100%', padding:'16px 24px', border:'none', borderRadius:'12px', fontFamily:'inherit', fontSize:'16px', fontWeight:'700', cursor:'pointer', background:'linear-gradient(135deg,#8b5cf6,#7c3aed)', color:'#fff', boxShadow:'0 4px 20px rgba(139,92,246,0.3)'}}>Start Pro — 3 Day Free Trial</button>
+                  <div style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'6px', marginTop:'16px', fontSize:'12px', color:'rgba(255,255,255,0.3)'}}>🔒 Secure payment · Instant access · Cancel anytime</div>
 
                 </div>
               </div>
