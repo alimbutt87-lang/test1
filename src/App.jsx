@@ -4575,7 +4575,7 @@ Return ONLY valid JSON:
 
                   <div style={{marginBottom:'20px'}}>
                     <div style={{fontSize:'40px', fontWeight:'900', color:'#fff'}}><span style={{fontSize:'22px', verticalAlign:'super', fontWeight:'700'}}>$</span>19.99<span style={{fontSize:'16px', color:'rgba(255,255,255,0.4)', fontWeight:'500'}}> /mo</span></div>
-                    <div style={{display:'inline-block', background:'rgba(34,197,94,0.15)', color:'#22c55e', fontSize:'11px', fontWeight:'700', padding:'3px 10px', borderRadius:'4px', marginTop:'8px'}}>BEST VALUE — Unlimited interviews</div>
+                    <div style={{display:'inline-block', background:'rgba(34,197,94,0.15)', color:'#22c55e', fontSize:'11px', fontWeight:'700', padding:'3px 10px', borderRadius:'4px', marginTop:'8px'}}>Unlimited interviews</div>
                   </div>
                   <ul style={{textAlign:'left', marginBottom:'24px', padding:0}}>
                     {['Full 8-category performance breakdown','Question-by-question detailed feedback','Model answers for each question','Personalized improvement action plan','Video presence analysis','Unlimited interview practice','Track your progress over time','Full leaderboard access'].map((f,i) => (
