@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import AdminDashboard from './AdminDashboard';
+console.log('B2B_BUILD_CHECK_V2');
 
 // ===== CONFIGURATION =====
 // Set to true for testing (bypasses paywall), false for production
 const TEST_MODE = false;
+
+// ===== FEATURE FLAGS =====
+const DEVICE_CHECK_EMAIL = 'ali.m.butt87@gmail.com';
+const PAYWALL_V2_EMAIL = 'ali.m.butt87@gmail.com'; // remove email check to roll out to everyone
+const STRIPE_UNLOCK_PRICE_ID = 'price_1TDqfgDqS9966uj0y3CkcL30';
 
 // Stripe URLs
 const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/fZu14n8Ac7Wm3QJ0TN6wE00';
@@ -14,6 +20,160 @@ const STRIPE_SUBSCRIBE_URL = 'https://buy.stripe.com/6oUaEXbMo90qcnfaun6wE02';
 const SUPABASE_URL = 'https://msngeennlvzbhohnrhnq.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable__01NFWdOHHofya6dz2CLhg_XFBWE8sQ';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ===== PAYWALL PRICING TOGGLE =====
+function PaywallPricingToggle({ onOneTimeClick, onProClick }) {
+  const [mode, setMode] = React.useState('once');
+  const btnBase = { flex:1, padding:'10px 16px', border:'none', borderRadius:'8px', fontFamily:'inherit', fontSize:'13px', fontWeight:'600', cursor:'pointer', transition:'all 0.25s' };
+  return (
+    <div>
+      <div style={{display:'flex', background:'rgba(255,255,255,0.04)', borderRadius:'10px', padding:'4px', marginBottom:'24px'}}>
+        <button onClick={() => setMode('once')} style={{...btnBase, background: mode==='once'?'#8b5cf6':'transparent', color: mode==='once'?'#fff':'rgba(255,255,255,0.4)', boxShadow: mode==='once'?'0 2px 12px rgba(139,92,246,0.3)':'none'}}>This Result Only</button>
+        <button onClick={() => setMode('pro')} style={{...btnBase, background: mode==='pro'?'#8b5cf6':'transparent', color: mode==='pro'?'#fff':'rgba(255,255,255,0.4)', boxShadow: mode==='pro'?'0 2px 12px rgba(139,92,246,0.3)':'none'}}>Unlimited Pro</button>
+      </div>
+      {mode === 'once' ? (
+        <div>
+          <div style={{marginBottom:'20px'}}>
+            <div style={{fontSize:'40px', fontWeight:'900', color:'#fff'}}><span style={{fontSize:'22px', verticalAlign:'super', fontWeight:'700'}}>$</span>4.99</div>
+            <div style={{fontSize:'14px', color:'rgba(255,255,255,0.4)', fontWeight:'500'}}>one-time payment</div>
+          </div>
+          <ul style={{textAlign:'left', marginBottom:'24px', padding:0}}>
+            {['Full 8-category performance breakdown','Question-by-question detailed feedback','Model answers for each question','Personalized improvement action plan','Video presence analysis'].map((f,i) => (
+              <li key={i} style={{listStyle:'none', display:'flex', alignItems:'center', gap:'10px', padding:'6px 0', fontSize:'13px', color:'rgba(255,255,255,0.6)'}}>
+                <span style={{color:'#22c55e', fontSize:'14px', fontWeight:'700'}}>✓</span>{f}
+              </li>
+            ))}
+          </ul>
+          <button onClick={onOneTimeClick} style={{width:'100%', padding:'16px 24px', border:'none', borderRadius:'12px', fontFamily:'inherit', fontSize:'16px', fontWeight:'700', cursor:'pointer', background:'linear-gradient(135deg,#8b5cf6,#7c3aed)', color:'#fff', boxShadow:'0 4px 20px rgba(139,92,246,0.3)'}}>Unlock My Results</button>
+        </div>
+      ) : (
+        <div>
+          <div style={{marginBottom:'20px'}}>
+            <div style={{fontSize:'40px', fontWeight:'900', color:'#fff'}}><span style={{fontSize:'22px', verticalAlign:'super', fontWeight:'700'}}>$</span>19.99<span style={{fontSize:'16px', color:'rgba(255,255,255,0.4)', fontWeight:'500'}}> /mo</span></div>
+            <div style={{display:'inline-block', background:'rgba(34,197,94,0.15)', color:'#22c55e', fontSize:'11px', fontWeight:'700', padding:'3px 10px', borderRadius:'4px', marginTop:'8px'}}>BEST VALUE — Unlimited interviews</div>
+          </div>
+          <ul style={{textAlign:'left', marginBottom:'24px', padding:0}}>
+            {['Everything in one-time unlock','Unlimited interview practice','Track your progress over time','Full leaderboard access'].map((f,i) => (
+              <li key={i} style={{listStyle:'none', display:'flex', alignItems:'center', gap:'10px', padding:'6px 0', fontSize:'13px', color:'rgba(255,255,255,0.6)'}}>
+                <span style={{color:'#22c55e', fontSize:'14px', fontWeight:'700'}}>✓</span>{f}
+              </li>
+            ))}
+          </ul>
+          <button onClick={onProClick} style={{width:'100%', padding:'16px 24px', border:'none', borderRadius:'12px', fontFamily:'inherit', fontSize:'16px', fontWeight:'700', cursor:'pointer', background:'linear-gradient(135deg,#8b5cf6,#7c3aed)', color:'#fff', boxShadow:'0 4px 20px rgba(139,92,246,0.3)'}}>Start Pro — 3 Day Free Trial</button>
+        </div>
+      )}
+      <div style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'6px', marginTop:'16px', fontSize:'12px', color:'rgba(255,255,255,0.3)'}}>🔒 Secure payment · Instant access · Cancel anytime</div>
+    </div>
+  );
+}
+
+// ===== DEVICE CHECK SCREEN =====
+function DeviceCheckScreen({ onPass, onBack }) {
+  const [micStatus, setMicStatus] = React.useState('checking');
+  const [camStatus, setCamStatus] = React.useState('checking');
+  const [browserOk, setBrowserOk] = React.useState(true);
+  const [micError, setMicError] = React.useState('');
+  const [volumeLevel, setVolumeLevel] = React.useState([2,3,4,3,2,3,4,5]);
+  const streamRef = React.useRef(null);
+  const animFrameRef = React.useRef(null);
+  const bothOk = micStatus === 'ok' && camStatus === 'ok' && browserOk;
+
+  React.useEffect(() => {
+    const isChrome = /Chrome/.test(navigator.userAgent) && !/Edg/.test(navigator.userAgent);
+    setBrowserOk(isChrome);
+    navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+      .then((stream) => {
+        streamRef.current = stream;
+        setMicStatus('ok'); setCamStatus('ok');
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+        audioCtx.createMediaStreamSource(stream).connect(analyser);
+        const data = new Uint8Array(analyser.frequencyBinCount);
+        const animate = () => {
+          analyser.getByteFrequencyData(data);
+          setVolumeLevel(Array.from({ length: 8 }, (_, i) => Math.max(4, Math.round((data[Math.floor(i * data.length / 8)] / 255) * 100))));
+          animFrameRef.current = requestAnimationFrame(animate);
+        };
+        animate();
+      })
+      .catch((err) => {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+          .then((s) => { streamRef.current = s; setMicStatus('ok'); setCamStatus('error'); })
+          .catch(() => {
+            setMicStatus('error'); setCamStatus('error');
+            if (err.name === 'NotAllowedError') setMicError('Permission denied — click the mic icon in your address bar and allow access.');
+            else if (err.name === 'NotFoundError') setMicError('No microphone found — plug one in or check your system settings.');
+            else setMicError('Could not access your mic. Try Chrome for the best experience.');
+          });
+      });
+    return () => {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
+    };
+  }, []);
+
+  const handlePass = () => {
+    if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
+    onPass();
+  };
+  const dot = (s) => ({ width:'7px', height:'7px', borderRadius:'50%', background: s==='ok'?'#00d9ff':s==='error'?'#ef4444':'#888', flexShrink:0 });
+
+  return (
+    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#0a0a0f 0%,#1a1a2e 50%,#0a0a0f 100%)',display:'flex',alignItems:'center',justifyContent:'center',padding:'20px',fontFamily:"'Inter','SF Pro Display',-apple-system,sans-serif",color:'#fff',position:'relative'}}>
+      <div style={{position:'fixed',top:'-50%',left:'-50%',width:'200%',height:'200%',background:'radial-gradient(circle at 30% 30%,rgba(0,217,255,0.06) 0%,transparent 50%),radial-gradient(circle at 70% 70%,rgba(139,92,246,0.06) 0%,transparent 50%)',pointerEvents:'none',zIndex:0}}/>
+      <div style={{maxWidth:'500px',width:'100%',zIndex:1}}>
+        <div style={{textAlign:'center',marginBottom:'2rem'}}>
+          <div style={{display:'inline-block',background:'rgba(0,217,255,0.08)',border:'1px solid rgba(0,217,255,0.2)',borderRadius:'20px',padding:'4px 14px',fontSize:'12px',color:'#00d9ff',letterSpacing:'0.08em',marginBottom:'1rem'}}>READY CHECK</div>
+          <h2 style={{fontSize:'26px',fontWeight:'700',margin:'0 0 8px'}}>Before we start</h2>
+          <p style={{color:'rgba(255,255,255,0.4)',fontSize:'14px',margin:0}}>Quick check to make sure your mic and camera are ready — takes under 20 seconds</p>
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'12px',marginBottom:'12px'}}>
+          <div style={{background:'rgba(255,255,255,0.05)',border:`1px solid ${micStatus==='error'?'rgba(239,68,68,0.4)':'rgba(0,217,255,0.25)'}`,borderRadius:'10px',padding:'1.25rem'}}>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'12px'}}>
+              <span style={{color:'rgba(255,255,255,0.4)',fontSize:'11px',letterSpacing:'0.08em'}}>MICROPHONE</span>
+              <div style={{display:'flex',alignItems:'center',gap:'5px'}}><div style={dot(micStatus)}/><span style={{fontSize:'11px',color:micStatus==='ok'?'#00d9ff':micStatus==='error'?'#ef4444':'rgba(255,255,255,0.4)'}}>{micStatus==='ok'?'Detected':micStatus==='error'?'Not found':'Checking...'}</span></div>
+            </div>
+            <div style={{display:'flex',alignItems:'flex-end',gap:'3px',height:'36px',marginBottom:'10px'}}>
+              {volumeLevel.map((h,i)=><div key={i} style={{flex:1,borderRadius:'2px',minHeight:'4px',height:`${h}%`,background:micStatus==='error'?'#ef4444':'#00d9ff',opacity:micStatus==='error'?0.3:0.85,transition:'height 0.1s ease'}}/>)}
+            </div>
+            <p style={{color:'rgba(255,255,255,0.25)',fontSize:'11px',margin:0}}>{micStatus==='ok'?'Mic working — bars show your voice level':micStatus==='error'?'No audio signal':'Requesting access...'}</p>
+          </div>
+          <div style={{background:'rgba(255,255,255,0.05)',border:`1px solid ${camStatus==='error'?'rgba(239,68,68,0.4)':'rgba(0,217,255,0.25)'}`,borderRadius:'10px',padding:'1.25rem'}}>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'12px'}}>
+              <span style={{color:'rgba(255,255,255,0.4)',fontSize:'11px',letterSpacing:'0.08em'}}>CAMERA</span>
+              <div style={{display:'flex',alignItems:'center',gap:'5px'}}><div style={dot(camStatus)}/><span style={{fontSize:'11px',color:camStatus==='ok'?'#00d9ff':camStatus==='error'?'#ef4444':'rgba(255,255,255,0.4)'}}>{camStatus==='ok'?'Active':camStatus==='error'?'Not found':'Checking...'}</span></div>
+            </div>
+            <div style={{background:'rgba(255,255,255,0.03)',border:'1px solid rgba(255,255,255,0.08)',borderRadius:'6px',height:'46px',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'10px'}}>
+              <span style={{color:'rgba(255,255,255,0.2)',fontSize:'12px'}}>{camStatus==='ok'?'● Live':camStatus==='error'?'No camera':'...'}</span>
+            </div>
+            <p style={{color:'rgba(255,255,255,0.25)',fontSize:'11px',margin:0}}>{camStatus==='ok'?'Camera working':camStatus==='error'?'Camera optional':'Requesting access...'}</p>
+          </div>
+        </div>
+        <div style={{background:'rgba(255,255,255,0.05)',border:`1px solid ${browserOk?'rgba(255,255,255,0.08)':'rgba(239,68,68,0.3)'}`,borderRadius:'10px',padding:'0.9rem 1.25rem',marginBottom:'16px',display:'flex',alignItems:'center',gap:'12px'}}>
+          <div style={{width:'20px',height:'20px',borderRadius:'50%',background:browserOk?'rgba(0,217,255,0.1)':'rgba(239,68,68,0.1)',border:`1px solid ${browserOk?'rgba(0,217,255,0.3)':'rgba(239,68,68,0.3)'}`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:'11px',color:browserOk?'#00d9ff':'#ef4444'}}>{browserOk?'✓':'✗'}</div>
+          <div>
+            <p style={{color:'#fff',fontSize:'13px',margin:'0 0 2px',fontWeight:'500'}}>{browserOk?'Browser supported':'Browser not fully supported'}</p>
+            <p style={{color:'rgba(255,255,255,0.3)',fontSize:'11px',margin:0}}>{browserOk?'Chrome detected — speech transcription will work':'Speech transcription requires Chrome. Firefox and Edge do not support it reliably.'}</p>
+          </div>
+        </div>
+        {(micStatus==='error'||!browserOk)&&(
+          <div style={{background:'rgba(239,68,68,0.06)',border:'1px solid rgba(239,68,68,0.2)',borderRadius:'10px',padding:'1rem 1.25rem',marginBottom:'16px'}}>
+            <p style={{color:'#fca5a5',fontSize:'13px',fontWeight:'500',margin:'0 0 8px'}}>Try one of these fixes:</p>
+            {!browserOk&&<p style={{color:'rgba(255,255,255,0.6)',fontSize:'12px',margin:'0 0 4px'}}>● Your mic may be working but speech transcription only works in <span style={{color:'#00d9ff'}}>Chrome</span> — Firefox and Edge both have issues with this API</p>}
+            {micError&&<p style={{color:'rgba(255,255,255,0.6)',fontSize:'12px',margin:'0 0 4px'}}>● {micError}</p>}
+            {micStatus==='error'&&<p style={{color:'rgba(255,255,255,0.6)',fontSize:'12px',margin:0}}>● Make sure your mic is plugged in and not muted</p>}
+          </div>
+        )}
+        <button onClick={handlePass} disabled={micStatus==='checking'} style={{width:'100%',background:bothOk?'linear-gradient(135deg,#00d9ff 0%,#8b5cf6 100%)':'rgba(255,255,255,0.08)',border:bothOk?'none':'1px solid rgba(255,255,255,0.1)',borderRadius:'12px',padding:'15px',fontSize:'16px',fontWeight:'600',color:bothOk?'#fff':'rgba(255,255,255,0.5)',cursor:micStatus==='checking'?'not-allowed':'pointer',transition:'all 0.2s',marginBottom:'12px'}}>
+          {micStatus==='checking'?'Checking devices...':bothOk?'Everything looks good — Start Interview →':"Start anyway (answers won't be transcribed)"}
+        </button>
+        <button onClick={onBack} style={{display:'block',width:'100%',background:'transparent',border:'none',color:'rgba(255,255,255,0.4)',fontSize:'14px',cursor:'pointer',padding:'8px'}}>← Back to setup</button>
+      </div>
+    </div>
+  );
+}
 
 // Main App Component
 export default function InterviewSimulator() {
@@ -39,6 +199,11 @@ export default function InterviewSimulator() {
   const [userName, setUserName] = useState('');
   const [micPermission, setMicPermission] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  // Paywall V2 state
+  const [currentInterviewId, setCurrentInterviewId] = useState(null);
+  const [isResultUnlocked, setIsResultUnlocked] = useState(false);
+  const [isVerifyingPayment, setIsVerifyingPayment] = useState(false);
   
   // Authentication states
   const [user, setUser] = useState(null);
@@ -73,6 +238,7 @@ export default function InterviewSimulator() {
   const [waitingForMobileNext, setWaitingForMobileNext] = useState(false);
   const [mobileGateEmail, setMobileGateEmail] = useState('');
   const [mobileGateMessage, setMobileGateMessage] = useState('');
+  const [urlRole, setUrlRole] = useState('');
   
   // Follow-up question states
   const [isFollowUp, setIsFollowUp] = useState(false);
@@ -117,6 +283,53 @@ export default function InterviewSimulator() {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Handle Stripe redirect back after one-time payment
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+    const interviewId = params.get('interview_id');
+    const unlocked = params.get('unlocked');
+
+    if (sessionId && interviewId && unlocked === 'true') {
+      setIsVerifyingPayment(true);
+      setCurrentInterviewId(interviewId);
+      // Clean the URL
+      window.history.replaceState({}, '', window.location.pathname);
+      // Verify with backend
+      fetch('/api/verify-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId, interviewId })
+      })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            setIsResultUnlocked(true);
+            // If we have finalResults in localStorage from before redirect, restore stage
+            const savedResults = localStorage.getItem('pendingResults');
+            if (savedResults) {
+              setFinalResults(JSON.parse(savedResults));
+              localStorage.removeItem('pendingResults');
+              setStage('results');
+            }
+          }
+        })
+        .catch(e => console.error('Payment verification error:', e))
+        .finally(() => setIsVerifyingPayment(false));
+    }
+  }, []);
+
+
+
+  // Read ?role= URL param to personalise landing page headline
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const role = params.get('role');
+    if (role) {
+      setUrlRole(decodeURIComponent(role));
+    }
   }, []);
 
   // Initialize auth on mount
@@ -210,6 +423,10 @@ export default function InterviewSimulator() {
 
   // Load user data from Supabase
   const loadUserData = async (userId) => {
+    let loadedInterviews = 0;
+    let loadedSubscribed = false;
+    let loadedOrgId = null;
+    
     try {
       // Recover invite org from sessionStorage if React state was lost during OAuth redirect
       let effectiveInviteOrg = inviteOrg;
@@ -234,10 +451,14 @@ export default function InterviewSimulator() {
         .single();
       
       if (data) {
-        setCompletedInterviews(data.completed_interviews || 0);
-        setIsSubscribed(data.is_subscribed || false);
+        loadedInterviews = data.completed_interviews || 0;
+        loadedSubscribed = data.is_subscribed || false;
+        loadedOrgId = data.org_id || null;
+        setCompletedInterviews(loadedInterviews);
+        setIsSubscribed(loadedSubscribed);
         setSubscriptionDate(data.subscription_date);
         setUserRole(data.role || 'candidate');
+        console.log('B2B_LOAD:', { role: data.role, org_id: data.org_id, userId });
         setUserOrgId(data.org_id || null);
 
         // If user has an org_id, fetch the org details
@@ -247,7 +468,7 @@ export default function InterviewSimulator() {
             .select('*')
             .eq('id', data.org_id)
             .single();
-          if (orgData) setUserOrg(orgData);
+          if (orgData) { setUserOrg(orgData); console.log('B2B_ORG_LOADED:', orgData); } else { console.log('B2B_ORG_FAILED'); }
         }
 
         // If user just came through an invite link and doesn't have an org yet,
@@ -294,6 +515,12 @@ export default function InterviewSimulator() {
     } catch (e) {
       console.error('Error loading user data:', e);
     }
+    
+    // If user just signed in via OAuth, redirect appropriately
+    if (sessionStorage.getItem('pendingAuthRedirect')) {
+      sessionStorage.removeItem('pendingAuthRedirect');
+      setStage('setup');
+    }
   };
 
   // Sign in with Google
@@ -302,6 +529,9 @@ export default function InterviewSimulator() {
     if (window.mixpanel) {
       window.mixpanel.track('google_sign_in_clicked');
     }
+    
+    // Flag so we know to redirect to setup after OAuth returns
+    sessionStorage.setItem('pendingAuthRedirect', 'true');
     
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -887,6 +1117,11 @@ Return ONLY valid JSON:
     setVideoSnapshots([]);
     setVideoFeedback(null);
     setFinalResults(null);
+    // Reset paywall state for new interview
+    setIsResultUnlocked(false);
+    setCurrentInterviewId(null);
+    localStorage.removeItem('pendingInterviewId');
+    localStorage.removeItem('pendingResults');
     
     // Track interview started
     if (window.mixpanel) {
@@ -1572,8 +1807,8 @@ Return ONLY valid JSON:
           'last_interview_score': results.overallScore
         });
       }
-      // ===== B2B FORK: Save to Supabase if user has org_id =====
-      if (userOrgId && user) {
+      // ===== SAVE TO SUPABASE FOR ALL LOGGED-IN USERS =====
+      if (user) {
         try {
           const { data: sessionData } = await supabase.auth.getSession();
           const accessToken = sessionData?.session?.access_token;
@@ -1586,12 +1821,12 @@ Return ONLY valid JSON:
               parentQuestionIndex: a.parentQuestionIndex != null ? a.parentQuestionIndex : null
             }));
 
-            await fetch('/api/save-interview-results', {
+            const saveResponse = await fetch('/api/save-interview-results', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 accessToken,
-                orgId: userOrgId,
+                orgId: userOrgId || null,
                 interviewData: {
                   jobTitle,
                   results,
@@ -1601,12 +1836,20 @@ Return ONLY valid JSON:
                 }
               })
             });
+            const saveData = await saveResponse.json();
+            if (saveData.id) {
+              setCurrentInterviewId(saveData.id);
+              // Store results in localStorage in case user gets redirected to Stripe and comes back
+              localStorage.setItem('pendingResults', JSON.stringify(finalResultsWithVideo));
+              localStorage.setItem('pendingInterviewId', saveData.id);
+            }
           }
         } catch (e) {
-          console.error('B2B save error (non-blocking):', e);
+          console.error('Save to Supabase error (non-blocking):', e);
         }
       }
-      // ===== END B2B FORK =====
+      // ===== END SAVE =====
+
 
       
       setIsAnalyzing(false);
@@ -1961,15 +2204,23 @@ Return ONLY valid JSON:
   };
 
   const handleStartInterview = async (source = 'landing') => {
+    // Unlock audio playback for Safari (must happen in user gesture context)
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const buf = ctx.createBuffer(1, 1, 22050);
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(ctx.destination);
+      src.start(0);
+      // Also create and play a silent HTML5 audio to unlock Audio() constructor
+      const silentAudio = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
+      silentAudio.play().catch(() => {});
+    } catch (e) {}
+    
     // In TEST_MODE, always allow access
-    // In production, check if user is subscribed or has free trial remaining
     // B2B candidates with an org_id skip the paywall entirely
+    // Interviews are now unlimited — results are paywalled instead
     const isB2BCandidate = userOrgId != null;
-    if (!TEST_MODE && !isSubscribed && !isB2BCandidate && completedInterviews >= 1) {
-      setPreviousStage(source);
-      setStage('paywall');
-      return;
-    }
     
     // Reset interview state for new interview (but keep form data like job title, description, name, country, resume)
     setQuestions([]);
@@ -2020,6 +2271,18 @@ Return ONLY valid JSON:
     return { trend: 'down', icon: '↓', color: '#ef4444' };
   };
 
+  // B2B Admin Dashboard
+  if (userRole === 'admin' && userOrg && user) {
+    return (
+      <AdminDashboard
+        user={user}
+        supabase={supabase}
+        org={userOrg}
+       onLogout={signOut}
+      />
+    );
+  }
+
   // Loading state
   if (isLoading) {
     return (
@@ -2032,203 +2295,1106 @@ Return ONLY valid JSON:
     );
   }
 
+
+
+    // Dynamic headline based on ?role= param
+    const getHeadline = () => {
+      if (!urlRole) {
+        return (
+          <>
+            Practice smarter.<br/>
+            <em>Land the job.</em>
+          </>
+        );
+      }
+      // 3 variations, assigned statically by first character of role name
+      const code = urlRole.charCodeAt(0) % 3;
+      if (code === 0) {
+        return (
+          <>
+            Simulate a realistic<br/>
+            <em>{urlRole} interview.</em>
+          </>
+        );
+      } else if (code === 1) {
+        return (
+          <>
+            Practise for your<br/>
+            <em>{urlRole} interview.</em>
+          </>
+        );
+      } else {
+        return (
+          <>
+            Ace your<br/>
+            <em>{urlRole} interview.</em>
+          </>
+        );
+      }
+    };
+
   // Landing Page
   if (stage === 'landing') {
+    const handleCTA = () => {
+      if (user) {
+        handleStartInterview();
+      } else {
+        signInWithGoogle();
+      }
+    };
+
     return (
-      <div style={styles.container}>
-        <div style={styles.heroGlow}></div>
-        <div style={styles.landing}>
-          {/* User auth section - top right (only show when logged in) */}
-          {user && (
-            <div style={styles.authSection}>
-              {/* Desktop view */}
-              {!isMobile && (
-                <div style={styles.userInfo}>
-                  <span style={styles.userEmail}>👤 {user.email.length > 25 ? user.email.substring(0, 22) + '...' : user.email}</span>
-                  <button style={styles.signOutBtn} onClick={signOut}>Sign Out</button>
-                </div>
-              )}
-              {/* Mobile menu button */}
-              {isMobile && (
-                <>
-                  <button 
-                    style={styles.mobileMenuBtn} 
-                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  >
-                    {mobileMenuOpen ? '✕' : '☰'}
-                  </button>
-                  {/* Mobile dropdown */}
-                  {mobileMenuOpen && (
-                    <div style={styles.mobileMenuDropdown}>
-                      <span style={styles.mobileMenuEmail}>{user.email}</span>
-                      <button style={styles.mobileMenuItem} onClick={() => {
-                        setMobileMenuOpen(false);
-                        if (window.mixpanel) window.mixpanel.track('dashboard_viewed');
-                        setStage('dashboard');
-                      }}>
-                        ⚙️ Dashboard
-                      </button>
-                      {pastInterviews.length > 0 && (
-                        <button style={styles.mobileMenuItem} onClick={() => {
-                          setMobileMenuOpen(false);
-                          if (window.mixpanel) window.mixpanel.track('history_viewed');
-                          setPreviousStage('landing');
-                          setStage('history');
-                        }}>
-                          📋 History
-                        </button>
-                      )}
-                      <button style={styles.mobileMenuItemDanger} onClick={() => {
-                        setMobileMenuOpen(false);
-                        signOut();
-                      }}>
-                        Sign Out
-                      </button>
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-          )}
-          
-          {TEST_MODE && (
-            <div style={styles.testModeBanner}>
-              🧪 TEST MODE - Paywall disabled
-              <button style={styles.resetBtn} onClick={resetAllData}>Reset Data</button>
-            </div>
-          )}
-          
-          {/* Logo - centered */}
-          <img src="/Logoapp.png" alt="Ace My Interviews" style={styles.logoCentered} />
-          <h1 style={styles.heroTitle}>
-            No surprises.<br />
-            <span style={styles.heroAccent}>Ace your interview.</span>
-          </h1>
-          <p style={styles.heroSubtitle}>
-            Enter your role and job description. We simulate a real interview with timed, 
-            camera-on answers — then score both what you say and how you say it.
-          </p>
-          
-          <div style={styles.featurePills}>
-            <div style={styles.featurePill}>
-              <span>⏱️</span>
-              <span>3-min timed answers</span>
-            </div>
-            <div style={styles.featurePill}>
-              <span>📹</span>
-              <span>Camera-on pressure</span>
-            </div>
-            <div style={styles.featurePill}>
-              <span>✅</span>
-              <span>Pass/Fail verdict</span>
-            </div>
-            <div style={styles.featurePill}>
-              <span>📊</span>
-              <span>Delivery analysis</span>
-            </div>
-          </div>
+      <>
+        {/* Google Fonts */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
 
-          {/* B2B Invite Badge */}
-          {inviteOrg && !user && (
-            <div style={{
-              background: 'rgba(16,185,129,0.1)',
-              border: '1px solid rgba(16,185,129,0.3)',
-              borderRadius: 12,
-              padding: '12px 20px',
-              marginBottom: 16,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-              fontSize: 14,
-              color: '#34d399'
-            }}>
-              🎓 You've been invited by {inviteOrg.name}
-            </div>
-          )}
-          {/* Main CTA - changes based on auth state */}
-          {!user && !TEST_MODE ? (
-            <div style={styles.ctaWrapper}>
-              <button style={styles.googleSignInBtnLarge} onClick={signInWithGoogle}>
-                <svg style={styles.googleIcon} viewBox="0 0 24 24" width="20" height="20">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
-                Sign in to Start Free Interview
-              </button>
-              <p style={styles.trialNote}>🎁 First interview is completely free • No credit card required</p>
-            </div>
-          ) : (
-            <>
-              <button style={styles.primaryBtn} onClick={handleStartInterview}>
-                {completedInterviews === 0 ? 'Start Free Interview' : 'Start Interview'}
-                <span style={styles.btnArrow}>→</span>
-              </button>
-              
-              {completedInterviews === 0 && !TEST_MODE && (
-                <p style={styles.trialNote}>🎁 First interview is completely free</p>
-              )}
-              
-              {isSubscribed && (
-                <p style={styles.trialNote}>✓ Subscribed • Unlimited interviews</p>
-              )}
-              
-              {!isSubscribed && completedInterviews > 0 && !TEST_MODE && (
-                <p style={styles.trialNote}>Free trial used • Subscribe for unlimited access</p>
-              )}
-            </>
-          )}
+        <style>{`
+          .lp-root {
+            background: #070b14;
+            color: #e8edf5;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+          }
+          .lp-root *, .lp-root *::before, .lp-root *::after { box-sizing: border-box; }
 
-          {/* Secondary actions - only show when logged in */}
-          {user && (
-            <div style={styles.secondaryActions}>
-              <button style={styles.secondaryBtn} onClick={() => {
-                if (window.mixpanel) window.mixpanel.track('dashboard_viewed');
-                setStage('dashboard');
-              }}>
-                ⚙️ Dashboard
-              </button>
-              {pastInterviews.length > 0 && (
-                <button style={styles.secondaryBtn} onClick={() => {
-                  if (window.mixpanel) window.mixpanel.track('history_viewed');
-                  setPreviousStage('landing');
-                  setStage('history');
-                }}>
-                  📋 History ({pastInterviews.length})
-                </button>
-              )}
-            </div>
-          )}
-          
-          {/* Trust Block */}
-          <div style={styles.trustBlock}>
-            <p style={styles.trustTitle}>🔒 Your Practice is Private</p>
-            <p style={styles.trustText}>
-              Video and audio recordings are processed in real-time and never stored. 
-              We only save your scores to track progress. <a href="#" onClick={(e) => { 
-                e.preventDefault(); 
-                if (window.mixpanel) window.mixpanel.track('privacy_policy_viewed');
-                setStage('privacy'); 
-              }} style={styles.trustLink}>Learn more</a>
+          /* Noise overlay */
+          .lp-root::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+          }
+
+          /* NAV */
+          .lp-nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1.2rem 6%;
+            background: rgba(7,11,20,0.8);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+          }
+          .lp-nav-logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #e8edf5;
+            text-decoration: none;
+          }
+          .lp-nav-logo span { color: #00e5ff; }
+          .lp-nav-links { display: flex; gap: 2.5rem; list-style: none; margin: 0; padding: 0; }
+          .lp-nav-links a { color: #7a8ba3; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+          .lp-nav-links a:hover { color: #e8edf5; }
+          .lp-nav-cta {
+            background: #00e5ff;
+            color: #000;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            padding: 0.6rem 1.4rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: box-shadow 0.2s, transform 0.2s;
+          }
+          .lp-nav-cta:hover { box-shadow: 0 0 24px rgba(0,229,255,0.4); transform: translateY(-1px); }
+
+          /* HERO */
+          .lp-hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 7rem 6% 5rem;
+            overflow: hidden;
+          }
+          .lp-hero::after {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 900px;
+            height: 600px;
+            background: radial-gradient(ellipse at center, rgba(0,229,255,0.1) 0%, transparent 70%);
+            pointer-events: none;
+          }
+          .lp-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0,229,255,0.08);
+            border: 1px solid rgba(0,229,255,0.25);
+            border-radius: 100px;
+            padding: 0.35rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #00e5ff;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            animation: lpFadeDown 0.8s ease forwards;
+          }
+          .lp-badge::before {
+            content: '';
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #00e5ff;
+            animation: lpPulse 2s infinite;
+          }
+          @keyframes lpPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+          }
+          @keyframes lpFadeDown {
+            from { opacity: 0; transform: translateY(-16px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .lp-hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: clamp(2.6rem, 5.5vw, 4.5rem);
+            line-height: 1.08;
+            letter-spacing: -0.01em;
+            max-width: 860px;
+            margin: 0;
+            animation: lpFadeDown 0.8s 0.1s ease both;
+          }
+          .lp-hero h1 em {
+            font-style: normal;
+            color: #00e5ff;
+            position: relative;
+          }
+          .lp-hero h1 em::after {
+            content: '';
+            position: absolute;
+            bottom: 4px; left: 0; right: 0;
+            height: 3px;
+            background: #00e5ff;
+            opacity: 0.4;
+            border-radius: 2px;
+          }
+          .lp-hero-sub {
+            max-width: 580px;
+            color: #7a8ba3;
+            font-size: 1.15rem;
+            font-weight: 300;
+            margin: 1.75rem 0 2.5rem;
+            line-height: 1.7;
+            animation: lpFadeDown 0.8s 0.2s ease both;
+          }
+          .lp-hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: lpFadeDown 0.8s 0.3s ease both;
+          }
+          .lp-btn-primary {
+            background: #00e5ff;
+            color: #000;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 0.9rem 2.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: box-shadow 0.25s, transform 0.2s;
+            border: none;
+            cursor: pointer;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+          }
+          .lp-btn-primary:hover { box-shadow: 0 0 40px rgba(0,229,255,0.4); transform: translateY(-2px); }
+          .lp-btn-secondary {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.07);
+            color: #e8edf5;
+            font-family: 'Syne', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 0.9rem 2.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+          }
+          .lp-btn-secondary:hover { border-color: #00e5ff; background: rgba(0,229,255,0.12); }
+
+          .lp-hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            animation: lpFadeDown 0.8s 0.4s ease both;
+          }
+          .lp-hero-stat { text-align: center; }
+          .lp-hero-stat-num {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 2rem;
+            color: #e8edf5;
+            letter-spacing: -0.01em;
+          }
+          .lp-hero-stat-num span { color: #00e5ff; }
+          .lp-hero-stat-label { font-size: 0.8rem; color: #7a8ba3; text-transform: uppercase; letter-spacing: 0.08em; }
+
+          /* TICKER */
+          .lp-ticker {
+            position: relative; z-index: 1;
+            background: rgba(0,229,255,0.06);
+            border-top: 1px solid rgba(0,229,255,0.12);
+            border-bottom: 1px solid rgba(0,229,255,0.12);
+            padding: 0.7rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+          }
+          .lp-ticker-inner {
+            display: inline-block;
+            animation: lpTicker 30s linear infinite;
+            font-size: 0.78rem;
+            color: #00e5ff;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+          }
+          @keyframes lpTicker {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+          }
+          .lp-ticker-sep { margin: 0 2rem; opacity: 0.4; }
+
+          /* MOCKUP */
+          .lp-mockup-section {
+            position: relative; z-index: 1;
+            padding: 2rem 6% 6rem;
+            display: flex;
+            justify-content: center;
+          }
+          .lp-mockup-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+          }
+          .lp-mockup-glow {
+            position: absolute;
+            inset: -40px;
+            background: radial-gradient(ellipse at center, rgba(0,229,255,0.08) 0%, transparent 70%);
+            pointer-events: none;
+          }
+          .lp-mockup-frame {
+            background: #0d1422;
+            border: 1px solid rgba(0,229,255,0.15);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+            position: relative;
+          }
+          .lp-mockup-topbar {
+            background: rgba(0,0,0,0.3);
+            padding: 0.8rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+          }
+          .lp-dot { width: 10px; height: 10px; border-radius: 50%; }
+          .lp-dot-r { background: #ff5f57; }
+          .lp-dot-y { background: #febc2e; }
+          .lp-dot-g { background: #28c840; }
+          .lp-mockup-url {
+            flex: 1; text-align: center;
+            font-size: 0.75rem; color: #7a8ba3;
+            background: rgba(255,255,255,0.04);
+            padding: 0.3rem 1rem;
+            border-radius: 6px;
+            max-width: 300px;
+            margin: 0 auto;
+          }
+          .lp-mockup-body {
+            padding: 3rem 2.5rem;
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+          }
+          .lp-sim-progress { width: 100%; max-width: 500px; }
+          .lp-sim-progress-bar { height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; margin-bottom: 0.4rem; }
+          .lp-sim-progress-fill { width: 20%; height: 100%; background: linear-gradient(90deg, #00e5ff, #0090ff); border-radius: 2px; }
+          .lp-sim-progress-label { font-size: 0.75rem; color: #7a8ba3; }
+          .lp-sim-timer {
+            background: rgba(0,229,255,0.06);
+            border: 1.5px solid rgba(0,229,255,0.3);
+            border-radius: 10px;
+            padding: 0.8rem 2rem;
+            text-align: center;
+          }
+          .lp-sim-timer-label { font-size: 0.65rem; color: #00e5ff; letter-spacing: 0.12em; text-transform: uppercase; }
+          .lp-sim-timer-num { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; color: #00e5ff; letter-spacing: -0.04em; }
+          .lp-sim-question {
+            width: 100%; max-width: 500px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #e8edf5;
+          }
+          .lp-sim-recording {
+            background: rgba(255,77,106,0.1);
+            border: 1px solid rgba(255,77,106,0.3);
+            border-radius: 8px;
+            padding: 0.6rem 1.25rem;
+            font-size: 0.82rem;
+            color: #ff4d6a;
+            display: flex; align-items: center; gap: 0.5rem;
+            width: 100%; max-width: 500px;
+          }
+          .lp-rec-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #ff4d6a;
+            animation: lpPulse 1.2s infinite;
+          }
+          .lp-sim-btn {
+            background: linear-gradient(135deg, #00e5ff, #0090ff);
+            color: #000;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 0.7rem 1.75rem;
+            border-radius: 8px;
+            border: none;
+          }
+
+          /* SECTIONS */
+          .lp-section { position: relative; z-index: 1; }
+          .lp-section-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #00e5ff;
+            margin-bottom: 1rem;
+          }
+          .lp-section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            line-height: 1.15;
+            margin: 0 0 1rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+          }
+          .lp-section-sub {
+            color: #7a8ba3;
+            font-size: 1.05rem;
+            max-width: 500px;
+            margin: 0 auto 4rem;
+          }
+
+          /* HOW IT WORKS */
+          .lp-hiw {
+            padding: 7rem 6%;
+            text-align: center;
+          }
+          .lp-steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.07);
+            border-radius: 16px;
+            overflow: hidden;
+          }
+          .lp-step-card {
+            background: #0d1422;
+            padding: 2.5rem 2rem;
+            text-align: left;
+            transition: background 0.3s;
+          }
+          .lp-step-card:hover { background: #111927; }
+          .lp-step-num {
+            font-family: 'Syne', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: rgba(0,229,255,0.1);
+            line-height: 1;
+            margin-bottom: 1rem;
+          }
+          .lp-step-icon {
+            width: 44px; height: 44px;
+            background: rgba(0,229,255,0.12);
+            border: 1px solid rgba(0,229,255,0.2);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+          }
+          .lp-step-title {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 0.5rem;
+          }
+          .lp-step-desc { font-size: 0.9rem; color: #7a8ba3; line-height: 1.6; }
+
+          /* FEATURES */
+          .lp-features {
+            padding: 7rem 6%;
+            max-width: 1100px;
+            margin: 0 auto;
+          }
+          .lp-features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+          }
+          .lp-feature-card {
+            background: #0d1422;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 14px;
+            padding: 2rem;
+            transition: border-color 0.3s, transform 0.3s;
+            position: relative;
+            overflow: hidden;
+          }
+          .lp-feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00e5ff, transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+          }
+          .lp-feature-card:hover { border-color: rgba(0,229,255,0.2); transform: translateY(-3px); }
+          .lp-feature-card:hover::before { opacity: 1; }
+          .lp-feature-card.lp-large { grid-column: span 3; }
+          .lp-feature-icon { font-size: 1.5rem; margin-bottom: 1rem; display: block; }
+          .lp-feature-title {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+          }
+          .lp-feature-desc { font-size: 0.9rem; color: #7a8ba3; line-height: 1.6; }
+
+          /* Score bars */
+          .lp-score-bars { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; }
+          .lp-score-row { display: flex; align-items: center; gap: 0.75rem; }
+          .lp-score-label { font-size: 0.78rem; color: #7a8ba3; width: 120px; flex-shrink: 0; }
+          .lp-score-track { flex: 1; height: 6px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+          .lp-score-fill { height: 100%; border-radius: 4px; transition: width 1.2s cubic-bezier(0.22,1,0.36,1); }
+          .lp-score-val { font-size: 0.8rem; font-weight: 600; font-family: 'Syne', sans-serif; width: 28px; text-align: right; }
+
+          /* Video metrics */
+          .lp-video-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+          }
+          .lp-video-metric {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 10px;
+            padding: 0.9rem;
+          }
+          .lp-vm-label { font-size: 0.72rem; color: #7a8ba3; margin-bottom: 0.3rem; }
+          .lp-vm-score { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.3rem; }
+          .lp-vm-bar { margin-top: 0.4rem; height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+          .lp-vm-bar-fill { height: 100%; border-radius: 2px; }
+
+          /* TESTIMONIALS */
+          .lp-social-proof {
+            padding: 7rem 6%;
+            text-align: center;
+            position: relative;
+          }
+          .lp-social-proof::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px; height: 400px;
+            background: radial-gradient(ellipse, rgba(0,229,255,0.05) 0%, transparent 70%);
+            pointer-events: none;
+          }
+          .lp-testimonials {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-width: 1000px;
+            margin: 3rem auto 0;
+          }
+          .lp-testimonial-card {
+            background: #0d1422;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 14px;
+            padding: 1.75rem;
+            text-align: left;
+            transition: border-color 0.3s;
+          }
+          .lp-testimonial-card:hover { border-color: rgba(0,229,255,0.15); }
+          .lp-testimonial-stars { color: #ffd700; font-size: 0.85rem; margin-bottom: 0.75rem; letter-spacing: 2px; }
+          .lp-testimonial-quote { font-size: 0.9rem; color: #7a8ba3; line-height: 1.65; margin-bottom: 1.25rem; }
+          .lp-testimonial-author { display: flex; align-items: center; gap: 0.75rem; }
+          .lp-testimonial-avatar {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: linear-gradient(135deg, #00e5ff, #0090ff);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.8rem; color: #000;
+            flex-shrink: 0;
+          }
+          .lp-testimonial-name { font-weight: 600; font-size: 0.88rem; color: #e8edf5; }
+          .lp-testimonial-role { font-size: 0.75rem; color: #7a8ba3; }
+
+          /* COMPARE */
+          .lp-compare {
+            padding: 7rem 6%;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+          }
+          .lp-compare-table {
+            margin-top: 3rem;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 16px;
+            overflow: hidden;
+          }
+          .lp-compare-head, .lp-compare-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+          }
+          .lp-compare-head { background: rgba(255,255,255,0.03); }
+          .lp-compare-row:last-child { border-bottom: none; }
+          .lp-compare-row:hover { background: rgba(255,255,255,0.02); }
+          .lp-compare-cell {
+            padding: 1rem 1.25rem;
+            font-size: 0.88rem;
+            display: flex; align-items: center;
+            border-right: 1px solid rgba(255,255,255,0.07);
+            color: #7a8ba3;
+          }
+          .lp-compare-cell:last-child { border-right: none; }
+          .lp-compare-cell.lp-center { justify-content: center; }
+          .lp-col-head { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+          .lp-col-ace { color: #00e5ff; font-weight: 700; font-family: 'Syne', sans-serif; }
+          .lp-check { color: #00ff9d; font-size: 1rem; }
+          .lp-cross { color: rgba(255,255,255,0.2); font-size: 0.9rem; }
+          .lp-partial { color: #ff7b3a; font-size: 0.85rem; }
+
+          /* CTA SECTION */
+          .lp-cta-section {
+            padding: 8rem 6%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+          }
+          .lp-cta-section::before {
+            content: '';
+            position: absolute;
+            bottom: -200px; left: 50%;
+            transform: translateX(-50%);
+            width: 1200px; height: 700px;
+            background: radial-gradient(ellipse at bottom, rgba(0,229,255,0.1) 0%, transparent 70%);
+            pointer-events: none;
+          }
+          .lp-cta-box {
+            background: #0d1422;
+            border: 1px solid rgba(0,229,255,0.2);
+            border-radius: 24px;
+            padding: 5rem 3rem;
+            max-width: 720px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+          }
+          .lp-cta-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 50%; transform: translateX(-50%);
+            width: 60%; height: 1px;
+            background: linear-gradient(90deg, transparent, #00e5ff, transparent);
+          }
+          .lp-cta-box h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin: 0 0 1rem;
+            line-height: 1.15;
+          }
+          .lp-cta-box p { color: #7a8ba3; font-size: 1.05rem; margin-bottom: 2.5rem; }
+          .lp-cta-note { font-size: 0.78rem !important; color: #7a8ba3; margin-top: 1rem !important; }
+
+          /* FOOTER */
+          .lp-footer {
+            padding: 3rem 6%;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            position: relative;
+            z-index: 1;
+          }
+          .lp-footer-copy { font-size: 0.82rem; color: #7a8ba3; }
+          .lp-footer-links { display: flex; gap: 2rem; }
+          .lp-footer-links a { font-size: 0.82rem; color: #7a8ba3; text-decoration: none; transition: color 0.2s; cursor: pointer; }
+          .lp-footer-links a:hover { color: #e8edf5; }
+
+          /* Fade in animation */
+          .lp-fade-in {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+          }
+          .lp-fade-in.lp-visible {
+            opacity: 1;
+            transform: translateY(0);
+          }
+
+          /* Google icon in button */
+          .lp-google-svg { flex-shrink: 0; }
+
+          /* RESPONSIVE */
+          @media (max-width: 768px) {
+            .lp-nav-links { display: none; }
+            .lp-hero-stats { gap: 2rem; flex-wrap: wrap; justify-content: center; }
+            .lp-steps-grid { grid-template-columns: 1fr; }
+            .lp-features-grid { grid-template-columns: 1fr; }
+            .lp-feature-card.lp-large { grid-column: span 1; }
+            .lp-testimonials { grid-template-columns: 1fr; }
+            .lp-compare-head, .lp-compare-row { grid-template-columns: 2fr 1fr 1fr; }
+            .lp-compare-cell:nth-child(3) { display: none; }
+            .lp-video-grid { grid-template-columns: 1fr 1fr; }
+          }
+        `}</style>
+
+        <div className="lp-root">
+          {/* NAV */}
+          <nav className="lp-nav">
+            <span className="lp-nav-logo">Ace<span>My</span>Interviews</span>
+            <ul className="lp-nav-links">
+              <li><a href="#lp-how">How it works</a></li>
+              <li><a href="#lp-features">Features</a></li>
+              <li><a href="#lp-testimonials">Reviews</a></li>
+              <li><a href="#lp-compare">Compare</a></li>
+            </ul>
+            <button className="lp-nav-cta" onClick={handleCTA}>{user ? (completedInterviews === 0 ? 'Start Free Interview →' : 'Start Interview →') : 'Start Free →'}</button>
+            {user && <>
+              <button onClick={() => setStage('dashboard')} style={{background:'none', border:'1px solid rgba(255,255,255,0.1)', color:'#7a8ba3', fontSize:'0.82rem', padding:'0.5rem 1rem', borderRadius:'6px', cursor:'pointer', marginLeft:'0.5rem'}}>My Dashboard</button>
+              <button onClick={signOut} style={{background:'none', border:'1px solid rgba(255,255,255,0.1)', color:'#7a8ba3', fontSize:'0.82rem', padding:'0.5rem 1rem', borderRadius:'6px', cursor:'pointer', marginLeft:'0.5rem'}}>Sign Out</button>
+            </>}
+          </nav>
+
+          {/* HERO */}
+          <section className="lp-hero">
+            <div className="lp-badge">✦ AI-Powered Interview Training</div>
+            <h1>
+              {getHeadline()}
+            </h1>
+            <p className="lp-hero-sub">
+              Simulate real interviews with an AI that asks follow-up questions, 
+              grades your answers across 8 dimensions, and tells you exactly what to 
+              fix — before the real thing.
             </p>
-          </div>
-          
-          {/* Footer */}
-          <div style={styles.footer}>
-            <div style={styles.footerLinks}>
-              <a href="#" onClick={(e) => { 
-                e.preventDefault(); 
-                if (window.mixpanel) window.mixpanel.track('privacy_policy_viewed');
-                setStage('privacy'); 
-              }} style={styles.footerLink}>Privacy Policy</a>
-              <span style={styles.footerDivider}>•</span>
-              <a href="mailto:support@interviewsimulator.com" style={styles.footerLink}>Contact</a>
+            <div className="lp-hero-actions">
+              <button className="lp-btn-primary" onClick={handleCTA}>
+                {!user && <svg className="lp-google-svg" width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#000"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#000"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#000"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#000"/></svg>}
+                {user ? (completedInterviews === 0 ? 'Start Free Interview' : 'Start Interview') : 'Try a free interview'}
+              </button>
+              <a className="lp-btn-secondary" href="#lp-how">See how it works</a>
             </div>
-            <p style={styles.footerCopyright}>© 2025 Interview Simulator. All rights reserved.</p>
+            <div className="lp-hero-stats">
+              <div className="lp-hero-stat">
+                <div className="lp-hero-stat-num">8<span>+</span></div>
+                <div className="lp-hero-stat-label">Scoring dimensions</div>
+              </div>
+              <div className="lp-hero-stat">
+                <div className="lp-hero-stat-num">3<span>+</span></div>
+                <div className="lp-hero-stat-label">Follow-up questions</div>
+              </div>
+              <div className="lp-hero-stat">
+                <div className="lp-hero-stat-num">60<span>s</span></div>
+                <div className="lp-hero-stat-label">To start practicing</div>
+              </div>
+              <div className="lp-hero-stat">
+                <div className="lp-hero-stat-num">100<span>%</span></div>
+                <div className="lp-hero-stat-label">Actionable feedback</div>
+              </div>
+            </div>
+          </section>
+
+          {/* TICKER */}
+          <div className="lp-ticker">
+            <div className="lp-ticker-inner">
+              AI Follow-up Questions <span className="lp-ticker-sep">◆</span>
+              Clarity Scoring <span className="lp-ticker-sep">◆</span>
+              STAR Method Coaching <span className="lp-ticker-sep">◆</span>
+              Video Presence Analysis <span className="lp-ticker-sep">◆</span>
+              Real-time Feedback <span className="lp-ticker-sep">◆</span>
+              Percentile Ranking <span className="lp-ticker-sep">◆</span>
+              Technical Accuracy <span className="lp-ticker-sep">◆</span>
+              Confidence Scoring <span className="lp-ticker-sep">◆</span>
+              AI Follow-up Questions <span className="lp-ticker-sep">◆</span>
+              Clarity Scoring <span className="lp-ticker-sep">◆</span>
+              STAR Method Coaching <span className="lp-ticker-sep">◆</span>
+              Video Presence Analysis <span className="lp-ticker-sep">◆</span>
+              Real-time Feedback <span className="lp-ticker-sep">◆</span>
+              Percentile Ranking <span className="lp-ticker-sep">◆</span>
+              Technical Accuracy <span className="lp-ticker-sep">◆</span>
+              Confidence Scoring <span className="lp-ticker-sep">◆</span>
+            </div>
           </div>
+
+          {/* MOCKUP PREVIEW */}
+          <div className="lp-mockup-section">
+            <div className="lp-mockup-wrapper">
+              <div className="lp-mockup-glow"></div>
+              <div className="lp-mockup-frame">
+                <div className="lp-mockup-topbar">
+                  <div className="lp-dot lp-dot-r"></div>
+                  <div className="lp-dot lp-dot-y"></div>
+                  <div className="lp-dot lp-dot-g"></div>
+                  <div className="lp-mockup-url">🔒 acemyinterviews.io/interview</div>
+                </div>
+                <div className="lp-mockup-body">
+                  <div className="lp-sim-progress">
+                    <div className="lp-sim-progress-bar"><div className="lp-sim-progress-fill"></div></div>
+                    <div className="lp-sim-progress-label">Question 1 of 5</div>
+                  </div>
+                  <div className="lp-sim-timer">
+                    <div className="lp-sim-timer-label">Time Remaining</div>
+                    <div className="lp-sim-timer-num">2:19</div>
+                  </div>
+                  <div className="lp-sim-question">
+                    Tell me about a time you had to translate complex technical 
+                    requirements into business language for non-technical stakeholders.
+                  </div>
+                  <div className="lp-sim-recording">
+                    <div className="lp-rec-dot"></div>
+                    Recording your answer...
+                  </div>
+                  <button className="lp-sim-btn">Submit Answer →</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* HOW IT WORKS */}
+          <section className="lp-hiw lp-section lp-fade-in lp-visible" id="lp-how">
+            <div className="lp-section-tag">Simple 3-step process</div>
+            <h2 className="lp-section-title">From nervous to confident in one session</h2>
+            <p className="lp-section-sub">No setup, no coaching calls, no waiting. Just you and the most demanding AI interviewer you've ever faced.</p>
+            <div className="lp-steps-grid">
+              <div className="lp-step-card">
+                <div className="lp-step-num">01</div>
+                <div className="lp-step-icon">📝</div>
+                <div className="lp-step-title">Tell us about the role</div>
+                <div className="lp-step-desc">Enter the job title and paste the job description — the AI uses it to generate questions specific to that role. Paste your resume too and every question gets tailored to your actual experience.</div>
+              </div>
+              <div className="lp-step-card">
+                <div className="lp-step-num">02</div>
+                <div className="lp-step-icon">🎬</div>
+                <div className="lp-step-title">Answer on camera, in real-time</div>
+                <div className="lp-step-desc">The AI records your voice and video, then asks intelligent follow-up questions based on what you actually said — just like a real interviewer probing for depth.</div>
+              </div>
+              <div className="lp-step-card">
+                <div className="lp-step-num">03</div>
+                <div className="lp-step-icon">📊</div>
+                <div className="lp-step-title">Get a full performance breakdown</div>
+                <div className="lp-step-desc">See your score across Clarity, Depth, Confidence, STAR Method, Technical Accuracy, and 3 more. Know exactly what to improve before the real interview.</div>
+              </div>
+            </div>
+          </section>
+
+          {/* FEATURES */}
+          <section className="lp-features lp-section lp-fade-in lp-visible" id="lp-features">
+            <div style={{textAlign:'center'}}>
+              <div className="lp-section-tag">What makes it different</div>
+              <h2 className="lp-section-title">Not just mock questions — a full diagnostic</h2>
+              <p className="lp-section-sub">Most prep tools give you questions. We give you the same level of analysis a career coach would — in seconds.</p>
+            </div>
+            <div className="lp-features-grid">
+              {/* AI Follow-up */}
+              <div className="lp-feature-card">
+                <span className="lp-feature-icon">🤖</span>
+                <div className="lp-feature-title">Dynamic AI follow-up questions</div>
+                <div className="lp-feature-desc">The AI actually listens to what you say and asks pointed follow-ups based on your specific answer. No two interviews are the same.</div>
+                <div style={{marginTop:'1.25rem', background:'rgba(0,229,255,0.05)', border:'1px solid rgba(0,229,255,0.12)', borderRadius:'10px', padding:'1rem', fontSize:'0.82rem', color:'#7a8ba3', lineHeight:'1.65'}}>
+                  <span style={{color:'#00e5ff', fontSize:'0.7rem', textTransform:'uppercase', letterSpacing:'0.1em', fontWeight:'600'}}>AI Follow-up</span><br/><br/>
+                  "You mentioned stakeholders thought they could automate everything — walk me through exactly how you presented that Excel sheet and what their reaction was."
+                </div>
+              </div>
+
+              {/* 8-dimension scoring */}
+              <div className="lp-feature-card">
+                <span className="lp-feature-icon">📈</span>
+                <div className="lp-feature-title">8-dimension performance scoring</div>
+                <div className="lp-feature-desc">Every answer is graded across Clarity, Relevance, Depth, Confidence, Conciseness, STAR Method, Technical Accuracy, and Enthusiasm.</div>
+                <div className="lp-score-bars">
+                  <div className="lp-score-row">
+                    <span className="lp-score-label">Technical Accuracy</span>
+                    <div className="lp-score-track"><div className="lp-score-fill" style={{width:'80%', background:'#00ff9d'}}></div></div>
+                    <span className="lp-score-val" style={{color:'#00ff9d'}}>80</span>
+                  </div>
+                  <div className="lp-score-row">
+                    <span className="lp-score-label">Relevance</span>
+                    <div className="lp-score-track"><div className="lp-score-fill" style={{width:'78%', background:'#00e5ff'}}></div></div>
+                    <span className="lp-score-val" style={{color:'#00e5ff'}}>78</span>
+                  </div>
+                  <div className="lp-score-row">
+                    <span className="lp-score-label">Depth</span>
+                    <div className="lp-score-track"><div className="lp-score-fill" style={{width:'75%', background:'#00e5ff'}}></div></div>
+                    <span className="lp-score-val" style={{color:'#00e5ff'}}>75</span>
+                  </div>
+                  <div className="lp-score-row">
+                    <span className="lp-score-label">Conciseness</span>
+                    <div className="lp-score-track"><div className="lp-score-fill" style={{width:'60%', background:'#ff7b3a'}}></div></div>
+                    <span className="lp-score-val" style={{color:'#ff7b3a'}}>60</span>
+                  </div>
+                  <div className="lp-score-row">
+                    <span className="lp-score-label">STAR Method</span>
+                    <div className="lp-score-track"><div className="lp-score-fill" style={{width:'55%', background:'#ff4d6a'}}></div></div>
+                    <span className="lp-score-val" style={{color:'#ff4d6a'}}>55</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Video presence */}
+              <div className="lp-feature-card">
+                <span className="lp-feature-icon">🎥</span>
+                <div className="lp-feature-title">Video presence analysis</div>
+                <div className="lp-feature-desc">Beyond words — your body language, eye contact, facial expression, and framing are all analysed automatically.</div>
+                <div className="lp-video-grid">
+                  <div className="lp-video-metric">
+                    <div className="lp-vm-label">Eye Contact</div>
+                    <div className="lp-vm-score" style={{color:'#ff4d6a'}}>25</div>
+                    <div className="lp-vm-bar"><div className="lp-vm-bar-fill" style={{width:'25%', background:'#ff4d6a'}}></div></div>
+                  </div>
+                  <div className="lp-video-metric">
+                    <div className="lp-vm-label">Posture</div>
+                    <div className="lp-vm-score" style={{color:'#ff7b3a'}}>70</div>
+                    <div className="lp-vm-bar"><div className="lp-vm-bar-fill" style={{width:'70%', background:'#ff7b3a'}}></div></div>
+                  </div>
+                  <div className="lp-video-metric">
+                    <div className="lp-vm-label">Framing</div>
+                    <div className="lp-vm-score" style={{color:'#00ff9d'}}>85</div>
+                    <div className="lp-vm-bar"><div className="lp-vm-bar-fill" style={{width:'85%', background:'#00ff9d'}}></div></div>
+                  </div>
+                  <div className="lp-video-metric">
+                    <div className="lp-vm-label">Background</div>
+                    <div className="lp-vm-score" style={{color:'#00ff9d'}}>90</div>
+                    <div className="lp-vm-bar"><div className="lp-vm-bar-fill" style={{width:'90%', background:'#00ff9d'}}></div></div>
+                  </div>
+                  <div className="lp-video-metric">
+                    <div className="lp-vm-label">Expression</div>
+                    <div className="lp-vm-score" style={{color:'#ff4d6a'}}>40</div>
+                    <div className="lp-vm-bar"><div className="lp-vm-bar-fill" style={{width:'40%', background:'#ff4d6a'}}></div></div>
+                  </div>
+                  <div className="lp-video-metric">
+                    <div className="lp-vm-label">Overall</div>
+                    <div className="lp-vm-score" style={{color:'#ff7b3a'}}>61</div>
+                    <div className="lp-vm-bar"><div className="lp-vm-bar-fill" style={{width:'61%', background:'#ff7b3a'}}></div></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Q-by-Q breakdown */}
+              <div className="lp-feature-card lp-large">
+                <div style={{display:'flex', alignItems:'flex-start', justifyContent:'space-between', flexWrap:'wrap', gap:'1rem', marginBottom:'1.5rem'}}>
+                  <div>
+                    <span className="lp-feature-icon" style={{marginBottom:'0.5rem'}}>📋</span>
+                    <div className="lp-feature-title">Question-by-question feedback</div>
+                    <div className="lp-feature-desc" style={{maxWidth:'520px'}}>Each answer gets a full breakdown — specific strengths, concrete improvements, and separate scores for your main answer and the AI follow-up.</div>
+                  </div>
+                  <div style={{display:'flex', alignItems:'center', gap:'1rem', flexShrink:0}}>
+                    <div style={{textAlign:'center'}}>
+                      <div style={{fontFamily:"'Syne', sans-serif", fontSize:'2.6rem', fontWeight:700, color:'#00e5ff', letterSpacing:'-0.02em', lineHeight:1}}>72</div>
+                      <div style={{fontSize:'0.72rem', color:'#7a8ba3', textTransform:'uppercase', letterSpacing:'0.08em'}}>Overall</div>
+                    </div>
+                    <span style={{background:'rgba(0,255,157,0.1)', border:'1px solid rgba(0,255,157,0.25)', color:'#00ff9d', fontSize:'0.72rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.1em', padding:'0.2rem 0.6rem', borderRadius:'4px'}}>✓ You passed</span>
+                  </div>
+                </div>
+
+                {/* Q1 Block */}
+                <div style={{background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.07)', borderRadius:'12px', padding:'1.25rem 1.5rem', marginBottom:'1rem'}}>
+                  <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'0.6rem', flexWrap:'wrap', gap:'0.5rem'}}>
+                    <div style={{display:'flex', alignItems:'center', gap:'0.75rem'}}>
+                      <span style={{background:'#00e5ff', color:'#000', fontFamily:"'Syne', sans-serif", fontWeight:700, fontSize:'0.72rem', padding:'0.2rem 0.55rem', borderRadius:'4px', letterSpacing:'0.04em'}}>Q1</span>
+                      <span style={{fontSize:'0.82rem', color:'#7a8ba3'}}>Translating technical requirements for stakeholders</span>
+                    </div>
+                    <span style={{fontFamily:"'Syne', sans-serif", fontWeight:700, fontSize:'0.9rem', color:'#00e5ff'}}>combined <strong style={{fontSize:'1rem'}}>76</strong>/100</span>
+                  </div>
+                  <p style={{fontSize:'0.82rem', color:'#7a8ba3', lineHeight:1.6, marginBottom:'1rem'}}>Strong example with specific actions taken (10 knowledge articles, 2 help articles, demo videos, live sessions). Candidate clearly identified the bottleneck. However the response lacked clear structure and was somewhat rambling in delivery.</p>
+                  <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1rem'}}>
+                    <div>
+                      <div style={{fontSize:'0.72rem', fontWeight:700, color:'#00ff9d', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:'0.6rem'}}>✓ Strengths</div>
+                      <ul style={{listStyle:'none', display:'flex', flexDirection:'column', gap:'0.45rem', margin:0, padding:0}}>
+                        <li style={{fontSize:'0.8rem', color:'#7a8ba3', display:'flex', gap:'0.5rem'}}><span style={{color:'#00ff9d', flexShrink:0}}>•</span>Specific deliverables mentioned</li>
+                        <li style={{fontSize:'0.8rem', color:'#7a8ba3', display:'flex', gap:'0.5rem'}}><span style={{color:'#00ff9d', flexShrink:0}}>•</span>Comprehensive multi-stakeholder approach</li>
+                        <li style={{fontSize:'0.8rem', color:'#7a8ba3', display:'flex', gap:'0.5rem'}}><span style={{color:'#00ff9d', flexShrink:0}}>•</span>Proactive issue identification</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <div style={{fontSize:'0.72rem', fontWeight:700, color:'#ff7b3a', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:'0.6rem'}}>△ Improve</div>
+                      <ul style={{listStyle:'none', display:'flex', flexDirection:'column', gap:'0.45rem', margin:0, padding:0}}>
+                        <li style={{fontSize:'0.8rem', color:'#7a8ba3', display:'flex', gap:'0.5rem'}}><span style={{color:'#ff7b3a', flexShrink:0}}>•</span>Structure with STAR method</li>
+                        <li style={{fontSize:'0.8rem', color:'#7a8ba3', display:'flex', gap:'0.5rem'}}><span style={{color:'#ff7b3a', flexShrink:0}}>•</span>Provide timeline details upfront</li>
+                        <li style={{fontSize:'0.8rem', color:'#7a8ba3', display:'flex', gap:'0.5rem'}}><span style={{color:'#ff7b3a', flexShrink:0}}>•</span>Quantify the scope better</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Follow-up block */}
+                <div style={{background:'rgba(0,229,255,0.03)', border:'1px solid rgba(0,229,255,0.15)', borderRadius:'12px', padding:'1.25rem 1.5rem'}}>
+                  <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'0.5rem', flexWrap:'wrap', gap:'0.5rem'}}>
+                    <div style={{display:'flex', alignItems:'center', gap:'0.75rem'}}>
+                      <span style={{background:'rgba(0,229,255,0.15)', color:'#00e5ff', border:'1px solid rgba(0,229,255,0.3)', fontFamily:"'Syne', sans-serif", fontWeight:700, fontSize:'0.7rem', padding:'0.2rem 0.6rem', borderRadius:'4px', letterSpacing:'0.04em'}}>↩ Follow-up</span>
+                      <span style={{fontSize:'0.78rem', color:'#7a8ba3', fontStyle:'italic'}}>"Walk me through how you presented the Excel sheet and their reaction…"</span>
+                    </div>
+                    <span style={{fontFamily:"'Syne', sans-serif", fontWeight:700, fontSize:'0.9rem', color:'#00e5ff'}}><strong style={{fontSize:'1rem'}}>78</strong>/100</span>
+                  </div>
+                  <p style={{fontSize:'0.78rem', color:'rgba(0,229,255,0.6)', marginBottom:'0.75rem'}}>↳ Follow-up tested ability to provide specifics on timeline and impact — candidate delivered well on timeline but could have been more quantitative on results.</p>
+                  <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1rem'}}>
+                    <div>
+                      <div style={{fontSize:'0.7rem', fontWeight:700, color:'#00ff9d', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:'0.5rem'}}>✓ Strengths</div>
+                      <ul style={{listStyle:'none', display:'flex', flexDirection:'column', gap:'0.4rem', margin:0, padding:0}}>
+                        <li style={{fontSize:'0.78rem', color:'#7a8ba3', display:'flex', gap:'0.5rem'}}><span style={{color:'#00ff9d', flexShrink:0}}>•</span>Clear timeline provided (2 weeks)</li>
+                        <li style={{fontSize:'0.78rem', color:'#7a8ba3', display:'flex', gap:'0.5rem'}}><span style={{color:'#00ff9d', flexShrink:0}}>•</span>Specific deliverable counts mentioned</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <div style={{fontSize:'0.7rem', fontWeight:700, color:'#ff7b3a', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:'0.5rem'}}>△ Improve</div>
+                      <ul style={{listStyle:'none', display:'flex', flexDirection:'column', gap:'0.4rem', margin:0, padding:0}}>
+                        <li style={{fontSize:'0.78rem', color:'#7a8ba3', display:'flex', gap:'0.5rem'}}><span style={{color:'#ff7b3a', flexShrink:0}}>•</span>Could have provided measurable success metrics</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* TESTIMONIALS */}
+          <section className="lp-social-proof lp-section lp-fade-in lp-visible" id="lp-testimonials">
+            <h2 className="lp-section-title">Real people. Real interviews. Real offers.</h2>
+            <p className="lp-section-sub">From first-timers to senior hires — here's what candidates said after practicing with AceMyInterviews.</p>
+            <div className="lp-testimonials">
+              <div className="lp-testimonial-card">
+                <div className="lp-testimonial-stars">★★★★★</div>
+                <p className="lp-testimonial-quote">"The follow-up questions caught me completely off guard the first time — which is exactly what I needed. By the third session I had an answer ready for anything."</p>
+                <div className="lp-testimonial-author">
+                  <div className="lp-testimonial-avatar">JR</div>
+                  <div>
+                    <div className="lp-testimonial-name">James R.</div>
+                    <div className="lp-testimonial-role">Product Manager @ Stripe</div>
+                  </div>
+                </div>
+              </div>
+              <div className="lp-testimonial-card">
+                <div className="lp-testimonial-stars">★★★★★</div>
+                <p className="lp-testimonial-quote">"I had no idea my eye contact was that bad until the video analysis flagged it. Practiced for 2 days, walked into the interview feeling completely different."</p>
+                <div className="lp-testimonial-author">
+                  <div className="lp-testimonial-avatar">SM</div>
+                  <div>
+                    <div className="lp-testimonial-name">Sarah M.</div>
+                    <div className="lp-testimonial-role">Software Engineer @ Meta</div>
+                  </div>
+                </div>
+              </div>
+              <div className="lp-testimonial-card">
+                <div className="lp-testimonial-stars">★★★★★</div>
+                <p className="lp-testimonial-quote">"The STAR method score showed me exactly why my answers were landing flat. Once I structured them properly my score jumped from 55 to 84 in 3 tries."</p>
+                <div className="lp-testimonial-author">
+                  <div className="lp-testimonial-avatar">AL</div>
+                  <div>
+                    <div className="lp-testimonial-name">Alicia L.</div>
+                    <div className="lp-testimonial-role">Senior Analyst @ McKinsey</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* COMPARISON TABLE */}
+          <section className="lp-compare lp-section lp-fade-in lp-visible" id="lp-compare">
+            <div className="lp-section-tag">Why AceMyInterviews</div>
+            <h2 className="lp-section-title">The prep tool that actually mirrors real interviews</h2>
+            <div className="lp-compare-table">
+              <div className="lp-compare-head">
+                <div className="lp-compare-cell lp-col-head">Feature</div>
+                <div className="lp-compare-cell lp-center lp-col-head lp-col-ace">AceMy<br/>Interviews</div>
+                <div className="lp-compare-cell lp-center lp-col-head">Mock<br/>Questions</div>
+                <div className="lp-compare-cell lp-center lp-col-head">Human<br/>Coach</div>
+              </div>
+              {[
+                ['AI follow-up questions', true, false, 'partial'],
+                ['8-dimension scoring', true, false, 'partial'],
+                ['Video presence analysis', true, false, false],
+                ['Available 24/7, instant', true, true, false],
+                ['Percentile ranking vs peers', true, false, false],
+                ['Per-question improvement notes', true, false, 'partial'],
+                ['Free to start', true, true, false],
+              ].map(([feature, ace, mock, human], i) => (
+                <div className="lp-compare-row" key={i}>
+                  <div className="lp-compare-cell">{feature}</div>
+                  <div className="lp-compare-cell lp-center">{ace === true ? <span className="lp-check">✓</span> : ace === 'partial' ? <span className="lp-partial">~</span> : <span className="lp-cross">✗</span>}</div>
+                  <div className="lp-compare-cell lp-center">{mock === true ? <span className="lp-check">✓</span> : mock === 'partial' ? <span className="lp-partial">~</span> : <span className="lp-cross">✗</span>}</div>
+                  <div className="lp-compare-cell lp-center">{human === true ? <span className="lp-check">✓</span> : human === 'partial' ? <span className="lp-partial">~</span> : <span className="lp-cross">✗</span>}</div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* FINAL CTA */}
+          <section className="lp-cta-section lp-section lp-fade-in lp-visible">
+            <div className="lp-cta-box">
+              <h2>Your next interview<br/>starts <em style={{color:'#00e5ff', fontStyle:'normal'}}>right now</em></h2>
+              <p>Set up in under a minute. Get your first score in under 10. No credit card — just sign in with Google and you're in.</p>
+              <button className="lp-btn-primary" onClick={handleCTA} style={{fontSize:'1.05rem', padding:'1rem 2.5rem', margin:'0 auto', display:'flex'}}>
+                {!user && <svg className="lp-google-svg" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#000"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#000"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#000"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#000"/></svg>}
+                {user ? (completedInterviews === 0 ? 'Start Free Interview' : 'Start Interview') : 'Continue with Google'}
+              </button>
+              <p className="lp-cta-note">{user ? (isSubscribed ? '✓ Subscribed · Unlimited interviews' : completedInterviews === 0 ? '🎁 First interview is completely free' : 'Free trial used · Subscribe for unlimited access') : 'Free to start · No card needed · Takes 60 seconds to set up'}</p>
+            </div>
+          </section>
+
+          {/* FOOTER */}
+          <footer className="lp-footer">
+            <div className="lp-footer-copy">© 2026 AceMyInterviews. All rights reserved.</div>
+            <div className="lp-footer-links">
+              <a onClick={(e) => { e.preventDefault(); setStage('privacy'); }}>Privacy</a>
+              <a href="mailto:support@acemyinterviews.io">Contact</a>
+            </div>
+          </footer>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -3099,7 +4265,7 @@ Return ONLY valid JSON:
                 if (isMobile) {
                   setStage('mobileGate');
                 } else {
-                  generateQuestions();
+                  setStage('device-check');
                 }
               }
             }}
@@ -3115,6 +4281,10 @@ Return ONLY valid JSON:
         </div>
       </div>
     );
+  }
+
+  if (stage === 'device-check') {
+    return <DeviceCheckScreen onPass={() => generateQuestions()} onBack={() => setStage('setup')} />;
   }
 
   // Generating Questions
@@ -3377,6 +4547,172 @@ Return ONLY valid JSON:
 
   // Results / Scorecard
   if (stage === 'results' && finalResults) {
+    // ===== PAYWALL V2 LOGIC =====
+    const paywallEnabled = !isSubscribed && !TEST_MODE;
+    const hasAccess = !paywallEnabled || isResultUnlocked;
+
+    // Handler for one-time unlock button
+    const handleOneTimeUnlock = async () => {
+      // Use state or fall back to localStorage in case state wasn't set yet
+      const interviewId = currentInterviewId || localStorage.getItem('pendingInterviewId');
+      if (!interviewId) {
+        console.error('No interview ID found — cannot create checkout');
+        return;
+      }
+      try {
+        const response = await fetch('/api/create-checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            interviewId,
+            userEmail: user?.email
+          })
+        });
+        const data = await response.json();
+        if (data.url) {
+          localStorage.setItem('pendingResults', JSON.stringify(finalResults));
+          window.location.href = data.url;
+        }
+      } catch (e) {
+        console.error('Checkout error:', e);
+      }
+    };
+
+    // Find best scoring question for the model answer teaser
+    const bestQuestion = finalResults.questionScores
+      ? [...finalResults.questionScores].sort((a, b) => {
+          const aScore = a.combinedScore ?? a.score;
+          const bScore = b.combinedScore ?? b.score;
+          return bScore - aScore;
+        })[0]
+      : null;
+
+    const modelAnswer = finalResults.modelAnswer || null;
+
+    // ===== PAYWALL TEASER VIEW (non-paying users) =====
+    if (!hasAccess) {
+      return (
+        <div style={styles.container}>
+          <div style={styles.heroGlow}></div>
+          <div style={{...styles.results, maxWidth: '800px', width: '100%'}}>
+
+            {/* Score hero */}
+            <div style={{...styles.verdictCard, background: finalResults.passed ? 'linear-gradient(135deg,rgba(16,185,129,0.2) 0%,rgba(16,185,129,0.05) 100%)' : 'linear-gradient(135deg,rgba(239,68,68,0.15) 0%,rgba(239,68,68,0.03) 100%)', borderColor: finalResults.passed ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.2)', textAlign:'center'}}>
+              <div style={styles.verdictIcon}>{finalResults.passed ? '🎉' : '💪'}</div>
+              <h2 style={{...styles.verdictTitle, color: finalResults.passed ? '#10b981' : '#fca5a5'}}>
+                {finalResults.passed ? 'Great job! You passed!' : 'Not quite there yet — but you can fix this'}
+              </h2>
+              <div style={styles.overallScore}>
+                <span style={styles.scoreNumber}>{finalResults.overallScore}</span>
+                <span style={styles.scoreOutOf}>/100</span>
+              </div>
+            </div>
+
+            {/* Teaser cards */}
+            <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'16px', marginBottom:'16px'}}>
+              {finalResults.passed ? (
+                <div style={{background:'rgba(17,24,39,0.8)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', padding:'20px 24px', borderTop:'3px solid', borderImage:'linear-gradient(90deg,#10b981,#00d9ff) 1'}}>
+                  <div style={{fontSize:'11px', fontWeight:'700', textTransform:'uppercase', letterSpacing:'1px', color:'rgba(255,255,255,0.4)', marginBottom:'8px'}}>🏆 Strong Performance</div>
+                  <div style={{fontSize:'16px', fontWeight:'700', color:'#10b981', marginBottom:'6px', lineHeight:'1.3'}}>You passed — but there's still room to score even higher</div>
+                  <div style={{fontSize:'13px', color:'rgba(255,255,255,0.5)', lineHeight:'1.4'}}>Our AI found specific areas where top candidates outperform you. <strong style={{color:'rgba(255,255,255,0.8)'}}>Unlock to see what they are.</strong></div>
+                </div>
+              ) : (
+                <div style={{background:'rgba(17,24,39,0.8)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', padding:'20px 24px', borderTop:'3px solid', borderImage:'linear-gradient(90deg,#ef4444,#f59e0b) 1'}}>
+                  <div style={{fontSize:'11px', fontWeight:'700', textTransform:'uppercase', letterSpacing:'1px', color:'rgba(255,255,255,0.4)', marginBottom:'8px'}}>⚠️ Red Flag Detected</div>
+                  <div style={{fontSize:'16px', fontWeight:'700', color:'#ef4444', marginBottom:'6px', lineHeight:'1.3'}}>Your answers share a pattern common in rejected candidates</div>
+                  <div style={{fontSize:'13px', color:'rgba(255,255,255,0.5)', lineHeight:'1.4'}}>Our AI identified a recurring issue across your responses. <strong style={{color:'rgba(255,255,255,0.8)'}}>Unlock results to see what it is.</strong></div>
+                </div>
+              )}
+              <div style={{background:'rgba(17,24,39,0.8)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', padding:'20px 24px', borderTop:'3px solid', borderImage:'linear-gradient(90deg,#8b5cf6,#00d9ff) 1'}}>
+                <div style={{fontSize:'11px', fontWeight:'700', textTransform:'uppercase', letterSpacing:'1px', color:'rgba(255,255,255,0.4)', marginBottom:'8px'}}>Your Best Answer</div>
+                <div style={{fontSize:'16px', fontWeight:'700', color:'#a855f7', marginBottom:'6px', lineHeight:'1.3'}}>
+                  {bestQuestion ? `Q${bestQuestion.questionNum} was your strongest — but it still had critical gaps` : 'Your strongest answer still had critical gaps'}
+                </div>
+                <div style={{fontSize:'13px', color:'rgba(255,255,255,0.5)', lineHeight:'1.4'}}>Our analysis found specific areas where you lost points. <strong style={{color:'rgba(255,255,255,0.8)'}}>See the full breakdown.</strong></div>
+              </div>
+            </div>
+
+            {/* Model answer comparison teaser */}
+            {modelAnswer && bestQuestion && (
+              <div style={{background:'rgba(17,24,39,0.8)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', padding:'20px 24px', marginBottom:'16px'}}>
+                <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'16px'}}>
+                  <h3 style={{fontSize:'15px', fontWeight:'700', margin:0}}>📈 How Your Best Answer Compares</h3>
+                  <span style={{background:'rgba(34,197,94,0.15)', color:'#22c55e', fontSize:'10px', fontWeight:'700', padding:'2px 8px', borderRadius:'3px', textTransform:'uppercase'}}>Preview</span>
+                </div>
+                <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'16px'}}>
+                  <div style={{background:'rgba(239,68,68,0.08)', border:'1px solid rgba(239,68,68,0.2)', borderRadius:'10px', padding:'14px 16px'}}>
+                    <div style={{fontSize:'11px', fontWeight:'700', color:'#ef4444', textTransform:'uppercase', letterSpacing:'0.5px', marginBottom:'8px'}}>Your Answer</div>
+                    <div style={{fontSize:'13px', color:'rgba(255,255,255,0.6)', lineHeight:'1.5', fontStyle:'italic', marginBottom:'10px'}}>
+                      "{bestQuestion.feedback?.substring(0, 120)}..."
+                    </div>
+                    <div style={{fontSize:'24px', fontWeight:'900', color:'#ef4444'}}>{bestQuestion.combinedScore ?? bestQuestion.score}<span style={{fontSize:'14px', color:'rgba(255,255,255,0.4)'}}>/100</span></div>
+                  </div>
+                  <div style={{background:'rgba(34,197,94,0.08)', border:'1px solid rgba(34,197,94,0.2)', borderRadius:'10px', padding:'14px 16px', position:'relative'}}>
+                    <div style={{fontSize:'11px', fontWeight:'700', color:'#22c55e', textTransform:'uppercase', letterSpacing:'0.5px', marginBottom:'8px'}}>Top-Scoring Answer</div>
+                    <div style={{fontSize:'13px', color:'rgba(255,255,255,0.6)', lineHeight:'1.5', fontStyle:'italic', marginBottom:'10px', filter:'blur(5px)', userSelect:'none'}}>
+                      "{modelAnswer.answer?.substring(0, 120)}..."
+                    </div>
+                    <div style={{position:'absolute', top:'50%', left:'50%', transform:'translate(-50%,-50%)', background:'rgba(17,24,39,0.9)', padding:'8px 16px', borderRadius:'8px', fontSize:'12px', fontWeight:'700', color:'#a855f7', whiteSpace:'nowrap'}}>🔒 Unlock to see model answer</div>
+                    <div style={{fontSize:'24px', fontWeight:'900', color:'#22c55e'}}>92<span style={{fontSize:'14px', color:'rgba(255,255,255,0.4)'}}>/100</span></div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Blurred results preview */}
+            <div style={{position:'relative', marginBottom:'16px'}}>
+              <div style={{filter:'blur(8px)', pointerEvents:'none', userSelect:'none', opacity:0.5}}>
+                <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'12px', marginBottom:'12px'}}>
+                  {Object.entries(finalResults.categories).slice(0,4).map(([key, val]) => (
+                    <div key={key} style={{background:'rgba(17,24,39,0.8)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'10px', padding:'16px 20px'}}>
+                      <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'8px'}}>
+                        <span style={{fontSize:'14px', fontWeight:'600', color:'#fff'}}>{key.replace(/([A-Z])/g,' $1').trim()}</span>
+                        <span style={{fontSize:'18px', fontWeight:'800', color:'#ef4444'}}>{val.score}</span>
+                      </div>
+                      <div style={{height:'4px', background:'rgba(255,255,255,0.06)', borderRadius:'2px', overflow:'hidden', marginBottom:'8px'}}>
+                        <div style={{height:'100%', borderRadius:'2px', background:'#ef4444', width:`${val.score}%`}}/>
+                      </div>
+                      <p style={{fontSize:'12px', color:'rgba(255,255,255,0.5)', margin:0, lineHeight:'1.4'}}>{val.feedback}</p>
+                    </div>
+                  ))}
+                </div>
+                {finalResults.questionScores?.slice(0,3).map((q, i) => (
+                  <div key={i} style={{background:'rgba(17,24,39,0.8)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', padding:'20px 24px', marginBottom:'12px'}}>
+                    <div style={{display:'flex', justifyContent:'space-between', marginBottom:'12px'}}>
+                      <span style={{fontSize:'14px', fontWeight:'700', color:'#00d9ff'}}>Q{q.questionNum}</span>
+                      <span style={{fontSize:'14px', fontWeight:'700', color:'#ef4444'}}>{q.combinedScore ?? q.score}/100</span>
+                    </div>
+                    <p style={{fontSize:'13px', color:'rgba(255,255,255,0.5)', lineHeight:'1.5', margin:0}}>{q.feedback}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Gradient fade */}
+              <div style={{position:'absolute', bottom:0, left:0, right:0, height:'200px', background:'linear-gradient(transparent, #0a0a0f)', pointerEvents:'none'}}/>
+
+              {/* Paywall card */}
+              <div style={{position:'absolute', top:'80px', left:'50%', transform:'translateX(-50%)', width:'100%', maxWidth:'520px', padding:'0 16px', zIndex:10}}>
+                <div style={{background:'linear-gradient(145deg,#1a1f35,#111827)', border:'1px solid rgba(168,85,247,0.3)', borderRadius:'20px', padding:'36px 32px', textAlign:'center', boxShadow:'0 24px 80px rgba(0,0,0,0.6)', position:'relative', overflow:'hidden'}}>
+                  <div style={{position:'absolute', top:0, left:0, right:0, height:'3px', background:'linear-gradient(90deg,#00d9ff,#8b5cf6)'}}/>
+                  <div style={{width:'56px', height:'56px', background:'rgba(168,85,247,0.15)', borderRadius:'16px', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 20px', fontSize:'24px'}}>🔒</div>
+                  <h2 style={{fontSize:'22px', fontWeight:'800', marginBottom:'8px', lineHeight:'1.3'}}>Unlock Your Complete<br/>Interview Breakdown</h2>
+                  <p style={{fontSize:'14px', color:'rgba(255,255,255,0.5)', marginBottom:'24px', lineHeight:'1.5'}}>See all 8 scoring dimensions, question-by-question feedback, model answers, and your video presence analysis.</p>
+
+                  <PaywallPricingToggle
+                    onOneTimeClick={handleOneTimeUnlock}
+                    onProClick={() => window.open(STRIPE_SUBSCRIBE_URL, '_blank')}
+                  />
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      );
+    }
+    // ===== END PAYWALL VIEW =====
+
     // Calculate percentile (comparing to all users)
     const calculatePercentile = () => {
       // Use leaderboard scores, or fallback dummy scores if empty
@@ -3648,6 +4984,19 @@ Return ONLY valid JSON:
               <p style={styles.coachingText}>{finalResults.coachingTip}</p>
             </div>
           </div>
+
+          {/* Model Answer — shown to paying users */}
+          {finalResults.modelAnswer && (
+            <div style={styles.scorecardSection}>
+              <h3 style={styles.scorecardTitle}>🏆 Model Answer — Q{finalResults.modelAnswer.questionNum}</h3>
+              <div style={{background:'rgba(34,197,94,0.06)', border:'1px solid rgba(34,197,94,0.2)', borderRadius:'12px', padding:'20px 24px'}}>
+                <p style={{fontSize:'13px', color:'rgba(255,255,255,0.4)', marginBottom:'8px', fontWeight:'600', textTransform:'uppercase', letterSpacing:'0.5px'}}>Question</p>
+                <p style={{fontSize:'14px', color:'rgba(255,255,255,0.8)', marginBottom:'16px', lineHeight:'1.5'}}>{finalResults.modelAnswer.question}</p>
+                <p style={{fontSize:'13px', color:'rgba(255,255,255,0.4)', marginBottom:'8px', fontWeight:'600', textTransform:'uppercase', letterSpacing:'0.5px'}}>What a 90+ answer looks like</p>
+                <p style={{fontSize:'14px', color:'rgba(255,255,255,0.8)', lineHeight:'1.6', fontStyle:'italic'}}>"{finalResults.modelAnswer.answer}"</p>
+              </div>
+            </div>
+          )}
 
           {/* Video Analysis Feedback */}
           {finalResults.videoAnalysis && (
