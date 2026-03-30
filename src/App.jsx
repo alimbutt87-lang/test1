@@ -234,11 +234,14 @@ export default function InterviewSimulator() {
 
   // Handle return from Stripe after subscribing
   useEffect(() => {
+    if (authLoading) return; // Wait for auth to resolve first
     const params = new URLSearchParams(window.location.search);
-    const subscribed = params.get('subscribed');
-    if (subscribed === 'true' && user) {
-      // Clean the URL
+    const subscribedParam = params.get('subscribed');
+    const subscribedFlag = localStorage.getItem('stripeRedirectPending');
+    if ((subscribedParam === 'true' || subscribedFlag === 'true') && user) {
+      // Clean up
       window.history.replaceState({}, '', window.location.pathname);
+      localStorage.removeItem('stripeRedirectPending');
       // Mark as subscribed immediately in React state
       setIsSubscribed(true);
       localStorage.setItem('subscription', JSON.stringify({ active: true, date: new Date().toISOString() }));
@@ -248,7 +251,6 @@ export default function InterviewSimulator() {
         .update({ is_subscribed: true, subscription_date: new Date().toISOString() })
         .eq('id', user.id)
         .then(() => {
-          // Now safe to reload user data
           loadUserData(user.id);
         });
       // Check if we need to restore results
@@ -257,13 +259,12 @@ export default function InterviewSimulator() {
       if (pendingInterviewId && pendingStage === 'results') {
         localStorage.removeItem('pendingInterviewId');
         localStorage.removeItem('pendingStage');
-        // Fetch the interview results from Supabase
         supabase
           .from('interview_results')
           .select('full_results')
           .eq('id', pendingInterviewId)
           .single()
-          .then(({ data, error }) => {
+          .then(({ data }) => {
             if (data?.full_results) {
               setFinalResults(data.full_results);
               setStage('results');
@@ -275,7 +276,7 @@ export default function InterviewSimulator() {
         setStage('dashboard');
       }
     }
-  }, [user]);
+  }, [user, authLoading]);
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const role = params.get('role');
@@ -3355,6 +3356,7 @@ Return ONLY valid JSON:
       }
       if (currentInterviewId) localStorage.setItem('pendingInterviewId', currentInterviewId);
       localStorage.setItem('pendingStage', previousStage || 'landing');
+      localStorage.setItem('stripeRedirectPending', 'true');
       window.location.href = STRIPE_SUBSCRIBE_URL;
     };
     
@@ -4624,7 +4626,7 @@ Return ONLY valid JSON:
                       </li>
                     ))}
                   </ul>
-                  <button onClick={() => { if (currentInterviewId) localStorage.setItem('pendingInterviewId', currentInterviewId); localStorage.setItem('pendingStage', 'results'); window.location.href = STRIPE_SUBSCRIBE_URL; }} style={{width:'100%', padding:'16px 24px', border:'none', borderRadius:'12px', fontFamily:'inherit', fontSize:'16px', fontWeight:'700', cursor:'pointer', background:'linear-gradient(135deg,#8b5cf6,#7c3aed)', color:'#fff', boxShadow:'0 4px 20px rgba(139,92,246,0.3)'}}>Start Pro — $19.99/month</button>
+                  <button onClick={() => { if (currentInterviewId) localStorage.setItem('pendingInterviewId', currentInterviewId); localStorage.setItem('pendingStage', 'results'); localStorage.setItem('stripeRedirectPending', 'true'); window.location.href = STRIPE_SUBSCRIBE_URL; }} style={{width:'100%', padding:'16px 24px', border:'none', borderRadius:'12px', fontFamily:'inherit', fontSize:'16px', fontWeight:'700', cursor:'pointer', background:'linear-gradient(135deg,#8b5cf6,#7c3aed)', color:'#fff', boxShadow:'0 4px 20px rgba(139,92,246,0.3)'}}>Start Pro — $19.99/month</button>
                   <div style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'6px', marginTop:'16px', fontSize:'12px', color:'rgba(255,255,255,0.3)'}}>🔒 Secure payment · Instant access · Cancel anytime</div>
 
                 </div>
