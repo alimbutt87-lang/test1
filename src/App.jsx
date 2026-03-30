@@ -3317,7 +3317,7 @@ Return ONLY valid JSON:
         <div style={styles.heroGlow}></div>
         <div style={styles.paywall}>
           <div style={styles.lockIcon}>🔒</div>
-          <h2 style={styles.paywallTitle}>Your free trial has ended</h2>
+          <h2 style={styles.paywallTitle}>Unlock unlimited access</h2>
           <p style={styles.paywallText}>
             Unlock unlimited practice interviews and keep improving until you land your dream job.
           </p>
@@ -4575,7 +4575,7 @@ Return ONLY valid JSON:
 
                   <div style={{marginBottom:'20px'}}>
                     <div style={{fontSize:'40px', fontWeight:'900', color:'#fff'}}><span style={{fontSize:'22px', verticalAlign:'super', fontWeight:'700'}}>$</span>19.99<span style={{fontSize:'16px', color:'rgba(255,255,255,0.4)', fontWeight:'500'}}> /mo</span></div>
-                    <div style={{display:'inline-block', background:'rgba(34,197,94,0.15)', color:'#22c55e', fontSize:'11px', fontWeight:'700', padding:'3px 10px', borderRadius:'4px', marginTop:'8px'}}>3 DAY FREE TRIAL — Cancel anytime</div>
+                    <div style={{display:'inline-block', background:'rgba(34,197,94,0.15)', color:'#22c55e', fontSize:'11px', fontWeight:'700', padding:'3px 10px', borderRadius:'4px', marginTop:'8px'}}>BEST VALUE — Unlimited interviews</div>
                   </div>
                   <ul style={{textAlign:'left', marginBottom:'24px', padding:0}}>
                     {['Full 8-category performance breakdown','Question-by-question detailed feedback','Model answers for each question','Personalized improvement action plan','Video presence analysis','Unlimited interview practice','Track your progress over time','Full leaderboard access'].map((f,i) => (
@@ -4584,7 +4584,7 @@ Return ONLY valid JSON:
                       </li>
                     ))}
                   </ul>
-                  <button onClick={() => window.open(STRIPE_SUBSCRIBE_URL, '_blank')} style={{width:'100%', padding:'16px 24px', border:'none', borderRadius:'12px', fontFamily:'inherit', fontSize:'16px', fontWeight:'700', cursor:'pointer', background:'linear-gradient(135deg,#8b5cf6,#7c3aed)', color:'#fff', boxShadow:'0 4px 20px rgba(139,92,246,0.3)'}}>Start Pro — 3 Day Free Trial</button>
+                  <button onClick={() => window.open(STRIPE_SUBSCRIBE_URL, '_blank')} style={{width:'100%', padding:'16px 24px', border:'none', borderRadius:'12px', fontFamily:'inherit', fontSize:'16px', fontWeight:'700', cursor:'pointer', background:'linear-gradient(135deg,#8b5cf6,#7c3aed)', color:'#fff', boxShadow:'0 4px 20px rgba(139,92,246,0.3)'}}>Start Pro — $19.99/month</button>
                   <div style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'6px', marginTop:'16px', fontSize:'12px', color:'rgba(255,255,255,0.3)'}}>🔒 Secure payment · Instant access · Cancel anytime</div>
 
                 </div>
