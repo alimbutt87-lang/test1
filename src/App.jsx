@@ -3005,7 +3005,10 @@ Return ONLY valid JSON:
               <li><a href="#lp-compare">Compare</a></li>
             </ul>
             <button className="lp-nav-cta" onClick={handleCTA}>{user ? (completedInterviews === 0 ? 'Start Free Interview →' : 'Start Interview →') : 'Start Free →'}</button>
-            {user && <button onClick={signOut} style={{background:'none', border:'1px solid rgba(255,255,255,0.1)', color:'#7a8ba3', fontSize:'0.82rem', padding:'0.5rem 1rem', borderRadius:'6px', cursor:'pointer', marginLeft:'0.5rem'}}>Sign Out</button>}
+            {user && <>
+              <button onClick={() => setStage('dashboard')} style={{background:'none', border:'1px solid rgba(255,255,255,0.1)', color:'#7a8ba3', fontSize:'0.82rem', padding:'0.5rem 1rem', borderRadius:'6px', cursor:'pointer', marginLeft:'0.5rem'}}>My Dashboard</button>
+              <button onClick={signOut} style={{background:'none', border:'1px solid rgba(255,255,255,0.1)', color:'#7a8ba3', fontSize:'0.82rem', padding:'0.5rem 1rem', borderRadius:'6px', cursor:'pointer', marginLeft:'0.5rem'}}>Sign Out</button>
+            </>}
           </nav>
 
           {/* HERO */}
