@@ -232,7 +232,43 @@ export default function InterviewSimulator() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Read ?role= URL param to personalise landing page headline
+  // Handle return from Stripe after subscribing
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const subscribed = params.get('subscribed');
+    if (subscribed === 'true' && user) {
+      // Clean the URL
+      window.history.replaceState({}, '', window.location.pathname);
+      // Mark as subscribed immediately
+      setIsSubscribed(true);
+      localStorage.setItem('subscription', JSON.stringify({ active: true, date: new Date().toISOString() }));
+      // Update Supabase in background
+      loadUserData(user.id);
+      // Check if we need to restore results
+      const pendingInterviewId = localStorage.getItem('pendingInterviewId');
+      const pendingStage = localStorage.getItem('pendingStage');
+      if (pendingInterviewId && pendingStage === 'results') {
+        localStorage.removeItem('pendingInterviewId');
+        localStorage.removeItem('pendingStage');
+        // Fetch the interview results from Supabase
+        supabase
+          .from('interview_results')
+          .select('full_results')
+          .eq('id', pendingInterviewId)
+          .single()
+          .then(({ data, error }) => {
+            if (data?.full_results) {
+              setFinalResults(data.full_results);
+              setStage('results');
+            } else {
+              setStage('dashboard');
+            }
+          });
+      } else {
+        setStage('dashboard');
+      }
+    }
+  }, [user]);
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const role = params.get('role');
@@ -3310,6 +3346,9 @@ Return ONLY valid JSON:
       if (window.mixpanel) {
         window.mixpanel.track('subscribe_clicked');
       }
+      if (currentInterviewId) localStorage.setItem('pendingInterviewId', currentInterviewId);
+      localStorage.setItem('pendingStage', previousStage || 'landing');
+      window.location.href = STRIPE_SUBSCRIBE_URL;
     };
     
     return (
@@ -3344,16 +3383,10 @@ Return ONLY valid JSON:
               <span style={styles.btnArrow}>→</span>
             </button>
           ) : (
-            <a 
-              href={STRIPE_SUBSCRIBE_URL}
-              target="_blank" 
-              rel="noopener noreferrer"
-              style={styles.primaryBtn}
-              onClick={handleSubscribeClick}
-            >
+            <button style={styles.primaryBtn} onClick={handleSubscribeClick}>
               Subscribe Now
               <span style={styles.btnArrow}>→</span>
-            </a>
+            </button>
           )}
           
           <button style={styles.ghostBtn} onClick={() => {
@@ -4584,7 +4617,7 @@ Return ONLY valid JSON:
                       </li>
                     ))}
                   </ul>
-                  <button onClick={() => window.open(STRIPE_SUBSCRIBE_URL, '_blank')} style={{width:'100%', padding:'16px 24px', border:'none', borderRadius:'12px', fontFamily:'inherit', fontSize:'16px', fontWeight:'700', cursor:'pointer', background:'linear-gradient(135deg,#8b5cf6,#7c3aed)', color:'#fff', boxShadow:'0 4px 20px rgba(139,92,246,0.3)'}}>Start Pro — $19.99/month</button>
+                  <button onClick={() => { if (currentInterviewId) localStorage.setItem('pendingInterviewId', currentInterviewId); localStorage.setItem('pendingStage', 'results'); window.location.href = STRIPE_SUBSCRIBE_URL; }} style={{width:'100%', padding:'16px 24px', border:'none', borderRadius:'12px', fontFamily:'inherit', fontSize:'16px', fontWeight:'700', cursor:'pointer', background:'linear-gradient(135deg,#8b5cf6,#7c3aed)', color:'#fff', boxShadow:'0 4px 20px rgba(139,92,246,0.3)'}}>Start Pro — $19.99/month</button>
                   <div style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'6px', marginTop:'16px', fontSize:'12px', color:'rgba(255,255,255,0.3)'}}>🔒 Secure payment · Instant access · Cancel anytime</div>
 
                 </div>
