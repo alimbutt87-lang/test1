@@ -151,6 +151,7 @@ export default function InterviewSimulator() {
   const [userName, setUserName] = useState('');
   const [micPermission, setMicPermission] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [currentInterviewId, setCurrentInterviewId] = useState(null);
 
   // Authentication states
   const [user, setUser] = useState(null);
