@@ -151,7 +151,6 @@ export default function InterviewSimulator() {
   const [userName, setUserName] = useState('');
   const [micPermission, setMicPermission] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [currentInterviewId, setCurrentInterviewId] = useState(null);
 
   // Authentication states
   const [user, setUser] = useState(null);
@@ -240,11 +239,18 @@ export default function InterviewSimulator() {
     if (subscribed === 'true' && user) {
       // Clean the URL
       window.history.replaceState({}, '', window.location.pathname);
-      // Mark as subscribed immediately
+      // Mark as subscribed immediately in React state
       setIsSubscribed(true);
       localStorage.setItem('subscription', JSON.stringify({ active: true, date: new Date().toISOString() }));
-      // Update Supabase in background
-      loadUserData(user.id);
+      // Update Supabase directly so loadUserData doesn't overwrite with false
+      supabase
+        .from('user_profiles')
+        .update({ is_subscribed: true, subscription_date: new Date().toISOString() })
+        .eq('id', user.id)
+        .then(() => {
+          // Now safe to reload user data
+          loadUserData(user.id);
+        });
       // Check if we need to restore results
       const pendingInterviewId = localStorage.getItem('pendingInterviewId');
       const pendingStage = localStorage.getItem('pendingStage');
