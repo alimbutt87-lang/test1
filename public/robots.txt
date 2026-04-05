@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /*?role=
+
+Sitemap: https://www.acemyinterviews.io/sitemap.xml
