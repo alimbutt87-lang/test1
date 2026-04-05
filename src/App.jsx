@@ -279,6 +279,14 @@ export default function InterviewSimulator() {
     }
   }, [user, authLoading]);
   useEffect(() => {
+    // Check sessionStorage first (set by SEO page CTA clicks - no URL param needed)
+    const storedRole = sessionStorage.getItem('interviewRole');
+    if (storedRole) {
+      setUrlRole(storedRole);
+      sessionStorage.removeItem('interviewRole'); // Clean up after reading
+      return;
+    }
+    // Fallback: still support ?role= in URL for any existing links not yet updated
     const params = new URLSearchParams(window.location.search);
     const role = params.get('role');
     if (role) {
